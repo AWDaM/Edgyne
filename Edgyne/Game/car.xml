@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--Car File-->
+
+<car>
+<size x="4" y="1" z="8"/>
+  <offset x="0" y="1.5" z="0"/>
+  <mass value="500"/>
+  <suspensionStiffness value="10"/>
+  <suspensionCompression value="0.83"/>
+  <suspensionDamping value="0.3"/>
+  <maxSuspensionTravelCm value="1000"/>
+  <frictionSlip value="8"/>
+  <maxSuspensionForce value="10000"/>
+  <connection_height value="1.2"/>
+  <wheel_radius value="0.6"/>
+  <wheel_width value="0.5" />
+  <suspensionRestLength value="1.2"/>
+  <direction x="0" y="-1" z="0"/>
+  <axis x="-1" y="0" z="0"/>
+  
+  <!--Front left-->
+  <wheel_FrontLeft>
+    <connectionOffset value="-0.3"/>
+    <front value="true"/>
+    <drive value="false"/>
+    <brake value="true"/>
+    <steering value="true"/>
+  </wheel_FrontLeft>
+
+ <!--Front right-->
+ <wheel_FrontRight>
+    <connectionOffset value="0.3"/>
+    <front value="true"/>
+    <drive value="false"/>
+    <brake value="true"/>
+    <steering value="true"/>
+  </wheel_FrontRight>
+
+<!--Rear left-->
+ <wheel_RearLeft>
+    <connectionOffset value="-0.3"/>
+    <front value="false"/>
+    <drive value="true"/>
+    <brake value="false"/>
+    <steering value="false"/>
+  </wheel_RearLeft>
+
+<!--Rear right-->
+ <wheel_RearRight>
+    <connectionOffset value="0.3"/>
+    <front value="false"/>
+    <drive value="true"/>
+    <brake value="false"/>
+    <steering value="false"/>
+  </wheel_RearRight>
+
+<position x="0" y="8" z="0"/>
+</car>
