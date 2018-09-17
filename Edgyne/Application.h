@@ -10,6 +10,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModulePhysics3D.h"
+#include "ModuleImGui.h"
 #include "PugiXml\src\pugixml.hpp"
 
 class Application
@@ -21,6 +22,7 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModulePhysics3D* physics;
+	ModuleImGui* imGui;
 
 
 private:

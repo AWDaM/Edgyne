@@ -8,6 +8,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	physics = new ModulePhysics3D(this);
+	imGui = new ModuleImGui(this);
 
 
 	// The order of calls is very important!
@@ -20,6 +21,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 	AddModule(physics);
+	AddModule(imGui);
 	
 	// Scenes
 
@@ -80,6 +82,7 @@ void Application::FinishUpdate()
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
+
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
 	
