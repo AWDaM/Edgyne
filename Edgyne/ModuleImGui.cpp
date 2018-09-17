@@ -49,7 +49,7 @@ update_status ModuleImGui::PreUpdate(float dt)
 		ImGui_ImplOpenGL2_NewFrame();
 		ImGui_ImplSDL2_NewFrame(App->window->window);
 		ImGui::NewFrame();
-		
+
 
 	
 	return status;
@@ -57,6 +57,7 @@ update_status ModuleImGui::PreUpdate(float dt)
 
 update_status ModuleImGui::Update(float dt)
 {
+	update_status status = UPDATE_CONTINUE;
 	//ImGui::SetNextWindowPos({ 0,0 });
 	//ImGuiWindowFlags window_flags = 0;
 	//window_flags |= ImGuiWindowFlags_NoTitleBar;
@@ -71,12 +72,34 @@ update_status ModuleImGui::Update(float dt)
 	//
 	//ImGui::PopStyleColor(3);
 	//ImGui::End();
-	//ImGui::ShowDemoWindow();
-	bool show_demo_window = true;
-	ImGui::ShowDemoWindow(&show_demo_window);
+	
 
-
-	return UPDATE_CONTINUE;
+	
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Windows"))
+		{
+			if (ImGui::MenuItem("ExampleWindow", "CTRL+Z"))
+			{
+		
+					show_demo_window = !show_demo_window;
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Close"))
+		{
+			to_close = true;
+			
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+	if (show_demo_window)
+	{
+		ImGui::ShowDemoWindow();
+	}
+	
+	return status;
 }
 
 update_status ModuleImGui::PostUpdate(float dt)
@@ -90,8 +113,12 @@ update_status ModuleImGui::PostUpdate(float dt)
 	//glClear(GL_COLOR_BUFFER_BIT);
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-	SDL_GL_SwapWindow(App->window->window);
-	return UPDATE_CONTINUE;
+	update_status status = UPDATE_CONTINUE;
+	if (to_close == true)
+	{
+		status = UPDATE_STOP;
+	}
+	return status;
 }
 
 
