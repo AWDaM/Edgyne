@@ -79,9 +79,8 @@ update_status ModuleImGui::Update(float dt)
 	{
 		if (ImGui::BeginMenu("Windows"))
 		{
-			if (ImGui::MenuItem("ExampleWindow", "CTRL+Z"))
+			if (ImGui::MenuItem("ExampleWindow"))
 			{
-		
 					show_demo_window = !show_demo_window;
 			}
 			ImGui::EndMenu();
