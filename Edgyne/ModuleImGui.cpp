@@ -44,7 +44,8 @@ update_status ModuleImGui::PreUpdate(float dt)
 		ImGui_ImplSDL2_NewFrame(App->window->window);
 		ImGui::NewFrame();
 
-
+		math::vec test = math::vec(5, 5, 5);
+		LOG("%f",test.x);
 	
 	return status;
 }
