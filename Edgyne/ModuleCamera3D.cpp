@@ -1,8 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
-#include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
-#include "ModulePhysics3D.h"
 #include "Timer.h"
 #include "p2Log.h"
 

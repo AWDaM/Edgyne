@@ -56,14 +56,12 @@ update_status ModuleImGui::Update(float dt)
 	
 
 	
-	if (ImGui::BeginMainMenuBar())
-	{
+	ImGui::BeginMainMenuBar();
+	
 		if (ImGui::BeginMenu("Windows"))
 		{
-			if (ImGui::MenuItem("ExampleWindow"))
-			{
-					show_demo_window = !show_demo_window;
-			}
+			ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
+		
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Close"))
@@ -73,10 +71,10 @@ update_status ModuleImGui::Update(float dt)
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
-	}
+	
 	if (show_demo_window)
 	{
-		ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 	
 	return status;
