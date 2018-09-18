@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "p2Queue.h"
+#include <vector>
 class btVector3;
 class Timer;
 
@@ -41,12 +42,10 @@ public:
 	
 	vec3 X, Y, Z, Position, Reference;
 	mat4x4 Camera_view;
-	vec3 Last_position;
+	
 private:
-	p2Queue<vec3> pastDirections;
 	mat4x4 ViewMatrix, ViewMatrixInverse;
-	CameraState state = NO_STATE;
-	vec3 InitialPosition;
-	vec3 InitialSpeed;
+
+
 
 };

@@ -143,9 +143,6 @@
     <ClCompile Include="Light.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities.h">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="p2Log.cpp">
       <Filter>Sources\Containers</Filter>
     </ClCompile>
