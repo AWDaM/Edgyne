@@ -7,7 +7,7 @@ Application::Application()
 	audio = new ModuleAudio(this, true);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
-
+	test = new ModuleTest(this);
 	imGui = new ModuleImGui(this);
 
 
@@ -21,6 +21,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 	AddModule(imGui);
+	AddModule(test);
 	
 	// Scenes
 

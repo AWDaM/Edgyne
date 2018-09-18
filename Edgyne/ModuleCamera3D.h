@@ -4,19 +4,9 @@
 #include "glmath.h"
 #include "p2Queue.h"
 #include <vector>
-class btVector3;
+
 class Timer;
 
-enum CameraState
-{
-	NO_STATE,
-	THIRD_PERSON,
-	THIRD_PERSON_BACK,
-	FIRST_PERSON,
-	FROM_WHEEL,
-	INITIAL_CAM,
-	FRONT,
-};
 
 class ModuleCamera3D : public Module
 {

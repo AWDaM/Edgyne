@@ -10,6 +10,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
+#include "ModuleTest.h"
 
 #include "MathGeoLib\MathGeoLib.h"
 
@@ -27,10 +28,9 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleImGui* imGui;
+	ModuleTest* test;
 
 
-
-	
 private:
 
 	Timer	ms_timer;
