@@ -1,5 +1,8 @@
 #pragma once
 #include "Module.h"
+#include "MathGeoLib\Geometry\Sphere.h" // this is shit
+
+
 
 
 class ModuleTest : public Module
@@ -12,6 +15,7 @@ public:
 
 	update_status Update(float dt);
 
-
+	Sphere* pera;
+	Sphere* limonera;
 };
 

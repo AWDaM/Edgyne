@@ -7,6 +7,12 @@
 
 ModuleTest::ModuleTest(Application* app, bool start_enabled ) : Module(app, start_enabled)
 {
+	math::vec test = math::vec(5, 5, 5);
+
+	math::vec test2 = math::vec(-10, 5, 5);
+
+	pera = new math::Sphere(test, 6.0);
+	limonera = new math::Sphere(test2, 4.0);
 }
 
 
@@ -21,11 +27,10 @@ ModuleTest::~ModuleTest()
 update_status ModuleTest::Update(float dt)
 {
 
-	math::vec test = math::vec(5, 5, 5);
+	limonera->pos.x += 0.1;
 
-	math::Sphere pera =  math::Sphere(test, 6.0);
-	math::Sphere limonera = math::Sphere(test, 4.0);
-	if (pera.Intersects(limonera))
+	
+	if (pera->Intersects(*limonera))
 	{
 		LOG("IT WORKS IT WORKS");
 	}
