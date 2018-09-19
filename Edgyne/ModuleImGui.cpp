@@ -55,9 +55,7 @@ update_status ModuleImGui::Update(float dt)
 
 	
 
-	ImGui::Begin("Shapes and Collisions", &perma_true);
-	if (ImGui::CollapsingHeader("Shapes"))
-	{
+	ImGui::Begin("Shapes", &perma_true);
 		if(ImGui::TreeNode("Sphere"))
 		{
 			static float fx = 1.0f;
@@ -102,8 +100,41 @@ update_status ModuleImGui::Update(float dt)
 			}
 			ImGui::TreePop();
 		}
+
+		if (ImGui::TreeNode("AABB"))
+		{
+			static float fxmax = 1.0f;
+			static float fymax= 1.0f;
+			static float fzmax = 1.0f;
+			
+			ImGui::InputFloat("maxX", &fxmax, 0.1f, 1.0f);
+			ImGui::InputFloat("maxY", &fymax, 0.1f, 1.0f);
+			ImGui::InputFloat("maxZ", &fzmax, 0.1f, 1.0f);
+
+			static float fxmin = 1.0f;
+			static float fymin = 1.0f;
+			static float fzmin = 1.0f;
+
+			ImGui::InputFloat("maxX", &fxmin, 0.1f, 1.0f);
+			ImGui::InputFloat("maxY", &fymin, 0.1f, 1.0f);
+			ImGui::InputFloat("maxZ", &fzmin, 0.1f, 1.0f);
+			
+
+			if (ImGui::Button("Spawn/Respawn AABB"))
+			{
+				App->test->CreateAABB(fxmax,fymax,fzmax,fxmin,fymin,fzmin);
+			}
+			ImGui::TreePop();
+			
+		}
 	
-	}
+	ImGui::End();
+
+	ImGui::Begin("Intersections", &perma_true);
+	ImGui::Checkbox("sphere", &App->test->sphere_intersection);
+	LOG("%d", App->test->sphere_intersection);
+	ImGui::Checkbox("capsule", &App->test->capsule_intersection);
+	ImGui::Checkbox("aabb", &App->test->aabb_intersection);
 	ImGui::End();
 	ImGui::BeginMainMenuBar();
 	

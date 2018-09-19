@@ -46,6 +46,49 @@ bool ModuleTest::CreateCapsule(float xt, float yt, float zt, float xb, float yb,
 	return true;
 }
 
+bool ModuleTest::CreateAABB(float maxx, float maxy, float maxz, float minx, float miny, float minz)
+{
+	RELEASE(aabb);
+	math::vec max = math::vec(maxx,maxy,maxz);
+	math::vec min = math::vec(minx,miny,minz);
+	aabb = new math::AABB(min, max);
+	return true;
+}
+
+bool ModuleTest::CheckTestIntersections()
+{
+	if (sphere != nullptr && capsule != nullptr && aabb != nullptr)
+	{
+		if (sphere->Intersects(*capsule) || sphere->Intersects(*aabb))
+		{
+			sphere_intersection = true;
+		}
+		else
+		{
+			sphere_intersection = false;
+		}
+
+		if (capsule->Intersects(*aabb) || capsule->Intersects(*sphere))
+		{
+			capsule_intersection = true;
+		}
+		else
+		{
+			capsule_intersection = false;
+		}
+
+		if (aabb->Intersects(*sphere) || aabb->Intersects(*capsule))
+		{
+			aabb_intersection = true;
+		}
+		else
+		{
+			aabb_intersection = false;
+		}
+	}
+	return true;
+}
+
 
 
 
@@ -61,7 +104,7 @@ update_status ModuleTest::Update(float dt)
 	//	LOG("IT WORKS IT WORKS");
 	//}
 	//
-
+	CheckTestIntersections();
 	return UPDATE_CONTINUE;
 }
 

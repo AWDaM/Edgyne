@@ -14,13 +14,20 @@ public:
 	bool CreateSphere(float x, float y, float z, float r);
 	bool CreateCylinder();
 	bool CreateCapsule(float xt, float yt, float zt, float xb, float yb, float zb,float r);
+	bool CreateAABB(float maxx, float maxy, float maxz, float minx, float miny, float minz);
+
+	bool CheckTestIntersections();
 
 	update_status Update(float dt);
 
 	Sphere* sphere = nullptr;
+	bool sphere_intersection = false;
 	Cylinder* cylinder = nullptr;
+	bool cylinder_intersection = false;
 	Capsule* capsule = nullptr;
-	
+	bool capsule_intersection = false;
+	AABB* aabb = nullptr;
+	bool aabb_intersection = false;
 
 };
 
