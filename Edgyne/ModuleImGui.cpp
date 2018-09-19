@@ -2,6 +2,7 @@
 #include "ModuleImGui.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
+#include "ModuleTest.h"
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl2.h"
@@ -54,7 +55,29 @@ update_status ModuleImGui::Update(float dt)
 
 	
 
+	ImGui::Begin("Shapes and Collisions", &perma_true);
+	if (ImGui::CollapsingHeader("Shapes"))
+	{
+		if(ImGui::TreeNode("Sphere"))
+		{
+			static float fx = 1.0f;
+			static float fy = 1.0f;
+			static float fz = 1.0f;
+			static float fr = 1.0f;
+			ImGui::InputFloat("X", &fx, 0.1f, 1.0f);
+			ImGui::InputFloat("Y", &fy, 0.1f, 1.0f);
+			ImGui::InputFloat("Z", &fz, 0.1f, 1.0f);
+			ImGui::InputFloat("R", &fr, 0.1f, 1.0f);
+			
+			if (ImGui::Button("Spawn/Respawn Sphere"))
+			{
+				App->test->CreateSphere(fx, fy, fz, fr);
+			}
+			ImGui::TreePop();
+		}
 	
+	}
+	ImGui::End();
 	ImGui::BeginMainMenuBar();
 	
 		if (ImGui::BeginMenu("Windows"))

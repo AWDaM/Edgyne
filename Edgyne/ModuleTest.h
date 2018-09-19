@@ -11,11 +11,14 @@ public:
 	ModuleTest(Application* app, bool start_enabled = true);
 	~ModuleTest();
 
-
+	bool CreateSphere(float x, float y, float z, float r);
+	bool CreateCylinder();
 
 	update_status Update(float dt);
 
-	Sphere* pera;
-	Sphere* limonera;
+	Sphere* sphere = nullptr;
+	Cylinder* cylinder = nullptr;
+	
+
 };
 

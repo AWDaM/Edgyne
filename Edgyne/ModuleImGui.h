@@ -13,6 +13,7 @@ public:
 private:
 public:
 	bool show_demo_window = false;
+	bool perma_true = true;
 	bool to_close = false;
 };
 
