@@ -90,9 +90,9 @@ update_status ModuleImGui::Update(float dt)
 			static float fxb = 1.0f;
 			static float fyb = 1.0f;
 			static float fzb = 1.0f;
-			ImGui::InputFloat("top X", &fxb, 0.1f, 1.0f);
-			ImGui::InputFloat("top Y", &fyb, 0.1f, 1.0f);
-			ImGui::InputFloat("top Z", &fzb, 0.1f, 1.0f);
+			ImGui::InputFloat("bottom X", &fxb, 0.1f, 1.0f);
+			ImGui::InputFloat("bottom Y", &fyb, 0.1f, 1.0f);
+			ImGui::InputFloat("bottom Z", &fzb, 0.1f, 1.0f);
 			
 			ImGui::InputFloat("Radius", &fr, 0.1f, 1.0f);
 
