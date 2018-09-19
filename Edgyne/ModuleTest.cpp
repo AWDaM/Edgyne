@@ -34,7 +34,16 @@ bool ModuleTest::CreateCylinder()
 {
 	math::vec test = math::vec(5, 5, 5);
 	//cylinder = new math::Cylinder(test);
-	return false;
+	return true;
+}
+
+bool ModuleTest::CreateCapsule(float xt, float yt, float zt, float xb, float yb, float zb, float r)
+{
+	RELEASE(capsule);
+	math::vec top = math::vec(xt,yt,zt);
+	math::vec bottom = math::vec(xb,yb,zb);
+	capsule = new math::Capsule(bottom, top, r);
+	return true;
 }
 
 
