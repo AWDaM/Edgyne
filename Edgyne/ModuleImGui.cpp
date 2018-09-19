@@ -97,11 +97,38 @@ update_status ModuleImGui::Update(float dt)
 			ImGui::InputFloat("X", &fx, 0.1f, 1.0f);
 			ImGui::InputFloat("Y", &fy, 0.1f, 1.0f);
 			ImGui::InputFloat("Z", &fz, 0.1f, 1.0f);
-			ImGui::InputFloat("R", &fr, 0.1f, 1.0f);
+			ImGui::InputFloat("Radius", &fr, 0.1f, 1.0f);
 			
 			if (ImGui::Button("Spawn/Respawn Sphere"))
 			{
 				App->test->CreateSphere(fx, fy, fz, fr);
+			}
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Capsule"))
+		{
+			static float fxt = 1.0f;
+			static float fyt = 1.0f;
+			static float fzt = 1.0f;
+			static float fr = 1.0f;
+			ImGui::InputFloat("top X", &fxt, 0.1f, 1.0f);
+			ImGui::InputFloat("top Y", &fyt, 0.1f, 1.0f);
+			ImGui::InputFloat("top Z", &fzt, 0.1f, 1.0f);
+			
+
+			static float fxb = 1.0f;
+			static float fyb = 1.0f;
+			static float fzb = 1.0f;
+			ImGui::InputFloat("bottom X", &fxb, 0.1f, 1.0f);
+			ImGui::InputFloat("bottom Y", &fyb, 0.1f, 1.0f);
+			ImGui::InputFloat("bottom Z", &fzb, 0.1f, 1.0f);
+			
+			ImGui::InputFloat("Radius", &fr, 0.1f, 1.0f);
+
+			if (ImGui::Button("Spawn/Respawn Capsule"))
+			{
+				App->test->CreateCapsule(fxt,fyt,fzt,fxb,fyb,fzb,fr);
 			}
 			ImGui::TreePop();
 		}
