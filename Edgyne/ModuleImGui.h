@@ -1,5 +1,7 @@
 #pragma once
 #include "Module.h"
+#include "pcg_variants.h"
+
 class ModuleImGui : public Module
 {
 public:
@@ -11,9 +13,20 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 private:
+	pcg32_random_t rng;
+	int rng2 = 0;
+	pcg32_random_t rngSeed3;
+	float rng3 = 0;
+	pcg_state_setseq_64 dunnoWhatThisIs;
+	uint32_t bound;
+	int tmpBoundMin = 0;
+	int tmpBoundMax = 100;
+
+
 public:
 	bool show_demo_window = false;
 	bool perma_true = true;
+	bool perma_true_2 = true;
 	bool to_close = false;
 };
 

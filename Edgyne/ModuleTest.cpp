@@ -30,6 +30,14 @@ bool ModuleTest::CreateSphere(float x, float y, float z, float r)
 	return true;
 }
 
+bool ModuleTest::CreateFrustum(float x, float y, float z, float r)
+{
+	//RELEASE(frustum);
+	//math::vec vector = math::vec(x, y, z);
+	//frustum = new math::Frustum(x,)
+	return false;
+}
+
 bool ModuleTest::CreateCylinder()
 {
 	math::vec test = math::vec(5, 5, 5);
