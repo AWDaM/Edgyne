@@ -49,16 +49,16 @@ bool ModuleAudio::CleanUp()
 {
 	LOG("Freeing sound FX, closing Mixer and Audio subsystem");
 
-	if(music != NULL)
+	if (music != NULL)
 	{
 		Mix_FreeMusic(music);
 	}
+	std::list<Mix_Chunk*>::iterator item = fx.begin();
 
-	p2List_item<Mix_Chunk*>* item;
-
-	for(item = fx.getFirst(); item != NULL; item = item->next)
+	while (item != fx.end())
 	{
-		Mix_FreeChunk(item->data);
+		Mix_FreeChunk(*item);
+		item++;
 	}
 
 	fx.clear();
@@ -132,8 +132,8 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 	}
 	else
 	{
-		fx.add(chunk);
-		ret = fx.count();
+		fx.push_back(chunk);
+		ret = fx.size();
 	}
 
 	return ret;
@@ -145,11 +145,31 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat)
 	bool ret = false;
 
 	Mix_Chunk* chunk = NULL;
-	
-	if(fx.at(id-1, chunk) == true)
+
+	if (FindIDOnList(id - 1, chunk))
 	{
 		Mix_PlayChannel(-1, chunk, repeat);
 		ret = true;
+	}
+
+	return ret;
+}
+
+bool ModuleAudio::FindIDOnList(int index, Mix_Chunk* data)
+{
+	bool ret = false;
+	unsigned int i = 0;
+	std::list<Mix_Chunk*>::iterator p_data = fx.begin();
+
+	while (i < index && *p_data != nullptr)
+	{
+		p_data++;
+		i++;
+	}
+	if (*p_data != nullptr)
+	{
+		ret = true;
+		data = *p_data;
 	}
 
 	return ret;
