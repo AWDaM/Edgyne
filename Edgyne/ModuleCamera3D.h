@@ -2,7 +2,6 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
-#include "p2Queue.h"
 #include <vector>
 
 class Timer;
