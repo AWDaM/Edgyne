@@ -12,6 +12,13 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
+
+	void RandomNumberTest();
+	void IntersectionsTest();
+	//void Configuration();
+	void HelpMenu();
+	void About();
+
 private:
 	pcg32_random_t rng;
 	int rng2 = 0;
@@ -25,6 +32,10 @@ private:
 
 public:
 	bool show_demo_window = false;
+	bool show_random_number_test = false;
+	bool show_intersections_test = false;
+	bool show_configuration = false;
+	bool show_about_window = false;
 	bool perma_true = true;
 	bool perma_true_2 = true;
 	bool to_close = false;
