@@ -15,6 +15,11 @@ public:
 	update_status PostUpdate(float dt);
 
 	void AddLog(std::string Log);
+	void RandomNumberTest();
+	void IntersectionsTest();
+	void ConsoleWindow();
+	void HelpMenu();
+	void About();
 
 private:
 	std::list<std::string> LogInformation;
@@ -33,6 +38,10 @@ private:
 public:
 	bool show_demo_window = false;
 	bool show_console = false;
+	bool show_random_number_test = false;
+	bool show_intersections_test = false;
+	bool show_configuration = false;
+	bool show_about_window = false;
 	bool perma_true = true;
 	bool perma_true_2 = true;
 	bool to_close = false;

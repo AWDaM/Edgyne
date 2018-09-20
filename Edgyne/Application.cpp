@@ -128,6 +128,11 @@ bool Application::CleanUp()
 	return ret;
 }
 
+void Application::OpenBrowser(std::string url)
+{
+	ShellExecuteA(NULL, "open", url.data(), NULL, NULL, SW_SHOWNORMAL);
+}
+
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);

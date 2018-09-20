@@ -44,7 +44,7 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
-
+	void OpenBrowser(std::string);
 private:
 
 	void AddModule(Module* mod);
