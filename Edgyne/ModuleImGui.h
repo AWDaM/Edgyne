@@ -1,7 +1,8 @@
 #pragma once
 #include "Module.h"
 #include "pcg_variants.h"
-
+#include <list>
+#include <string>
 class ModuleImGui : public Module
 {
 public:
@@ -12,7 +13,12 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
+
+	void AddLog(std::string Log);
+
 private:
+	std::list<std::string> LogInformation;
+
 	pcg32_random_t rng;
 	int rng2 = 0;
 	pcg32_random_t rngSeed3;
@@ -23,8 +29,10 @@ private:
 	int tmpBoundMax = 100;
 
 
+
 public:
 	bool show_demo_window = false;
+	bool show_console = false;
 	bool perma_true = true;
 	bool perma_true_2 = true;
 	bool to_close = false;

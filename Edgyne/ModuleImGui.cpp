@@ -174,6 +174,12 @@ update_status ModuleImGui::Update(float dt)
 		
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Console"))
+		{
+			ImGui::MenuItem("Show Console", NULL, &show_console);
+
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Close"))
 		{
 			to_close = true;
@@ -187,6 +193,21 @@ update_status ModuleImGui::Update(float dt)
 		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 	
+	if (show_console)
+	{
+		ImGui::Begin("Console", &show_console);
+		{
+			std::list<std::string>::iterator item = LogInformation.begin();
+			while (item != LogInformation.end())
+			{
+				ImGui::Text(item->data());
+				item++;
+			}
+
+		}
+		ImGui::End();
+	}
+
 	return status;
 }
 
@@ -203,6 +224,11 @@ update_status ModuleImGui::PostUpdate(float dt)
 		status = UPDATE_STOP;
 	}
 	return status;
+}
+
+void ModuleImGui::AddLog(std::string Log)
+{
+	LogInformation.push_back(Log);
 }
 
 

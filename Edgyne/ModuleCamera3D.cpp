@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "ModuleImGui.h"
 #include "Timer.h"
 #include "p2Log.h"
 
@@ -25,7 +26,7 @@ ModuleCamera3D::~ModuleCamera3D()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
-	LOG("Setting up the camera");
+	App->imGui->AddLog("Setting up the camera");
 	bool ret = true;
 	return ret;
 }
