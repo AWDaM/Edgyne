@@ -20,7 +20,7 @@ public:
 	void ConsoleWindow();
 	void HelpMenu();
 	void About();
-
+	void Configuration();
 private:
 	std::list<std::string> LogInformation;
 
@@ -42,6 +42,7 @@ public:
 	bool show_intersections_test = false;
 	bool show_configuration = false;
 	bool show_about_window = false;
+	
 	bool perma_true = true;
 	bool perma_true_2 = true;
 	bool to_close = false;

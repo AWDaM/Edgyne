@@ -19,6 +19,7 @@ public:
 	bool CleanUp();
 
 	void SetTitle(const char* title);
+	void Configuration();
 
 public:
 	//The window we'll be rendering to

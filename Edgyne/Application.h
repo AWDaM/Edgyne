@@ -10,7 +10,9 @@
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
 #include "ModuleTest.h"
-
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_impl_sdl.h"
+#include "ImGui/imgui_impl_opengl2.h"
 #include "MathGeoLib\MathGeoLib.h"
 
 #include <list>
@@ -28,13 +30,13 @@ public:
 	ModuleCamera3D* camera;
 	ModuleImGui* imGui;
 	ModuleTest* test;
-
+	std::list<Module*> list_modules;
 
 private:
 
 	Timer	ms_timer;
 	float	dt;
-	std::list<Module*> list_modules;
+
 
 public:
 

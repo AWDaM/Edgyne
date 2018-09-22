@@ -4,9 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleTest.h"
 #include "pcg_variants.h"
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_sdl.h"
-#include "ImGui/imgui_impl_opengl2.h"
+
 #include <stdio.h>
 #include <time.h>
 
@@ -14,6 +12,7 @@
 
 ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	name = "ImGui";
 }
 
 
@@ -56,13 +55,13 @@ update_status ModuleImGui::Update(float dt)
 
 	
 	ImGui::BeginMainMenuBar();
-	//Configuration();
 	HelpMenu();
 		if (ImGui::BeginMenu("Windows"))
 		{
 			ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
 			ImGui::MenuItem("RandomNumberTest", NULL, &show_random_number_test);
 			ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
+			ImGui::MenuItem("Configuration", NULL, &show_configuration);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Console"))
@@ -79,11 +78,12 @@ update_status ModuleImGui::Update(float dt)
 		}
 		ImGui::EndMainMenuBar();
 	
-	if (show_demo_window)			ImGui::ShowDemoWindow(&show_demo_window);
+	if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
 	if (show_random_number_test)	RandomNumberTest();
-	if (show_intersections_test)	IntersectionsTest();
-	if (show_about_window)			About();
-	if (show_console)				ConsoleWindow();
+	if (show_intersections_test)		IntersectionsTest();
+	if (show_about_window)				About();
+	if (show_console)							ConsoleWindow();
+	if (show_configuration)				Configuration();
 
 	return status;
 }
@@ -319,6 +319,30 @@ void ModuleImGui::About()
 
 	ImGui::End();
 
+}
+
+void ModuleImGui::Configuration()
+{
+	if(ImGui::Begin("Configuration",&show_configuration))
+	{ 
+		if (ImGui::CollapsingHeader("General Options"))
+		{
+			ImGui::Button("Default Options");
+			ImGui::SameLine();
+			ImGui::Button("Load Options");
+			ImGui::SameLine();
+			ImGui::Button("Save Options");
+		}
+		std::list<Module*>::iterator item = App->list_modules.begin();
+
+		while (item != App->list_modules.end())
+		{
+			/*(*item)->Configuration();*/
+			log((*item)->)
+			item++;
+		}
+	}
+	ImGui::End();
 }
 
 void ModuleImGui::AddLog(std::string Log)
