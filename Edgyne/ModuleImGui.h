@@ -20,7 +20,7 @@ public:
 	void ConsoleWindow();
 	void HelpMenu();
 	void About();
-	void Configuration();
+	void Configuration_window();
 private:
 	std::list<std::string> LogInformation;
 

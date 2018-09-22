@@ -1,5 +1,6 @@
 #pragma once
 
+#include<string>
 class Application;
 struct PhysBody3D;
 
@@ -55,5 +56,5 @@ public:
 	{}
 
 public:
-	std::string name=""
+	std::string name = "";
 };

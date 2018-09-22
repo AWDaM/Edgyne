@@ -83,7 +83,7 @@ update_status ModuleImGui::Update(float dt)
 	if (show_intersections_test)		IntersectionsTest();
 	if (show_about_window)				About();
 	if (show_console)							ConsoleWindow();
-	if (show_configuration)				Configuration();
+	if (show_configuration)				Configuration_window();
 
 	return status;
 }
@@ -321,7 +321,7 @@ void ModuleImGui::About()
 
 }
 
-void ModuleImGui::Configuration()
+void ModuleImGui::Configuration_window()
 {
 	if(ImGui::Begin("Configuration",&show_configuration))
 	{ 
@@ -337,10 +337,10 @@ void ModuleImGui::Configuration()
 
 		while (item != App->list_modules.end())
 		{
-			/*(*item)->Configuration();*/
-			log((*item)->)
+			(*item)->Configuration();
 			item++;
 		}
+		
 	}
 	ImGui::End();
 }
