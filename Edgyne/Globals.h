@@ -17,6 +17,8 @@ void log(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
 
+#define FPS_LOG_SIZE 100
+
 
 typedef unsigned int uint;
 
@@ -35,5 +37,5 @@ enum update_status
 #define WIN_RESIZABLE true
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
-#define VSYNC true
+#define VSYNC false
 #define TITLE "Edgyne"

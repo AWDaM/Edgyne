@@ -98,11 +98,11 @@ void ModuleWindow::Configuration()
 {
 	if (ImGui::CollapsingHeader("Window"))
 	{
-		char* window_name = "";
-		if (ImGui::InputText("Window Title", window_name, 25))
-		{
-			SetTitle(window_name);
-		}
+		//char* window_name = "";
+		//if (ImGui::InputText("Window Title", window_name, 25,NULL,NULL,))
+		//{
+		//	SetTitle(window_name);
+		//}
 	}
 
 }

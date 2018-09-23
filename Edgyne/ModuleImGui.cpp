@@ -21,7 +21,7 @@ bool ModuleImGui::Init()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
@@ -333,8 +333,11 @@ void ModuleImGui::Configuration_window()
 			ImGui::SameLine();
 			ImGui::Button("Save Options");
 		}
+
+		App->Configuration_ImGui();
 		std::list<Module*>::iterator item = App->list_modules.begin();
 
+		
 		while (item != App->list_modules.end())
 		{
 			(*item)->Configuration();
