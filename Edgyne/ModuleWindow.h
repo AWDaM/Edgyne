@@ -27,6 +27,9 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
+
+	//ONLY USE THIS NAME FOR THE Configuration FUNCTION
+	
 };
 
 #endif // __ModuleWindow_H__
