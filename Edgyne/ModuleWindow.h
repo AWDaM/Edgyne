@@ -36,8 +36,9 @@ public:
 	bool borderless = false;
 	bool desktop_fullscreen = false;
 
-	//ONLY USE THIS NAME FOR THE Configuration FUNCTION
-	
+	int window_w;
+	int window_h;
+	float brightness;
 };
 
 #endif // __ModuleWindow_H__

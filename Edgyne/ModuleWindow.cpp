@@ -28,8 +28,9 @@ bool ModuleWindow::Init()
 	else
 	{
 		//Create window
-		int width = SCREEN_WIDTH * SCREEN_SIZE;
-		int height = SCREEN_HEIGHT * SCREEN_SIZE;
+		 window_w = SCREEN_WIDTH * SCREEN_SIZE;
+		 window_h = SCREEN_HEIGHT * SCREEN_SIZE;
+		 brightness = 1.0f;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -60,7 +61,7 @@ bool ModuleWindow::Init()
 			desktop_fullscreen = true;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, flags);
 
 		if(window == NULL)
 		{
@@ -71,6 +72,9 @@ bool ModuleWindow::Init()
 		{
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
+			SDL_SetWindowMinimumSize(window, MINIMUM_SCREEN_WIDHT, MINIMUM_SCREEN_HEIGHT);
+			SDL_SetWindowMaximumSize(window, MAXIMUM_SCREEN_WIDHT, MAXIMUM_SCREEN_HEIGHT);
+			SDL_SetWindowBrightness(window, brightness);
 		}
 	}
 
@@ -133,6 +137,19 @@ void ModuleWindow::Configuration()
 			SetBorderless();
 		if (ImGui::Checkbox("Fullscreen Desktop", &desktop_fullscreen))
 			SetDesktopFullscreen();
+
+		int min_w, min_h, max_w, max_h;
+
+		SDL_GetWindowMinimumSize(window, &min_w, &min_h);
+		SDL_GetWindowMaximumSize(window, &max_w, &max_h);
+
+		if (ImGui::SliderInt("Width", &window_w, min_w, max_w))
+			SDL_SetWindowSize(window, window_w, window_h);
+		if(ImGui::SliderInt("Height", &window_h,min_h,max_h))
+			SDL_SetWindowSize(window, window_w, window_h);
+		if (ImGui::SliderFloat("Brightness", &brightness, 0.0f, 1.0f));
+			SDL_SetWindowBrightness(window, brightness);
+
 	}
 
 }
