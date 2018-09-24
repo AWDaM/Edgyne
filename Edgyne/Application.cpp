@@ -252,6 +252,39 @@ void Application::Configuration_ImGui()
 	}
 }
 
+void Application::Hardware_ImGui()
+{
+	if (ImGui::CollapsingHeader("Hardware"))
+	{
+		ImGui::Text("CPU count: %i", SDL_GetCPUCount());
+		ImGui::Text("Cache Size: %i kb", SDL_GetCPUCacheLineSize());
+		ImGui::Text("System RAM: %i MB", SDL_GetSystemRAM());
+		if (SDL_Has3DNow)
+			ImGui::Text("CPU has 3DNow!");
+		if (SDL_HasAVX())
+			ImGui::Text("CPU has AVX");
+		if (SDL_HasAVX2())
+			ImGui::Text("CPU has AVX2");
+		if (SDL_HasAltiVec())
+			ImGui::Text("CPU has AltiVec");
+		if (SDL_HasMMX())
+			ImGui::Text("CPU has MMX");
+		if (SDL_HasRDTSC())
+			ImGui::Text("CPU has RDTSC");
+		if (SDL_HasSSE())
+			ImGui::Text("CPU has SSE");
+		if (SDL_HasSSE2())
+			ImGui::Text("CPU has SSE2");
+		if (SDL_HasSSE3())
+			ImGui::Text("CPU has SSE3");
+		if (SDL_HasSSE41())
+			ImGui::Text("CPU has SSE41");
+		if (SDL_HasSSE42())
+			ImGui::Text("CPU has SSE42");
+
+	}
+}
+
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);

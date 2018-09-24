@@ -378,6 +378,7 @@ void ModuleImGui::Configuration_window()
 		}
 		
 	}
+	App->Hardware_ImGui();
 	ImGui::End();
 }
 

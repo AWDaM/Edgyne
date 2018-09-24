@@ -65,6 +65,7 @@ public:
 
 	void Log(const char* entry);
 	void Configuration_ImGui();
+	void Hardware_ImGui();
 
 private:
 
