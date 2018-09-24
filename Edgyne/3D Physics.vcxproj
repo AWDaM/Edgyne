@@ -169,6 +169,7 @@
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="p2Point.h" />
     <ClInclude Include="p2Queue.h" />
+    <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +231,7 @@
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleTest.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
