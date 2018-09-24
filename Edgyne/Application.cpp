@@ -1,15 +1,24 @@
 #include "Application.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
+#include "ModuleAudio.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "ModuleImGui.h"
+#include "ModuleTest.h"
 #include "p2Defs.h"
 
 Application::Application()
 {
+
+
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
-	test = new ModuleTest(this);
 	imGui = new ModuleImGui(this);
+	test = new ModuleTest(this);
 
 
 	// The order of calls is very important!
@@ -21,9 +30,9 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
-	AddModule(imGui);
 	AddModule(test);
-	
+	AddModule(imGui);
+
 	// Scenes
 
 	// Renderer last!
@@ -53,7 +62,6 @@ bool Application::Init()
 		ret = (*item)->Init();
 		item++;
 	}
-
 	// After all Init calls we call Start() in all modules
 	LOG("Application Start --------------");
 	 item = list_modules.begin();
@@ -117,6 +125,7 @@ update_status Application::Update()
 
 bool Application::CleanUp()
 {
+	canLog = false;
 	bool ret = true;
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
 
@@ -131,6 +140,18 @@ bool Application::CleanUp()
 void Application::OpenBrowser(std::string url)
 {
 	ShellExecuteA(NULL, "open", url.data(), NULL, NULL, SW_SHOWNORMAL);
+}
+
+void Application::Log(const char* entry)
+{
+	if (canLog)
+	{
+		// save all logs, so we can dump all in a file upon close
+		log.append(entry);
+
+		// send to editor console
+		imGui->AddLog(entry);
+	}
 }
 
 void Application::AddModule(Module* mod)

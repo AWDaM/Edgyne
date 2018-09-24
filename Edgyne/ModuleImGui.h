@@ -1,8 +1,12 @@
 #pragma once
 #include "Module.h"
+#include "GUIElements.h"
+#include "GUIConsole.h"
 #include "pcg_variants.h"
 #include <list>
 #include <string>
+#include <vector>
+
 class ModuleImGui : public Module
 {
 public:
@@ -10,17 +14,24 @@ public:
 	~ModuleImGui();
 
 	bool Init();
+	bool CleanUp();
+
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 
-	void AddLog(std::string Log);
+	void AddLog(const char* Log);
 	void RandomNumberTest();
 	void IntersectionsTest();
 	void ConsoleWindow();
 	void HelpMenu();
 	void About();
 	void Configuration_window();
+
+public:
+	GUIConsole* console = nullptr;
+
+
 private:
 	std::list<std::string> LogInformation;
 
@@ -34,8 +45,9 @@ private:
 	int tmpBoundMax = 100;
 
 
-
 public:
+	std::vector<GUIElements*> GUIElement;
+
 	bool show_demo_window = false;
 	bool show_console = false;
 	bool show_random_number_test = false;

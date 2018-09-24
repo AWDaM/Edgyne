@@ -46,6 +46,9 @@
     <Filter Include="Sources\MathGeoLib\Algorithm\Random">
       <UniqueIdentifier>{8b8401cc-8a45-4439-8be0-8c477f31599b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GUI">
+      <UniqueIdentifier>{6940805d-953e-44fb-844b-5ebf8894d96d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -97,9 +100,6 @@
       <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="p2Defs.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Log.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
@@ -327,6 +327,12 @@
     <ClInclude Include="ModuleTest.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="GUIElements.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIConsole.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -361,9 +367,6 @@
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Sources\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="p2Log.cpp">
-      <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>Sources\ImGui</Filter>
@@ -499,6 +502,15 @@
     </ClCompile>
     <ClCompile Include="ModuleTest.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIElements.cpp">
+      <Filter>Sources\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIConsole.cpp">
+      <Filter>Sources\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

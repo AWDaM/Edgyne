@@ -3,13 +3,6 @@
 #include "Globals.h"
 #include "Timer.h"
 #include "Module.h"
-#include "ModuleWindow.h"
-#include "ModuleInput.h"
-#include "ModuleAudio.h"
-#include "ModuleRenderer3D.h"
-#include "ModuleCamera3D.h"
-#include "ModuleImGui.h"
-#include "ModuleTest.h"
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl2.h"
@@ -20,16 +13,25 @@
 #include <string>
 #include <queue>
 
+class ModuleWindow;
+class ModuleInput;
+class ModuleAudio;
+class ModuleRenderer3D;
+class ModuleCamera3D;
+class ModuleImGui;
+class ModuleTest;
+
 class Application
 {
 public:
-	ModuleWindow* window;
+	ModuleWindow * window;
 	ModuleInput* input;
 	ModuleAudio* audio;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleImGui* imGui;
 	ModuleTest* test;
+
 	std::list<Module*> list_modules;
 
 private:
@@ -47,9 +49,19 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void OpenBrowser(std::string);
+	void Log(const char* entry);
+
 private:
 
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+	std::string log;
+
+public:
+
+	bool canLog = false;
+
 };
+
+extern Application* App;

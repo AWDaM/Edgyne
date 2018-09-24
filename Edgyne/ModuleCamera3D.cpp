@@ -1,14 +1,14 @@
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
+#include "ModuleInput.h"
+#include "Globals.h"
 #include "Timer.h"
-#include "p2Log.h"
 
 
 
 
-ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(start_enabled)
 {
 	name = "Camera";
 

@@ -1,7 +1,9 @@
 #include "Application.h"
 #include "ModuleImGui.h"
+#include "GUIElements.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
+#include "ModuleInput.h"
 #include "ModuleTest.h"
 #include "pcg_variants.h"
 
@@ -10,7 +12,7 @@
 
 
 
-ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(start_enabled)
 {
 	name = "ImGui";
 }
@@ -24,6 +26,10 @@ bool ModuleImGui::Init()
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
+	GUIElement.push_back(console = new GUIConsole());
+
+	App->canLog = true;
+
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 	ImGui_ImplOpenGL2_Init();
 
@@ -34,6 +40,21 @@ bool ModuleImGui::Init()
 
 
 	return true;
+}
+
+bool ModuleImGui::CleanUp()
+{
+
+	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+	{
+		GUIElements* element = (*it);
+
+		if (element->IsActive())
+		{
+			
+		}
+	}
+	return false;
 }
 
 update_status ModuleImGui::PreUpdate(float dt)
@@ -78,6 +99,18 @@ update_status ModuleImGui::Update(float dt)
 		}
 		ImGui::EndMainMenuBar();
 	
+		for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+		{
+			GUIElements* element = (*it);
+
+			if (element->IsActive())
+			{
+				ImGui::SetNextWindowPos(ImVec2((float)element->posx, (float)element->posy), ImGuiSetCond_Always);
+				ImGui::SetNextWindowSize(ImVec2((float)element->width, (float)element->height), ImGuiSetCond_Always);
+				element->Draw();
+			}
+		}
+
 	if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
 	if (show_random_number_test)	RandomNumberTest();
 	if (show_intersections_test)		IntersectionsTest();
@@ -345,9 +378,11 @@ void ModuleImGui::Configuration_window()
 	ImGui::End();
 }
 
-void ModuleImGui::AddLog(std::string Log)
+void ModuleImGui::AddLog(const char* Log)
 {
 	LogInformation.push_back(Log);
+
+	console->AddLog(Log);
 }
 
 
