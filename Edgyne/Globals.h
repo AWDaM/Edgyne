@@ -17,6 +17,8 @@ void _log(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
 
+#define FPS_LOG_SIZE 100
+
 
 typedef unsigned int uint;
 
@@ -30,10 +32,14 @@ enum update_status
 // Configuration -----------
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 1024
+#define MINIMUM_SCREEN_WIDHT 640
+#define MINIMUM_SCREEN_HEIGHT 480
+#define MAXIMUM_SCREEN_WIDHT 3840
+#define MAXIMUM_SCREEN_HEIGHT 2160
 #define SCREEN_SIZE 1
 #define WIN_FULLSCREEN false
 #define WIN_RESIZABLE true
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
-#define VSYNC true
+#define VSYNC false
 #define TITLE "Edgyne"

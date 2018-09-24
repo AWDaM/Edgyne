@@ -19,7 +19,11 @@ public:
 	bool CleanUp();
 
 	void SetTitle(const char* title);
+	void SetFullscreen();
+	void SetBorderless();
+	void SetDesktopFullscreen();
 	void Configuration();
+	
 
 public:
 	//The window we'll be rendering to
@@ -27,9 +31,14 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
+	bool fullscreen = false;
+	bool resizable = false;
+	bool borderless = false;
+	bool desktop_fullscreen = false;
 
-	//ONLY USE THIS NAME FOR THE Configuration FUNCTION
-	
+	int window_w;
+	int window_h;
+	float brightness;
 };
 
 #endif // __ModuleWindow_H__

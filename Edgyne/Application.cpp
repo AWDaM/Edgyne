@@ -8,10 +8,11 @@
 #include "ModuleTest.h"
 #include "p2Defs.h"
 
-Application::Application()
+Application::Application() 
 {
 
 
+	PERF_START(ptimer);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
@@ -20,6 +21,11 @@ Application::Application()
 	imGui = new ModuleImGui(this);
 	test = new ModuleTest(this);
 
+	framerate = 1000 / 60;
+	
+	fps.resize(FPS_LOG_SIZE);
+
+	ms.resize(FPS_LOG_SIZE);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -37,6 +43,7 @@ Application::Application()
 
 	// Renderer last!
 	AddModule(renderer3D);
+	PERF_PEEK(ptimer);
 }
 
 Application::~Application()
@@ -79,13 +86,80 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
+	frame_count++;
+	last_sec_frame_count++;
+
+	dt = frame_time.ReadSec();
+
+	frame_time.Start();
+	ptimer.Start();
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	if (last_sec_frame_time.ReadMs() > 1000)
+	{
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
+
+	float avg_fps = float(frame_count) / startup_time.ReadSec();
+	float seconds_since_startup = startup_time.ReadSec();
+	uint32 last_frame_ms = frame_time.ReadMs();
+	uint32 frames_on_last_update = prev_last_sec_frame_count;
+
+	//static char title[256];
+	//if (entitycontroller->debug)
+	//	sprintf_s(title, 256, "Alliance: The last Bastion | FPS: %i Avg.FPS: %.2f last frame ms: %02u", frames_on_last_update, avg_fps, last_frame_ms);
+	//else
+	//	sprintf_s(title, 256, "Alliance: The last Bastion | FPS %i", frames_on_last_update);
+	//App->win->SetTitle(title);
+	LOG("FPS: %i", frames_on_last_update);
+
+	if (framerate > 0 && last_frame_ms < framerate) SDL_Delay(framerate - last_frame_ms);
+	ChangeFPSlog(frames_on_last_update, last_frame_ms);
+	
+}
+
+int Application::GetFramerate() const
+{
+	int ret;
+	if (framerate > 0)
+		ret =(int) ((1.0f / (float)framerate) * 1000.0f);
+	else
+		ret = 0;
+	return ret;
+}
+
+void Application::SetFramerate(int _framerate)
+{
+	if (_framerate > 0)
+		framerate = 1000 / _framerate;
+	else
+		framerate = 0;
+
+
+}
+
+void Application::ChangeFPSlog(int _fps, float _ms)
+{
+	
+	
+	for(int i = 0 ; i  < FPS_LOG_SIZE-1 ; i++)
+	{
+		fps[i] = fps[i+1];
+	}
+	fps[FPS_LOG_SIZE-1] = _fps;
+
+
+	for (int i = 0; i < FPS_LOG_SIZE - 1; i++)
+	{
+		ms[i] = ms[i + 1];
+	}
+	ms[FPS_LOG_SIZE - 1] = _ms;
+	
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -151,6 +225,30 @@ void Application::Log(const char* entry)
 
 		// send to editor console
 		imGui->AddLog(entry);
+	}
+}
+void Application::Configuration_ImGui()
+{
+	if (ImGui::CollapsingHeader("Application"))
+	{
+		char* window_name = "";
+		if (ImGui::InputText("Application Name", window_name, 25))
+		{
+			window->SetTitle(window_name);
+		}
+		int framerate_imgui = GetFramerate();
+		if (ImGui::SliderInt("Max FPS", &framerate_imgui, 0, 120))
+		{
+			SetFramerate(framerate_imgui);
+		}
+
+		ImGui::Text("Framerate: %0.1f  ", fps[FPS_LOG_SIZE-1]);
+		ImGui::SameLine();
+		ImGui::PlotHistogram("", &fps[0], fps.size(), 0, "", 0.0f, 100.0f, ImVec2(310, 100));
+
+		ImGui::Text("Miliseconds: %0.1f", ms[FPS_LOG_SIZE - 1]);
+		ImGui::SameLine();
+		ImGui::PlotHistogram("", &ms[0], ms.size(), 0, "", 0.0f, 10.0f, ImVec2(310, 100));
 	}
 }
 
