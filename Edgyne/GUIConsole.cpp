@@ -20,7 +20,6 @@ GUIConsole::~GUIConsole()
 
 void GUIConsole::Draw()
 {
-	LOG("test LOG on an update");
 	ImGui::Begin("Console", &active, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing);
 	ImGui::TextUnformatted(Buf.begin());
 	if (ScrollToBottom)
