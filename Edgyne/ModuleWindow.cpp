@@ -76,6 +76,7 @@ bool ModuleWindow::Init()
 			SDL_SetWindowMaximumSize(window, MAXIMUM_SCREEN_WIDHT, MAXIMUM_SCREEN_HEIGHT);
 			SDL_SetWindowBrightness(window, brightness);
 		}
+		
 	}
 
 	return ret;

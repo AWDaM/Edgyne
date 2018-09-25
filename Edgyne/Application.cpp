@@ -231,8 +231,8 @@ void Application::Configuration_ImGui()
 {
 	if (ImGui::CollapsingHeader("Application"))
 	{
-		char* window_name = "";
-		if (ImGui::InputText("Application Name", window_name, 25))
+		
+		if (ImGui::InputText("Application Name", window_name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
 		{
 			window->SetTitle(window_name);
 		}

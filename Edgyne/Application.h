@@ -51,7 +51,7 @@ private:
 
 	std::vector<float> fps;
 	std::vector<float> ms;
-
+	char* window_name = "";
 
 public:
 
