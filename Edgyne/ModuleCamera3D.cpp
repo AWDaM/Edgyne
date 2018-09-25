@@ -29,7 +29,7 @@ ModuleCamera3D::~ModuleCamera3D()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
-	App->imGui->AddLog("Setting up the camera");
+	LOG("Setting up the camera");
 	bool ret = true;
 	return ret;
 }

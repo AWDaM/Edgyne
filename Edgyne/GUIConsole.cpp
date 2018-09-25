@@ -4,13 +4,14 @@
 
 
 
-GUIConsole::GUIConsole() : GUIElements("console")
+GUIConsole::GUIConsole(std::string log) : GUIElements("console")
 {
 	width = 658;
 	height = 300;
 	posy = 100;
-	active = true;
+
 	canLog = true;
+	AddLog(log.data());
 }
 
 

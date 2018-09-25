@@ -113,8 +113,8 @@ bool ModuleTest::Init()
 
 update_status ModuleTest::Update(float dt)
 {	
-	LOG("json'd number: %d", num);
-	LOG("json'd string: %s", string.data());
+	//LOG("json'd number: %d", num);
+	//LOG("json'd string: %s", string.data());
 	//limonera->pos.x += 0.1;
 
 	//

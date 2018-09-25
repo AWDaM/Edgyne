@@ -116,7 +116,7 @@ void Application::FinishUpdate()
 	//else
 	//	sprintf_s(title, 256, "Alliance: The last Bastion | FPS %i", frames_on_last_update);
 	//App->win->SetTitle(title);
-	LOG("FPS: %i", frames_on_last_update);
+	//LOG("FPS: %i", frames_on_last_update);
 
 	if (framerate > 0 && last_frame_ms < framerate) SDL_Delay(framerate - last_frame_ms);
 	ChangeFPSlog(frames_on_last_update, last_frame_ms);
@@ -218,11 +218,11 @@ void Application::OpenBrowser(std::string url)
 
 void Application::Log(const char* entry)
 {
-	if (canLog)
-	{
+
 		// save all logs, so we can dump all in a file upon close
 		log.append(entry);
-
+		if (canLog)
+		{
 		// send to editor console
 		imGui->AddLog(entry);
 	}

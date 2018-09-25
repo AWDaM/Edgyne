@@ -39,7 +39,7 @@ public:
 
 private:
 
-	Timer	ms_timer;
+	Timer				ms_timer;
 	PerfTimer			ptimer;
 	uint64				frame_count = 0;
 	PerfTimer			startup_time;
@@ -73,10 +73,10 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 
-	std::string log;
 
 public:
 
+	std::string log;
 	bool canLog = false;
 	int GetFramerate() const;
 	void SetFramerate(int _framerate);

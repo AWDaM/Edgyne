@@ -26,7 +26,7 @@ bool ModuleImGui::Init()
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
 
-	GUIElement.push_back(console = new GUIConsole());
+	GUIElement.push_back(console = new GUIConsole(App->log));
 
 	App->canLog = true;
 
@@ -87,7 +87,8 @@ update_status ModuleImGui::Update(float dt)
 		}
 		if (ImGui::BeginMenu("Console"))
 		{
-			ImGui::MenuItem("Show Console", NULL, &show_console);
+
+			console->active = ImGui::MenuItem("Show Console", NULL, &show_console);
 
 			ImGui::EndMenu();
 		}
@@ -256,23 +257,6 @@ void ModuleImGui::IntersectionsTest()
 	ImGui::Checkbox("capsule", &App->test->capsule_intersection);
 	ImGui::Checkbox("aabb", &App->test->aabb_intersection);
 	ImGui::End();
-
-	ImGui::BeginMainMenuBar();
-	
-		if (ImGui::BeginMenu("Windows"))
-		{
-			ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
-		
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Close"))
-		{
-			to_close = true;
-			
-			ImGui::EndMenu();
-		}
-		ImGui::EndMainMenuBar();
 
 }
 

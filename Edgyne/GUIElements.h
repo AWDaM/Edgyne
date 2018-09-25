@@ -16,7 +16,7 @@ public:
 	virtual bool CleanUp() {return true;};
 
 public:
-	bool active = true;
+	bool active = false;
 	int width = 1, height = 1, posx = 0, posy = 0;
 
 protected:
