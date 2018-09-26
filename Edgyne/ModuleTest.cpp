@@ -92,7 +92,7 @@ bool ModuleTest::CheckTestIntersections()
 	return true;
 }
 
-bool ModuleTest::Init()
+bool ModuleTest::Init(rapidjson::Document& document)
 {
 	json = "{\"This\" : \"testring\", \"num\" : 2}";
 

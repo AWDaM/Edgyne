@@ -22,7 +22,7 @@ ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(start_en
 
 
 
-bool ModuleImGui::Init()
+bool ModuleImGui::Init(rapidjson::Document& document)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

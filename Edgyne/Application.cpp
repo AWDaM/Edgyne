@@ -8,6 +8,8 @@
 #include "ModuleTest.h"
 #include "p2Defs.h"
 
+#include "rapidjson/filereadstream.h"
+
 Application::Application() 
 {
 
@@ -60,13 +62,22 @@ bool Application::Init()
 {
 	bool ret = true;
 
+	rapidjson::Document document;
+
+	FILE* fp = fopen("config.json", "rb");
+	char readBuffer[65536];
+
+	rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+
+	document.ParseStream(is);
+
 	// Call Init() in all modules
 
 	std::list<Module*>::iterator item = list_modules.begin();
 
 	while(item != list_modules.end() && ret == true)
 	{
-		ret = (*item)->Init();
+		ret = (*item)->Init(document);
 		item++;
 	}
 	// After all Init calls we call Start() in all modules
@@ -205,7 +216,7 @@ bool Application::CleanUp()
 
 	while (item != list_modules.rend() && ret == true)
 	{
-		ret = (*item)->Init();
+		ret = (*item)->CleanUp();
 		item++;
 	}
 	return ret;

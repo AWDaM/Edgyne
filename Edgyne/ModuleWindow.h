@@ -15,7 +15,7 @@ public:
 	// Destructor
 	virtual ~ModuleWindow();
 
-	bool Init();
+	bool Init(rapidjson::Document& document);
 	bool CleanUp();
 
 	void SetFullscreen();
