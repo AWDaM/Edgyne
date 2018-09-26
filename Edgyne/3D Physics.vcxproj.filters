@@ -336,7 +336,12 @@
     <ClInclude Include="GUIAbout.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="GUIConfiguration.h" />
+    <ClInclude Include="ModuleLevel.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIConfiguration.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -519,7 +524,12 @@
     <ClCompile Include="GUIAbout.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GUIConfiguration.cpp" />
+    <ClCompile Include="ModuleLevel.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIConfiguration.cpp">
+      <Filter>Sources\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">

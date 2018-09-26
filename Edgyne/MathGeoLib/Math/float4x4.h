@@ -199,6 +199,11 @@ public:
 		This function is mostly used for testing and debugging purposes only. */
 	static float4x4 RandomGeneral(LCG &lcg, float minElem, float maxElem);
 
+
+	//Perspective function (handmade)
+	float4x4 float4x4::Perspective(float fovy, float aspect, float n, float f);
+
+
 	/// Creates a new float4x4 that rotates one coordinate system to coincide with another.
 	/** This function rotates the sourceDirection vector to coincide with the targetDirection vector, and then
 			rotates sourceDirection2 (which was transformed by 1.) to targetDirection2, but keeping the constraint that

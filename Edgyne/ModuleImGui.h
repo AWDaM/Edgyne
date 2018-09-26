@@ -24,13 +24,17 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 
+	void Draw();
+
 	void AddLog(const char* Log);
 	void RandomNumberTest();
 	void IntersectionsTest();
 	void ConsoleWindow();
 	void HelpMenu();
-	void About();
-	void Configuration_window();
+
+
+	void MainMenu();
+
 
 public:
 	GUIConsole* console = nullptr;

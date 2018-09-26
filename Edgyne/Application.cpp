@@ -6,6 +6,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
 #include "ModuleTest.h"
+#include "ModuleLevel.h"
 #include "p2Defs.h"
 
 Application::Application() 
@@ -20,6 +21,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	imGui = new ModuleImGui(this);
 	test = new ModuleTest(this);
+	level = new ModuleLevel(this);
 
 	framerate = 1000 / 60;
 	
@@ -38,6 +40,7 @@ Application::Application()
 	AddModule(audio);
 	AddModule(test);
 	AddModule(imGui);
+	AddModule(level);
 
 	// Scenes
 

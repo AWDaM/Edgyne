@@ -4,6 +4,9 @@
 
 GUIConfiguration::GUIConfiguration() : GUIElements("Configuration")
 {
+	width = 658;
+	height = 300;
+	posy = 100;
 }
 
 

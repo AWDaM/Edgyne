@@ -5,6 +5,18 @@
 
 #define MAX_LIGHTS 8
 
+enum glRenderOptions
+{
+	DEFAULT = 0,
+	DEPTH_TEST,
+	CULL_FACE,
+	LIGHTING,
+	COLOR_MATERIAL,
+	TEXTURE_2D,
+	LINE_SMOOTH,
+	SCISSOR_TEST
+};
+
 class ModuleRenderer3D : public Module
 {
 public:
@@ -17,6 +29,9 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+	void Configuration();
+
+	void glSwitch(bool var, glRenderOptions option);
 
 public:
 
@@ -24,4 +39,14 @@ public:
 	SDL_GLContext context;
 	math::float3x3 NormalMatrix;
 	math::float4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+
+	bool depth_test = true;
+	bool cull_face = true;
+	bool lighting = true;
+	bool color_material = true;
+	bool texture_2d = false;
+	bool line_smooth = false;
+	bool scissor_test = false;
+
+	bool draw_wireframe = false;
 };

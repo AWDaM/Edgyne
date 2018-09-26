@@ -3,6 +3,8 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleWindow.h"
+#include "ModuleImGui.h"
+#include "ModuleLevel.h"
 #include "GL/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -36,7 +38,6 @@ bool ModuleRenderer3D::Init()
 	}
 
 	GLenum err = glewInit();
-
 	if (err != GLEW_OK)
 	{
 		LOG("Glew library not initialized properly %s\n", glewGetErrorString(err));
@@ -124,6 +125,8 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
+
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -142,6 +145,9 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	App->imGui->Draw();
+
+	App->level->Draw();
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
@@ -159,13 +165,114 @@ bool ModuleRenderer3D::CleanUp()
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	//glViewport(0, 0, width, height);
+	glViewport(0, 0, width, height);
 
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadIdentity();
-	//ProjectionMatrix. = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	//glLoadMatrixf(&ProjectionMatrix);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	ProjectionMatrix.Perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	glLoadMatrixf((float*)&ProjectionMatrix);
 
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+void ModuleRenderer3D::Configuration()
+{
+	if (ImGui::CollapsingHeader("Render3D"))
+	{
+		if(ImGui::Checkbox("WireframeRender", &draw_wireframe))
+		{
+			if (draw_wireframe)
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			}
+			else
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		ImGui::Dummy({ 0, 10 });
+		if (ImGui::Checkbox("Depth Test", &depth_test))
+			glSwitch(depth_test, DEPTH_TEST);
+		if (ImGui::Checkbox("Cull Face", &cull_face))
+			glSwitch(cull_face, CULL_FACE);
+		if (ImGui::Checkbox("Lighting", &lighting))
+			glSwitch(lighting, LIGHTING);
+		if (ImGui::Checkbox("Color Material", &color_material))
+			glSwitch(color_material, COLOR_MATERIAL);
+		if (ImGui::Checkbox("Texture 2D", &texture_2d))
+			glSwitch(texture_2d, TEXTURE_2D);
+		if (ImGui::Checkbox("Line Smooth", &line_smooth))
+			glSwitch(line_smooth, LINE_SMOOTH);
+		if (ImGui::Checkbox("Scissor Test", &scissor_test))
+			glSwitch(scissor_test, SCISSOR_TEST);
+	}
+}
+
+void ModuleRenderer3D::glSwitch(bool var, glRenderOptions option)
+{
+	switch (option)
+	{
+		case 0:
+		{
+			LOG("Invalid RenderOption");
+		}
+			break;
+		case 1:
+		{
+			if (var)
+				glEnable(GL_DEPTH_TEST);
+			else
+				glDisable(GL_DEPTH_TEST);
+		}
+			break;
+		case 2:
+		{
+			if (var)
+				glEnable(GL_CULL_FACE);
+			else
+				glDisable(GL_CULL_FACE);
+		}
+			break;
+		case 3:
+		{
+			if (var)
+				glEnable(GL_LIGHTING);
+			else
+				glDisable(GL_LIGHTING);
+		}
+			break;
+		case 4: 
+		{
+			if (var)
+				glEnable(GL_COLOR_MATERIAL);
+			else
+				glDisable(GL_COLOR_MATERIAL);
+		}
+			break;
+		case 5:
+		{
+			if (var)
+				glEnable(GL_TEXTURE_2D);
+			else
+				glDisable(GL_TEXTURE_2D);
+		}
+			break;
+		case 6:
+		{
+			if (var)
+				glEnable(GL_LINE_SMOOTH);
+			else
+				glDisable(GL_LINE_SMOOTH);
+		}
+			break;
+		case 7:
+		{
+			if (var)
+				glEnable(GL_SCISSOR_TEST);
+			else
+				glDisable(GL_SCISSOR_TEST);
+		}
+			break;
+
+	}
+
 }

@@ -220,6 +220,21 @@ float4x4 float4x4::RandomGeneral(LCG &lcg, float minElem, float maxElem)
 	return m;
 }
 
+float4x4 float4x4::Perspective(float fovy, float aspect, float n, float f)
+{
+	float4x4 Perspective;
+
+	float coty = 1.0f / tan(fovy*(float)pi / 360.0f);
+
+	Perspective.Set(0,0,coty/aspect );
+	Perspective.Set(1,1,coty );
+	Perspective.Set(2,2,(n+f)/(n-f));
+	Perspective.Set(2,3,-1.0f);
+	Perspective.Set(3,2,2.0f * n *f / (n-f));
+	Perspective.Set(3,3,0.0f);
+	return Perspective;
+}
+
 float4x4 float4x4::FromQuat(const Quat &orientation)
 {
 	return float4x4(orientation);

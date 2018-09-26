@@ -75,67 +75,37 @@ update_status ModuleImGui::Update(float dt)
 	update_status status = UPDATE_CONTINUE;
 
 
-	
-	ImGui::BeginMainMenuBar();
-	HelpMenu();
-		if (ImGui::BeginMenu("Windows"))
-		{
-			ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
-			ImGui::MenuItem("RandomNumberTest", NULL, &show_random_number_test);
-			ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
-			ImGui::MenuItem("Configuration", NULL, &configuration->active);
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Console"))
-		{
-
-			console->active = ImGui::MenuItem("Show Console", NULL, &show_console);
-
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Close"))
-		{
-			to_close = true;
-			
-			ImGui::EndMenu();
-		}
-		ImGui::EndMainMenuBar();
-	
-		for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
-		{
-			GUIElements* element = (*it);
-
-			if (element->IsActive())
-			{
-				ImGui::SetNextWindowPos(ImVec2((float)element->posx, (float)element->posy), ImGuiSetCond_Always);
-				ImGui::SetNextWindowSize(ImVec2((float)element->width, (float)element->height), ImGuiSetCond_Always);
-				element->Draw();
-			}
-		}
-
-	if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
-	if (show_random_number_test)	RandomNumberTest();
-	if (show_intersections_test)		IntersectionsTest();
-	if (show_about_window)				About();
-	if (show_console)							ConsoleWindow();
-
 
 	return status;
 }
 
 update_status ModuleImGui::PostUpdate(float dt)
 {
-
-	
-	ImGui::Render();
-	
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	update_status status = UPDATE_CONTINUE;
 	if (to_close == true)
 	{
 		status = UPDATE_STOP;
 	}
 	return status;
+}
+
+void ModuleImGui::Draw()
+{
+	MainMenu();
+	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+	{
+		GUIElements* element = (*it);
+
+		if (element->IsActive())
+		{
+			ImGui::SetNextWindowPos(ImVec2((float)element->posx, (float)element->posy), ImGuiSetCond_Always);
+			ImGui::SetNextWindowSize(ImVec2((float)element->width, (float)element->height), ImGuiSetCond_Always);
+			element->Draw();
+		}
+	}
+	ImGui::Render();
+
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 }
 
 void ModuleImGui::RandomNumberTest()
@@ -295,16 +265,43 @@ void ModuleImGui::HelpMenu()
 
 }
 
-void ModuleImGui::About()
-{
+
+void ModuleImGui::MainMenu()
+{ 
 
 
+	ImGui::BeginMainMenuBar();
+	HelpMenu();
+	if (ImGui::BeginMenu("Windows"))
+	{
+		ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
+		ImGui::MenuItem("RandomNumberTest", NULL, &show_random_number_test);
+		ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
+		ImGui::MenuItem("Configuration", NULL, &configuration->active);
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Console"))
+	{
 
-}
+		console->active = ImGui::MenuItem("Show Console", NULL, &show_console);
 
-void ModuleImGui::Configuration_window()
-{
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Close"))
+	{
+		to_close = true;
+
+		ImGui::EndMenu();
+	}
+	ImGui::EndMainMenuBar();
+
 	
+
+	if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
+	if (show_random_number_test)	RandomNumberTest();
+	if (show_intersections_test)		IntersectionsTest();
+	if (show_console)							ConsoleWindow();
+
 }
 
 void ModuleImGui::AddLog(const char* Log)
