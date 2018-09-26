@@ -231,10 +231,11 @@ void Application::Configuration_ImGui()
 {
 	if (ImGui::CollapsingHeader("Application"))
 	{
-		
-		if (ImGui::InputText("Application Name", window_name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+		static char name[25];
+		strcpy_s(name, 25, GetTitle());
+		if (ImGui::InputText("Application Name", name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
 		{
-			window->SetTitle(window_name);
+			SetTitle(name);
 		}
 		int framerate_imgui = GetFramerate();
 		if (ImGui::SliderInt("Max FPS", &framerate_imgui, 0, 120))
@@ -288,4 +289,15 @@ void Application::Hardware_ImGui()
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
+}
+
+char* Application::GetTitle() const
+{
+	return window_name;
+
+}
+void Application::SetTitle(char* title)
+{
+	window_name = title;
+	SDL_SetWindowTitle(App->window->window, title);
 }

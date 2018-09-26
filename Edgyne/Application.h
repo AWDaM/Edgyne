@@ -51,7 +51,7 @@ private:
 
 	std::vector<float> fps;
 	std::vector<float> ms;
-	char* window_name = "";
+	char* window_name = TITLE;
 
 public:
 
@@ -66,6 +66,8 @@ public:
 	void Log(const char* entry);
 	void Configuration_ImGui();
 	void Hardware_ImGui();
+	char* Application::GetTitle() const;
+	void Application::SetTitle( char* title);
 
 private:
 

@@ -1,11 +1,15 @@
 #pragma once
 #include "Module.h"
 #include "GUIElements.h"
-#include "GUIConsole.h"
+
 #include "pcg_variants.h"
 #include <list>
 #include <string>
 #include <vector>
+
+class GUIConsole;
+class GUIAbout;
+class GUIConfiguration;
 
 class ModuleImGui : public Module
 {
@@ -30,7 +34,8 @@ public:
 
 public:
 	GUIConsole* console = nullptr;
-
+	GUIAbout* about = nullptr;
+	GUIConfiguration* configuration = nullptr;
 
 private:
 	std::list<std::string> LogInformation;

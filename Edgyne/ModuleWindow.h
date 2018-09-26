@@ -18,7 +18,6 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	void SetTitle(const char* title);
 	void SetFullscreen();
 	void SetBorderless();
 	void SetDesktopFullscreen();

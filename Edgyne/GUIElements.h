@@ -1,6 +1,7 @@
 #pragma once
 #include "Globals.h"
 #include <string>
+#include "Imgui/imgui.h"
 
 class GUIElements
 {

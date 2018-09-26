@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GUIElements.h"
-#include "Imgui/imgui.h"
+
 
 class GUIConsole : public GUIElements
 {
