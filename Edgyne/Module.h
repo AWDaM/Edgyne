@@ -46,6 +46,8 @@ public:
 		return UPDATE_CONTINUE;
 	}
 
+	virtual void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os) {};
+
 	virtual bool CleanUp() 
 	{ 
 		return true; 

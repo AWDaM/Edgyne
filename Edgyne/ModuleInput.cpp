@@ -130,3 +130,7 @@ bool ModuleInput::CleanUp()
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }
+
+void ModuleInput::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+}

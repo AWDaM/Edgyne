@@ -16,6 +16,8 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+
 	void Look(const math::vec &Position, const vec &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec &Spot);
 	void Move(const vec &Movement);

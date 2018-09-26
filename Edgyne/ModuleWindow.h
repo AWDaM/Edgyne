@@ -18,6 +18,8 @@ public:
 	bool Init(rapidjson::Document& document);
 	bool CleanUp();
 
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+
 	void SetFullscreen();
 	void SetBorderless();
 	void SetDesktopFullscreen();

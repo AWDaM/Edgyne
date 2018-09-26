@@ -16,6 +16,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+
 	void OnResize(int width, int height);
 
 public:

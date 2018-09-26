@@ -17,6 +17,8 @@ public:
 	bool Init(rapidjson::Document& document);
 	bool CleanUp();
 
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+
 	// Play a music file
 	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);
 

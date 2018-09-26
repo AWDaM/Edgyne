@@ -74,6 +74,11 @@ bool ModuleAudio::CleanUp()
 	return true;
 }
 
+void ModuleAudio::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+
+}
+
 // Play a music file
 bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 {

@@ -98,6 +98,10 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
+void ModuleWindow::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+}
+
 
 
 void ModuleWindow::SetFullscreen()

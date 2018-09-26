@@ -42,6 +42,10 @@ bool ModuleCamera3D::CleanUp()
 	return true;
 }
 
+void ModuleCamera3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+}
+
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {

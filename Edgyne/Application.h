@@ -72,6 +72,8 @@ public:
 	char* Application::GetTitle() const;
 	void Application::SetTitle( char* title);
 
+	void SaveData();
+
 private:
 
 	void AddModule(Module* mod);
@@ -81,6 +83,7 @@ private:
 
 public:
 
+	bool toSave = false;
 	std::string log;
 	bool canLog = false;
 	int GetFramerate() const;

@@ -20,6 +20,8 @@ public:
 	bool Init(rapidjson::Document& document);
 	bool CleanUp();
 
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);

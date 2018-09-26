@@ -204,6 +204,11 @@ update_status Application::Update()
 		item++;
 	}
 
+	if (toSave)
+	{
+		SaveData();
+	}
+
 	FinishUpdate();
 	return ret;
 }
@@ -311,4 +316,26 @@ void Application::SetTitle(char* title)
 {
 	window_name = title;
 	SDL_SetWindowTitle(App->window->window, title);
+}
+
+void Application::SaveData()
+{
+	rapidjson::Document document;
+	document.SetObject();
+	FILE* fp = fopen("save.json", "wb");
+	char writeBuffer[655360];
+
+	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+
+	for (std::list<Module*>::iterator item = list_modules.begin(); item != list_modules.end(); item++)
+	{
+		(*item)->Save(document, os);
+	}
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+	document.Accept(writer);
+
+	fclose(fp);
+
+	toSave = false;
 }

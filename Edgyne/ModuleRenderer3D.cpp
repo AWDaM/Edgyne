@@ -156,6 +156,10 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
+void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+}
+
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
