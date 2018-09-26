@@ -15,7 +15,7 @@ ModuleWindow::~ModuleWindow()
 }
 
 // Called before render is available
-bool ModuleWindow::Init()
+bool ModuleWindow::Init(rapidjson::Document& document)
 {
 	LOG("Init SDL window & surface");
 	bool ret = true;
@@ -96,6 +96,10 @@ bool ModuleWindow::CleanUp()
 	//Quit SDL subsystems
 	SDL_Quit();
 	return true;
+}
+
+void ModuleWindow::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
 }
 
 

@@ -4,9 +4,11 @@
 
 GUIConfiguration::GUIConfiguration() : GUIElements("Configuration")
 {
-	width = 658;
+	posx = 420;
+	posy = 200;
+	width = 600;
 	height = 300;
-	posy = 100;
+
 }
 
 
@@ -24,7 +26,10 @@ void GUIConfiguration::Draw()
 			ImGui::SameLine();
 			ImGui::Button("Load Options");
 			ImGui::SameLine();
-			ImGui::Button("Save Options");
+			if (ImGui::Button("Save Options"))
+			{
+				App->toSave = true;
+			}
 		}
 
 		App->Configuration_ImGui();

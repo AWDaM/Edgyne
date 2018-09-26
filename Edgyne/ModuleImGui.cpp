@@ -22,7 +22,7 @@ ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(start_en
 
 
 
-bool ModuleImGui::Init()
+bool ModuleImGui::Init(rapidjson::Document& document)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -58,6 +58,23 @@ bool ModuleImGui::CleanUp()
 	return false;
 }
 
+void ModuleImGui::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+	doc.AddMember("Name", 2, allocator);
+	doc.AddMember("Pepe", "paco", allocator);
+
+	rapidjson::Value Obj(rapidjson::kObjectType);
+	Obj.AddMember("tete", "gym\n", allocator);
+	rapidjson::Value Ovj(rapidjson::kObjectType);
+	Ovj.AddMember("tinc", "gana", allocator);
+	Obj.AddMember("pilota", Ovj, allocator);
+	doc.AddMember("chistorra", Obj, allocator);
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+
+}
+
 update_status ModuleImGui::PreUpdate(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
@@ -74,6 +91,7 @@ update_status ModuleImGui::Update(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
 
+	
 
 
 	return status;

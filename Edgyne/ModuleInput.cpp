@@ -20,7 +20,7 @@ ModuleInput::~ModuleInput()
 }
 
 // Called before render is available
-bool ModuleInput::Init()
+bool ModuleInput::Init(rapidjson::Document& document)
 {
 	LOG("Init SDL input event system");
 	bool ret = true;
@@ -129,4 +129,8 @@ bool ModuleInput::CleanUp()
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
+}
+
+void ModuleInput::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
 }

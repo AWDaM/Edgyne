@@ -14,8 +14,12 @@ ModuleAudio::~ModuleAudio()
 {}
 
 // Called before render is available
-bool ModuleAudio::Init()
+bool ModuleAudio::Init(rapidjson::Document& document)
 {
+	rapidjson::Value& node = document[name.data()];
+
+	std::string testring = node["omae wa mou"].GetString();
+
 	LOG("Loading Audio Mixer");
 	bool ret = true;
 	SDL_Init(0);
@@ -68,6 +72,11 @@ bool ModuleAudio::CleanUp()
 	Mix_Quit();
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 	return true;
+}
+
+void ModuleAudio::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+
 }
 
 // Play a music file

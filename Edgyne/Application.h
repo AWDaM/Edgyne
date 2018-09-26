@@ -8,6 +8,9 @@
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl2.h"
 #include "MathGeoLib\MathGeoLib.h"
+#include "rapidjson/rapidjson.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/filewritestream.h"
 
 #include <list>
 #include <vector>
@@ -71,6 +74,8 @@ public:
 	char* Application::GetTitle() const;
 	void Application::SetTitle( char* title);
 
+	void SaveData();
+
 private:
 
 	void AddModule(Module* mod);
@@ -80,6 +85,7 @@ private:
 
 public:
 
+	bool toSave = false;
 	std::string log;
 	bool canLog = false;
 	int GetFramerate() const;

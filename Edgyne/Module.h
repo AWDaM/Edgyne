@@ -1,6 +1,10 @@
 #pragma once
+#include "rapidjson/document.h"// rapidjson's DOM-style API
+#include "rapidjson/prettywriter.h" // for stringify JSON
+#include "rapidjson/filewritestream.h"
 
 #include<string>
+
 class Application;
 struct PhysBody3D;
 
@@ -17,7 +21,7 @@ public:
 	virtual ~Module()
 	{}
 
-	virtual bool Init() 
+	virtual bool Init(rapidjson::Document& document)
 	{
 		return true; 
 	}
@@ -41,6 +45,8 @@ public:
 	{
 		return UPDATE_CONTINUE;
 	}
+
+	virtual void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os) {};
 
 	virtual bool CleanUp() 
 	{ 

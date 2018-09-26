@@ -24,7 +24,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
 // Called before render is available
-bool ModuleRenderer3D::Init()
+bool ModuleRenderer3D::Init(rapidjson::Document& document)
 {
 	App->Log("Creating 3D Renderer context");
 	bool ret = true;
@@ -160,6 +160,10 @@ bool ModuleRenderer3D::CleanUp()
 	SDL_GL_DeleteContext(context);
 
 	return true;
+}
+
+void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
 }
 
 

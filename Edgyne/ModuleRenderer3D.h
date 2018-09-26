@@ -23,10 +23,12 @@ public:
 	ModuleRenderer3D(Application* app, bool start_enabled = true);
 	~ModuleRenderer3D();
 
-	bool Init();
+	bool Init(rapidjson::Document& document);
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
 
 	void OnResize(int width, int height);
 	void Configuration();
