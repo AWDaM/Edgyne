@@ -42,23 +42,23 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 	
-	//for(int i = 0; i < MAX_KEYS; ++i)
-	//{
-	//	if(keys[i] == 1)
-	//	{
-	//		if(keyboard[i] == KEY_IDLE)
-	//			keyboard[i] = KEY_DOWN;
-	//		else
-	//			keyboard[i] = KEY_REPEAT;
-	//	}
-	//	else
-	//	{
-	//		if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
-	//			keyboard[i] = KEY_UP;
-	//		else
-	//			keyboard[i] = KEY_IDLE;
-	//	}
-	//}
+	for(int i = 0; i < MAX_KEYS; ++i)
+	{
+		if(keys[i] == 1)
+		{
+			if(keyboard[i] == KEY_IDLE)
+				keyboard[i] = KEY_DOWN;
+			else
+				keyboard[i] = KEY_REPEAT;
+		}
+		else
+		{
+			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+				keyboard[i] = KEY_UP;
+			else
+				keyboard[i] = KEY_IDLE;
+		}
+	}
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
