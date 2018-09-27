@@ -336,12 +336,9 @@
     <ClInclude Include="GUIAbout.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="ModuleLevel.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-=======
->>>>>>> 4a799a36bfbdbbc8f9d683c64693dd4b4796d33d
     <ClInclude Include="GUIConfiguration.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
@@ -527,12 +524,9 @@
     <ClCompile Include="GUIAbout.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="ModuleLevel.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-=======
->>>>>>> 4a799a36bfbdbbc8f9d683c64693dd4b4796d33d
     <ClCompile Include="GUIConfiguration.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
