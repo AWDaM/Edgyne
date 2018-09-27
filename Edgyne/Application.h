@@ -25,6 +25,7 @@ class ModuleCamera3D;
 class ModuleImGui;
 class ModuleTest;
 class ModuleLevel;
+class ModuleDebug;
 
 class Application
 {
@@ -37,6 +38,7 @@ public:
 	ModuleImGui* imGui;
 	ModuleTest* test;
 	ModuleLevel* level;
+	ModuleDebug* debug;
 
 	std::list<Module*> list_modules;
 

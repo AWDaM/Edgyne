@@ -5,6 +5,7 @@
 #include "ModuleWindow.h"
 #include "ModuleImGui.h"
 #include "ModuleLevel.h"
+#include "ModuleDebug.h"
 #include "GL/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -145,9 +146,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	App->imGui->Draw();
+
 
 	App->level->Draw();
+	App->debug->Draw();
+	App->imGui->Draw();
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
@@ -184,16 +187,6 @@ void ModuleRenderer3D::Configuration()
 {
 	if (ImGui::CollapsingHeader("Render3D"))
 	{
-		if(ImGui::Checkbox("WireframeRender", &draw_wireframe))
-		{
-			if (draw_wireframe)
-			{
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			}
-			else
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
-		ImGui::Dummy({ 0, 10 });
 		if (ImGui::Checkbox("Depth Test", &depth_test))
 			glSwitch(depth_test, DEPTH_TEST);
 		if (ImGui::Checkbox("Cull Face", &cull_face))
