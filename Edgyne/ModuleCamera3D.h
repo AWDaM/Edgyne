@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "glmath.h"
 #include <vector>
 
 class Timer;
@@ -18,10 +19,10 @@ public:
 
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
 
-	void Look(const math::vec &Position, const vec &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec &Spot);
-	void Move(const vec &Movement);
-	float4x4* GetViewMatrix();
+	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
+	void LookAt(const vec3 &Spot);
+	void Move(const vec3 &Movement);
+	float* GetViewMatrix();
 
 	
 private:
@@ -30,11 +31,10 @@ private:
 
 public:
 	
-	vec X, Y, Z, Position, Reference;
-	float4x4 Camera_view;
+	vec3 X, Y, Z, Position, Reference;
 	
 private:
-	float4x4 ViewMatrix, ViewMatrixInverse;
+	mat4x4 ViewMatrix, ViewMatrixInverse;
 
 
 

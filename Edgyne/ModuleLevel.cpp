@@ -15,7 +15,7 @@ ModuleLevel::~ModuleLevel()
 
 void ModuleLevel::Draw()
 {
-	/*glLineWidth(2.0f);
+	glLineWidth(2.0f);
 
 	glBegin(GL_LINES);
 	glVertex3f(0.f, 6.f, 3.f);
@@ -29,13 +29,13 @@ void ModuleLevel::Draw()
 	glVertex3f(0.f, 5.f, 7.f);
 	glVertex3f(0.f, 3.f, 4.f);
 	glVertex3f(8.f, 0.f, 6.f);
-	glEnd();
 
-	glLineWidth(1.0f);*/
+
+	glLineWidth(1.0f);
 
 	glLineWidth(3.0f);
 	glColor3f(0.5f, 0.5f, 0.5f);
-	glBegin(GL_LINES);
+
 	float d = 20.0f;
 	for (float i = -d; i <= d; i += 1.0f)
 	{

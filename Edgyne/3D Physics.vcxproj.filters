@@ -342,6 +342,9 @@
     <ClInclude Include="GUIConfiguration.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="glmath.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -529,6 +532,9 @@
     </ClCompile>
     <ClCompile Include="GUIConfiguration.cpp">
       <Filter>Sources\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="glmath.cpp">
+      <Filter>Sources\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
