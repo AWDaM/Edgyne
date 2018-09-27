@@ -17,9 +17,11 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(st
 	Y = vec(0.0f, 1.0f, 0.0f);
 	Z = vec(0.0f, 0.0f, 1.0f);
 
-	Position = vec(5.0f, 2.0f, 0.0f);
-	Reference = vec(0.0f, 2.0f, 0.0f);
+	Position = vec(5.0f, 5.0f, 5.0f);
+	Reference = vec(0.0f, 0.0f, 0.0f);
 	CalculateViewMatrix();
+
+	LookAt(Reference);
 	
 }
 
@@ -50,9 +52,9 @@ void ModuleCamera3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream 
 update_status ModuleCamera3D::Update(float dt)
 {
 	vec newPos(0.f, 0.f, 0.f);
-	float speed = 3.0f * dt;
+	float speed = .5f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		speed = 8.0f * dt;
+		speed = 1.0f * dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
