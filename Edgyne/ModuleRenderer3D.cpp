@@ -15,6 +15,7 @@
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "GL/lib/glew32.lib")
 
+
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(start_enabled)
 {
 	name = "Render3D";
