@@ -35,6 +35,6 @@ public:
 
 	std::array<float, 108> cube_vertex_array;
 	std::array<float, 24> cube_indices_array;
-	std::array<float, 36> cube_indices_indexes;
+	std::array<uint, 36> cube_indices_indexes;
 };
 
