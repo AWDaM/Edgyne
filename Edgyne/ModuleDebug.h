@@ -1,7 +1,9 @@
 #pragma once
 #include "Module.h"
 #include <array>
-
+#include "GL/glew.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 class ModuleDebug :
 	public Module
@@ -18,6 +20,7 @@ public:
 	void Draw_Plane();
 	void Draw_Axis();
 	void Draw_Cube_Vertex_Array();
+	void Draw_Sphere();
 
 	void Vertex_Array_Cube();
 	void Indices_Array_Cube();
@@ -30,6 +33,24 @@ public:
 
 	uint my_id_vertex = 0;
 
+	uint my_id = 0;
+	float4x4 transform;
+	bool axis, wire;
+
+	std::vector<float> shape;
+	std::vector<uint> indicesS;
+
+	float radius = 1;
+	int rings = 6;
+	int sectors = 12;
+	vec pos = { 0,0,0 };
+
+	std::vector<GLfloat> vertices;
+	std::vector<GLfloat> normals;
+	std::vector<GLfloat> texcoords;
+	std::vector<GLushort> indices;
+
+	bool toDrawSphere = true;
+
 	std::array<float, 108> cube_vertex_array;
 };
-

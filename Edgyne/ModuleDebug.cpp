@@ -1,10 +1,8 @@
 #include "Application.h"
 #include "ModuleDebug.h"
-
-#include "GL/glew.h"
 #include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
+#include <cmath>
+#include <vector>
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -48,7 +46,9 @@ void ModuleDebug::Draw()
 		Draw_Axis();
 
 	Draw_Cube_Vertex_Array();
-		
+	
+	Draw_Sphere();
+
 	glColor3f(1.0f, 1.0, 1.0);
 	
 }
@@ -171,6 +171,85 @@ void ModuleDebug::Draw_Cube_Vertex_Array()
 	glDrawArrays(GL_TRIANGLES, 0, 108);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void ModuleDebug::Draw_Sphere()
+{
+
+
+	//TEMP
+	if (toDrawSphere)
+	{
+		vec initialPos = pos;
+
+		float x, y, z, xz;                              // vertex position
+
+		float sectorStep = 2 * pi / sectors;
+		float stackStep = pi / rings;
+		float sectorAngle, stackAngle;
+
+		for (int i = 0; i <= rings; ++i)
+		{
+			stackAngle = pi / 2 - i * stackStep;					// starting from pi/2 to -pi/2
+			xz = radius * cosf(stackAngle);							// r * cos(u)
+			y = initialPos.y + radius * sinf(stackAngle);			// r * sin(u)
+
+																	// add (sectorCount+1) vertices per stack
+																	// the first and last vertices have same position and normal, but different tex coods
+			for (int j = 0; j <= sectors; ++j)
+			{
+				sectorAngle = j * sectorStep;
+
+				// vertex position (x, y, z)
+				z = initialPos.z + xz * cosf(sectorAngle);			// r * cos(u) * cos(v)
+				x = initialPos.x + xz * sinf(sectorAngle);			// r * cos(u) * sin(v)
+				shape.push_back(x);
+				shape.push_back(y);
+				shape.push_back(z);
+			}
+		}
+
+		int k1, k2;
+		for (int i = 0; i < rings; ++i)
+		{
+			k1 = i * (sectors + 1);     // beginning of current stack
+			k2 = k1 + sectors + 1;      // beginning of next stack
+
+			for (int j = 0; j < sectors; ++j, ++k1, ++k2)
+			{
+				// 2 triangles per sector excluding 1st and last stacks
+				if (i != 0)
+				{
+					indicesS.push_back(k1);
+					indicesS.push_back(k2);
+					indicesS.push_back(k1 + 1);
+				}
+
+				if (i != (rings - 1))
+				{
+					indicesS.push_back(k1 + 1);
+					indicesS.push_back(k2);
+					indicesS.push_back(k2 + 1);
+				}
+			}
+		}
+
+		glGenBuffers(1, (GLuint*)&(my_id));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indicesS.size(), &indicesS[0], GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		toDrawSphere = false;
+	}
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id);
+	glVertexPointer(3, GL_FLOAT, 0, &shape[0]);
+	glDrawElements(GL_TRIANGLES, indicesS.size(), GL_UNSIGNED_INT, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
 }
 
 void ModuleDebug::Vertex_Array_Cube()
