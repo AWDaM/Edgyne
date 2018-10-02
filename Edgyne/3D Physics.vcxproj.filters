@@ -348,7 +348,9 @@
     <ClInclude Include="ModuleDebug.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleLoader.h" />
+    <ClInclude Include="ModuleLoader.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -370,9 +372,6 @@
       <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
@@ -543,7 +542,12 @@
     <ClCompile Include="ModuleDebug.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleLoader.cpp" />
+    <ClCompile Include="ModuleLoader.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">
