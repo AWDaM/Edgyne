@@ -7,6 +7,7 @@ public:
 	ModuleLevel(Application* app, bool start_enabled = true);
 	~ModuleLevel();
 
+	bool Start();
 
 	void Draw();
 };

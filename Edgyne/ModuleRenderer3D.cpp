@@ -150,8 +150,18 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 
 	App->level->Draw();
-	App->debug->Draw();
+	//App->debug->Draw();
+	std::list<mesh*>::iterator item = mesh_list.begin();
+
+	while (item != mesh_list.end())
+	{
+		(*item)->Draw();
+		item++;
+	}
 	App->imGui->Draw();
+
+
+
 	SDL_GL_SwapWindow(App->window->window);
 	return UPDATE_CONTINUE;
 }
@@ -273,4 +283,20 @@ void ModuleRenderer3D::glSwitch(bool var, glRenderOptions option)
 
 	}
 
+}
+
+bool mesh::Draw()
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+
+	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
+
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	return true;
 }

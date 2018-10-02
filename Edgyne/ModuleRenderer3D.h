@@ -27,6 +27,9 @@ struct mesh
 	uint id_vertex = 0;
 	uint num_vertex = 0;
 	float* vertex = nullptr;
+
+	bool Draw();
+
 };
 
 class ModuleRenderer3D : public Module
