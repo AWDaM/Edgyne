@@ -18,6 +18,17 @@ enum glRenderOptions
 	SCISSOR_TEST
 };
 
+struct mesh
+{
+	uint id_index = 0;
+	uint num_index = 0;
+	uint* index = nullptr;
+
+	uint id_vertex = 0;
+	uint num_vertex = 0;
+	float* vertex = nullptr;
+};
+
 class ModuleRenderer3D : public Module
 {
 public:
@@ -52,4 +63,6 @@ public:
 	bool scissor_test = false;
 
 	bool draw_wireframe = false;
+
+	std::list<mesh*> mesh_list;
 };
