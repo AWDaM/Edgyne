@@ -8,6 +8,7 @@
 #include "ModuleTest.h"
 #include "ModuleLevel.h"
 #include "ModuleDebug.h"
+#include "ModuleLoader.h"
 #include "p2Defs.h"
 
 #include "rapidjson/filereadstream.h"
@@ -26,6 +27,7 @@ Application::Application()
 	test = new ModuleTest(this);
 	level = new ModuleLevel(this);
 	debug = new ModuleDebug(this);
+	loader = new ModuleLoader(this);
 
 	framerate = 1000 / 60;
 	
@@ -46,6 +48,7 @@ Application::Application()
 	AddModule(imGui);
 	AddModule(level);
 	AddModule(debug);
+	AddModule(loader);
 
 	// Scenes
 

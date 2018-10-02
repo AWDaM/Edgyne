@@ -29,6 +29,7 @@ class ModuleImGui;
 class ModuleTest;
 class ModuleLevel;
 class ModuleDebug;
+class ModuleLoader;
 
 class Application
 {
@@ -42,6 +43,7 @@ public:
 	ModuleTest* test;
 	ModuleLevel* level;
 	ModuleDebug* debug;
+	ModuleLoader* loader;
 
 	std::list<Module*> list_modules;
 

@@ -162,6 +162,7 @@
     <ClInclude Include="ModuleDebug.h" />
     <ClInclude Include="ModuleImGui.h" />
     <ClInclude Include="ModuleLevel.h" />
+    <ClInclude Include="ModuleLoader.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="ModuleTest.h" />
     <ClInclude Include="p2Defs.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="ModuleImGui.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleLevel.cpp" />
+    <ClCompile Include="ModuleLoader.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleTest.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
