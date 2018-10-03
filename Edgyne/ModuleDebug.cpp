@@ -258,17 +258,17 @@ void ModuleDebug::Draw_Sphere()
 
 void ModuleDebug::Draw_Cube_Indices()
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
+	//glEnableClientState(GL_VERTEX_ARRAY);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id_array);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id_array);
 
-	glVertexPointer(3, GL_FLOAT, 0, &cube_indices_array[0]);
+	//glVertexPointer(3, GL_FLOAT, 0, &cube_indices_array[0]);
 
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	glDisableClientState(GL_VERTEX_ARRAY);
+	//glDisableClientState(GL_VERTEX_ARRAY);
 
 }
 
@@ -332,29 +332,29 @@ void ModuleDebug::Vertex_Array_Cube()
 
 void ModuleDebug::Indices_Array_Cube()
 {
-	cube_indices_array = {
-		-2, 0, 1,//B 0
+	//cube_indices_array = {
+	//	-2, 0, 1,//B 0
 
-		-4, 0, 1,//A 1
+	//	-4, 0, 1,//A 1
 
-		-4, 0, -1, //E 2
+	//	-4, 0, -1, //E 2
 
-		-2, 0, -1,//F 3
+	//	-2, 0, -1,//F 3
 
-		-2, 2, 1, //D 4
+	//	-2, 2, 1, //D 4
 
-		-4, 2, 1,//C 5
+	//	-4, 2, 1,//C 5
 
-		-2, 2, -1,//H 6
+	//	-2, 2, -1,//H 6
 
-		-4, 2, -1 }; //G 7
+	//	-4, 2, -1 }; //G 7
 
-	cube_indices_indexes = {
-		1,0,5,   5,0,4,   2,0,1,   2,3,0,   3,6,4,   3,4,0,   2,5,7,   5,2,1,   7,3,2,   7,6,3,   4,6,7,   7,5,4
-	};
-	glGenBuffers(1, (GLuint*)&(my_id_array));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id_array);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*36, &cube_indices_indexes[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//cube_indices_indexes = {
+	//	1,0,5,   5,0,4,   2,0,1,   2,3,0,   3,6,4,   3,4,0,   2,5,7,   5,2,1,   7,3,2,   7,6,3,   4,6,7,   7,5,4
+	//};
+	//glGenBuffers(1, (GLuint*)&(my_id_array));
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id_array);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*36, &cube_indices_indexes[0], GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
  
 }

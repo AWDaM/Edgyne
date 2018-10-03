@@ -150,7 +150,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 
 	App->level->Draw();
-	//App->debug->Draw();
+	App->debug->Draw();
+
 	std::list<mesh*>::iterator item = mesh_list.begin();
 
 	while (item != mesh_list.end())
@@ -158,6 +159,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		(*item)->Draw();
 		item++;
 	}
+
+
 	App->imGui->Draw();
 
 
@@ -293,7 +296,7 @@ bool mesh::Draw()
 
 	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
 
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES,num_index, GL_UNSIGNED_INT, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 

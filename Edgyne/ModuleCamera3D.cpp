@@ -48,7 +48,7 @@ void ModuleCamera3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream 
 update_status ModuleCamera3D::Update(float dt)
 {
 	vec3 newPos(0.f, 0.f, 0.f);
-	float speed = .5f * dt;
+	float speed = 100.0f * dt;
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 1.0f * dt;
 

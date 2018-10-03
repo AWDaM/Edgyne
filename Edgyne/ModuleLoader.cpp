@@ -72,12 +72,13 @@ bool ModuleLoader::Import(const std::string & file)
 			}
 			glGenBuffers(1, (GLuint*)&(new_mesh->id_index));
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 36, &new_mesh->index[0], GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			App->renderer3D->mesh_list.push_back(new_mesh);
 		}
 		aiReleaseImport(scene);
 	}
+
 	else
 		LOG("Error loading scene %s", file);
 
