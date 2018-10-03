@@ -34,6 +34,14 @@ bool ModuleLoader::Init(rapidjson::Document& document)
 	return true;
 }
 
+update_status ModuleLoader::Update(float dt)
+{
+	update_status ret = UPDATE_CONTINUE;
+
+
+	return ret;
+}
+
 bool ModuleLoader::CleanUp()
 {
 	aiDetachAllLogStreams();
@@ -61,12 +69,12 @@ bool ModuleLoader::Import(const std::string & file)
 			{
 				new_mesh->num_index = currentMesh->mNumFaces * 3;
 				new_mesh->index = new uint[new_mesh->num_index]; // assume each face is a triangle
-				for (uint i = 0; i < currentMesh->mNumFaces; ++i)
+				for (uint j = 0; j < currentMesh->mNumFaces; ++j)
 				{
-					if (currentMesh->mFaces[i].mNumIndices != 3)
+					if (currentMesh->mFaces[j].mNumIndices != 3)
 						LOG("WARNING, geometry face with != 3 indices!");
 					else
-						memcpy(&new_mesh->index[i * 3], currentMesh->mFaces[i].mIndices, 3 * sizeof(uint));
+						memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 				}
 
 			}

@@ -13,9 +13,11 @@ public:
 
 	bool Init(rapidjson::Document& document);
 
+	update_status Update(float dt);
 	bool CleanUp();
 
 	bool Import(const std::string& file);
+
 
 private:
 public:
