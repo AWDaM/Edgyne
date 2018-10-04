@@ -150,13 +150,16 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 
 	App->level->Draw();
-	App->debug->Draw();
+
+//	App->debug->Draw();
+
 
 	std::list<mesh*>::iterator item = mesh_list.begin();
 
 	while (item != mesh_list.end())
 	{
 		(*item)->Draw();
+
 		item++;
 	}
 
