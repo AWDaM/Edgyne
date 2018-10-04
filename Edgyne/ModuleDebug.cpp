@@ -23,6 +23,29 @@ bool ModuleDebug::Start()
 {
 	Vertex_Array_Cube();
 	Indices_Array_Cube();
+
+	const int CHECKERS_HEIGHT = 100;
+	const int CHECKERS_WIDTH = 100;
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &ImageName);
+	glBindTexture(GL_TEXTURE_2D, ImageName);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
 	return true;
 }
 
@@ -79,55 +102,96 @@ void ModuleDebug::Configuration()
 void ModuleDebug::Draw_Cube_Direct_Mode()
 {
 	glColor3f(1, 1, 1);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, ImageName);
 	glBegin(GL_TRIANGLES);
+
+	glTexCoord2f(1, 1);
+	glVertex3f(1, 0, 1); //v3
+	glTexCoord2f(0, 1);
+	glVertex3f(-1, 0, 1); //v2
+	glTexCoord2f(0, 0);
+	glVertex3f(-1, 0, -1); // v7
+
+	glTexCoord2f(0, 0);
+	glVertex3f(-1, 0, -1); 
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 0, -1); //v4
+	glTexCoord2f(1, 1);
 	glVertex3f(1, 0, 1);
-	glVertex3f(-1, 0, 1);
-	glVertex3f(-1, 0, -1);
-	glVertex3f(-1, 0, -1);
+
+	glTexCoord2f(0, 0);
+	glVertex3f(-1, 0, 1); //v2
+	glTexCoord2f(1, 0);
+	glVertex3f(1, 0, 1);//v3
+	glTexCoord2f(1, 1);
+	glVertex3f(1, 2, 1); //v0
+
+	glTexCoord2f(0, 0);
+	glVertex3f(-1, 0, 1); //v2
+	glTexCoord2f(1, 1);
+	glVertex3f(1, 2, 1); //v0
+	glTexCoord2f(0, 1);
+	glVertex3f(-1, 2, 1); //v1
+
+	glTexCoord2f(0, 1);
+	glVertex3f(1, 2, 1); //vo
+	glTexCoord2f(0, 0);
+	glVertex3f(1, 0, 1); //v3
+	glTexCoord2f(1, 1);
+	glVertex3f(1, 2, -1); //v5
+
+	glTexCoord2f(1, 1);
+	glVertex3f(1, 2, -1);
+	glTexCoord2f(0, 0);
+	glVertex3f(1, 0, 1);
+	glTexCoord2f(1, 0);
 	glVertex3f(1, 0, -1);
-	glVertex3f(1, 0, 1);
 
-	glVertex3f(-1, 0, 1);
-	glVertex3f(1, 0, 1);
-	glVertex3f(1, 2, 1);
-
-	glVertex3f(-1, 0, 1);
-	glVertex3f(1, 2, 1);
+	glTexCoord2f(0, 0);
 	glVertex3f(-1, 2, 1);
-
-	glVertex3f(1, 2, 1);
-	glVertex3f(1, 0, 1);
+	glTexCoord2f(1, 1);
 	glVertex3f(1, 2, -1);
-
-	glVertex3f(1, 2, -1);
-	glVertex3f(1, 0, 1);
-	glVertex3f(1, 0, -1);
-
-	glVertex3f(-1, 2, 1);
-	glVertex3f(1, 2, -1);
+	glTexCoord2f(1, 0);
 	glVertex3f(-1, 2, -1);
 
+	glTexCoord2f(1, 0);
 	glVertex3f(1, 2, 1);
+	glTexCoord2f(1, 1);
 	glVertex3f(1, 2, -1);
+	glTexCoord2f(0, 0);
 	glVertex3f(-1, 2, 1);
 
+	glTexCoord2f(1, 1);
 	glVertex3f(-1, 2, 1);
+	glTexCoord2f(0, 0);
 	glVertex3f(-1, 0, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(-1, 0, 1);
 
+	glTexCoord2f(0,1);
 	glVertex3f(-1, 2, -1);
+	glTexCoord2f(0,0);
 	glVertex3f(-1, 0, -1);
+	glTexCoord2f(1, 1);
 	glVertex3f(-1, 2, 1);
 
+	glTexCoord2f(1, 1);
 	glVertex3f(-1, 2, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(1, 2, -1);
+	glTexCoord2f(1, 0);
 	glVertex3f(-1, 0, -1);
 
+	glTexCoord2f(0,0);
 	glVertex3f(1, 0, -1);
+	glTexCoord2f(1, 0);
 	glVertex3f(-1, 0, -1);
+	glTexCoord2f(0, 1);
 	glVertex3f(1, 2, -1);
 
 	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ModuleDebug::Draw_Plane()

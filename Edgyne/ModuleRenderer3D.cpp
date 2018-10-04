@@ -111,6 +111,7 @@ bool ModuleRenderer3D::Init(rapidjson::Document& document)
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_TEXTURE_2D);
 
 		LOG("Vendor: %s", glGetString(GL_VENDOR));
 		LOG("Renderer: %s", glGetString(GL_RENDERER));
@@ -151,7 +152,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	App->level->Draw();
 
-//	App->debug->Draw();
+	App->debug->Draw();
 
 
 	std::list<mesh*>::iterator item = mesh_list.begin();

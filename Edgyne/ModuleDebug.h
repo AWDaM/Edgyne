@@ -56,6 +56,8 @@ public:
 	std::vector<GLfloat> texcoords;
 	std::vector<GLushort> indices;
 
+	GLubyte checkImage[100][100][4];
+	uint ImageName = 0;
 	bool toDrawSphere = true;
 
 };

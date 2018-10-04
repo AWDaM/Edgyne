@@ -61,7 +61,7 @@ public:
 	bool cull_face = true;
 	bool lighting = true;
 	bool color_material = true;
-	bool texture_2d = false;
+	bool texture_2d = true;
 	bool line_smooth = false;
 	bool scissor_test = false;
 
