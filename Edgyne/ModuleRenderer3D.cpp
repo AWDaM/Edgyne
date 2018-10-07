@@ -149,6 +149,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 
+	update_status status = UPDATE_CONTINUE;
 
 	App->level->Draw();
 
@@ -167,10 +168,13 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	App->imGui->Draw();
 
-
+	if (App->imGui->to_close == true) // A bit hardcoded, but cant find any other way
+	{
+		status = UPDATE_STOP;
+	}
 
 	SDL_GL_SwapWindow(App->window->window);
-	return UPDATE_CONTINUE;
+	return status;
 }
 
 // Called before quitting
