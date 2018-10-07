@@ -9,9 +9,17 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "DevIL\include\il.h"
+#include "DevIL\include\ilu.h"
+#include "DevIL\include\ilut.h"
+
+
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "GL/lib/glew32.lib")
+#pragma comment (lib, "DevIL/libx86/DevIL.lib")
+#pragma comment (lib, "DevIL/libx86/ILU.lib")
+#pragma comment (lib, "DevIL/libx86/ILUT.lib")
 //#include "Assimp\include\cfileio.h"
 
 #pragma comment(lib,"Assimp/libx86/assimp.lib")
@@ -28,9 +36,15 @@ ModuleLoader::~ModuleLoader()
 
 bool ModuleLoader::Init(rapidjson::Document& document)
 {
-
+	ilInit();
+	iluInit();
+	ilutRenderer(ILUT_OPENGL);
+	ILenum error;
+	error = iluLoadImage("Lenna_(test_image).png");
+	LOG("%d: %s/n", error, iluErrorString(error));
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
+
 	return true;
 }
 
@@ -92,3 +106,6 @@ bool ModuleLoader::Import(const std::string & file)
 
 	return true;
 }
+
+
+
