@@ -79,6 +79,7 @@ update_status ModuleImGui::PreUpdate(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
 
+
 		ImGui_ImplOpenGL2_NewFrame();
 		ImGui_ImplSDL2_NewFrame(App->window->window);
 		ImGui::NewFrame();
@@ -100,10 +101,7 @@ update_status ModuleImGui::Update(float dt)
 update_status ModuleImGui::PostUpdate(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
-	if (to_close == true)
-	{
-		status = UPDATE_STOP;
-	}
+
 	return status;
 }
 
@@ -289,7 +287,7 @@ void ModuleImGui::MainMenu()
 
 
 	ImGui::BeginMainMenuBar();
-	HelpMenu();
+
 	if (ImGui::BeginMenu("Windows"))
 	{
 		ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
@@ -305,6 +303,7 @@ void ModuleImGui::MainMenu()
 
 		ImGui::EndMenu();
 	}
+	HelpMenu();
 	if (ImGui::BeginMenu("Close"))
 	{
 		to_close = true;
