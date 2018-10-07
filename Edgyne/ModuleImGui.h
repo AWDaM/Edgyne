@@ -30,7 +30,9 @@ public:
 
 	void AddLog(const char* Log);
 	void RandomNumberTest();
-	void IntersectionsTest();
+
+	//void IntersectionsTest();
+
 	void ConsoleWindow();
 	void HelpMenu();
 
