@@ -68,7 +68,11 @@ bool ModuleLoader::Import(const std::string & file)
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		aiNode* rootNode = scene->mRootNode;
+		aiNode* currentNode = rootNode;
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+		//for (int j = 0; j < rootNode->mNumChildren; currentNode = rootNode->mChildren[j])
+	
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
 			mesh* new_mesh = new mesh();
@@ -77,12 +81,65 @@ bool ModuleLoader::Import(const std::string & file)
 			new_mesh->num_vertex = currentMesh->mNumVertices;
 			new_mesh->vertex = new float[new_mesh->num_vertex * 3];
 			memcpy(new_mesh->vertex, currentMesh->mVertices, sizeof(float) * new_mesh->num_vertex * 3);
+
 			LOG("New mesh with %d vertices", new_mesh->num_vertex);
 
+			//Texture coordinates loaded 
+			if (currentMesh->HasTextureCoords(0))
+			{
+				new_mesh->texCoords = new float[new_mesh->num_vertex * 2];
+
+				int l = 0;
+				for (int k = 0; l < new_mesh->num_vertex * 2;k++)
+				{
+
+					new_mesh->texCoords[l++] = currentMesh->mTextureCoords[0][k].x;
+					new_mesh->texCoords[l++] = currentMesh->mTextureCoords[0][k].y;
+				}
+
+				aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
+				aiString texPath;
+				material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
+				std::string texFullPath = "Library/";
+				texFullPath.append(texPath.C_Str());
+
+				ILuint imgName;
+				ilGenImages(1, &imgName);
+				ilBindImage(imgName);
+				if (ilLoadImage(texFullPath.data()))
+				{
+					ILinfo imgData;
+					iluGetImageInfo(&imgData);
+					if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
+						iluFlipImage();
+
+					if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+					{
+						LOG("DevIL Error: %s", iluErrorString(ilGetError()));
+					}
+					else
+					{
+						
+						glGenTextures(1, &new_mesh->id_texture);
+						glBindTexture(GL_TEXTURE_2D, new_mesh->id_texture);
+
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgData.Width, imgData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+						//width = ImageInfo.Width;
+						//height = ImageInfo.Height;
+					}
+				}
+				ilDeleteImage(imgName);
+			}
 			if (currentMesh->HasFaces())
 			{
 				new_mesh->num_index = currentMesh->mNumFaces * 3;
 				new_mesh->index = new uint[new_mesh->num_index]; // assume each face is a triangle
+
 				for (uint j = 0; j < currentMesh->mNumFaces; ++j)
 				{
 					if (currentMesh->mFaces[j].mNumIndices != 3)
@@ -90,12 +147,12 @@ bool ModuleLoader::Import(const std::string & file)
 					else
 						memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 				}
-
 			}
 			glGenBuffers(1, (GLuint*)&(new_mesh->id_index));
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 			App->renderer3D->mesh_list.push_back(new_mesh);
 		}
 		aiReleaseImport(scene);
