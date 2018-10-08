@@ -312,6 +312,8 @@ bool mesh::Draw()
 	//Draw The Mesh
 	glDrawElements(GL_TRIANGLES,num_index, GL_UNSIGNED_INT, NULL);
 
+	DrawNormals();
+
 	//Disable All The Data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	if (id_texture)
@@ -320,5 +322,25 @@ bool mesh::Draw()
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+
 	return true;
+}
+
+void mesh::DrawNormals()
+{
+	glLineWidth(2.0f);
+	glColor3f(0, 1, 0);
+
+	glBegin(GL_LINES);
+	for (int i = 0; i < num_vertex * 3; i = i + 3)
+	{
+		glVertex3f(vertex[i] - normals[i], vertex[i + 1] - normals[i + 1], vertex[i + 2] - normals[i + 2]);
+		glVertex3f(vertex[i], vertex[i + 1], vertex[i + 2]);
+	}
+	glEnd();
+
+	glColor3f(1, 1, 1);
+
+	glLineWidth(1.0f);
 }

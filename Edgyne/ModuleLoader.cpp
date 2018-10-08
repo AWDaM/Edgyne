@@ -80,6 +80,9 @@ bool ModuleLoader::Import(const std::string & file)
 			LOG("Loading Vertices from the %i mesh", i + 1);
 			LoadVerices(new_mesh, currentMesh);
 
+			LOG("Loading Normals from the %i mesh", i + 1);
+			LoadNormals(new_mesh, currentMesh);
+
 			LOG("Loading Textures from the %i mesh", i + 1);
 			LoadTextures(new_mesh, currentMesh, scene);
 			 
@@ -172,10 +175,9 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 
 void ModuleLoader::LoadNormals(mesh* new_mesh, aiMesh* currentMesh)
 {
-
-
-
-
+	new_mesh->normals = new float[new_mesh->num_vertex * 3];
+	memcpy(new_mesh->normals, currentMesh->mNormals, sizeof(float)*new_mesh->num_vertex * 3);
+	LOG("Normals loaded correctly");
 }
 
 void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)

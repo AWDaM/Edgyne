@@ -28,12 +28,15 @@ struct mesh
 	uint num_vertex = 0;
 	float* vertex = nullptr;
 
+	uint id_normals = 0;
+	float* normals = nullptr;
 
 	uint id_texture = 0;
 	float* texCoords = nullptr;
 
 
 	bool Draw();
+	void DrawNormals();
 
 };
 
