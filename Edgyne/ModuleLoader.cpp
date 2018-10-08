@@ -85,6 +85,7 @@ bool ModuleLoader::Import(const std::string & file)
 			 
 			LOG("Loading Indices from the %i mesh", i + 1);
 			LoadIndices(new_mesh, currentMesh);
+
 			
 			App->renderer3D->mesh_list.push_back(new_mesh);
 		}

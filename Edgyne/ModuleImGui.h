@@ -34,7 +34,6 @@ public:
 
 	//void IntersectionsTest();
 
-	void ConsoleWindow();
 	void HelpMenu();
 
 
