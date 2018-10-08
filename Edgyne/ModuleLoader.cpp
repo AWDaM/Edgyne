@@ -130,6 +130,7 @@ bool ModuleLoader::Import(const std::string & file)
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgData.Width, imgData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+						glBindTexture(GL_TEXTURE_2D, 0);
 						//width = ImageInfo.Width;
 						//height = ImageInfo.Height;
 					}
@@ -153,7 +154,7 @@ bool ModuleLoader::Import(const std::string & file)
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
+			
 			App->renderer3D->mesh_list.push_back(new_mesh);
 		}
 		aiReleaseImport(scene);

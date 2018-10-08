@@ -20,3 +20,15 @@ bool GUIElements::IsActive() const
 {
 	return active;
 }
+
+void GUIElements::Move()
+{
+	if (ImGui::GetWindowPos() != position)
+	{
+		ImGui::GetWindowPos() = position;
+	}
+	if (ImGui::GetWindowSize() != size)
+	{
+		ImGui::GetWindowSize() != size;
+	}
+}

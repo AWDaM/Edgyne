@@ -103,6 +103,7 @@ update_status ModuleImGui::PostUpdate(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
 
+
 	return status;
 }
 
@@ -115,11 +116,11 @@ void ModuleImGui::Draw()
 
 		if (element->IsActive())
 		{
-			ImGui::SetNextWindowPos(ImVec2((float)element->posx, (float)element->posy), ImGuiSetCond_Always);
-			ImGui::SetNextWindowSize(ImVec2((float)element->width, (float)element->height), ImGuiSetCond_Always);
+			element->Move();
 			element->Draw();
 		}
 	}
+	ImGui::End();
 	ImGui::Render();
 
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
@@ -217,20 +218,7 @@ void ModuleImGui::RandomNumberTest()
 //
 //}
 
-void ModuleImGui::ConsoleWindow()
-{
-	//ImGui::Begin("Console", &show_console);
-	//{
-		//std::list<std::string>::iterator item = LogInformation.begin();
-		//while (item != LogInformation.end())
-		//{
-		//	ImGui::Text(item->data());
-		//	item++;
-		//}
 
-	//}
-	//ImGui::End();
-}
 
 void ModuleImGui::HelpMenu()
 {
@@ -254,40 +242,56 @@ void ModuleImGui::HelpMenu()
 
 void ModuleImGui::MainMenu()
 { 
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | 
+		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+	static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_PassthruDockspace;
+
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+	ImGui::SetNextWindowBgAlpha(0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::Begin("Edgyne", &perma_true, window_flags);
+	ImGui::PopStyleVar(3);
+	ImGuiIO& io = ImGui::GetIO();
+
+		ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);
+		ImGui::BeginMainMenuBar();
+
+		if (ImGui::BeginMenu("Windows"))
+		{
+			ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
+			ImGui::MenuItem("RandomNumberTest", NULL, &random_number_test->active);
+			//ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
+			ImGui::MenuItem("Configuration", NULL, &configuration->active);
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Console"))
+		{
+
+			ImGui::MenuItem("Show Console", NULL, &console->active);
+
+			ImGui::EndMenu();
+		}
+		HelpMenu();
+		if (ImGui::BeginMenu("Close"))
+		{
+			to_close = true;
+
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
 
 
-	ImGui::BeginMainMenuBar();
 
-	if (ImGui::BeginMenu("Windows"))
-	{
-		ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
-		ImGui::MenuItem("RandomNumberTest", NULL, &random_number_test->active);
-		//ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
-		ImGui::MenuItem("Configuration", NULL, &configuration->active);
-		ImGui::EndMenu();
-	}
-	if (ImGui::BeginMenu("Console"))
-	{
-
-		ImGui::MenuItem("Show Console", NULL, &console->active);
-
-		ImGui::EndMenu();
-	}
-	HelpMenu();
-	if (ImGui::BeginMenu("Close"))
-	{
-		to_close = true;
-
-		ImGui::EndMenu();
-	}
-	ImGui::EndMainMenuBar();
-
+		if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
+		//if (show_intersections_test)		IntersectionsTest();
 	
-
-	if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
-	//if (show_intersections_test)		IntersectionsTest();
-	if (show_console)							ConsoleWindow();
-
 }
 
 void ModuleImGui::AddLog(const char* Log)
