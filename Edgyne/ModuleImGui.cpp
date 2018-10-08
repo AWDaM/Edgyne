@@ -28,7 +28,7 @@ bool ModuleImGui::Init(rapidjson::Document& document)
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-	ImGui::Doc
+	//ImGui::Doc
 	GUIElement.push_back(console = new GUIConsole(App->log));
 	GUIElement.push_back(about = new GUIAbout());
 	GUIElement.push_back(configuration = new GUIConfiguration());
@@ -249,17 +249,17 @@ void ModuleImGui::RandomNumberTest()
 
 void ModuleImGui::ConsoleWindow()
 {
-	ImGui::Begin("Console", &show_console);
-	{
-		std::list<std::string>::iterator item = LogInformation.begin();
-		while (item != LogInformation.end())
-		{
-			ImGui::Text(item->data());
-			item++;
-		}
+	//ImGui::Begin("Console", &show_console);
+	//{
+		//std::list<std::string>::iterator item = LogInformation.begin();
+		//while (item != LogInformation.end())
+		//{
+		//	ImGui::Text(item->data());
+		//	item++;
+		//}
 
-	}
-	ImGui::End();
+	//}
+	//ImGui::End();
 }
 
 void ModuleImGui::HelpMenu()
@@ -323,7 +323,7 @@ void ModuleImGui::MainMenu()
 
 void ModuleImGui::AddLog(const char* Log)
 {
-	LogInformation.push_back(Log);
+	//LogInformation.push_back(Log);
 
 	console->AddLog(Log);
 }

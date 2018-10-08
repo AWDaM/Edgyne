@@ -17,7 +17,7 @@ public:
 	void AddLog(const char* entry);
 
 public:
-	bool canLog = false;
+	//bool canLog = false;
 	ImGuiTextBuffer Buf;
 	bool ScrollToBottom;
 };

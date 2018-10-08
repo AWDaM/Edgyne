@@ -46,7 +46,7 @@ public:
 	GUIConfiguration* configuration = nullptr;
 
 private:
-	std::list<std::string> LogInformation;
+	//std::list<std::string> LogInformation;
 
 	pcg32_random_t rng;
 	int rng2 = 0;

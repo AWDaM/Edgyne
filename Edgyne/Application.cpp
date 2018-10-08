@@ -250,7 +250,7 @@ void Application::Log(const char* entry)
 		if (canLog)
 		{
 		// send to editor console
-		imGui->AddLog(entry);
+		imGui->AddLog(log.data());
 	}
 }
 void Application::Configuration_ImGui()
