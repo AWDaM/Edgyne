@@ -84,6 +84,7 @@
     <ClInclude Include="GUIConfiguration.h" />
     <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="GUIElements.h" />
+    <ClInclude Include="GUIRandomNumberTest.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_opengl2.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="GUIConfiguration.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="GUIElements.cpp" />
+    <ClCompile Include="GUIRandomNumberTest.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />

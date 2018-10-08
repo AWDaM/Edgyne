@@ -5,13 +5,14 @@
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleTest.h"
-#include "pcg_variants.h"
+
 
 #include "GUIConsole.h"
 #include "GUIAbout.h"
 #include "GUIConfiguration.h"
+#include "GUIRandomNumberTest.h"
 #include <stdio.h>
-#include <time.h>
+
 
 
 
@@ -27,11 +28,11 @@ bool ModuleImGui::Init(rapidjson::Document& document)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); 
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-	//ImGui::Doc
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;  // Enable Keyboard Controls
 	GUIElement.push_back(console = new GUIConsole(App->log));
 	GUIElement.push_back(about = new GUIAbout());
 	GUIElement.push_back(configuration = new GUIConfiguration());
+	GUIElement.push_back(random_number_test = new GUIRandomNumberTest());
 
 	App->canLog = true;
 
@@ -127,37 +128,6 @@ void ModuleImGui::Draw()
 void ModuleImGui::RandomNumberTest()
 {
 
-	//Random Number without Limits
-	ImGui::Begin("PCG Random Test", &perma_true_2);
-	ImGui::TextColored(ImVec4(1, 0, 0, 1), "Normal Random Number");
-	if (ImGui::Button("Generate Random Number"))
-	{
-		pcg32_srandom_r(&rng, time(NULL), (intptr_t)&rng);
-	}
-	ImGui::Text("%d", rng);
-
-
-	//Random Number Between 0 And A Boundary
-	ImGui::TextColored(ImVec4(1, 0, 0, 1), "Normal Random Number Between 0 and X");
-	ImGui::InputInt("Min Number", &tmpBoundMin);
-	ImGui::InputInt("Max Number", &tmpBoundMax);
-	bound = tmpBoundMax - tmpBoundMin + 1;
-	if (ImGui::Button("Generate Random Number With Boundaries"))
-	{
-		rng2 = pcg32_boundedrand_r(&dunnoWhatThisIs, bound);
-		rng2 += tmpBoundMin;
-	}
-	ImGui::Text("%d", rng2);
-
-	//Random Float Between 0 and 1
-	ImGui::TextColored(ImVec4(1, 0, 0, 1), "Random Float Between 0 and 1");
-	if (ImGui::Button("Generate Random Float Between 0 and 1"))
-	{
-		rng3 = ldexp(pcg32_random_r(&rngSeed3), -32);
-	}
-	ImGui::Text("%f", rng3);
-
-	ImGui::End();
 }
 
 //void ModuleImGui::IntersectionsTest()
@@ -273,7 +243,7 @@ void ModuleImGui::HelpMenu()
 		if (ImGui::MenuItem("Report a bug"))
 			App->OpenBrowser("https://github.com/AWDaM/Edgyne/issues");
 		if (ImGui::MenuItem("About"))
-			show_about_window = true;
+			about->ToggleActive();
 		ImGui::EndMenu();
 	}
 	
@@ -291,15 +261,15 @@ void ModuleImGui::MainMenu()
 	if (ImGui::BeginMenu("Windows"))
 	{
 		ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
-		ImGui::MenuItem("RandomNumberTest", NULL, &show_random_number_test);
-		ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
+		ImGui::MenuItem("RandomNumberTest", NULL, &random_number_test->active);
+		//ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
 		ImGui::MenuItem("Configuration", NULL, &configuration->active);
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Console"))
 	{
 
-		console->active = ImGui::MenuItem("Show Console", NULL, &show_console);
+		ImGui::MenuItem("Show Console", NULL, &console->active);
 
 		ImGui::EndMenu();
 	}
@@ -315,7 +285,6 @@ void ModuleImGui::MainMenu()
 	
 
 	if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
-	if (show_random_number_test)	RandomNumberTest();
 	//if (show_intersections_test)		IntersectionsTest();
 	if (show_console)							ConsoleWindow();
 
