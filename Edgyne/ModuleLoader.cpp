@@ -77,10 +77,13 @@ bool ModuleLoader::Import(const std::string & file)
 			mesh* new_mesh = new mesh();
 			aiMesh* currentMesh = scene->mMeshes[i];
 
+			LOG("Loading Vertices from the %i mesh", i + 1);
 			LoadVerices(new_mesh, currentMesh);
 
+			LOG("Loading Textures from the %i mesh", i + 1);
 			LoadTextures(new_mesh, currentMesh, scene);
 			 
+			LOG("Loading Indices from the %i mesh", i + 1);
 			LoadIndices(new_mesh, currentMesh);
 			
 			App->renderer3D->mesh_list.push_back(new_mesh);
@@ -105,16 +108,15 @@ void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
 
 bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene)
 {
+	bool ret = true;
 	if (currentMesh->HasTextureCoords(0))
 	{
 		new_mesh->texCoords = new float[new_mesh->num_vertex * 2];
 
-		int l = 0;
-		for (int k = 0; l < new_mesh->num_vertex * 2; k++)
+		for (int k = 0; k < new_mesh->num_vertex * 2; k += 2)
 		{
-
-			new_mesh->texCoords[l++] = currentMesh->mTextureCoords[0][k].x;
-			new_mesh->texCoords[l++] = currentMesh->mTextureCoords[0][k].y;
+			new_mesh->texCoords[k] = currentMesh->mTextureCoords[0][k/2].x;
+			new_mesh->texCoords[k+1] = currentMesh->mTextureCoords[0][k/2].y;
 		}
 
 		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
@@ -122,7 +124,7 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
 		std::string texFullPath = "Library/";
 		texFullPath.append(texPath.C_Str());
-
+		LOG("Image being loaded %s", texPath.C_Str());
 		ILuint imgName;
 		ilGenImages(1, &imgName);
 		ilBindImage(imgName);
@@ -136,10 +138,10 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 			{
 				LOG("DevIL Error: %s", iluErrorString(ilGetError()));
+				ret = false;
 			}
 			else
 			{
-
 				glGenTextures(1, &new_mesh->id_texture);
 				glBindTexture(GL_TEXTURE_2D, new_mesh->id_texture);
 
@@ -149,11 +151,25 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgData.Width, imgData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+				glBindTexture(GL_TEXTURE_2D, 0);
 			}
+		}
+		else
+		{
+			ret = false;
 		}
 		ilDeleteImage(imgName);
 	}
-	return false;
+	return ret;
+}
+
+void ModuleLoader::LoadNormals(mesh* new_mesh, aiMesh* currentMesh)
+{
+
+
+
+
 }
 
 void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
@@ -170,6 +186,7 @@ void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 			else
 				memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 		}
+		LOG("New mesh with %d indices", new_mesh->num_index);
 	}
 	glGenBuffers(1, (GLuint*)&(new_mesh->id_index));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);

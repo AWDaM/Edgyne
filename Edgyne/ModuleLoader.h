@@ -26,6 +26,7 @@ public:
 private:
 	void LoadVerices(mesh* new_mesh, aiMesh* currentMesh);
 	bool LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene);
+	void LoadNormals(mesh* new_mesh, aiMesh* currentMesh);
 	void LoadIndices(mesh* new_mesh, aiMesh* currentMesh);
 
 public:
