@@ -351,6 +351,9 @@
     <ClInclude Include="ModuleLoader.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="GUIRandomNumberTest.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -547,6 +550,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIRandomNumberTest.cpp">
+      <Filter>Sources\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,10 @@
 
 GUIAbout::GUIAbout() : GUIElements("about")
 {
+	posx = 420;
+	posy = 200;
+	width = 600;
+	height = 300;
 }
 
 
