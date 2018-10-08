@@ -66,6 +66,7 @@ bool ModuleLoader::CleanUp()
 bool ModuleLoader::Import(const std::string & file)
 {
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		aiNode* rootNode = scene->mRootNode;
