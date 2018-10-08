@@ -300,7 +300,8 @@ bool mesh::Draw()
 {
 	//Enable All The Data
 	glEnableClientState(GL_VERTEX_ARRAY);
-	if (id_texture)
+
+	 if (id_texture)
 	{
 		glBindTexture(GL_TEXTURE_2D, id_texture);
 	}

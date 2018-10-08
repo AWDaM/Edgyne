@@ -98,9 +98,71 @@ bool ModuleLoader::Import(const std::string & file)
 	return true;
 }
 
-bool ModuleLoader::LoadTexture()
+bool ModuleLoader::ImportTexture(const char* path)
 {
-	return false;
+	bool ret = true;
+	ILuint imgName;
+	ilGenImages(1, &imgName);
+	ilBindImage(imgName);
+	uint dropped_texture = 0;
+	if (ilLoadImage(path))
+	{
+		ILinfo imgData;
+		iluGetImageInfo(&imgData);
+		if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
+			iluFlipImage();
+
+		if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+		{
+			LOG("DevIL Error: %s", iluErrorString(ilGetError()));
+			ret = false;
+		}
+		else
+		{
+			
+			glGenTextures(1, &dropped_texture);
+			glBindTexture(GL_TEXTURE_2D, dropped_texture);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgData.Width, imgData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+	}
+	else
+	{
+		ret = false;
+	}
+	ilDeleteImage(imgName);
+
+	std::list<mesh*>::iterator item = App->renderer3D->mesh_list.begin();
+
+	while (item != App->renderer3D->mesh_list.end())
+	{
+		(*item)->id_texture = dropped_texture;
+
+		item++;
+	}
+
+	return ret;
+}
+
+void ModuleLoader::ReceivedFile(const char * path)
+{
+	std::string path_string = path;
+	path_string.erase(0, path_string.size() - 3);
+	if (path_string == MODEL)
+	{
+		Import(path);
+	}
+	else if (path_string == IMAGE)
+	{
+		ImportTexture(path);
+	}
 }
 
 void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)

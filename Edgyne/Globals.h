@@ -29,6 +29,10 @@ enum update_status
 	UPDATE_ERROR
 };
 
+//File formats
+#define IMAGE  "dds", "DDS", "png", "PNG"
+#define MODEL "fbx", "FBX"
+
 // Configuration -----------
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 1024

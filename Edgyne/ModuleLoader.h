@@ -20,9 +20,9 @@ public:
 
 	bool Import(const std::string& file);
 
-	bool LoadTexture();
+	bool ImportTexture(const char* path);
 
-
+	void ReceivedFile(const char* path);
 
 private:
 	void LoadVerices(mesh* new_mesh, aiMesh* currentMesh);
@@ -31,6 +31,8 @@ private:
 	void LoadIndices(mesh* new_mesh, aiMesh* currentMesh);
 
 public:
+
 private:
 	struct aiLogStream stream;
+
 };
