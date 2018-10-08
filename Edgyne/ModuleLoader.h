@@ -3,7 +3,9 @@
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
+#include "ModuleRenderer3D.h"
 
+//class mesh;
 
 class ModuleLoader : public Module
 {
@@ -19,9 +21,14 @@ public:
 	bool Import(const std::string& file);
 
 
+
+
 private:
+	void LoadVerices(mesh* new_mesh, aiMesh* currentMesh);
+	bool LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene);
+	void LoadIndices(mesh* new_mesh, aiMesh* currentMesh);
+
 public:
 private:
 	struct aiLogStream stream;
 };
-

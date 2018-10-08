@@ -62,7 +62,7 @@ void ModuleDebug::Draw()
 
 	if (direct_mode_cube)
 	{
-		//Draw_Cube_Direct_Mode();
+		Draw_Cube_Direct_Mode();
 	}
 	if (draw_plane)
 		Draw_Plane();
