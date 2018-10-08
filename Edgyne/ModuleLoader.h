@@ -20,6 +20,7 @@ public:
 
 	bool Import(const std::string& file);
 
+	bool LoadTexture();
 
 
 
