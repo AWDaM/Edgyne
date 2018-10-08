@@ -98,6 +98,11 @@ bool ModuleLoader::Import(const std::string & file)
 	return true;
 }
 
+bool ModuleLoader::LoadTexture()
+{
+	return false;
+}
+
 void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
 {
 	new_mesh->num_vertex = currentMesh->mNumVertices;
