@@ -75,5 +75,7 @@ public:
 
 	bool draw_wireframe = false;
 
+	uint  DroppedTexture;
+
 	std::list<mesh*> mesh_list;
 };
