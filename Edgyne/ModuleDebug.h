@@ -31,6 +31,7 @@ public:
 	bool direct_mode_cube = true;
 	bool draw_plane = true;
 	bool draw_axis = true;
+	bool draw_normals = false;
 
 	uint my_id_vertex = 0;
 	uint my_id_array = 0;

@@ -96,6 +96,7 @@ void ModuleDebug::Configuration()
 		ImGui::Checkbox("Direct Mode Cube", &direct_mode_cube);
 		ImGui::Checkbox("Plane", &draw_plane);
 		ImGui::Checkbox("Axis", &draw_axis);
+		ImGui::Checkbox("Mesh Normals", &draw_normals);
 	}
 }
 

@@ -30,8 +30,8 @@ enum update_status
 };
 
 //File formats
-#define IMAGE  "dds", "DDS", "png", "PNG"
-#define MODEL "fbx", "FBX"
+#define IMAGE  value=="dds" || value=="DDS" || value=="png" || value=="PNG"
+#define MODEL value =="fbx" || value =="FBX"
 
 // Configuration -----------
 #define SCREEN_WIDTH 1280
