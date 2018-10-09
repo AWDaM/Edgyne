@@ -84,7 +84,7 @@ bool ModuleLoader::Import(const std::string & file)
 			LoadNormals(new_mesh, currentMesh);
 
 			LOG("Loading Textures from the %i mesh", i + 1);
-			LoadTextures(new_mesh, currentMesh, scene);
+			LoadTextures(new_mesh, currentMesh, scene, file);
 			 
 			LOG("Loading Indices from the %i mesh", i + 1);
 			LoadIndices(new_mesh, currentMesh);
@@ -157,7 +157,7 @@ bool ModuleLoader::ImportTexture(const char* path)
 void ModuleLoader::ReceivedFile(const char * path)
 {
 	std::string path_string = path;
-	path_string.erase(0, path_string.size() - 3);
+	path_string.erase(0,path_string.find_last_of(".")+1);
 	if (MODEL(path_string))
 	{
 		Import(path);
@@ -177,7 +177,7 @@ void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
 	LOG("New mesh with %d vertices", new_mesh->num_vertex);
 }
 
-bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene)
+bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene, const std::string& file)
 {
 	bool ret = true;
 	if (currentMesh->HasTextureCoords(0))
@@ -193,13 +193,13 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
 		aiString texPath;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
-		std::string texFullPath = "Library/";
-		texFullPath.append(texPath.C_Str());
+		std::string texFullPath = file;
+
 		LOG("Image being loaded %s", texPath.C_Str());
 		ILuint imgName;
 		ilGenImages(1, &imgName);
 		ilBindImage(imgName);
-		if (ilLoadImage(texFullPath.data()))
+		if (CheckTexturePaths(file, texPath))
 		{
 			ILinfo imgData;
 			iluGetImageInfo(&imgData);
@@ -228,6 +228,7 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 		}
 		else
 		{
+			LOG("Error loading texture file");
 			ret = false;
 		}
 		ilDeleteImage(imgName);
@@ -262,6 +263,40 @@ void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
+{
+	bool ret = false;
+	file = file.substr(0,file.find_last_of("\\")+1);
+	file.append(texPath.C_Str());
+	if (ilLoadImage(file.data()))
+	{
+		LOG("Texture found at the same file as the object");
+		ret = true;
+	}
+	else
+	{
+		file = "Library/";
+		file.append(texPath.C_Str());
+		if (ilLoadImage(file.data()))
+		{
+			LOG("Texture found at the library folder");
+			ret = true;
+		}
+		else
+		{
+			file.clear();
+			file.append(texPath.C_Str());
+			if (ilLoadImage(file.data()))
+			{
+				LOG("Texture found at the source folder");
+				ret = true;
+			}
+		}
+
+	}
+	return ret;
 }
 
 
