@@ -158,11 +158,11 @@ void ModuleLoader::ReceivedFile(const char * path)
 {
 	std::string path_string = path;
 	path_string.erase(0, path_string.size() - 3);
-	if (path_string == MODEL)
+	if (MODEL(path_string))
 	{
 		Import(path);
 	}
-	else if (path_string == IMAGE)
+	else if (IMAGE(path_string))
 	{
 		ImportTexture(path);
 	}

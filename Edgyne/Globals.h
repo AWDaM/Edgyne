@@ -6,6 +6,7 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include<iostream>
 
 #define LOG(format, ...) _log(__FILE__, __LINE__, format, __VA_ARGS__)
 
@@ -30,8 +31,8 @@ enum update_status
 };
 
 //File formats
-#define IMAGE  value=="dds" || value=="DDS" || value=="png" || value=="PNG"
-#define MODEL value =="fbx" || value =="FBX"
+#define IMAGE(path)  path == "dds" || path == "DDS" || path == "png" || path == "PNG"
+#define MODEL(path) path == "fbx" || path == "FBX"
 
 // Configuration -----------
 #define SCREEN_WIDTH 1280
