@@ -163,6 +163,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		(*item)->Draw();
 		if (App->debug->draw_normals)
 			(*item)->DrawNormals();
+		if (App->debug->draw_boundingBox)
+			(*item)->DrawBoundingBox();
 		item++;
 	}
 
@@ -313,8 +315,6 @@ bool mesh::Draw()
 
 	//Draw The Mesh
 	glDrawElements(GL_TRIANGLES,num_index, GL_UNSIGNED_INT, NULL);
-
-	DrawBoundingBox();
 
 	//Disable All The Data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

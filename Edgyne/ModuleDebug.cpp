@@ -68,11 +68,14 @@ void ModuleDebug::Draw()
 		Draw_Plane();
 	if (draw_axis)
 		Draw_Axis();
-	
-	Draw_Sphere();
+	if(sphere)
+		Draw_Sphere();
 
+	if(vertex_cube)
 	Draw_Cube_Vertex();
-	glColor3f(1.0f, 0, 0);
+
+
+	if(indices_cube)
 	Draw_Cube_Indices();
 		
 
@@ -94,9 +97,13 @@ void ModuleDebug::Configuration()
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		ImGui::Checkbox("Direct Mode Cube", &direct_mode_cube);
+		ImGui::Checkbox("Vertex Cube", &vertex_cube);
+		ImGui::Checkbox("Indices Cube", &indices_cube);
+		ImGui::Checkbox("Sphere", &sphere);
 		ImGui::Checkbox("Plane", &draw_plane);
 		ImGui::Checkbox("Axis", &draw_axis);
 		ImGui::Checkbox("Mesh Normals", &draw_normals);
+		ImGui::Checkbox("Bounding Box", &draw_boundingBox);
 	}
 }
 
@@ -323,6 +330,7 @@ void ModuleDebug::Draw_Sphere()
 
 void ModuleDebug::Draw_Cube_Indices()
 {
+	glColor3f(1.0f, 0, 0);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id_array);

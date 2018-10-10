@@ -28,10 +28,14 @@ public:
 
 public:
 	bool draw_wireframe = false;
-	bool direct_mode_cube = true;
+	bool direct_mode_cube = false;
+	bool vertex_cube = false;
+	bool indices_cube = false;
+	bool sphere = false;
 	bool draw_plane = true;
 	bool draw_axis = true;
 	bool draw_normals = false;
+	bool draw_boundingBox = false;
 
 	uint my_id_vertex = 0;
 	uint my_id_array = 0;
