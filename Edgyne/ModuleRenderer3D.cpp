@@ -297,6 +297,22 @@ void ModuleRenderer3D::glSwitch(bool var, glRenderOptions option)
 
 }
 
+void ModuleRenderer3D::DeleteMesh()
+{
+	for (std::list<mesh*>::iterator it = mesh_list.begin(); it != mesh_list.end(); ++it)
+	{
+		mesh* element = (*it);
+		delete(element->index);
+		element->index = nullptr;
+		delete(element->vertex);
+		element->vertex = nullptr;
+		delete(element->texCoords);
+		element->texCoords = nullptr;
+		(*it) = nullptr;
+	}
+
+}
+
 bool mesh::Draw()
 {
 	//Enable All The Data

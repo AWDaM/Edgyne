@@ -58,6 +58,7 @@ public:
 	void Configuration();
 
 	void glSwitch(bool var, glRenderOptions option);
+	void DeleteMesh();
 
 public:
 

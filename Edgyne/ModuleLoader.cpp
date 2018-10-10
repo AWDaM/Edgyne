@@ -65,6 +65,8 @@ bool ModuleLoader::CleanUp()
 
 bool ModuleLoader::Import(const std::string & file)
 {
+	App->renderer3D->DeleteMesh();
+	App->renderer3D->mesh_list.clear();
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
