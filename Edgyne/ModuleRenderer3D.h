@@ -36,6 +36,9 @@ struct mesh
 
 	AABB boundingBox;
 
+	vec3 color = { 0,0,0 };
+
+
 	bool Draw();
 	void DrawNormals();
 	void DrawBoundingBox();
@@ -58,6 +61,7 @@ public:
 	void Configuration();
 
 	void glSwitch(bool var, glRenderOptions option);
+	void DeleteMesh();
 
 public:
 

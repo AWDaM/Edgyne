@@ -65,6 +65,8 @@ bool ModuleLoader::CleanUp()
 
 bool ModuleLoader::Import(const std::string & file)
 {
+	App->renderer3D->DeleteMesh();
+	App->renderer3D->mesh_list.clear();
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
@@ -80,14 +82,21 @@ bool ModuleLoader::Import(const std::string & file)
 			LOG("Loading Vertices from the %i mesh", i + 1);
 			LoadVerices(new_mesh, currentMesh);
 
+			LOG("Loading Color from the %i mesh", i + 1);
+			LoadColor(new_mesh, scene->mMaterials[currentMesh->mMaterialIndex]);
+
 			LOG("Loading Normals from the %i mesh", i + 1);
-			LoadNormals(new_mesh, currentMesh);
+			if(currentMesh->HasNormals())
+				LoadNormals(new_mesh, currentMesh);
 
 			LOG("Loading Textures from the %i mesh", i + 1);
-			LoadTextures(new_mesh, currentMesh, scene, file);
+			if(currentMesh->HasTextureCoords(0))
+				LoadTextures(new_mesh, currentMesh, scene, file);
+
 			 
 			LOG("Loading Indices from the %i mesh", i + 1);
-			LoadIndices(new_mesh, currentMesh);
+			if(currentMesh->HasFaces())
+				LoadIndices(new_mesh, currentMesh);
 
 			LOG("Generating BoundingBox for the %i mesh", i + 1);
 			LoadBoundingBox(new_mesh, currentMesh);
@@ -179,6 +188,15 @@ void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
 	LOG("New mesh with %d vertices", new_mesh->num_vertex);
 }
 
+void ModuleLoader::LoadColor(mesh* new_mesh, aiMaterial* mat)
+{
+	aiColor3D color(0.f, 0.f, 0.f);
+	mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+	new_mesh->color.x = color.r;
+	new_mesh->color.y = color.g;
+	new_mesh->color.z = color.b;
+}
+
 bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene, const std::string& file)
 {
 	bool ret = true;
@@ -247,20 +265,18 @@ void ModuleLoader::LoadNormals(mesh* new_mesh, aiMesh* currentMesh)
 
 void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 {
-	if (currentMesh->HasFaces())
-	{
-		new_mesh->num_index = currentMesh->mNumFaces * 3;
-		new_mesh->index = new uint[new_mesh->num_index]; // assume each face is a triangle
+	new_mesh->num_index = currentMesh->mNumFaces * 3; // assume each face is a triangle
+	new_mesh->index = new uint[new_mesh->num_index]; 
 
-		for (uint j = 0; j < currentMesh->mNumFaces; ++j)
-		{
-			if (currentMesh->mFaces[j].mNumIndices != 3)
-				LOG("WARNING, geometry face with != 3 indices!");
-			else
-				memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
-		}
-		LOG("New mesh with %d indices", new_mesh->num_index);
+	for (uint j = 0; j < currentMesh->mNumFaces; ++j)
+	{
+		if (currentMesh->mFaces[j].mNumIndices != 3)
+			LOG("WARNING, geometry face with != 3 indices!");
+		else
+			memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 	}
+	LOG("New mesh with %d indices", new_mesh->num_index);
+
 	glGenBuffers(1, (GLuint*)&(new_mesh->id_index));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);

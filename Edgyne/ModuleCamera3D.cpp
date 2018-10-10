@@ -118,6 +118,7 @@ update_status ModuleCamera3D::Update(float dt)
 		X = vec3(1.0f, 0.0f, 0.0f);
 		Y = vec3(0.0f, 1.0f, 0.0f);
 		Z = vec3(0.0f, 0.0f, 1.0f);
+
 		Position = vec3(5.0f, 5.0f, 5.0f);
 		Reference = { 0,0,0 };
 	}
