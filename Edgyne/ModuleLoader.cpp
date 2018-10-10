@@ -311,9 +311,12 @@ void ModuleLoader::LoadBoundingBox(mesh * new_mesh, aiMesh * currentMesh)
 		}
 	}
 	
-	AABB bounding_box({ min_point.x,min_point.y,min_point.z }, {max_point.x, max_point.y, max_point.z});
+	//AABB bounding_box({ min_point.x,min_point.y,min_point.z }, {max_point.x, max_point.y, max_point.z});
+	AABB bounding_box;
+	bounding_box.SetNegativeInfinity();
+	bounding_box.Enclose((float3*)new_mesh->vertex, currentMesh->mNumVertices);
 	
-	new_mesh->boundingBox = bounding_box;
+	new_mesh->bounding_box = bounding_box;
 }
 
 bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
