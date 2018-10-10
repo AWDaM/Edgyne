@@ -29,6 +29,7 @@ private:
 	bool LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene, const std::string& file);
 	void LoadNormals(mesh* new_mesh, aiMesh* currentMesh);
 	void LoadIndices(mesh* new_mesh, aiMesh* currentMesh);
+	void LoadBoundingBox(mesh* new_mesh, aiMesh* currentMesh);
 
 	bool CheckTexturePaths(std::string file, aiString texPath);
 public:

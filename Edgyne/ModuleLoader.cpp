@@ -89,7 +89,9 @@ bool ModuleLoader::Import(const std::string & file)
 			LOG("Loading Indices from the %i mesh", i + 1);
 			LoadIndices(new_mesh, currentMesh);
 
-			
+			LOG("Generating BoundingBox for the %i mesh", i + 1);
+			LoadBoundingBox(new_mesh, currentMesh);
+
 			App->renderer3D->mesh_list.push_back(new_mesh);
 		}
 		aiReleaseImport(scene);
@@ -263,6 +265,39 @@ void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void ModuleLoader::LoadBoundingBox(mesh * new_mesh, aiMesh * currentMesh)
+{
+	float3 tmp_max_point = { 0,0,0 };
+	float3 tmp_min_point = { 0,0,0 };
+
+	float3 max_point = { 0,0,0 };
+	float3 min_point = { 0,0,0 };
+	for (int i = 0; i < currentMesh->mNumVertices; i++)
+	{
+		tmp_max_point.x = currentMesh->mVertices[i].x;
+		tmp_max_point.y = currentMesh->mVertices[i].y;
+		tmp_max_point.z= currentMesh->mVertices[i].z;
+
+		tmp_min_point.x = currentMesh->mVertices[i].x;
+		tmp_min_point.y = currentMesh->mVertices[i].y;
+		tmp_min_point.z = currentMesh->mVertices[i].z;
+
+		if (tmp_min_point.SumOfElements() < min_point.SumOfElements())
+		{
+			min_point = tmp_min_point;
+		}
+
+		else if (tmp_min_point.SumOfElements() > max_point.SumOfElements())
+		{
+			max_point = tmp_min_point;
+		}
+	}
+	
+	AABB bounding_box({ min_point.x,min_point.y,min_point.z }, {max_point.x, max_point.y, max_point.z});
+	
+	new_mesh->boundingBox = bounding_box;
 }
 
 bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)

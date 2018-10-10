@@ -34,10 +34,11 @@ struct mesh
 	uint id_texture = 0;
 	float* texCoords = nullptr;
 
+	AABB boundingBox;
 
 	bool Draw();
 	void DrawNormals();
-
+	void DrawBoundingBox();
 };
 
 class ModuleRenderer3D : public Module

@@ -19,6 +19,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(st
 	
 	Position = vec3(5.0f, 5.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);	
+	LookAt(Reference);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -109,10 +110,20 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		Position = Reference + Z * length(Position);
+		LookAt({ 0,0,0 });
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	{
+		X = vec3(1.0f, 0.0f, 0.0f);
+		Y = vec3(0.0f, 1.0f, 0.0f);
+		Z = vec3(0.0f, 0.0f, 1.0f);
+		Position = vec3(5.0f, 5.0f, 5.0f);
+		Reference = { 0,0,0 };
 	}
 
 	// Recalculate matrix -------------
-	LookAt(Reference);
+
 	CalculateViewMatrix();
 
 	return UPDATE_CONTINUE;
