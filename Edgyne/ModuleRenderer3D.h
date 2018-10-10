@@ -34,6 +34,7 @@ struct mesh
 	uint id_texture = 0;
 	float* texCoords = nullptr;
 
+	vec3 color = { 0,0,0 };
 
 	bool Draw();
 	void DrawNormals();

@@ -302,10 +302,13 @@ bool mesh::Draw()
 	//Enable All The Data
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	 if (id_texture)
+	if (id_texture)
 	{
 		glBindTexture(GL_TEXTURE_2D, id_texture);
 	}
+	else
+		glColor3f(color.x,color.y,color.z);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -322,6 +325,9 @@ bool mesh::Draw()
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+	else
+		glColor3f(1, 1, 1);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
