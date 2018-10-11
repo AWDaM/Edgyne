@@ -16,7 +16,7 @@ ModuleLevel::~ModuleLevel()
 
 bool ModuleLevel::Start()
 {
-	//App->loader->Import("Library/warrior.FBX");
+	App->loader->ReceivedFile("Library\\BakerHouse\\BakerHouse.FBX");
 	return true;
 }
 

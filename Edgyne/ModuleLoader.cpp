@@ -198,7 +198,7 @@ void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
 
 void ModuleLoader::LoadColor(mesh* new_mesh, aiMaterial* mat)
 {
-	aiColor3D color(0.f, 0.f, 0.f);
+	aiColor3D color(1.f, 1.f, 1.f);
 	mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
 	new_mesh->color.x = color.r;
 	new_mesh->color.y = color.g;
