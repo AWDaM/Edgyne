@@ -80,12 +80,11 @@ update_status ModuleImGui::PreUpdate(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
 
-	if (EditorOff)
-	{
+
 		ImGui_ImplOpenGL2_NewFrame();
 		ImGui_ImplSDL2_NewFrame(App->window->window);
 		ImGui::NewFrame();
-	}
+
 	return status;
 }
 
@@ -93,8 +92,8 @@ update_status ModuleImGui::Update(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
 
-	
-
+	if (App->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
+		ToggleEditor();
 
 	return status;
 }
@@ -109,7 +108,7 @@ update_status ModuleImGui::PostUpdate(float dt)
 
 void ModuleImGui::Draw()
 {
-	if (EditorOff)
+	if (!EditorOff)
 	{
 		MainMenu();
 		for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
@@ -123,10 +122,11 @@ void ModuleImGui::Draw()
 			}
 		}
 		ImGui::End();
+	}
 		ImGui::Render();
 
 		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-	}
+	
 }
 
 //void ModuleImGui::IntersectionsTest()
