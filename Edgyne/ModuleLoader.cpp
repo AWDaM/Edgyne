@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleLoader.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
@@ -103,6 +104,13 @@ bool ModuleLoader::Import(const std::string & file)
 
 			App->renderer3D->mesh_list.push_back(new_mesh);
 		}
+		LOG("Centering Camera around the model");
+		App->renderer3D->CalculateGlobalBoundingBox();
+		vec half_diagonal  = App->renderer3D->globalBoundingBox.CenterPoint();
+		vec center_point = App->renderer3D->globalBoundingBox.CenterPoint();
+		half_diagonal += App->renderer3D->globalBoundingBox.HalfDiagonal();
+		 
+		App->camera->CameraAdaptation({ half_diagonal.x,half_diagonal.y,half_diagonal.z }, { center_point.x,center_point.y,center_point.z });
 		aiReleaseImport(scene);
 	}
 

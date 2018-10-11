@@ -35,7 +35,8 @@ public:
 	bool draw_plane = true;
 	bool draw_axis = true;
 	bool draw_normals = false;
-	bool draw_boundingBox = false;
+	bool draw_meshBoundingBox = true;
+	bool draw_globalBoundingBox = true;
 
 	uint my_id_vertex = 0;
 	uint my_id_array = 0;

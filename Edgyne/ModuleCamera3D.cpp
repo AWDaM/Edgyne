@@ -110,7 +110,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		Position = Reference + Z * length(Position);
-		LookAt({ 0,0,0 });
+		Look(Position,{ 0,0,0 },true);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
@@ -121,6 +121,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		Position = vec3(5.0f, 5.0f, 5.0f);
 		Reference = { 0,0,0 };
+		Look(Position, Reference);
 	}
 
 	// Recalculate matrix -------------
@@ -170,6 +171,17 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 
 	CalculateViewMatrix();
 }
+
+void ModuleCamera3D::CameraAdaptation(vec3 new_pos, vec3 new_ref)
+{
+	Position = new_pos;
+	Position += CAMERA_OFFSET*new_pos;
+	Reference = new_ref;
+
+	Look(Position, Reference);
+	CalculateViewMatrix();
+}
+
 
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()

@@ -60,6 +60,9 @@ public:
 	void OnResize(int width, int height);
 	void Configuration();
 
+	void CalculateGlobalBoundingBox();
+	void DrawGlobalBoundingBox();
+
 	void glSwitch(bool var, glRenderOptions option);
 	void DeleteMesh();
 
@@ -81,6 +84,8 @@ public:
 	bool draw_wireframe = false;
 
 	uint  DroppedTexture;
+
+	AABB globalBoundingBox;
 
 	std::list<mesh*> mesh_list;
 };

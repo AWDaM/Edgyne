@@ -46,6 +46,7 @@ bool ModuleDebug::Start()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 
+	glBindTexture(GL_TEXTURE_2D, 0);
 	return true;
 }
 
@@ -103,7 +104,8 @@ void ModuleDebug::Configuration()
 		ImGui::Checkbox("Plane", &draw_plane);
 		ImGui::Checkbox("Axis", &draw_axis);
 		ImGui::Checkbox("Mesh Normals", &draw_normals);
-		ImGui::Checkbox("Bounding Box", &draw_boundingBox);
+		ImGui::Checkbox("Mesh Bounding Box", &draw_meshBoundingBox);
+		ImGui::Checkbox("Global Bounding Box", &draw_globalBoundingBox);
 	}
 }
 

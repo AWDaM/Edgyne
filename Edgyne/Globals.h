@@ -34,6 +34,9 @@ enum update_status
 #define IMAGE(path)  path == "dds" || path == "DDS" || path == "png" || path == "PNG"
 #define MODEL(path) path == "fbx" || path == "FBX"
 
+//Stuff
+#define CAMERA_OFFSET 0.4
+
 // Configuration -----------
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 1024
