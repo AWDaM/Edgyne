@@ -80,12 +80,12 @@ update_status ModuleImGui::PreUpdate(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
 
-
+	if (EditorOff)
+	{
 		ImGui_ImplOpenGL2_NewFrame();
 		ImGui_ImplSDL2_NewFrame(App->window->window);
 		ImGui::NewFrame();
-
-	
+	}
 	return status;
 }
 
@@ -109,26 +109,24 @@ update_status ModuleImGui::PostUpdate(float dt)
 
 void ModuleImGui::Draw()
 {
-	MainMenu();
-	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+	if (EditorOff)
 	{
-		GUIElements* element = (*it);
-
-		if (element->IsActive())
+		MainMenu();
+		for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
 		{
-			element->Move();
-			element->Draw();
+			GUIElements* element = (*it);
+
+			if (element->IsActive())
+			{
+				element->Move();
+				element->Draw();
+			}
 		}
+		ImGui::End();
+		ImGui::Render();
+
+		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	}
-	ImGui::End();
-	ImGui::Render();
-
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-}
-
-void ModuleImGui::RandomNumberTest()
-{
-
 }
 
 //void ModuleImGui::IntersectionsTest()
@@ -292,6 +290,11 @@ void ModuleImGui::MainMenu()
 		if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
 		//if (show_intersections_test)		IntersectionsTest();
 	
+}
+
+void ModuleImGui::ToggleEditor()
+{
+	EditorOff = !EditorOff;
 }
 
 void ModuleImGui::AddLog(const char* Log)

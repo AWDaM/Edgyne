@@ -396,6 +396,7 @@ bool mesh::Draw()
 	return true;
 }
 
+
 void mesh::DrawNormals()
 {
 	glLineWidth(2.0f);

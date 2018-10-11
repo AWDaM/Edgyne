@@ -30,7 +30,6 @@ public:
 	void Draw();
 
 	void AddLog(const char* Log);
-	void RandomNumberTest();
 
 	//void IntersectionsTest();
 
@@ -38,6 +37,13 @@ public:
 
 
 	void MainMenu();
+	 
+	void ToggleEditor();
+
+private:
+	//std::list<std::string> LogInformation;
+	bool EditorOff = false;
+
 
 
 public:
@@ -46,13 +52,6 @@ public:
 	GUIConfiguration* configuration = nullptr;
 	GUIRandomNumberTest* random_number_test = nullptr;
 
-private:
-	//std::list<std::string> LogInformation;
-
-
-
-
-public:
 	std::vector<GUIElements*> GUIElement;
 
 	bool show_demo_window = false;
