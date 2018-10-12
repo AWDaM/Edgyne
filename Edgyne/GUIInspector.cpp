@@ -23,7 +23,7 @@ void GUIInspector::Draw()
 
 	while (item != App->renderer3D->mesh_list.end())
 	{
-		ImGui::CollapsingHeader((*item)->name);
+		if(ImGui::CollapsingHeader((*item)->name))
 		{
 			ImGui::CollapsingHeader("Transform");
 			ImGui::CollapsingHeader("Mesh");
