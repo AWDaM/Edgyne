@@ -6,6 +6,8 @@
 #include "ModuleRenderer3D.h"
 
 //class mesh;
+void LogTest(const char* message, char* user);
+
 
 class ModuleLoader : public Module
 {
@@ -14,6 +16,7 @@ public:
 	~ModuleLoader();
 
 	bool Init(rapidjson::Document& document);
+
 
 	update_status Update(float dt);
 	bool CleanUp();
@@ -36,7 +39,8 @@ private:
 	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file);
 	bool CheckTexturePaths(std::string file, aiString texPath);
 public:
-
+	//char* assimpLog;
+	//char* user;
 private:
 	struct aiLogStream stream;
 
