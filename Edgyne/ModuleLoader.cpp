@@ -21,9 +21,15 @@
 #pragma comment (lib, "DevIL/libx86/DevIL.lib")
 #pragma comment (lib, "DevIL/libx86/ILU.lib")
 #pragma comment (lib, "DevIL/libx86/ILUT.lib")
-//#include "Assimp\include\cfileio.h"
+#include "Assimp\include\cfileio.h"
 
 #pragma comment(lib,"Assimp/libx86/assimp.lib")
+
+
+void LogTest(const char* message, char* user)
+{
+	LOG("%s", message);
+}
 
 
 ModuleLoader::ModuleLoader(Application * app, bool start_enabled) : Module(start_enabled)
@@ -44,10 +50,12 @@ bool ModuleLoader::Init(rapidjson::Document& document)
 	error = iluLoadImage("Lenna_(test_image).png");
 	LOG("%d: %s/n", error, iluErrorString(error));
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
+	stream.callback = LogTest;
+	aiAttachLogStream(&stream);	
 
 	return true;
 }
+
 
 update_status ModuleLoader::Update(float dt)
 {
@@ -360,6 +368,4 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 	}
 	return ret;
 }
-
-
 
