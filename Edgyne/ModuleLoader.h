@@ -6,7 +6,7 @@
 #include "ModuleRenderer3D.h"
 
 //class mesh;
-void LogTest(const char* message, char* user);
+void AssimpLoggerLoad(const char* message, char* user);
 
 
 class ModuleLoader : public Module

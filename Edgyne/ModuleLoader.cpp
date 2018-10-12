@@ -26,7 +26,7 @@
 #pragma comment(lib,"Assimp/libx86/assimp.lib")
 
 
-void LogTest(const char* message, char* user)
+void AssimpLoggerLoad(const char* message, char* user)
 {
 	LOG("%s", message);
 }
@@ -50,7 +50,7 @@ bool ModuleLoader::Init(rapidjson::Document& document)
 	error = iluLoadImage("Lenna_(test_image).png");
 	LOG("%d: %s/n", error, iluErrorString(error));
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	stream.callback = LogTest;
+	stream.callback = AssimpLoggerLoad;
 	aiAttachLogStream(&stream);	
 
 	return true;
@@ -80,6 +80,7 @@ bool ModuleLoader::Import(const std::string & file)
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		LOG("-------Loading new mesh--------");
 		aiNode* rootNode = scene->mRootNode;
 		LoadAllNodesMeshes(rootNode, scene, file);
 		
