@@ -11,6 +11,7 @@
 #include "GUIAbout.h"
 #include "GUIConfiguration.h"
 #include "GUIRandomNumberTest.h"
+#include "GUIInspector.h"
 #include <stdio.h>
 
 
@@ -33,6 +34,7 @@ bool ModuleImGui::Init(rapidjson::Document& document)
 	GUIElement.push_back(about = new GUIAbout());
 	GUIElement.push_back(configuration = new GUIConfiguration());
 	GUIElement.push_back(random_number_test = new GUIRandomNumberTest());
+	GUIElement.push_back(inspector = new GUIInspector());
 
 	App->canLog = true;
 
@@ -267,6 +269,7 @@ void ModuleImGui::MainMenu()
 			ImGui::MenuItem("RandomNumberTest", NULL, &random_number_test->active);
 			//ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
 			ImGui::MenuItem("Configuration", NULL, &configuration->active);
+			ImGui::MenuItem("Inspector", NULL, &inspector->active);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Console"))

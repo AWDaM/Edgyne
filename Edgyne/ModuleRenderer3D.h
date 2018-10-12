@@ -20,6 +20,8 @@ enum glRenderOptions
 
 struct mesh
 {
+	char name[25];
+
 	uint id_index = 0;
 	uint num_index = 0;
 	uint* index = nullptr;
@@ -37,6 +39,10 @@ struct mesh
 	AABB bounding_box;
 
 	vec3 color = { 0,0,0 };
+
+	vec3 position;
+	vec3 rotation;
+	vec3 scale;
 
 
 	bool Draw();

@@ -84,6 +84,7 @@
     <ClInclude Include="GUIConfiguration.h" />
     <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="GUIElements.h" />
+    <ClInclude Include="GUIInspector.h" />
     <ClInclude Include="GUIRandomNumberTest.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="GUIConfiguration.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="GUIElements.cpp" />
+    <ClCompile Include="GUIInspector.cpp" />
     <ClCompile Include="GUIRandomNumberTest.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />

@@ -28,6 +28,7 @@ public:
 	void ReceivedFile(const char* path);
 
 private:
+	void LoadInfo(mesh* new_mesh, aiMesh* currentMesh,aiNode* node);
 	void LoadVerices(mesh* new_mesh, aiMesh* currentMesh);
 	void LoadColor(mesh* new_mesh, aiMaterial* mat);
 	bool LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene, const std::string& file);
@@ -35,6 +36,7 @@ private:
 	void LoadIndices(mesh* new_mesh, aiMesh* currentMesh);
 	void LoadBoundingBox(mesh* new_mesh, aiMesh* currentMesh);
 
+	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file);
 	bool CheckTexturePaths(std::string file, aiString texPath);
 public:
 	//char* assimpLog;

@@ -77,41 +77,12 @@ bool ModuleLoader::Import(const std::string & file)
 	App->renderer3D->DeleteMesh();
 	App->renderer3D->mesh_list.clear();
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-
+	
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		aiNode* rootNode = scene->mRootNode;
-		aiNode* currentNode = rootNode;
-	
-		for (int i = 0; i < scene->mNumMeshes; i++)
-		{
-			mesh* new_mesh = new mesh();
-			aiMesh* currentMesh = scene->mMeshes[i];
-
-			LOG("Loading Vertices from the %i mesh", i + 1);
-			LoadVerices(new_mesh, currentMesh);
-
-			LOG("Loading Color from the %i mesh", i + 1);
-			LoadColor(new_mesh, scene->mMaterials[currentMesh->mMaterialIndex]);
-
-			LOG("Loading Normals from the %i mesh", i + 1);
-			if(currentMesh->HasNormals())
-				LoadNormals(new_mesh, currentMesh);
-
-			LOG("Loading Textures from the %i mesh", i + 1);
-			if(currentMesh->HasTextureCoords(0))
-				LoadTextures(new_mesh, currentMesh, scene, file);
-
-			 
-			LOG("Loading Indices from the %i mesh", i + 1);
-			if(currentMesh->HasFaces())
-				LoadIndices(new_mesh, currentMesh);
-
-			LOG("Generating BoundingBox for the %i mesh", i + 1);
-			LoadBoundingBox(new_mesh, currentMesh);
-
-			App->renderer3D->mesh_list.push_back(new_mesh);
-		}
+		LoadAllNodesMeshes(rootNode, scene, file);
+		
 		LOG("Centering Camera around the model");
 		App->renderer3D->CalculateGlobalBoundingBox();
 		vec half_diagonal  = App->renderer3D->globalBoundingBox.CenterPoint();
@@ -193,6 +164,29 @@ void ModuleLoader::ReceivedFile(const char * path)
 	{
 		ImportTexture(path);
 	}
+}
+
+void ModuleLoader::LoadInfo(mesh * new_mesh, aiMesh * currentMesh, aiNode* node)
+{
+	memcpy(new_mesh->name, currentMesh->mName.C_Str(), currentMesh->mName.length);
+
+	aiQuaternion rotation;
+	aiVector3D position, scaling, rotationEuler;
+	
+	node->mTransformation.Decompose(scaling, rotation, position);
+
+	rotationEuler = rotation.GetEuler();
+
+	new_mesh->rotation.x = rotationEuler.x;
+	new_mesh->rotation.y = rotationEuler.y;
+	new_mesh->rotation.z = rotationEuler.z;
+	new_mesh->position.x = position.x;
+	new_mesh->position.y = position.y;
+	new_mesh->position.z = position.z;
+	new_mesh->scale.x = scaling.x;
+	new_mesh->scale.y = scaling.y;
+	new_mesh->scale.z = scaling.z;
+
 }
 
 void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
@@ -301,38 +295,54 @@ void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 
 void ModuleLoader::LoadBoundingBox(mesh * new_mesh, aiMesh * currentMesh)
 {
-	float3 tmp_max_point = { 0,0,0 };
-	float3 tmp_min_point = { 0,0,0 };
-
-	float3 max_point = { 0,0,0 };
-	float3 min_point = { 0,0,0 };
-	for (int i = 0; i < currentMesh->mNumVertices; i++)
-	{
-		tmp_max_point.x = currentMesh->mVertices[i].x;
-		tmp_max_point.y = currentMesh->mVertices[i].y;
-		tmp_max_point.z= currentMesh->mVertices[i].z;
-
-		tmp_min_point.x = currentMesh->mVertices[i].x;
-		tmp_min_point.y = currentMesh->mVertices[i].y;
-		tmp_min_point.z = currentMesh->mVertices[i].z;
-
-		if (tmp_min_point.SumOfElements() < min_point.SumOfElements())
-		{
-			min_point = tmp_min_point;
-		}
-
-		else if (tmp_min_point.SumOfElements() > max_point.SumOfElements())
-		{
-			max_point = tmp_min_point;
-		}
-	}
 	
-	//AABB bounding_box({ min_point.x,min_point.y,min_point.z }, {max_point.x, max_point.y, max_point.z});
 	AABB bounding_box;
 	bounding_box.SetNegativeInfinity();
 	bounding_box.Enclose((float3*)new_mesh->vertex, currentMesh->mNumVertices);
 	
 	new_mesh->bounding_box = bounding_box;
+}
+
+void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file)
+{
+	for (int i = 0; i < node->mNumMeshes; i++)
+	{
+		mesh* new_mesh = new mesh();
+		
+		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
+		LOG("Loading Info for the %i mesh", i + 1);
+		LoadInfo(new_mesh, currentMesh, node);
+
+		LOG("Loading Vertices from the %i mesh", i + 1);
+		LoadVerices(new_mesh, currentMesh);
+
+		LOG("Loading Color from the %i mesh", i + 1);
+		LoadColor(new_mesh, scene->mMaterials[currentMesh->mMaterialIndex]);
+
+		LOG("Loading Normals from the %i mesh", i + 1);
+		if (currentMesh->HasNormals())
+			LoadNormals(new_mesh, currentMesh);
+
+		LOG("Loading Textures from the %i mesh", i + 1);
+		if (currentMesh->HasTextureCoords(0))
+			LoadTextures(new_mesh, currentMesh, scene, file);
+
+
+		LOG("Loading Indices from the %i mesh", i + 1);
+		if (currentMesh->HasFaces())
+			LoadIndices(new_mesh, currentMesh);
+
+		LOG("Generating BoundingBox for the %i mesh", i + 1);
+		LoadBoundingBox(new_mesh, currentMesh);
+
+		App->renderer3D->mesh_list.push_back(new_mesh);
+	}
+	
+	if (node->mNumChildren > 0)
+	{
+		for (int i = 0; i < node->mNumChildren; i++)
+			LoadAllNodesMeshes(node->mChildren[i], scene, file);
+	}
 }
 
 bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)

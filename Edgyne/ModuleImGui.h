@@ -11,6 +11,7 @@ class GUIConsole;
 class GUIAbout;
 class GUIConfiguration;
 class GUIRandomNumberTest;
+class GUIInspector;
 
 class ModuleImGui : public Module
 {
@@ -51,6 +52,7 @@ public:
 	GUIAbout* about = nullptr;
 	GUIConfiguration* configuration = nullptr;
 	GUIRandomNumberTest* random_number_test = nullptr;
+	GUIInspector* inspector = nullptr;
 
 	std::vector<GUIElements*> GUIElement;
 
@@ -60,6 +62,7 @@ public:
 	bool show_intersections_test = false;
 	bool show_configuration = false;
 	bool show_about_window = false;
+	bool show_inspector = false;
 	
 	bool perma_true = true;
 	bool perma_true_2 = true;
