@@ -177,9 +177,9 @@ void ModuleLoader::LoadInfo(mesh * new_mesh, aiMesh * currentMesh, aiNode* node)
 
 	rotationEuler = rotation.GetEuler();
 
-	new_mesh->rotation.x = rotationEuler.x;
-	new_mesh->rotation.y = rotationEuler.y;
-	new_mesh->rotation.z = rotationEuler.z;
+	new_mesh->rotation.x = math::RadToDeg(rotationEuler.x);
+	new_mesh->rotation.y = math::RadToDeg(rotationEuler.y);
+	new_mesh->rotation.z = math::RadToDeg(rotationEuler.z);
 	new_mesh->position.x = position.x;
 	new_mesh->position.y = position.y;
 	new_mesh->position.z = position.z;
