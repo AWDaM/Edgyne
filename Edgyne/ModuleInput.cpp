@@ -3,6 +3,9 @@
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleLoader.h"
+#include "ModuleImGui.h"
+#include "GUIScene.h"
+
 
 #define MAX_KEYS 300
 

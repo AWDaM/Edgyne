@@ -168,6 +168,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+	glViewport(0, 0, App->window->window_w, App->window->window_h);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
