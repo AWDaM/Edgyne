@@ -62,3 +62,8 @@ void GUIInspector::Draw()
 	
 	ImGui::End();
 }
+
+bool GUIInspector::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
+{
+	return true;
+}

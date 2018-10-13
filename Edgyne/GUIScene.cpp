@@ -26,3 +26,13 @@ void GUIScene::Draw()
 	ImGui::Image((ImTextureID)App->renderer3D->framebuffer_texture, { (float)App->window->window_w,(float)App->window->window_h }, { 0,1 }, { 1,0 });
 	ImGui::End();
 }
+
+bool GUIScene::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
+{
+	Node.AddMember("posx", posx, allocator);
+	Node.AddMember("posy", posy, allocator);
+	Node.AddMember("width", width, allocator);
+	Node.AddMember("height", height, allocator);
+	Node.AddMember("active", active, allocator);
+	return true;
+}

@@ -1,7 +1,6 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "ModuleAudio.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
@@ -21,7 +20,6 @@ Application::Application()
 	PERF_START(ptimer);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	audio = new ModuleAudio(this, true);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	imGui = new ModuleImGui(this);
@@ -44,7 +42,6 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(audio);
 	AddModule(test);
 	AddModule(imGui);
 	AddModule(level);
@@ -286,7 +283,7 @@ void Application::Hardware_ImGui()
 		ImGui::Text("CPU count: %i", SDL_GetCPUCount());
 		ImGui::Text("Cache Size: %i kb", SDL_GetCPUCacheLineSize());
 		ImGui::Text("System RAM: %i MB", SDL_GetSystemRAM());
-		if (SDL_Has3DNow)
+		if (SDL_Has3DNow())
 			ImGui::Text("CPU has 3DNow!");
 		if (SDL_HasAVX())
 			ImGui::Text("CPU has AVX");

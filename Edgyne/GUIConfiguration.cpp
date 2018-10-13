@@ -46,3 +46,8 @@ void GUIConfiguration::Draw()
 	App->Hardware_ImGui();
 	ImGui::End();
 }
+
+bool GUIConfiguration::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
+{
+	return true;
+}

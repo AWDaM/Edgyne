@@ -22,7 +22,6 @@
 
 class ModuleWindow;
 class ModuleInput;
-class ModuleAudio;
 class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleImGui;
@@ -36,7 +35,6 @@ class Application
 public:
 	ModuleWindow * window;
 	ModuleInput* input;
-	ModuleAudio* audio;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleImGui* imGui;

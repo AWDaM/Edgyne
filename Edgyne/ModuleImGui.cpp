@@ -66,15 +66,26 @@ bool ModuleImGui::CleanUp()
 void ModuleImGui::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
 {
 	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
-	doc.AddMember("Name", 2, allocator);
-	doc.AddMember("Pepe", "paco", allocator);
 
 	rapidjson::Value Obj(rapidjson::kObjectType);
-	Obj.AddMember("tete", "gym\n", allocator);
-	rapidjson::Value Ovj(rapidjson::kObjectType);
-	Ovj.AddMember("tinc", "gana", allocator);
-	Obj.AddMember("pilota", Ovj, allocator);
-	doc.AddMember("chistorra", Obj, allocator);
+
+	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+	{
+		rapidjson::Value childrenData(rapidjson::kObjectType);
+
+		(*it)->Save(childrenData, allocator);
+
+		Obj.AddMember((rapidjson::Value::StringRefType)(*it)->name.data(), childrenData, allocator);
+
+	}
+
+
+
+
+	//rapidjson::Value Ovj(rapidjson::kObjectType);
+	//Ovj.AddMember("tinc", "gana", allocator);
+	//Obj.AddMember("pilota", Ovj, allocator);
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), Obj, allocator);
 
 	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
 

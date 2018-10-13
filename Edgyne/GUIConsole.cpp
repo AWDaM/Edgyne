@@ -35,6 +35,11 @@ bool GUIConsole::CleanUp()
 	return true;
 }
 
+bool GUIConsole::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
+{
+	return true;
+}
+
 
 
 void GUIConsole::AddLog(const char* entry)

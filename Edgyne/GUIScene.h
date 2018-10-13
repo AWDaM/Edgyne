@@ -8,5 +8,7 @@ public:
 	~GUIScene();
 
 	void Draw();
+
+	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
 };
 

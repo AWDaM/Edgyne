@@ -62,3 +62,8 @@ void GUIAbout::Draw()
 
 	ImGui::End();
 }
+
+bool GUIAbout::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
+{
+	return true;
+}

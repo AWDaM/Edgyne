@@ -13,6 +13,8 @@ public:
 	void Draw() override;
 	bool CleanUp() override;
 
+	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
+
 	void Clear();
 	void AddLog(const char* entry);
 
