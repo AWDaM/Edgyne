@@ -27,7 +27,6 @@ void GUIScene::Draw()
 	ImGui::End();
 }
 
-<<<<<<< HEAD
 	bool GUIScene::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
 {
 	Node.AddMember("posx", posx, allocator);
