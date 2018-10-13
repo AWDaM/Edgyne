@@ -357,7 +357,9 @@
     <ClInclude Include="GUIInspector.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="GUIScene.h" />
+    <ClInclude Include="GUIScene.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -561,7 +563,9 @@
     <ClCompile Include="GUIInspector.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="GUIScene.cpp" />
+    <ClCompile Include="GUIScene.cpp">
+      <Filter>Sources\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">

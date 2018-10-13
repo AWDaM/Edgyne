@@ -120,16 +120,16 @@ bool ModuleRenderer3D::Init(rapidjson::Document& document)
 	}
 
 
-
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
+	GenerateFramebuffer();
 
 	return ret;
 }
 
 bool ModuleRenderer3D::GenerateFramebuffer()
 {
+	bool ret = true;
 	glGenFramebuffers(1, &framebuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
 
@@ -153,22 +153,20 @@ bool ModuleRenderer3D::GenerateFramebuffer()
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		LOG("Problem generating framebuffer: %s", glGetError());
+		ret = false;
 	}
-	else
-	{
 
-	}
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	return true;
+	return ret;
 }
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -241,6 +239,8 @@ void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStrea
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
+	//GenerateFramebuffer();
+
 	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
@@ -250,6 +250,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+
 }
 
 void ModuleRenderer3D::Configuration()

@@ -1,6 +1,7 @@
 #include "GUIScene.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleWindow.h"
 
 
 
@@ -22,6 +23,6 @@ void GUIScene::Draw()
 {
 	ImGui::Begin("Scene", &active);
 
-	ImGui::Image((ImTextureID)App->renderer3D->framebuffer_texture, ImGui::GetWindowSize());
+	ImGui::Image((ImTextureID)App->renderer3D->framebuffer_texture, { (float)App->window->window_w,(float)App->window->window_h }, { 0,1 }, { 1,0 });
 	ImGui::End();
 }
