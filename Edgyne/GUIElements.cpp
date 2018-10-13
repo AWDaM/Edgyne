@@ -25,10 +25,10 @@ void GUIElements::Move()
 {
 	if (ImGui::GetWindowPos() != position)
 	{
-		ImGui::GetWindowPos() = position;
+		position = ImGui::GetWindowPos();
 	}
 	if (ImGui::GetWindowSize() != size)
 	{
-		ImGui::GetWindowSize() != size;
+		size = ImGui::GetWindowSize();
 	}
 }
