@@ -8,5 +8,8 @@ public:
 	~GUIScene();
 
 	void Draw();
+	bool IsMouseHovering();
+
+	bool hovered = false;
 };
 

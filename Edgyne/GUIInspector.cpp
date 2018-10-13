@@ -50,6 +50,7 @@ void GUIInspector::Draw()
 			}
 			if(ImGui::TreeNode("Texture"))
 			{
+
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
