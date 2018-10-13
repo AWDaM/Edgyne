@@ -10,6 +10,8 @@ public:
 	~GUIRandomNumberTest();
 
 	void Draw();
+	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
+
 private:
 public:
 private:

@@ -20,6 +20,8 @@ public:
 
 	update_status Update(float dt);
 	bool CleanUp();
+	void Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os);
+	void Load(rapidjson::Document& doc);
 
 	bool Import(const std::string& file);
 
@@ -43,5 +45,7 @@ public:
 	//char* user;
 private:
 	struct aiLogStream stream;
+	std::string MeshPath;
+	std::string TexturePath;
 
 };

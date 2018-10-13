@@ -215,6 +215,10 @@ update_status Application::Update()
 	{
 		SaveData();
 	}
+	if (toLoad)
+	{
+		LoadData();
+	}
 
 	FinishUpdate();
 	return ret;
@@ -345,4 +349,25 @@ void Application::SaveData()
 	fclose(fp);
 
 	toSave = false;
+}
+
+void Application::LoadData()
+{
+	rapidjson::Document saveFile;
+
+	FILE* file = fopen("save.json", "rb");
+	char readBuffer[65536];
+
+	rapidjson::FileReadStream inputStream(file, readBuffer, sizeof(readBuffer));
+
+	saveFile.ParseStream(inputStream);
+
+	std::list<Module*>::iterator item = list_modules.begin();
+
+	while (item != list_modules.end())
+	{
+		(*item)->Load(saveFile);
+		item++;
+	}
+	toLoad = false;
 }

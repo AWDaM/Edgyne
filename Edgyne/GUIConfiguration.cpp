@@ -4,10 +4,8 @@
 
 GUIConfiguration::GUIConfiguration() : GUIElements("Configuration")
 {
-	posx = 420;
-	posy = 200;
-	width = 600;
-	height = 300;
+	position = { 420, 200 };
+	size = { 600, 300 };
 
 }
 
@@ -24,7 +22,10 @@ void GUIConfiguration::Draw()
 		{
 			ImGui::Button("Default Options");
 			ImGui::SameLine();
-			ImGui::Button("Load Options");
+			if(ImGui::Button("Load Options"))
+			{
+				App->toLoad = true;
+			}
 			ImGui::SameLine();
 			if (ImGui::Button("Save Options"))
 			{
@@ -49,5 +50,7 @@ void GUIConfiguration::Draw()
 
 bool GUIConfiguration::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
 {
+	Node.AddMember("active", active, allocator);
+
 	return true;
 }

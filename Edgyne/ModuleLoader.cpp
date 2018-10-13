@@ -74,6 +74,8 @@ bool ModuleLoader::CleanUp()
 
 bool ModuleLoader::Import(const std::string & file)
 {
+	MeshPath = file;
+	TexturePath.clear();
 	App->renderer3D->DeleteMesh();
 	App->renderer3D->mesh_list.clear();
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
@@ -102,6 +104,7 @@ bool ModuleLoader::Import(const std::string & file)
 
 bool ModuleLoader::ImportTexture(const char* path)
 {
+	TexturePath = path;
 	bool ret = true;
 	ILuint imgName;
 	ilGenImages(1, &imgName);
@@ -361,6 +364,7 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 	file.append(texPath.C_Str());
 	if (ilLoadImage(file.data()))
 	{
+		TexturePath = file;
 		LOG("Texture found at the same file as the object");
 		ret = true;
 	}
@@ -370,6 +374,7 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 		file.append(texPath.C_Str());
 		if (ilLoadImage(file.data()))
 		{
+			TexturePath = file;
 			LOG("Texture found at the library folder");
 			ret = true;
 		}
@@ -379,12 +384,39 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 			file.append(texPath.C_Str());
 			if (ilLoadImage(file.data()))
 			{
+				TexturePath = file;
 				LOG("Texture found at the source folder");
 				ret = true;
 			}
 		}
-
 	}
 	return ret;
 }
 
+void ModuleLoader::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+	rapidjson::Value obj(rapidjson::kObjectType);
+	obj.AddMember("Mesh Path", (rapidjson::Value::StringRefType)MeshPath.data(), allocator);
+	if(TexturePath.size())
+		obj.AddMember("Texture Path", (rapidjson::Value::StringRefType)TexturePath.data(), allocator);
+	
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+}
+
+void ModuleLoader::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+
+	MeshPath = node["Mesh Path"].GetString();
+	Import(MeshPath);
+	if (node.HasMember("Texture Path"))
+	{
+		TexturePath = node["Texture Path"].GetString();
+		ImportTexture(TexturePath.data());
+	}
+
+}

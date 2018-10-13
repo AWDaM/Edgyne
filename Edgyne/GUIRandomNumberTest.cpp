@@ -6,10 +6,8 @@
 
 GUIRandomNumberTest::GUIRandomNumberTest() : GUIElements("random_number_test")
 {
-	posx = 420;
-	posy = 200;
-	width = 600;
-	height = 300;
+	position = { 420, 200 };
+	size = { 600, 300 };
 }
 
 
@@ -51,4 +49,10 @@ void GUIRandomNumberTest::Draw()
 	ImGui::Text("%f", rng3);
 
 	ImGui::End();
+}
+
+bool GUIRandomNumberTest::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
+{
+	Node.AddMember("active", active, allocator);
+	return true;
 }

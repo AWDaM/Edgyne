@@ -78,13 +78,6 @@ void ModuleImGui::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & o
 		Obj.AddMember((rapidjson::Value::StringRefType)(*it)->name.data(), childrenData, allocator);
 
 	}
-
-
-
-
-	//rapidjson::Value Ovj(rapidjson::kObjectType);
-	//Ovj.AddMember("tinc", "gana", allocator);
-	//Obj.AddMember("pilota", Ovj, allocator);
 	doc.AddMember((rapidjson::Value::StringRefType)name.data(), Obj, allocator);
 
 	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);

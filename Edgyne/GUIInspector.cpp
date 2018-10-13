@@ -7,6 +7,8 @@
 
 GUIInspector::GUIInspector() : GUIElements("inspector")
 {
+	position = { 420, 200 };
+	size = { 600, 300 };
 }
 
 
@@ -50,6 +52,7 @@ void GUIInspector::Draw()
 			}
 			if(ImGui::TreeNode("Texture"))
 			{
+				ImGui::Text("Image size 512x512");
 				ImGui::Image((void *)(intptr_t)(*item)->id_texture, ImVec2(512, 512));
 				ImGui::TreePop();
 			}
@@ -65,5 +68,7 @@ void GUIInspector::Draw()
 
 bool GUIInspector::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
 {
+	Node.AddMember("active", active, allocator);
+
 	return true;
 }

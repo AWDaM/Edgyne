@@ -4,10 +4,8 @@
 
 GUIAbout::GUIAbout() : GUIElements("about")
 {
-	posx = 420;
-	posy = 200;
-	width = 600;
-	height = 300;
+	position = { 420, 200 };
+	size = { 600, 300 };
 }
 
 
@@ -65,5 +63,7 @@ void GUIAbout::Draw()
 
 bool GUIAbout::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
 {
+	Node.AddMember("active", active, allocator);
+
 	return true;
 }

@@ -1,1 +1,1 @@
-{"ImGui":{"console":{},"about":{},"Configuration":{},"random_number_test":{},"inspector":{},"scene":{"posx":420,"posy":200,"width":600,"height":300,"active":true}}}
+{"ImGui":{"console":{"active":false},"about":{"active":false},"Configuration":{"active":true},"random_number_test":{"active":false},"inspector":{"active":false},"scene":{"active":true}},"loader":{"Mesh Path":"Library\\BakerHouse\\BakerHouse.FBX","Texture Path":"C:\\Users\\farma\\Documents\\GitHub\\Edgyne\\Edgyne\\Game\\Library\\Lenna_(test_image).png"}}

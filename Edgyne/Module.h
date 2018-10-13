@@ -47,6 +47,7 @@ public:
 	}
 
 	virtual void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os) {};
+	virtual void Load(rapidjson::Document& doc) {};
 
 	virtual bool CleanUp() 
 	{ 

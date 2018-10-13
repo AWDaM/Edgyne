@@ -6,9 +6,8 @@
 
 GUIConsole::GUIConsole(std::string log) : GUIElements("console")
 {
-	width = 658;
-	height = 300;
-	posy = 100;
+	position = { 420, 200 };
+	size = { 600, 300 };
 
 	//canLog = true;
 	//AddLog(log.data());
@@ -37,6 +36,8 @@ bool GUIConsole::CleanUp()
 
 bool GUIConsole::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
 {
+	Node.AddMember("active", active, allocator);
+
 	return true;
 }
 

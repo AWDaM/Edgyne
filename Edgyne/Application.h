@@ -80,7 +80,7 @@ public:
 	void Application::SetTitle( char* title);
 
 	void SaveData();
-
+	void LoadData();
 private:
 
 	void AddModule(Module* mod);
@@ -91,6 +91,7 @@ private:
 public:
 
 	bool toSave = false;
+	bool toLoad = false;
 	std::string log;
 	bool canLog = false;
 	int GetFramerate() const;
