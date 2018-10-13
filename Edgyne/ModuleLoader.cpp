@@ -169,11 +169,17 @@ void ModuleLoader::ReceivedFile(const char * path)
 
 void ModuleLoader::LoadInfo(mesh * new_mesh, aiMesh * currentMesh, aiNode* node)
 {
-	memcpy(new_mesh->name, currentMesh->mName.C_Str(), currentMesh->mName.length);
+	if (currentMesh->mName.length != NULL)
+	{
+		memcpy(new_mesh->name, currentMesh->mName.C_Str(), currentMesh->mName.length);
+	}
+	else
+		memcpy(new_mesh->name, "No_name", 8);
+
 
 	aiQuaternion rotation;
 	aiVector3D position, scaling, rotationEuler;
-	
+
 	node->mTransformation.Decompose(scaling, rotation, position);
 
 	rotationEuler = rotation.GetEuler();
@@ -187,6 +193,8 @@ void ModuleLoader::LoadInfo(mesh * new_mesh, aiMesh * currentMesh, aiNode* node)
 	new_mesh->scale.x = scaling.x;
 	new_mesh->scale.y = scaling.y;
 	new_mesh->scale.z = scaling.z;
+
+	new_mesh->num_faces = currentMesh->mNumFaces;
 
 }
 

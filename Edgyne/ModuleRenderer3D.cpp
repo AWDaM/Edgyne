@@ -119,6 +119,8 @@ bool ModuleRenderer3D::Init(rapidjson::Document& document)
 		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	}
 
+
+
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -126,11 +128,48 @@ bool ModuleRenderer3D::Init(rapidjson::Document& document)
 	return ret;
 }
 
+bool ModuleRenderer3D::GenerateFramebuffer()
+{
+	glGenFramebuffers(1, &framebuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+
+
+	glGenTextures(1, &framebuffer_texture);
+	glBindTexture(GL_TEXTURE_2D, framebuffer_texture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,App->window->window_w, App->window->window_h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer_texture, 0);
+
+
+	glGenRenderbuffers(1, &framebuffer_depth_and_stencil);
+	glBindRenderbuffer(GL_RENDERBUFFER, framebuffer_depth_and_stencil);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->window_w, App->window->window_h);
+
+
+	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		LOG("Problem generating framebuffer: %s", glGetError());
+	}
+	else
+	{
+
+	}
+
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return true;
+}
+
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 
-
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -173,7 +212,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		item++;
 	}
 
-
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	App->imGui->Draw();
 
 	if (App->imGui->to_close == true) // A bit hardcoded, but cant find any other way
@@ -189,7 +228,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
-
+	glDeleteFramebuffers(1, &framebuffer);
 	SDL_GL_DeleteContext(context);
 
 	return true;

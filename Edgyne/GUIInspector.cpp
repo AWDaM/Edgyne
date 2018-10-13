@@ -17,7 +17,6 @@ GUIInspector::~GUIInspector()
 
 void GUIInspector::Draw()
 {
-	ImGui::SetNextWindowBgAlpha(1.0f);
 	ImGui::Begin("Inspector", &active);
 
 	std::list<mesh*>::iterator item = App->renderer3D->mesh_list.begin();
@@ -44,6 +43,9 @@ void GUIInspector::Draw()
 			}
 			if(ImGui::TreeNode("Mesh"))
 			{
+				ImGui::Text("Num Faces: %i", (*item)->num_faces);
+				ImGui::Text("Num Vertices: %i", (*item)->num_vertex);
+				ImGui::Text("Num Indexes: %i", (*item)->num_index);
 				ImGui::TreePop();
 			}
 			if(ImGui::TreeNode("Texture"))

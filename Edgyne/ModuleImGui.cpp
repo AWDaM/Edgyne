@@ -12,6 +12,7 @@
 #include "GUIConfiguration.h"
 #include "GUIRandomNumberTest.h"
 #include "GUIInspector.h"
+#include "GUIScene.h"
 #include <stdio.h>
 
 
@@ -35,6 +36,7 @@ bool ModuleImGui::Init(rapidjson::Document& document)
 	GUIElement.push_back(configuration = new GUIConfiguration());
 	GUIElement.push_back(random_number_test = new GUIRandomNumberTest());
 	GUIElement.push_back(inspector = new GUIInspector());
+	GUIElement.push_back(scene = new GUIScene());
 
 	App->canLog = true;
 

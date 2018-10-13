@@ -43,6 +43,7 @@ struct mesh
 	vec3 position;
 	vec3 rotation;
 	vec3 scale;
+	uint num_faces;
 
 
 	bool Draw();
@@ -57,6 +58,9 @@ public:
 	~ModuleRenderer3D();
 
 	bool Init(rapidjson::Document& document);
+
+	bool GenerateFramebuffer();
+
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
@@ -73,6 +77,10 @@ public:
 	void DeleteMesh();
 
 public:
+
+	uint framebuffer = 0;
+	uint framebuffer_texture = 0;
+	uint framebuffer_depth_and_stencil = 0;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
