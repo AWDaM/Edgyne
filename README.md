@@ -4,7 +4,9 @@ More information about the engine in the About tab.
 
 ### Authors
 The authors of this engine are two students at the [UPC of barcelona](https://www.citm.upc.edu), studying the degree in engineering of development and design of videogames
+
 [Jaume Surís](https://github.com/Farmak09)
+
 [Lorién Portella](https://github.com/Witiza)
 
 ### Camera Controls
