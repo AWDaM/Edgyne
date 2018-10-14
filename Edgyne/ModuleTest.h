@@ -19,7 +19,7 @@ public:
 
 	bool CheckTestIntersections();
 
-	bool Init(rapidjson::Document& document);
+	bool Init(rapidjson::Value& node);
 
 	update_status Update(float dt);
 

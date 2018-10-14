@@ -10,7 +10,7 @@
 
 ModuleDebug::ModuleDebug(Application* app, bool start_enabled) : Module(start_enabled)
 {
-	name = "debug";
+	name = "Debug";
 }
 
 
@@ -18,6 +18,10 @@ ModuleDebug::~ModuleDebug()
 {
 }
 
+bool ModuleDebug::Init(rapidjson::Value& node)
+{
+	return true;
+}
 
 bool ModuleDebug::Start()
 {

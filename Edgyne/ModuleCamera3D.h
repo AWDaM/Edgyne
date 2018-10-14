@@ -13,6 +13,7 @@ public:
 	ModuleCamera3D(Application* app, bool start_enabled = true);
 	~ModuleCamera3D();
 
+	bool Init(rapidjson::Value& node);
 	bool Start();
 	update_status Update(float dt);
 	bool CleanUp();
@@ -35,10 +36,4 @@ public:
 	
 	vec3 X, Y, Z, Position, Reference;
 	mat4x4 ViewMatrix, ViewMatrixInverse;
-	
-private:
-	
-
-
-
 };

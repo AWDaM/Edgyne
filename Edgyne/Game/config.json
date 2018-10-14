@@ -1,5 +1,33 @@
 {
-	"Audio":{
-		"omae wa mou": "shindeiru"
-	}
+  "Window": {
+    "Application Name": "Edgyne",
+    "Window Width": 1280,
+    "Window Height": 1024,
+    "Min Screen Width": 640,
+    "Min Screen Height": 480,
+    "Max Screen Width": 3840,
+    "Max Screen Height": 2160,
+    "Screen Size": 1,
+    "Fullscreen": false,
+    "Resizable": true,
+    "Borderless": false,
+    "Desktop Fullscreen": false
+  },
+  "Camera": {
+  },
+  "Input": {
+  },
+  "Test": {
+  },
+  "ImGui": {
+  },
+  "Level": {
+  },
+  "Debug": {
+  },
+  "Loader": {
+  },
+  "Render3D": {
+    "VSync": true
+  }
 }

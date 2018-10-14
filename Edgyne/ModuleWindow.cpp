@@ -15,8 +15,9 @@ ModuleWindow::~ModuleWindow()
 }
 
 // Called before render is available
-bool ModuleWindow::Init(rapidjson::Document& document)
+bool ModuleWindow::Init(rapidjson::Value& node)
 {
+
 	LOG("Init SDL window & surface");
 	bool ret = true;
 
@@ -27,9 +28,10 @@ bool ModuleWindow::Init(rapidjson::Document& document)
 	}
 	else
 	{
+		screenSize = node["Screen Size"].GetInt();
 		//Create window
-		 window_w = SCREEN_WIDTH * SCREEN_SIZE;
-		 window_h = SCREEN_HEIGHT * SCREEN_SIZE;
+		 window_w = node["Window Width"].GetInt() * screenSize;
+		 window_h = node["Window Height"].GetInt() * screenSize;
 		 brightness = 1.0f;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
@@ -37,31 +39,31 @@ bool ModuleWindow::Init(rapidjson::Document& document)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
-		if(WIN_FULLSCREEN == true)
+		if(node["Fullscreen"].GetBool() == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 			fullscreen = true;
 		}
 
-		if(WIN_RESIZABLE == true)
+		if(node["Resizable"].GetBool() == true)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 			resizable = true;
 		}
 
-		if(WIN_BORDERLESS == true)
+		if(node["Borderless"].GetBool() == true)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 			borderless = true;
 		}
 
-		if(WIN_FULLSCREEN_DESKTOP == true)
+		if(node["Desktop Fullscreen"].GetBool() == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 			desktop_fullscreen = true;
 		}
-
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, flags);
+		App->window_name = node["Application Name"].GetString();
+		window = SDL_CreateWindow(App->window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, flags);
 
 		if(window == NULL)
 		{
@@ -72,8 +74,8 @@ bool ModuleWindow::Init(rapidjson::Document& document)
 		{
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
-			SDL_SetWindowMinimumSize(window, MINIMUM_SCREEN_WIDHT, MINIMUM_SCREEN_HEIGHT);
-			SDL_SetWindowMaximumSize(window, MAXIMUM_SCREEN_WIDHT, MAXIMUM_SCREEN_HEIGHT);
+			SDL_SetWindowMinimumSize(window, node["Min Screen Width"].GetUint(), node["Min Screen Height"].GetUint());
+			SDL_SetWindowMaximumSize(window, node["Max Screen Width"].GetUint(), node["Max Screen Height"].GetUint());
 			SDL_SetWindowBrightness(window, brightness);
 		}
 		

@@ -15,7 +15,7 @@ public:
 	ModuleLoader(Application* app, bool start_enabled = true);
 	~ModuleLoader();
 
-	bool Init(rapidjson::Document& document);
+	bool Init(rapidjson::Value& node);
 
 
 	update_status Update(float dt);

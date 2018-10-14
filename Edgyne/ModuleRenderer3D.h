@@ -57,7 +57,7 @@ public:
 	ModuleRenderer3D(Application* app, bool start_enabled = true);
 	~ModuleRenderer3D();
 
-	bool Init(rapidjson::Document& document);
+	bool Init(rapidjson::Value& node);
 
 	bool GenerateFramebuffer();
 

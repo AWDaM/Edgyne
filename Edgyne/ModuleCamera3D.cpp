@@ -26,6 +26,11 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(st
 ModuleCamera3D::~ModuleCamera3D()
 {}
 
+bool ModuleCamera3D::Init(rapidjson::Value& node)
+{
+	return true;
+}
+
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {

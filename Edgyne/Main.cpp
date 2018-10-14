@@ -23,8 +23,6 @@ Application* App = NULL;
 
 int main(int argc, char ** argv)
 {
-	LOG("Starting game '%s'...", TITLE);
-
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
 
@@ -34,8 +32,8 @@ int main(int argc, char ** argv)
 		{
 		case MAIN_CREATION:
 
-			LOG("-------------- Application Creation --------------");
 			App = new Application();
+			LOG("-------------- Application Creation --------------");
 			state = MAIN_START;
 			break;
 
@@ -86,9 +84,8 @@ int main(int argc, char ** argv)
 
 		}
 	}
-
+	LOG("Exiting game '%s'...\n", App->window_name);
 	delete App;
 	App = nullptr;
-	LOG("Exiting game '%s'...\n", TITLE);
 	return main_return;
 }

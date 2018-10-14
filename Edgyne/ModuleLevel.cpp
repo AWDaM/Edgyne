@@ -7,11 +7,17 @@
 
 ModuleLevel::ModuleLevel(Application* app, bool start_enabled) : Module(start_enabled)
 {
+	name = "Level";
 }
 
 
 ModuleLevel::~ModuleLevel()
 {
+}
+
+bool ModuleLevel::Init(rapidjson::Value& node)
+{
+	return true;
 }
 
 bool ModuleLevel::Start()

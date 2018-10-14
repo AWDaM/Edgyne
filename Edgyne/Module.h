@@ -21,7 +21,7 @@ public:
 	virtual ~Module()
 	{}
 
-	virtual bool Init(rapidjson::Document& document)
+	virtual bool Init(rapidjson::Value& node)
 	{
 		return true; 
 	}

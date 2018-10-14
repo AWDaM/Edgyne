@@ -84,7 +84,7 @@ bool Application::Init()
 
 	while(item != list_modules.end() && ret == true)
 	{
-		ret = (*item)->Init(document);
+		ret = (*item)->Init(document[(*item)->name.data()]);
 		item++;
 	}
 	// After all Init calls we call Start() in all modules
@@ -318,7 +318,7 @@ void Application::AddModule(Module* mod)
 	list_modules.push_back(mod);
 }
 
-char* Application::GetTitle() const
+const char* Application::GetTitle() const
 {
 	return window_name;
 

@@ -20,7 +20,7 @@ public:
 	ModuleImGui(Application* app, bool start_enabled = true);
 	~ModuleImGui();
 
-	bool Init(rapidjson::Document& document);
+	bool Init(rapidjson::Value& node);
 	bool CleanUp();
 
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);

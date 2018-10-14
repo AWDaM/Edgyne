@@ -6,7 +6,7 @@ class ModuleLevel :
 public:
 	ModuleLevel(Application* app, bool start_enabled = true);
 	~ModuleLevel();
-
+	bool Init(rapidjson::Value& node);
 	bool Start();
 
 	void Draw();

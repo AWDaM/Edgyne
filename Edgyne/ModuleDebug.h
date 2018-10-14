@@ -11,6 +11,7 @@ class ModuleDebug :
 public:
 	ModuleDebug(Application* app, bool start_enabled = true);
 	~ModuleDebug();
+	bool Init(rapidjson::Value& node);
 
 	bool Start();
 	update_status Update(float dt);

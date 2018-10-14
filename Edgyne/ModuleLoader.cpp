@@ -34,14 +34,14 @@ void AssimpLoggerLoad(const char* message, char* user)
 
 ModuleLoader::ModuleLoader(Application * app, bool start_enabled) : Module(start_enabled)
 {
-	name = "loader";
+	name = "Loader";
 }
 
 ModuleLoader::~ModuleLoader()
 {
 }
 
-bool ModuleLoader::Init(rapidjson::Document& document)
+bool ModuleLoader::Init(rapidjson::Value& node)
 {
 	ilInit();
 	iluInit();
