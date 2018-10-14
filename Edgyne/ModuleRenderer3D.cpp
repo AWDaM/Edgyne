@@ -235,11 +235,6 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
-{
-}
-
-
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	App->window->window_w = width;
@@ -522,4 +517,48 @@ void ModuleRenderer3D::DeleteMesh()
 		(*it) = nullptr;
 	}
 
+}
+
+void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+	rapidjson::Value obj(rapidjson::kObjectType);
+	obj.AddMember("depth_test", depth_test, allocator);
+	obj.AddMember("cull_face", cull_face, allocator);
+	obj.AddMember("lighting", lighting, allocator);
+	obj.AddMember("color_material", color_material, allocator);
+	obj.AddMember("texture_2d", texture_2d, allocator);
+	obj.AddMember("line_smooth", line_smooth, allocator);
+	obj.AddMember("scissor_test", scissor_test, allocator);
+
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+}
+
+void ModuleRenderer3D::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+
+	depth_test = node["depth_test"].GetBool();
+	glSwitch(depth_test, DEPTH_TEST);
+
+	cull_face = node["cull_face"].GetBool();
+	glSwitch(cull_face, CULL_FACE);
+
+	lighting = node["lighting"].GetBool();
+	glSwitch(lighting, LIGHTING);
+
+	color_material = node["color_material"].GetBool();
+	glSwitch(color_material, COLOR_MATERIAL);
+
+	texture_2d = node["texture_2d"].GetBool();
+	glSwitch(texture_2d, TEXTURE_2D);
+
+	line_smooth = node["line_smooth"].GetBool();
+	glSwitch(line_smooth, LINE_SMOOTH);
+
+	scissor_test = node["scissor_test"].GetBool();
+	glSwitch(scissor_test, SCISSOR_TEST);
 }

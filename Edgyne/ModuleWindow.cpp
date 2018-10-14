@@ -104,8 +104,41 @@ bool ModuleWindow::CleanUp()
 
 void ModuleWindow::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
 {
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+	rapidjson::Value obj(rapidjson::kObjectType);
+	obj.AddMember("fullscreen", fullscreen, allocator);
+	obj.AddMember("borderless", borderless, allocator);
+	obj.AddMember("desktop_fullscreen", desktop_fullscreen, allocator);
+	obj.AddMember("window_w", window_w, allocator);
+	obj.AddMember("window_h", window_h, allocator);
+	obj.AddMember("brightness", brightness, allocator);
+
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
 }
 
+void ModuleWindow::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+
+	fullscreen = node["fullscreen"].GetBool();
+	SetFullscreen();
+
+	borderless = node["borderless"].GetBool();
+	SetBorderless();
+
+	desktop_fullscreen = node["desktop_fullscreen"].GetBool();
+	SetDesktopFullscreen();
+
+	window_w = node["window_w"].GetInt();
+	window_h = node["window_h"].GetInt();
+	SDL_SetWindowSize(window, window_w, window_h);
+
+	brightness = node["brightness"].GetFloat();
+	SDL_SetWindowBrightness(window, brightness);
+}
 
 
 void ModuleWindow::SetFullscreen()
@@ -119,7 +152,7 @@ void ModuleWindow::SetFullscreen()
 void ModuleWindow::SetBorderless()
 {
 
-	SDL_SetWindowBordered(window, (SDL_bool)borderless);
+	SDL_SetWindowBordered(window, (SDL_bool)!borderless);
 
 }
 

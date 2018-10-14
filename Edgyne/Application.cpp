@@ -349,18 +349,25 @@ void Application::LoadData()
 	rapidjson::Document saveFile;
 
 	FILE* file = fopen("save.json", "rb");
-	char readBuffer[65536];
-
-	rapidjson::FileReadStream inputStream(file, readBuffer, sizeof(readBuffer));
-
-	saveFile.ParseStream(inputStream);
-
-	std::list<Module*>::iterator item = list_modules.begin();
-
-	while (item != list_modules.end())
+	if (file)
 	{
-		(*item)->Load(saveFile);
-		item++;
+		char readBuffer[65536];
+
+		rapidjson::FileReadStream inputStream(file, readBuffer, sizeof(readBuffer));
+
+		saveFile.ParseStream(inputStream);
+
+		std::list<Module*>::iterator item = list_modules.begin();
+
+		while (item != list_modules.end())
+		{
+			(*item)->Load(saveFile);
+			item++;
+		}
+	}
+	else
+	{
+		LOG("Couldn't load dadta from save file");
 	}
 	toLoad = false;
 }

@@ -60,13 +60,15 @@ public:
 
 	bool Init(rapidjson::Value& node);
 
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+	void Load(rapidjson::Document& doc);
+
 	bool GenerateFramebuffer();
 
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
 
 	void OnResize(int width, int height);
 	void Configuration();
@@ -96,8 +98,6 @@ public:
 	bool texture_2d = true;
 	bool line_smooth = false;
 	bool scissor_test = false;
-
-	bool draw_wireframe = false;
 
 	uint  DroppedTexture;
 

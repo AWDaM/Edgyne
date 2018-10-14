@@ -19,6 +19,7 @@ public:
 	bool CleanUp();
 
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+	void Load(rapidjson::Document& doc);
 
 	void SetFullscreen();
 	void SetBorderless();
