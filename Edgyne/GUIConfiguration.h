@@ -4,7 +4,7 @@ class GUIConfiguration :
 	public GUIElements
 {
 public:
-	GUIConfiguration();
+	GUIConfiguration(bool active);
 	~GUIConfiguration();
 	void Draw();
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);

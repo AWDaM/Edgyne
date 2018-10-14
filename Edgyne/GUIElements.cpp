@@ -2,8 +2,9 @@
 
 
 
-GUIElements::GUIElements(const char* name) : name(name)
+GUIElements::GUIElements(const char* name, bool active = false) : name(name), active(active)
 {
+
 }
 
 

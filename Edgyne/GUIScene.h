@@ -4,7 +4,7 @@ class GUIScene :
 	public GUIElements
 {
 public:
-	GUIScene();
+	GUIScene(bool active);
 	~GUIScene();
 
 	void Draw();

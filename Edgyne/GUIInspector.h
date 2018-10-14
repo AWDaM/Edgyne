@@ -11,7 +11,7 @@ struct transformation
 class GUIInspector : public GUIElements
 {
 public:
-	GUIInspector();
+	GUIInspector(bool active);
 	~GUIInspector();
 
 	void Draw();

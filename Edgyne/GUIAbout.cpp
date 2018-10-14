@@ -2,7 +2,7 @@
 #include "Application.h"
 
 
-GUIAbout::GUIAbout() : GUIElements("about")
+GUIAbout::GUIAbout(bool active = false) : GUIElements("about",active)
 {
 	position = { 420, 200 };
 	size = { 600, 300 };

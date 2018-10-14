@@ -4,7 +4,7 @@ class GUIAbout :
 	public GUIElements
 {
 public:
-	GUIAbout();
+	GUIAbout(bool active);
 	~GUIAbout();
 
 	void Draw();

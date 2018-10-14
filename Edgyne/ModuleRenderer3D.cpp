@@ -131,33 +131,34 @@ bool ModuleRenderer3D::GenerateFramebuffer()
 {
 	bool ret = true;
 	glGenFramebuffers(1, &framebuffer);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
 
 	glGenTextures(1, &framebuffer_texture);
 	glBindTexture(GL_TEXTURE_2D, framebuffer_texture);
-
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,App->window->window_w, App->window->window_h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer_texture, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer_texture, 0);
 
 
 	glGenRenderbuffers(1, &framebuffer_depth_and_stencil);
 	glBindRenderbuffer(GL_RENDERBUFFER, framebuffer_depth_and_stencil);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->window_w, App->window->window_h);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer_depth_and_stencil);
 
+	//glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, framebuffer_msaa);
+	//glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGB, App->window->window_w, App->window->window_h, GL_TRUE);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D_MULTISAMPLE, framebuffer_texture,0);
 
-	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		LOG("Problem generating framebuffer: %s", glGetError());
 		ret = false;
 	}
 
 
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return ret;
@@ -167,7 +168,7 @@ bool ModuleRenderer3D::GenerateFramebuffer()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glViewport(0, 0, App->window->window_w, App->window->window_h);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -211,7 +212,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		item++;
 	}
 
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	App->imGui->Draw();
 
 	if (App->imGui->to_close == true) // A bit hardcoded, but cant find any other way
@@ -240,7 +243,9 @@ void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStrea
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	//GenerateFramebuffer();
+	App->window->window_w = width;
+	App->window->window_h = height;
+	GenerateFramebuffer();
 
 	glViewport(0, 0, width, height);
 

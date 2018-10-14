@@ -10,7 +10,7 @@ class GUIElements
 {
 
 public:
-	GUIElements(const char* name);
+	GUIElements(const char* name, bool active);
 	virtual ~GUIElements();
 
 	void ToggleActive();

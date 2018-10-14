@@ -5,7 +5,7 @@
 
 #include <list>
 
-GUIInspector::GUIInspector() : GUIElements("inspector")
+GUIInspector::GUIInspector(bool active = false) : GUIElements("inspector",active)
 {
 	position = { 420, 200 };
 	size = { 600, 300 };
@@ -52,8 +52,8 @@ void GUIInspector::Draw()
 				}
 				if (ImGui::TreeNode("Texture"))
 				{
-					ImGui::Text("Image size 512x512");
-					ImGui::Image((void *)(intptr_t)(*item)->id_texture, ImVec2(512, 512));
+					ImGui::Text("Image size 256x256");
+					ImGui::Image((void *)(intptr_t)(*item)->id_texture, ImVec2(256, 256));
 					ImGui::TreePop();
 				}
 				ImGui::TreePop();

@@ -6,7 +6,7 @@ class GUIRandomNumberTest :
 	public GUIElements
 {
 public:
-	GUIRandomNumberTest();
+	GUIRandomNumberTest(bool active);
 	~GUIRandomNumberTest();
 
 	void Draw();

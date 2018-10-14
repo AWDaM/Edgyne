@@ -7,7 +7,7 @@ class GUIConsole : public GUIElements
 {
 public:
 
-	GUIConsole(std::string log);
+	GUIConsole(std::string log, bool active);
 	virtual ~GUIConsole();
 
 	void Draw() override;
