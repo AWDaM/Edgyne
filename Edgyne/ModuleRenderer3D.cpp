@@ -148,7 +148,7 @@ bool ModuleRenderer3D::GenerateFramebuffer()
 	glGenRenderbuffers(1, &framebuffer_depth_and_stencil);
 	glBindRenderbuffer(GL_RENDERBUFFER, framebuffer_depth_and_stencil);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->window_w, App->window->window_h);
-
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer_depth_and_stencil);
 
 	if (glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -212,6 +212,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	}
 
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	App->imGui->Draw();
 
 	if (App->imGui->to_close == true) // A bit hardcoded, but cant find any other way
@@ -240,8 +242,8 @@ void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStrea
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	App->window->window_w = width;
-	App->window->window_h = height;
+	//App->window->window_w = width;
+	//App->window->window_h = height;
 	GenerateFramebuffer();
 
 	glViewport(0, 0, width, height);
