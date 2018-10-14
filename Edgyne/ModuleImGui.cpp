@@ -31,12 +31,12 @@ bool ModuleImGui::Init(rapidjson::Document& document)
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;  // Enable Keyboard Controls
-	GUIElement.push_back(console = new GUIConsole(App->log));
-	GUIElement.push_back(about = new GUIAbout());
-	GUIElement.push_back(configuration = new GUIConfiguration());
-	GUIElement.push_back(random_number_test = new GUIRandomNumberTest());
-	GUIElement.push_back(inspector = new GUIInspector());
-	GUIElement.push_back(scene = new GUIScene());
+	GUIElement.push_back(console = new GUIConsole(App->log, true));
+	GUIElement.push_back(about = new GUIAbout(false));
+	GUIElement.push_back(configuration = new GUIConfiguration(true));
+	GUIElement.push_back(random_number_test = new GUIRandomNumberTest(false));
+	GUIElement.push_back(inspector = new GUIInspector(true));
+	GUIElement.push_back(scene = new GUIScene(true));
 
 	App->canLog = true;
 

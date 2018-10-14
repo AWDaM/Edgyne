@@ -4,7 +4,7 @@
 
 
 
-GUIConsole::GUIConsole(std::string log) : GUIElements("console")
+GUIConsole::GUIConsole(std::string log, bool active = false) : GUIElements("console",active)
 {
 	position = { 420, 200 };
 	size = { 600, 300 };

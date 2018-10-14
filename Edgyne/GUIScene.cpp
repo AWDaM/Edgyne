@@ -5,11 +5,10 @@
 
 
 
-GUIScene::GUIScene() : GUIElements("scene")
+GUIScene::GUIScene(bool active = false) : GUIElements("scene",active)
 {
 	position = { 420, 200 };
 	size = { 600, 300 };
-	active = true;
 }
 
 

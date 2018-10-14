@@ -2,7 +2,7 @@
 #include "Application.h"
 
 
-GUIConfiguration::GUIConfiguration() : GUIElements("Configuration")
+GUIConfiguration::GUIConfiguration(bool active = false) : GUIElements("Configuration",active)
 {
 	position = { 420, 200 };
 	size = { 600, 300 };

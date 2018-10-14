@@ -122,7 +122,6 @@ bool ModuleRenderer3D::Init(rapidjson::Document& document)
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	GenerateFramebuffer();
 
 	return ret;
 }
@@ -242,8 +241,8 @@ void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStrea
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	//App->window->window_w = width;
-	//App->window->window_h = height;
+	App->window->window_w = width;
+	App->window->window_h = height;
 	GenerateFramebuffer();
 
 	glViewport(0, 0, width, height);

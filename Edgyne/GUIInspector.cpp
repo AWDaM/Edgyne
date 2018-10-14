@@ -5,7 +5,7 @@
 
 #include <list>
 
-GUIInspector::GUIInspector() : GUIElements("inspector")
+GUIInspector::GUIInspector(bool active = false) : GUIElements("inspector",active)
 {
 	position = { 420, 200 };
 	size = { 600, 300 };

@@ -4,7 +4,7 @@
 #include <time.h>
 
 
-GUIRandomNumberTest::GUIRandomNumberTest() : GUIElements("random_number_test")
+GUIRandomNumberTest::GUIRandomNumberTest(bool active = false) : GUIElements("random_number_test",active)
 {
 	position = { 420, 200 };
 	size = { 600, 300 };
