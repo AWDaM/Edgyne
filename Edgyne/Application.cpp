@@ -77,7 +77,7 @@ bool Application::Init()
 	rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 
 	document.ParseStream(is);
-
+	
 	// Call Init() in all modules
 
 	std::list<Module*>::iterator item = list_modules.begin();
@@ -128,13 +128,7 @@ void Application::FinishUpdate()
 	uint32 last_frame_ms = frame_time.ReadMs();
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
-	//static char title[256];
-	//if (entitycontroller->debug)
-	//	sprintf_s(title, 256, "Alliance: The last Bastion | FPS: %i Avg.FPS: %.2f last frame ms: %02u", frames_on_last_update, avg_fps, last_frame_ms);
-	//else
-	//	sprintf_s(title, 256, "Alliance: The last Bastion | FPS %i", frames_on_last_update);
-	//App->win->SetTitle(title);
-	//LOG("FPS: %i", frames_on_last_update);
+
 
 	if (framerate > 0 && last_frame_ms < framerate) SDL_Delay(framerate - last_frame_ms);
 	ChangeFPSlog(frames_on_last_update, last_frame_ms);
@@ -321,7 +315,6 @@ void Application::AddModule(Module* mod)
 const char* Application::GetTitle() const
 {
 	return window_name;
-
 }
 void Application::SetTitle(char* title)
 {

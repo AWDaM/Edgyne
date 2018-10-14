@@ -35,6 +35,7 @@ struct mesh
 
 	uint id_texture = 0;
 	float* texCoords = nullptr;
+	vec2 image_size = { 0,0 };
 
 	AABB bounding_box;
 
