@@ -34,10 +34,7 @@ public:
 
 	void AddLog(const char* Log);
 
-	//void IntersectionsTest();
-
 	void HelpMenu();
-
 
 	void MainMenu();
 	 

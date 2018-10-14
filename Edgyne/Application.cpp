@@ -4,7 +4,6 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
-#include "ModuleTest.h"
 #include "ModuleLevel.h"
 #include "ModuleDebug.h"
 #include "ModuleLoader.h"
@@ -23,7 +22,6 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	imGui = new ModuleImGui(this);
-	test = new ModuleTest(this);
 	level = new ModuleLevel(this);
 	debug = new ModuleDebug(this);
 	loader = new ModuleLoader(this);
@@ -41,8 +39,6 @@ Application::Application()
 	// Main Modules
 	AddModule(window);
 	AddModule(camera);
-	AddModule(input);
-	AddModule(test);
 	AddModule(imGui);
 	AddModule(level);
 	AddModule(debug);

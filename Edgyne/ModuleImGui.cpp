@@ -4,7 +4,6 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "ModuleTest.h"
 
 
 #include "GUIConsole.h"
@@ -221,7 +220,6 @@ void ModuleImGui::MainMenu()
 
 
 		if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
-		//if (show_intersections_test)		IntersectionsTest();
 	
 }
 
@@ -232,8 +230,6 @@ void ModuleImGui::ToggleEditor()
 
 void ModuleImGui::AddLog(const char* Log)
 {
-	//LogInformation.push_back(Log);
-
 	console->AddLog(Log);
 }
 

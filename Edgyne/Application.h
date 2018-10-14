@@ -22,7 +22,6 @@ class ModuleInput;
 class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleImGui;
-class ModuleTest;
 class ModuleLevel;
 class ModuleDebug;
 class ModuleLoader;
@@ -35,7 +34,6 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleImGui* imGui;
-	ModuleTest* test;
 	ModuleLevel* level;
 	ModuleDebug* debug;
 	ModuleLoader* loader;
