@@ -240,7 +240,9 @@ void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStrea
 
 void ModuleRenderer3D::OnResize(int width, int height)
 {
-	//GenerateFramebuffer();
+	App->window->window_w = width;
+	App->window->window_h = height;
+	GenerateFramebuffer();
 
 	glViewport(0, 0, width, height);
 

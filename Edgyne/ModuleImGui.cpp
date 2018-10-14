@@ -125,7 +125,6 @@ void ModuleImGui::Draw()
 
 			if (element->IsActive())
 			{
-				element->Move();
 				element->Draw();
 			}
 		}
