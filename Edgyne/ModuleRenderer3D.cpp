@@ -417,10 +417,11 @@ bool mesh::Draw()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
+	if(hasTextCoords)
+		glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
 
 	//Draw The Mesh
-	glDrawElements(GL_TRIANGLES,num_index, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
 	//Disable All The Data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

@@ -97,7 +97,7 @@ bool ModuleLoader::Import(const std::string & file)
 	}
 
 	else
-		LOG("Error loading scene %s", file);
+		LOG("Error loading object from path: %s", file);
 
 	return true;
 }
@@ -228,6 +228,7 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 	bool ret = true;
 	if (currentMesh->HasTextureCoords(0))
 	{
+		new_mesh->hasTextCoords = true;
 		new_mesh->texCoords = new float[new_mesh->num_vertex * 2];
 
 		for (int k = 0; k < new_mesh->num_vertex * 2; k += 2)
@@ -239,49 +240,62 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
 		aiString texPath;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
-		std::string texFullPath = file;
-
-		LOG("Image being loaded %s", texPath.C_Str());
-		ILuint imgName;
-		vec2 imgSize;
-		ilGenImages(1, &imgName);
-		ilBindImage(imgName);
-		if (CheckTexturePaths(file, texPath))
+		if (texPath.length > 0)
 		{
-			ILinfo imgData;
-			iluGetImageInfo(&imgData);
-			if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
-				iluFlipImage();
+			std::string texFullPath = file;
 
-			new_mesh->image_size.x = imgData.Width;
-			new_mesh->image_size.y = imgData.Height;
-
-			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+			LOG("Image being loaded %s", texPath.C_Str());
+			ILuint imgName;
+			vec2 imgSize;
+			ilGenImages(1, &imgName);
+			ilBindImage(imgName);
+			if (CheckTexturePaths(file, texPath))
 			{
-				LOG("DevIL Error: %s", iluErrorString(ilGetError()));
-				ret = false;
+				ILinfo imgData;
+				iluGetImageInfo(&imgData);
+				if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
+					iluFlipImage();
+
+				new_mesh->image_size.x = imgData.Width;
+				new_mesh->image_size.y = imgData.Height;
+
+				if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+				{
+					LOG("DevIL Error: %s", iluErrorString(ilGetError()));
+					ret = false;
+				}
+				else
+				{
+					glGenTextures(1, &new_mesh->id_texture);
+					glBindTexture(GL_TEXTURE_2D, new_mesh->id_texture);
+
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgData.Width, imgData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
 			}
 			else
 			{
-				glGenTextures(1, &new_mesh->id_texture);
-				glBindTexture(GL_TEXTURE_2D, new_mesh->id_texture);
-
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgData.Width, imgData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-
-				glBindTexture(GL_TEXTURE_2D, 0);
+				LOG("Error loading texture file");
+				ret = false;
 			}
+			ilDeleteImage(imgName);
 		}
 		else
 		{
 			LOG("Error loading texture file");
 			ret = false;
 		}
-		ilDeleteImage(imgName);
+	}
+	else
+	{
+		LOG("Item doesn't have texture coordinates");
+		new_mesh->hasTextCoords = false;
 	}
 	return ret;
 }

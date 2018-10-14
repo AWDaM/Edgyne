@@ -46,6 +46,7 @@ struct mesh
 	vec3 scale;
 	uint num_faces;
 
+	bool hasTextCoords = false;
 
 	bool Draw();
 	void DrawNormals();
