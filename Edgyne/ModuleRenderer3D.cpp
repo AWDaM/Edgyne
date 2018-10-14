@@ -147,10 +147,6 @@ bool ModuleRenderer3D::GenerateFramebuffer()
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->window_w, App->window->window_h);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer_depth_and_stencil);
 
-	//glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, framebuffer_msaa);
-	//glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGB, App->window->window_w, App->window->window_h, GL_TRUE);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D_MULTISAMPLE, framebuffer_texture,0);
-
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		LOG("Problem generating framebuffer: %s", glGetError());
