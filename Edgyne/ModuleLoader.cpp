@@ -107,13 +107,16 @@ bool ModuleLoader::ImportTexture(const char* path)
 	TexturePath = path;
 	bool ret = true;
 	ILuint imgName;
+	vec2 imgSize;
 	ilGenImages(1, &imgName);
 	ilBindImage(imgName);
 	uint dropped_texture = 0;
 	if (ilLoadImage(path))
 	{
 		ILinfo imgData;
+
 		iluGetImageInfo(&imgData);
+
 		if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
 			iluFlipImage();
 
@@ -124,7 +127,8 @@ bool ModuleLoader::ImportTexture(const char* path)
 		}
 		else
 		{
-			
+			imgSize.x = imgData.Width;
+			imgSize.y = imgData.Height;
 			glGenTextures(1, &dropped_texture);
 			glBindTexture(GL_TEXTURE_2D, dropped_texture);
 
@@ -149,7 +153,7 @@ bool ModuleLoader::ImportTexture(const char* path)
 	while (item != App->renderer3D->mesh_list.end())
 	{
 		(*item)->id_texture = dropped_texture;
-
+		(*item)->image_size = imgSize;
 		item++;
 	}
 
@@ -239,6 +243,7 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 
 		LOG("Image being loaded %s", texPath.C_Str());
 		ILuint imgName;
+		vec2 imgSize;
 		ilGenImages(1, &imgName);
 		ilBindImage(imgName);
 		if (CheckTexturePaths(file, texPath))
@@ -247,6 +252,9 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 			iluGetImageInfo(&imgData);
 			if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
 				iluFlipImage();
+
+			new_mesh->image_size.x = imgData.Width;
+			new_mesh->image_size.y = imgData.Height;
 
 			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 			{

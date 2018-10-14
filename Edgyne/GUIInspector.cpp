@@ -52,8 +52,13 @@ void GUIInspector::Draw()
 				}
 				if (ImGui::TreeNode("Texture"))
 				{
-					ImGui::Text("Image size 256x256");
-					ImGui::Image((void *)(intptr_t)(*item)->id_texture, ImVec2(256, 256));
+					if ((*item)->id_texture > 0)
+					{
+						ImGui::Text("Image size %ix%i", (int)(*item)->image_size.x, (int)(*item)->image_size.y);
+						ImGui::Image((void *)(intptr_t)(*item)->id_texture, ImVec2(256, 256));
+					}
+					else
+						ImGui::Text("The model does not have a texture");
 					ImGui::TreePop();
 				}
 				ImGui::TreePop();

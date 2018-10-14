@@ -180,9 +180,9 @@ void ModuleImGui::MainMenu()
 
 		if (ImGui::BeginMenu("Windows"))
 		{
+			ImGui::MenuItem("Scene", NULL, &scene->active);
 			ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
 			ImGui::MenuItem("RandomNumberTest", NULL, &random_number_test->active);
-			//ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
 			ImGui::MenuItem("Configuration", NULL, &configuration->active);
 			ImGui::MenuItem("Inspector", NULL, &inspector->active);
 			ImGui::EndMenu();
