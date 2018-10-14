@@ -20,15 +20,15 @@ GUIConsole::~GUIConsole()
 
 void GUIConsole::Draw()
 {
-	if(ImGui::Begin("Console", &active, ImGuiWindowFlags_NoFocusOnAppearing))
-	{
+	ImGui::Begin("Console", &active, ImGuiWindowFlags_NoFocusOnAppearing);
+	
 		Move();
 		ImGui::TextUnformatted(Buf.begin());
 		if (ScrollToBottom)
 			ImGui::SetScrollHere(1.0f);
 		ScrollToBottom = false;
 		ImGui::End();
-	}
+	
 }
 
 bool GUIConsole::CleanUp()

@@ -15,8 +15,8 @@ GUIAbout::~GUIAbout()
 
 void GUIAbout::Draw()
 {
-	if (ImGui::Begin("About", &active))
-	{
+	ImGui::Begin("About", &active);
+	
 		Move();
 		ImGui::Text("Edgyne");
 		ImGui::Dummy({ 0, 10 });
@@ -60,9 +60,6 @@ void GUIAbout::Draw()
 		ImGui::Text("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
 		ImGui::Text("SOFTWARE.");
 		ImGui::End();
-	}
-
-
 }
 
 bool GUIAbout::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)

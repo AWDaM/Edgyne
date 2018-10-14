@@ -16,8 +16,8 @@ GUIConfiguration::~GUIConfiguration()
 
 void GUIConfiguration::Draw()
 {
-	if (ImGui::Begin("Configuration", &active))
-	{
+	ImGui::Begin("Configuration", &active);
+	
 		Move();
 		if (ImGui::CollapsingHeader("General Options"))
 		{
@@ -45,7 +45,7 @@ void GUIConfiguration::Draw()
 		}
 		App->Hardware_ImGui();
 		ImGui::End();
-	}
+	
 
 }
 

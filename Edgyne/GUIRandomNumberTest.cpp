@@ -19,8 +19,8 @@ void GUIRandomNumberTest::Draw()
 {
 
 	//Random Number without Limits
-	if (ImGui::Begin("PCG Random Test", &active))
-	{
+	ImGui::Begin("PCG Random Test", &active);
+	
 		Move();
 		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Normal Random Number");
 		if (ImGui::Button("Generate Random Number"))
@@ -51,7 +51,7 @@ void GUIRandomNumberTest::Draw()
 		ImGui::Text("%f", rng3);
 
 		ImGui::End();
-	}
+	
 }
 
 bool GUIRandomNumberTest::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)

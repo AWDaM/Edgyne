@@ -19,7 +19,7 @@ GUIInspector::~GUIInspector()
 
 void GUIInspector::Draw()
 {
-	if (ImGui::Begin("Inspector", &active)) {
+	ImGui::Begin("Inspector", &active);
 		Move();
 		std::list<mesh*>::iterator item = App->renderer3D->mesh_list.begin();
 
@@ -62,9 +62,7 @@ void GUIInspector::Draw()
 
 			item++;
 		}
-
 		ImGui::End();
-	}
 }
 
 bool GUIInspector::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)

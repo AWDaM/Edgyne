@@ -164,9 +164,12 @@ bool ModuleRenderer3D::GenerateFramebuffer()
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-	glViewport(0, 0, App->window->window_w, App->window->window_h);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if (!App->imGui->EditorOff)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glViewport(0, 0, App->window->window_w, App->window->window_h);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);

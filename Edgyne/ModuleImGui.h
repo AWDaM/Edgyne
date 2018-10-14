@@ -43,12 +43,10 @@ public:
 	void ToggleEditor();
 
 private:
-	//std::list<std::string> LogInformation;
-	bool EditorOff = false;
-
-
 
 public:
+	bool EditorOff = false;
+
 	GUIConsole* console = nullptr;
 	GUIAbout* about = nullptr;
 	GUIConfiguration* configuration = nullptr;
