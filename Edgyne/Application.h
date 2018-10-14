@@ -17,9 +17,6 @@
 #include <string>
 #include <queue>
 
-
-
-
 class ModuleWindow;
 class ModuleInput;
 class ModuleRenderer3D;
@@ -80,6 +77,7 @@ public:
 
 	void SaveData();
 	void LoadData();
+
 private:
 
 	void AddModule(Module* mod);
@@ -89,6 +87,7 @@ private:
 
 public:
 	const char* window_name = nullptr;
+	bool vsync_on = true;
 	bool toSave = false;
 	bool toLoad = false;
 	std::string log;
