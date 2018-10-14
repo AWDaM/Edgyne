@@ -21,6 +21,7 @@ public:
 	virtual bool CleanUp() {return true;};
 
 	virtual bool Save(rapidjson::Value& Node, rapidjson::Document::AllocatorType& allocator) { return true; };
+	virtual bool Load(rapidjson::Value& Node) { return true; };
 public:
 	bool active = false;
 	bool resized = false;

@@ -15,6 +15,7 @@ public:
 	~GUIInspector();
 
 	void Draw();
+	bool Load(rapidjson::Value& Node);
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
 private:
 public:

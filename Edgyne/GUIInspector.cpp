@@ -76,3 +76,8 @@ bool GUIInspector::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorT
 
 	return true;
 }
+bool GUIInspector::Load(rapidjson::Value& Node)
+{
+	active = Node["active"].GetBool();
+	return true;
+}

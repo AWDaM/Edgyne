@@ -59,3 +59,8 @@ bool GUIRandomNumberTest::Save(rapidjson::Value & Node, rapidjson::Document::All
 	Node.AddMember("active", active, allocator);
 	return true;
 }
+bool GUIRandomNumberTest::Load(rapidjson::Value& Node)
+{
+	active = Node["active"].GetBool();
+	return true;
+}
