@@ -30,5 +30,7 @@ void GUIElements::Move()
 	if (ImGui::GetWindowSize() != size)
 	{
 		size = ImGui::GetWindowSize();
+		resized = true;
 	}
+	
 }

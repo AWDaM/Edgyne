@@ -137,99 +137,13 @@ void ModuleImGui::Draw()
 	
 }
 
-//void ModuleImGui::IntersectionsTest()
-//{
-//
-//	ImGui::Begin("Shapes", &perma_true);
-//	if (ImGui::TreeNode("Sphere"))
-//	{
-//		static float fx = 1.0f;
-//		static float fy = 1.0f;
-//		static float fz = 1.0f;
-//		static float fr = 1.0f;
-//		ImGui::InputFloat("X", &fx, 0.1f, 1.0f);
-//		ImGui::InputFloat("Y", &fy, 0.1f, 1.0f);
-//		ImGui::InputFloat("Z", &fz, 0.1f, 1.0f);
-//		ImGui::InputFloat("Radius", &fr, 0.1f, 1.0f);
-//
-//		if (ImGui::Button("Spawn/Respawn Sphere"))
-//		{
-//			App->test->CreateSphere(fx, fy, fz, fr);
-//		}
-//		ImGui::TreePop();
-//	}
-//
-//	if (ImGui::TreeNode("Capsule"))
-//	{
-//		static float fxt = 1.0f;
-//		static float fyt = 1.0f;
-//		static float fzt = 1.0f;
-//		static float fr = 1.0f;
-//		ImGui::InputFloat("top X", &fxt, 0.1f, 1.0f);
-//		ImGui::InputFloat("top Y", &fyt, 0.1f, 1.0f);
-//		ImGui::InputFloat("top Z", &fzt, 0.1f, 1.0f);
-//
-//
-//		static float fxb = 1.0f;
-//		static float fyb = 1.0f;
-//		static float fzb = 1.0f;
-//		ImGui::InputFloat("bottom X", &fxb, 0.1f, 1.0f);
-//		ImGui::InputFloat("bottom Y", &fyb, 0.1f, 1.0f);
-//		ImGui::InputFloat("bottom Z", &fzb, 0.1f, 1.0f);
-//
-//		ImGui::InputFloat("Radius", &fr, 0.1f, 1.0f);
-//
-//		if (ImGui::Button("Spawn/Respawn Capsule"))
-//		{
-//			App->test->CreateCapsule(fxt, fyt, fzt, fxb, fyb, fzb, fr);
-//		}
-//		ImGui::TreePop();
-//	}
-//
-//	if (ImGui::TreeNode("AABB"))
-//	{
-//		static float fxmax = 1.0f;
-//		static float fymax = 1.0f;
-//		static float fzmax = 1.0f;
-//
-//		ImGui::InputFloat("maxX", &fxmax, 0.1f, 1.0f);
-//		ImGui::InputFloat("maxY", &fymax, 0.1f, 1.0f);
-//		ImGui::InputFloat("maxZ", &fzmax, 0.1f, 1.0f);
-//
-//		static float fxmin = 1.0f;
-//		static float fymin = 1.0f;
-//		static float fzmin = 1.0f;
-//
-//		ImGui::InputFloat("maxX", &fxmin, 0.1f, 1.0f);
-//		ImGui::InputFloat("maxY", &fymin, 0.1f, 1.0f);
-//		ImGui::InputFloat("maxZ", &fzmin, 0.1f, 1.0f);
-//
-//
-//		if (ImGui::Button("Spawn/Respawn AABB"))
-//		{
-//			App->test->CreateAABB(fxmax, fymax, fzmax, fxmin, fymin, fzmin);
-//		}
-//		ImGui::TreePop();
-//
-//	}
-//
-//	ImGui::End();
-//
-//	ImGui::Begin("Intersections", &perma_true);
-//	ImGui::Checkbox("sphere", &App->test->sphere_intersection);
-//	LOG("%d", App->test->sphere_intersection);
-//	ImGui::Checkbox("capsule", &App->test->capsule_intersection);
-//	ImGui::Checkbox("aabb", &App->test->aabb_intersection);
-//	ImGui::End();
-//
-//}
+
 
 
 
 void ModuleImGui::HelpMenu()
 {
-	if (ImGui::BeginMenu("Help"))
-	{
+
 		if (ImGui::MenuItem("Documentation"))
 			App->OpenBrowser("https://github.com/AWDaM/Edgyne/wiki");
 		if (ImGui::MenuItem("Download last version"))
@@ -238,8 +152,8 @@ void ModuleImGui::HelpMenu()
 			App->OpenBrowser("https://github.com/AWDaM/Edgyne/issues");
 		if (ImGui::MenuItem("About"))
 			about->ToggleActive();
-		ImGui::EndMenu();
-	}
+
+
 	
 
 
@@ -285,7 +199,11 @@ void ModuleImGui::MainMenu()
 
 			ImGui::EndMenu();
 		}
-		HelpMenu();
+		if (ImGui::BeginMenu("Help"))
+		{
+			HelpMenu();
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Close"))
 		{
 			to_close = true;

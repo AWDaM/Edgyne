@@ -18,6 +18,7 @@ void GUIConfiguration::Draw()
 {
 	if (ImGui::Begin("Configuration", &active))
 	{
+		Move();
 		if (ImGui::CollapsingHeader("General Options"))
 		{
 			ImGui::Button("Default Options");
@@ -42,10 +43,10 @@ void GUIConfiguration::Draw()
 			(*item)->Configuration();
 			item++;
 		}
-
+		App->Hardware_ImGui();
+		ImGui::End();
 	}
-	App->Hardware_ImGui();
-	ImGui::End();
+
 }
 
 bool GUIConfiguration::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
