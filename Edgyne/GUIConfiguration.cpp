@@ -55,3 +55,8 @@ bool GUIConfiguration::Save(rapidjson::Value & Node, rapidjson::Document::Alloca
 
 	return true;
 }
+bool GUIConfiguration::Load(rapidjson::Value& Node)
+{
+	active = Node["active"].GetBool();
+	return true;
+}

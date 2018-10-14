@@ -9,5 +9,6 @@ public:
 
 	void Draw();
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
+	bool Load(rapidjson::Value& Node);
 };
 

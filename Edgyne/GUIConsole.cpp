@@ -44,8 +44,11 @@ bool GUIConsole::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorTyp
 	return true;
 }
 
-
-
+bool GUIConsole::Load(rapidjson::Value& Node)
+{
+	active = Node["active"].GetBool();
+	return true;
+}
 void GUIConsole::AddLog(const char* entry)
 {
 	Buf.clear();

@@ -24,6 +24,7 @@ public:
 	bool CleanUp();
 
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+	void Load(rapidjson::Document& doc);
 
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);

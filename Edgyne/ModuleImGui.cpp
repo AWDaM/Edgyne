@@ -84,6 +84,16 @@ void ModuleImGui::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & o
 
 }
 
+void ModuleImGui::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+	{
+		(*it)->Load(node[(*it)->name.data()]);
+	}
+
+}
+
 update_status ModuleImGui::PreUpdate(float dt)
 {
 	update_status status = UPDATE_CONTINUE;

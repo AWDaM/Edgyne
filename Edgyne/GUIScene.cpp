@@ -31,12 +31,16 @@ void GUIScene::Draw()
 	
 }
 
-	bool GUIScene::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
+bool GUIScene::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
 {
 	Node.AddMember("active", active, allocator);
 	return true;
 }
-
+bool GUIScene::Load(rapidjson::Value& Node)
+{
+	active = Node["active"].GetBool();
+	return true;
+}
 bool GUIScene::IsMouseHovering()
 {
 	return hovered;

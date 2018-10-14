@@ -68,3 +68,8 @@ bool GUIAbout::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType&
 
 	return true;
 }
+bool GUIAbout::Load(rapidjson::Value& Node)
+{
+	active = Node["active"].GetBool();
+	return true;
+}
