@@ -54,6 +54,52 @@ bool ModuleDebug::Start()
 	return true;
 }
 
+void ModuleDebug::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+	bool axis, wire;
+
+	
+	rapidjson::Value obj(rapidjson::kObjectType);
+	obj.AddMember("draw_wireframe", draw_wireframe, allocator);
+	obj.AddMember("direct_mode_cube", direct_mode_cube, allocator);
+	obj.AddMember("vertex_cube", vertex_cube, allocator);
+	obj.AddMember("indices_cube", indices_cube, allocator);
+	obj.AddMember("sphere", sphere, allocator);
+	obj.AddMember("draw_plane", draw_plane, allocator);
+	obj.AddMember("draw_axis", draw_axis, allocator);
+	obj.AddMember("draw_normals", draw_normals, allocator);
+	obj.AddMember("draw_meshBoundingBox", draw_meshBoundingBox, allocator);
+	obj.AddMember("draw_globalBoundingBox", draw_globalBoundingBox, allocator);
+
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+}
+
+void ModuleDebug::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+
+	draw_wireframe = node["draw_wireframe"].GetBool();
+	if (draw_wireframe)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	direct_mode_cube = node["direct_mode_cube"].GetBool();
+	vertex_cube = node["vertex_cube"].GetBool();
+	indices_cube = node["indices_cube"].GetBool();
+	sphere = node["sphere"].GetBool();
+	draw_plane = node["draw_plane"].GetBool();
+	draw_axis = node["draw_axis"].GetBool();
+	draw_normals = node["draw_normals"].GetBool();
+	draw_meshBoundingBox = node["draw_meshBoundingBox"].GetBool();
+	draw_globalBoundingBox = node["draw_globalBoundingBox"].GetBool();
+
+}
+
 update_status ModuleDebug::Update(float dt)
 {
 	return UPDATE_CONTINUE;

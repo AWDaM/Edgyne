@@ -246,12 +246,12 @@ void Application::OpenBrowser(std::string url)
 void Application::Log(const char* entry)
 {
 
-		// save all logs, so we can dump all in a file upon close
-		log.append(entry);
-		if (canLog)
-		{
-		// send to editor console
-		imGui->AddLog(log.data());
+	// save all logs, so we can dump all in a file upon close
+	log.append(entry);
+	if (canLog)
+	{
+	// send to editor console
+	imGui->AddLog(log.data());
 	}
 }
 void Application::Configuration_ImGui()

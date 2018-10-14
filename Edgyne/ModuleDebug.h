@@ -16,6 +16,10 @@ public:
 	bool Start();
 	update_status Update(float dt);
 	void Draw();
+
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+	void Load(rapidjson::Document& doc);
+
 	void Configuration();
 	void Draw_Cube_Direct_Mode();
 	void Draw_Plane();
