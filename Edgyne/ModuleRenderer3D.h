@@ -81,6 +81,7 @@ public:
 	uint framebuffer = 0;
 	uint framebuffer_texture = 0;
 	uint framebuffer_depth_and_stencil = 0;
+	uint framebuffer_msaa = 0;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
