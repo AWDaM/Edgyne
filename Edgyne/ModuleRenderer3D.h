@@ -47,6 +47,7 @@ struct mesh
 	uint num_faces;
 
 	bool hasTextCoords = false;
+	bool hasTriangleFaces = true;
 
 	bool Draw();
 	void DrawNormals();

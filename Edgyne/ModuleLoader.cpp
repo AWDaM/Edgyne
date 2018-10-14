@@ -315,7 +315,12 @@ void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 	for (uint j = 0; j < currentMesh->mNumFaces; ++j)
 	{
 		if (currentMesh->mFaces[j].mNumIndices != 3)
-			LOG("WARNING, geometry face with != 3 indices!");
+		{
+			LOG("---WARNING--- Geometry face with != 3 indices, Won't be drawn on screen");
+			new_mesh->hasTriangleFaces = false;
+			break;
+
+		}
 		else
 			memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 	}
