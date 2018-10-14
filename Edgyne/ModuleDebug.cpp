@@ -57,8 +57,6 @@ bool ModuleDebug::Start()
 void ModuleDebug::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
 {
 	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
-	bool axis, wire;
-
 	
 	rapidjson::Value obj(rapidjson::kObjectType);
 	obj.AddMember("draw_wireframe", draw_wireframe, allocator);
