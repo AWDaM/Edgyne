@@ -259,6 +259,14 @@ void Application::Configuration_ImGui()
 			SetTitle(name);
 		}
 		int framerate_imgui = GetFramerate();
+		if (ImGui::Checkbox("Vsync ON", &vsync_on))
+		{
+			if (vsync_on)
+				SDL_GL_SetSwapInterval(1);
+			else
+				SDL_GL_SetSwapInterval(0);
+		}
+
 		if (ImGui::SliderInt("Max FPS", &framerate_imgui, 0, 120))
 		{
 			SetFramerate(framerate_imgui);

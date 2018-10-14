@@ -50,8 +50,10 @@ bool ModuleRenderer3D::Init(rapidjson::Value& node)
 	{
 		
 		//Use Vsync
-		if(node["VSync"].GetBool() && SDL_GL_SetSwapInterval(1) < 0)
+		App->vsync_on = node["VSync"].GetBool();
+		if(App->vsync_on && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
