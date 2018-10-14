@@ -1,8 +1,8 @@
 {
   "Window": {
     "Application Name": "Edgyne",
-    "Window Width": 1280,
-    "Window Height": 1024,
+    "Window Width Offset": 200,
+    "Window Height Offset": 200,
     "Min Screen Width": 640,
     "Min Screen Height": 480,
     "Max Screen Width": 3840,

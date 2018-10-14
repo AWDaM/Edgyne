@@ -30,8 +30,10 @@ bool ModuleWindow::Init(rapidjson::Value& node)
 	{
 		screenSize = node["Screen Size"].GetInt();
 		//Create window
-		 window_w = node["Window Width"].GetInt() * screenSize;
-		 window_h = node["Window Height"].GetInt() * screenSize;
+		SDL_DisplayMode dm;
+		SDL_GetCurrentDisplayMode(0, &dm);
+		 window_w = (dm.w - node["Window Width Offset"].GetInt()) * screenSize;
+		 window_h = (dm.h - node["Window Height Offset"].GetInt()) * screenSize;
 		 brightness = 1.0f;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 

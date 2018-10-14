@@ -152,10 +152,6 @@ void ModuleImGui::HelpMenu()
 		if (ImGui::MenuItem("About"))
 			about->ToggleActive();
 
-
-	
-
-
 }
 
 
@@ -166,10 +162,10 @@ void ModuleImGui::MainMenu()
 
 	static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_PassthruDockspace;
 
-	//ImGuiViewport* viewport = ImGui::GetMainViewport();
-	//ImGui::SetNextWindowPos(viewport->Pos);
-	//ImGui::SetNextWindowSize(viewport->Size);
-	//ImGui::SetNextWindowViewport(viewport->ID);
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
 	ImGui::SetNextWindowBgAlpha(0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
