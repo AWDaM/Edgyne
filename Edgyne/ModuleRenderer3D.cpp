@@ -205,11 +205,14 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	while (item != mesh_list.end())
 	{
-		(*item)->Draw();
-		if (App->debug->draw_normals)
-			(*item)->DrawNormals();
-		if (App->debug->draw_meshBoundingBox)
-			(*item)->DrawBoundingBox();
+		if ((*item)->hasTriangleFaces)
+		{
+			(*item)->Draw();
+			if (App->debug->draw_normals)
+				(*item)->DrawNormals();
+			if (App->debug->draw_meshBoundingBox)
+				(*item)->DrawBoundingBox();
+		}
 		item++;
 	}
 
