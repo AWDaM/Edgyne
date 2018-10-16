@@ -2,6 +2,7 @@
 #include "ModuleLoader.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
+#include "GameObject.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
