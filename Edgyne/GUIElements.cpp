@@ -2,8 +2,9 @@
 
 
 
-GUIElements::GUIElements(const char* name) : name(name)
+GUIElements::GUIElements(const char* name, bool active = false) : name(name), active(active)
 {
+
 }
 
 
@@ -25,10 +26,12 @@ void GUIElements::Move()
 {
 	if (ImGui::GetWindowPos() != position)
 	{
-		ImGui::GetWindowPos() = position;
+		position = ImGui::GetWindowPos();
 	}
 	if (ImGui::GetWindowSize() != size)
 	{
-		ImGui::GetWindowSize() != size;
+		size = ImGui::GetWindowSize();
+		resized = true;
 	}
+	
 }

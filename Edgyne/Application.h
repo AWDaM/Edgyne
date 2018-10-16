@@ -17,16 +17,11 @@
 #include <string>
 #include <queue>
 
-
-
-
 class ModuleWindow;
 class ModuleInput;
-class ModuleAudio;
 class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleImGui;
-class ModuleTest;
 class ModuleLevel;
 class ModuleDebug;
 class ModuleLoader;
@@ -36,11 +31,9 @@ class Application
 public:
 	ModuleWindow * window;
 	ModuleInput* input;
-	ModuleAudio* audio;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleImGui* imGui;
-	ModuleTest* test;
 	ModuleLevel* level;
 	ModuleDebug* debug;
 	ModuleLoader* loader;
@@ -63,7 +56,6 @@ private:
 
 	std::vector<float> fps;
 	std::vector<float> ms;
-	char* window_name = TITLE;
 
 public:
 
@@ -78,10 +70,11 @@ public:
 	void Log(const char* entry);
 	void Configuration_ImGui();
 	void Hardware_ImGui();
-	char* Application::GetTitle() const;
+	const char* Application::GetTitle() const;
 	void Application::SetTitle( char* title);
 
 	void SaveData();
+	void LoadData();
 
 private:
 
@@ -91,8 +84,10 @@ private:
 
 
 public:
-
+	const char* window_name = nullptr;
+	bool vsync_on = true;
 	bool toSave = false;
+	bool toLoad = false;
 	std::string log;
 	bool canLog = false;
 	int GetFramerate() const;

@@ -20,6 +20,8 @@ enum glRenderOptions
 
 struct mesh
 {
+	char name[25];
+
 	uint id_index = 0;
 	uint num_index = 0;
 	uint* index = nullptr;
@@ -33,11 +35,23 @@ struct mesh
 
 	uint id_texture = 0;
 	float* texCoords = nullptr;
+	vec2 image_size = { 0,0 };
 
+	AABB bounding_box;
+
+	vec3 color = { 0,0,0 };
+
+	vec3 position;
+	vec3 rotation;
+	vec3 scale;
+	uint num_faces;
+
+	bool hasTextCoords = false;
+	bool hasTriangleFaces = true;
 
 	bool Draw();
 	void DrawNormals();
-
+	void DrawBoundingBox();
 };
 
 class ModuleRenderer3D : public Module
@@ -46,19 +60,33 @@ public:
 	ModuleRenderer3D(Application* app, bool start_enabled = true);
 	~ModuleRenderer3D();
 
-	bool Init(rapidjson::Document& document);
+	bool Init(rapidjson::Value& node);
+
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+	void Load(rapidjson::Document& doc);
+
+	bool GenerateFramebuffer();
+
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
 
 	void OnResize(int width, int height);
 	void Configuration();
 
+	void CalculateGlobalBoundingBox();
+	void DrawGlobalBoundingBox();
+
 	void glSwitch(bool var, glRenderOptions option);
+	void DeleteMesh();
 
 public:
+
+	uint framebuffer = 0;
+	uint framebuffer_texture = 0;
+	uint framebuffer_depth_and_stencil = 0;
+	uint framebuffer_msaa = 0;
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
@@ -73,9 +101,9 @@ public:
 	bool line_smooth = false;
 	bool scissor_test = false;
 
-	bool draw_wireframe = false;
-
 	uint  DroppedTexture;
+
+	AABB globalBoundingBox;
 
 	std::list<mesh*> mesh_list;
 };

@@ -34,19 +34,9 @@ enum update_status
 #define IMAGE(path)  path == "dds" || path == "DDS" || path == "png" || path == "PNG"
 #define MODEL(path) path == "fbx" || path == "FBX"
 
+//Stuff
+#define CAMERA_OFFSET 0.4
+
 // Configuration -----------
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 1024
-#define MINIMUM_SCREEN_WIDHT 640
-#define MINIMUM_SCREEN_HEIGHT 480
-#define MAXIMUM_SCREEN_WIDHT 3840
-#define MAXIMUM_SCREEN_HEIGHT 2160
-#define SCREEN_SIZE 1
-#define WIN_FULLSCREEN false
-#define WIN_RESIZABLE true
-#define WIN_BORDERLESS false
-#define WIN_FULLSCREEN_DESKTOP false
-#define VSYNC true
 #define CAMERA_SPEED 10
 #define CAMERA_SPEED_MULTIPLIER 2
-#define TITLE "Edgyne"

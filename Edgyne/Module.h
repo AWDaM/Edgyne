@@ -21,7 +21,7 @@ public:
 	virtual ~Module()
 	{}
 
-	virtual bool Init(rapidjson::Document& document)
+	virtual bool Init(rapidjson::Value& node)
 	{
 		return true; 
 	}
@@ -47,6 +47,7 @@ public:
 	}
 
 	virtual void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os) {};
+	virtual void Load(rapidjson::Document& doc) {};
 
 	virtual bool CleanUp() 
 	{ 

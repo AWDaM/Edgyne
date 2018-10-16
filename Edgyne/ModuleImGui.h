@@ -11,6 +11,8 @@ class GUIConsole;
 class GUIAbout;
 class GUIConfiguration;
 class GUIRandomNumberTest;
+class GUIInspector;
+class GUIScene;
 
 class ModuleImGui : public Module
 {
@@ -18,10 +20,11 @@ public:
 	ModuleImGui(Application* app, bool start_enabled = true);
 	~ModuleImGui();
 
-	bool Init(rapidjson::Document& document);
+	bool Init(rapidjson::Value& node);
 	bool CleanUp();
 
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+	void Load(rapidjson::Document& doc);
 
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
@@ -30,37 +33,29 @@ public:
 	void Draw();
 
 	void AddLog(const char* Log);
-	void RandomNumberTest();
-
-	//void IntersectionsTest();
 
 	void HelpMenu();
 
-
 	void MainMenu();
+	 
+	void ToggleEditor();
 
+private:
 
 public:
+	bool EditorOff = false;
+
 	GUIConsole* console = nullptr;
 	GUIAbout* about = nullptr;
 	GUIConfiguration* configuration = nullptr;
 	GUIRandomNumberTest* random_number_test = nullptr;
+	GUIInspector* inspector = nullptr;
+	GUIScene* scene = nullptr;
 
-private:
-	//std::list<std::string> LogInformation;
-
-
-
-
-public:
 	std::vector<GUIElements*> GUIElement;
 
 	bool show_demo_window = false;
-	bool show_console = false;
-	bool show_random_number_test = false;
-	bool show_intersections_test = false;
-	bool show_configuration = false;
-	bool show_about_window = false;
+
 	
 	bool perma_true = true;
 	bool perma_true_2 = true;

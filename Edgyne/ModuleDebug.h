@@ -11,10 +11,15 @@ class ModuleDebug :
 public:
 	ModuleDebug(Application* app, bool start_enabled = true);
 	~ModuleDebug();
+	bool Init(rapidjson::Value& node);
 
 	bool Start();
 	update_status Update(float dt);
 	void Draw();
+
+	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+	void Load(rapidjson::Document& doc);
+
 	void Configuration();
 	void Draw_Cube_Direct_Mode();
 	void Draw_Plane();
@@ -28,10 +33,15 @@ public:
 
 public:
 	bool draw_wireframe = false;
-	bool direct_mode_cube = true;
+	bool direct_mode_cube = false;
+	bool vertex_cube = false;
+	bool indices_cube = false;
+	bool sphere = false;
 	bool draw_plane = true;
 	bool draw_axis = true;
 	bool draw_normals = false;
+	bool draw_meshBoundingBox = true;
+	bool draw_globalBoundingBox = true;
 
 	uint my_id_vertex = 0;
 	uint my_id_array = 0;

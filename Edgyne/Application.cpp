@@ -1,11 +1,9 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "ModuleAudio.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
-#include "ModuleTest.h"
 #include "ModuleLevel.h"
 #include "ModuleDebug.h"
 #include "ModuleLoader.h"
@@ -21,11 +19,9 @@ Application::Application()
 	PERF_START(ptimer);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	audio = new ModuleAudio(this, true);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	imGui = new ModuleImGui(this);
-	test = new ModuleTest(this);
 	level = new ModuleLevel(this);
 	debug = new ModuleDebug(this);
 	loader = new ModuleLoader(this);
@@ -44,8 +40,6 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(audio);
-	AddModule(test);
 	AddModule(imGui);
 	AddModule(level);
 	AddModule(debug);
@@ -80,14 +74,14 @@ bool Application::Init()
 	rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
 
 	document.ParseStream(is);
-
+	
 	// Call Init() in all modules
 
 	std::list<Module*>::iterator item = list_modules.begin();
 
 	while(item != list_modules.end() && ret == true)
 	{
-		ret = (*item)->Init(document);
+		ret = (*item)->Init(document[(*item)->name.data()]);
 		item++;
 	}
 	// After all Init calls we call Start() in all modules
@@ -131,13 +125,7 @@ void Application::FinishUpdate()
 	uint32 last_frame_ms = frame_time.ReadMs();
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
-	//static char title[256];
-	//if (entitycontroller->debug)
-	//	sprintf_s(title, 256, "Alliance: The last Bastion | FPS: %i Avg.FPS: %.2f last frame ms: %02u", frames_on_last_update, avg_fps, last_frame_ms);
-	//else
-	//	sprintf_s(title, 256, "Alliance: The last Bastion | FPS %i", frames_on_last_update);
-	//App->win->SetTitle(title);
-	//LOG("FPS: %i", frames_on_last_update);
+
 
 	if (framerate > 0 && last_frame_ms < framerate) SDL_Delay(framerate - last_frame_ms);
 	ChangeFPSlog(frames_on_last_update, last_frame_ms);
@@ -218,6 +206,10 @@ update_status Application::Update()
 	{
 		SaveData();
 	}
+	if (toLoad)
+	{
+		LoadData();
+	}
 
 	FinishUpdate();
 	return ret;
@@ -245,12 +237,12 @@ void Application::OpenBrowser(std::string url)
 void Application::Log(const char* entry)
 {
 
-		// save all logs, so we can dump all in a file upon close
-		log.append(entry);
-		if (canLog)
-		{
-		// send to editor console
-		imGui->AddLog(log.data());
+	// save all logs, so we can dump all in a file upon close
+	log.append(entry);
+	if (canLog)
+	{
+	// send to editor console
+	imGui->AddLog(log.data());
 	}
 }
 void Application::Configuration_ImGui()
@@ -264,6 +256,14 @@ void Application::Configuration_ImGui()
 			SetTitle(name);
 		}
 		int framerate_imgui = GetFramerate();
+		if (ImGui::Checkbox("Vsync ON", &vsync_on))
+		{
+			if (vsync_on)
+				SDL_GL_SetSwapInterval(1);
+			else
+				SDL_GL_SetSwapInterval(0);
+		}
+
 		if (ImGui::SliderInt("Max FPS", &framerate_imgui, 0, 120))
 		{
 			SetFramerate(framerate_imgui);
@@ -286,7 +286,7 @@ void Application::Hardware_ImGui()
 		ImGui::Text("CPU count: %i", SDL_GetCPUCount());
 		ImGui::Text("Cache Size: %i kb", SDL_GetCPUCacheLineSize());
 		ImGui::Text("System RAM: %i MB", SDL_GetSystemRAM());
-		if (SDL_Has3DNow)
+		if (SDL_Has3DNow())
 			ImGui::Text("CPU has 3DNow!");
 		if (SDL_HasAVX())
 			ImGui::Text("CPU has AVX");
@@ -317,10 +317,9 @@ void Application::AddModule(Module* mod)
 	list_modules.push_back(mod);
 }
 
-char* Application::GetTitle() const
+const char* Application::GetTitle() const
 {
 	return window_name;
-
 }
 void Application::SetTitle(char* title)
 {
@@ -348,4 +347,32 @@ void Application::SaveData()
 	fclose(fp);
 
 	toSave = false;
+}
+
+void Application::LoadData()
+{
+	rapidjson::Document saveFile;
+
+	FILE* file = fopen("save.json", "rb");
+	if (file)
+	{
+		char readBuffer[65536];
+
+		rapidjson::FileReadStream inputStream(file, readBuffer, sizeof(readBuffer));
+
+		saveFile.ParseStream(inputStream);
+
+		std::list<Module*>::iterator item = list_modules.begin();
+
+		while (item != list_modules.end())
+		{
+			(*item)->Load(saveFile);
+			item++;
+		}
+	}
+	else
+	{
+		LOG("Couldn't load dadta from save file");
+	}
+	toLoad = false;
 }

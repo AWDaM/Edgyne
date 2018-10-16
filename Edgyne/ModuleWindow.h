@@ -15,10 +15,11 @@ public:
 	// Destructor
 	virtual ~ModuleWindow();
 
-	bool Init(rapidjson::Document& document);
+	bool Init(rapidjson::Value& node);
 	bool CleanUp();
 
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
+	void Load(rapidjson::Document& doc);
 
 	void SetFullscreen();
 	void SetBorderless();
@@ -37,6 +38,7 @@ public:
 	bool borderless = false;
 	bool desktop_fullscreen = false;
 
+	int screenSize;
 	int window_w;
 	int window_h;
 	float brightness;

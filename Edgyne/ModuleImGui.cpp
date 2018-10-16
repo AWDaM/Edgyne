@@ -4,13 +4,14 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-#include "ModuleTest.h"
 
 
 #include "GUIConsole.h"
 #include "GUIAbout.h"
 #include "GUIConfiguration.h"
 #include "GUIRandomNumberTest.h"
+#include "GUIInspector.h"
+#include "GUIScene.h"
 #include <stdio.h>
 
 
@@ -23,16 +24,18 @@ ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(start_en
 
 
 
-bool ModuleImGui::Init(rapidjson::Document& document)
+bool ModuleImGui::Init(rapidjson::Value& node)
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;  // Enable Keyboard Controls
-	GUIElement.push_back(console = new GUIConsole(App->log));
-	GUIElement.push_back(about = new GUIAbout());
-	GUIElement.push_back(configuration = new GUIConfiguration());
-	GUIElement.push_back(random_number_test = new GUIRandomNumberTest());
+	GUIElement.push_back(console = new GUIConsole(App->log, true));
+	GUIElement.push_back(about = new GUIAbout(false));
+	GUIElement.push_back(configuration = new GUIConfiguration(true));
+	GUIElement.push_back(random_number_test = new GUIRandomNumberTest(false));
+	GUIElement.push_back(inspector = new GUIInspector(true));
+	GUIElement.push_back(scene = new GUIScene(true));
 
 	App->canLog = true;
 
@@ -62,17 +65,31 @@ bool ModuleImGui::CleanUp()
 void ModuleImGui::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
 {
 	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
-	doc.AddMember("Name", 2, allocator);
-	doc.AddMember("Pepe", "paco", allocator);
 
 	rapidjson::Value Obj(rapidjson::kObjectType);
-	Obj.AddMember("tete", "gym\n", allocator);
-	rapidjson::Value Ovj(rapidjson::kObjectType);
-	Ovj.AddMember("tinc", "gana", allocator);
-	Obj.AddMember("pilota", Ovj, allocator);
-	doc.AddMember("chistorra", Obj, allocator);
+
+	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+	{
+		rapidjson::Value childrenData(rapidjson::kObjectType);
+
+		(*it)->Save(childrenData, allocator);
+
+		Obj.AddMember((rapidjson::Value::StringRefType)(*it)->name.data(), childrenData, allocator);
+
+	}
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), Obj, allocator);
 
 	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+
+}
+
+void ModuleImGui::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+	{
+		(*it)->Load(node[(*it)->name.data()]);
+	}
 
 }
 
@@ -85,7 +102,6 @@ update_status ModuleImGui::PreUpdate(float dt)
 		ImGui_ImplSDL2_NewFrame(App->window->window);
 		ImGui::NewFrame();
 
-	
 	return status;
 }
 
@@ -93,8 +109,8 @@ update_status ModuleImGui::Update(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
 
-	
-
+	if (App->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
+		ToggleEditor();
 
 	return status;
 }
@@ -109,121 +125,33 @@ update_status ModuleImGui::PostUpdate(float dt)
 
 void ModuleImGui::Draw()
 {
-	MainMenu();
-	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
+	if (!EditorOff)
 	{
-		GUIElements* element = (*it);
-
-		if (element->IsActive())
+		MainMenu();
+		for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
 		{
-			element->Move();
-			element->Draw();
+			GUIElements* element = (*it);
+
+			if (element->IsActive())
+			{
+				element->Draw();
+			}
 		}
+		ImGui::End();
 	}
-	ImGui::End();
-	ImGui::Render();
+		ImGui::Render();
 
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	
 }
 
-void ModuleImGui::RandomNumberTest()
-{
 
-}
-
-//void ModuleImGui::IntersectionsTest()
-//{
-//
-//	ImGui::Begin("Shapes", &perma_true);
-//	if (ImGui::TreeNode("Sphere"))
-//	{
-//		static float fx = 1.0f;
-//		static float fy = 1.0f;
-//		static float fz = 1.0f;
-//		static float fr = 1.0f;
-//		ImGui::InputFloat("X", &fx, 0.1f, 1.0f);
-//		ImGui::InputFloat("Y", &fy, 0.1f, 1.0f);
-//		ImGui::InputFloat("Z", &fz, 0.1f, 1.0f);
-//		ImGui::InputFloat("Radius", &fr, 0.1f, 1.0f);
-//
-//		if (ImGui::Button("Spawn/Respawn Sphere"))
-//		{
-//			App->test->CreateSphere(fx, fy, fz, fr);
-//		}
-//		ImGui::TreePop();
-//	}
-//
-//	if (ImGui::TreeNode("Capsule"))
-//	{
-//		static float fxt = 1.0f;
-//		static float fyt = 1.0f;
-//		static float fzt = 1.0f;
-//		static float fr = 1.0f;
-//		ImGui::InputFloat("top X", &fxt, 0.1f, 1.0f);
-//		ImGui::InputFloat("top Y", &fyt, 0.1f, 1.0f);
-//		ImGui::InputFloat("top Z", &fzt, 0.1f, 1.0f);
-//
-//
-//		static float fxb = 1.0f;
-//		static float fyb = 1.0f;
-//		static float fzb = 1.0f;
-//		ImGui::InputFloat("bottom X", &fxb, 0.1f, 1.0f);
-//		ImGui::InputFloat("bottom Y", &fyb, 0.1f, 1.0f);
-//		ImGui::InputFloat("bottom Z", &fzb, 0.1f, 1.0f);
-//
-//		ImGui::InputFloat("Radius", &fr, 0.1f, 1.0f);
-//
-//		if (ImGui::Button("Spawn/Respawn Capsule"))
-//		{
-//			App->test->CreateCapsule(fxt, fyt, fzt, fxb, fyb, fzb, fr);
-//		}
-//		ImGui::TreePop();
-//	}
-//
-//	if (ImGui::TreeNode("AABB"))
-//	{
-//		static float fxmax = 1.0f;
-//		static float fymax = 1.0f;
-//		static float fzmax = 1.0f;
-//
-//		ImGui::InputFloat("maxX", &fxmax, 0.1f, 1.0f);
-//		ImGui::InputFloat("maxY", &fymax, 0.1f, 1.0f);
-//		ImGui::InputFloat("maxZ", &fzmax, 0.1f, 1.0f);
-//
-//		static float fxmin = 1.0f;
-//		static float fymin = 1.0f;
-//		static float fzmin = 1.0f;
-//
-//		ImGui::InputFloat("maxX", &fxmin, 0.1f, 1.0f);
-//		ImGui::InputFloat("maxY", &fymin, 0.1f, 1.0f);
-//		ImGui::InputFloat("maxZ", &fzmin, 0.1f, 1.0f);
-//
-//
-//		if (ImGui::Button("Spawn/Respawn AABB"))
-//		{
-//			App->test->CreateAABB(fxmax, fymax, fzmax, fxmin, fymin, fzmin);
-//		}
-//		ImGui::TreePop();
-//
-//	}
-//
-//	ImGui::End();
-//
-//	ImGui::Begin("Intersections", &perma_true);
-//	ImGui::Checkbox("sphere", &App->test->sphere_intersection);
-//	LOG("%d", App->test->sphere_intersection);
-//	ImGui::Checkbox("capsule", &App->test->capsule_intersection);
-//	ImGui::Checkbox("aabb", &App->test->aabb_intersection);
-//	ImGui::End();
-//
-//}
 
 
 
 void ModuleImGui::HelpMenu()
 {
-	if (ImGui::BeginMenu("Help"))
-	{
+
 		if (ImGui::MenuItem("Documentation"))
 			App->OpenBrowser("https://github.com/AWDaM/Edgyne/wiki");
 		if (ImGui::MenuItem("Download last version"))
@@ -232,10 +160,6 @@ void ModuleImGui::HelpMenu()
 			App->OpenBrowser("https://github.com/AWDaM/Edgyne/issues");
 		if (ImGui::MenuItem("About"))
 			about->ToggleActive();
-		ImGui::EndMenu();
-	}
-	
-
 
 }
 
@@ -265,10 +189,11 @@ void ModuleImGui::MainMenu()
 
 		if (ImGui::BeginMenu("Windows"))
 		{
+			ImGui::MenuItem("Scene", NULL, &scene->active);
 			ImGui::MenuItem("ExampleWindow", NULL, &show_demo_window);
 			ImGui::MenuItem("RandomNumberTest", NULL, &random_number_test->active);
-			//ImGui::MenuItem("IntersectionsTest", NULL, &show_intersections_test);
 			ImGui::MenuItem("Configuration", NULL, &configuration->active);
+			ImGui::MenuItem("Inspector", NULL, &inspector->active);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Console"))
@@ -278,10 +203,15 @@ void ModuleImGui::MainMenu()
 
 			ImGui::EndMenu();
 		}
-		HelpMenu();
+		if (ImGui::BeginMenu("Help"))
+		{
+			HelpMenu();
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Close"))
 		{
-			to_close = true;
+			if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+				to_close = true;
 
 			ImGui::EndMenu();
 		}
@@ -290,14 +220,16 @@ void ModuleImGui::MainMenu()
 
 
 		if (show_demo_window)				ImGui::ShowDemoWindow(&show_demo_window);
-		//if (show_intersections_test)		IntersectionsTest();
 	
+}
+
+void ModuleImGui::ToggleEditor()
+{
+	EditorOff = !EditorOff;
 }
 
 void ModuleImGui::AddLog(const char* Log)
 {
-	//LogInformation.push_back(Log);
-
 	console->AddLog(Log);
 }
 

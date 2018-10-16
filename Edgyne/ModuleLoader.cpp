@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleLoader.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
@@ -20,21 +21,27 @@
 #pragma comment (lib, "DevIL/libx86/DevIL.lib")
 #pragma comment (lib, "DevIL/libx86/ILU.lib")
 #pragma comment (lib, "DevIL/libx86/ILUT.lib")
-//#include "Assimp\include\cfileio.h"
+#include "Assimp\include\cfileio.h"
 
 #pragma comment(lib,"Assimp/libx86/assimp.lib")
 
 
+void AssimpLoggerLoad(const char* message, char* user)
+{
+	LOG("%s", message);
+}
+
+
 ModuleLoader::ModuleLoader(Application * app, bool start_enabled) : Module(start_enabled)
 {
-	name = "loader";
+	name = "Loader";
 }
 
 ModuleLoader::~ModuleLoader()
 {
 }
 
-bool ModuleLoader::Init(rapidjson::Document& document)
+bool ModuleLoader::Init(rapidjson::Value& node)
 {
 	ilInit();
 	iluInit();
@@ -43,10 +50,12 @@ bool ModuleLoader::Init(rapidjson::Document& document)
 	error = iluLoadImage("Lenna_(test_image).png");
 	LOG("%d: %s/n", error, iluErrorString(error));
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
+	stream.callback = AssimpLoggerLoad;
+	aiAttachLogStream(&stream);	
 
 	return true;
 }
+
 
 update_status ModuleLoader::Update(float dt)
 {
@@ -65,53 +74,49 @@ bool ModuleLoader::CleanUp()
 
 bool ModuleLoader::Import(const std::string & file)
 {
+	MeshPath = file;
+	TexturePath.clear();
+	App->renderer3D->DeleteMesh();
+	App->renderer3D->mesh_list.clear();
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-
+	
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		LOG("-------Loading new mesh--------");
 		aiNode* rootNode = scene->mRootNode;
-		aiNode* currentNode = rootNode;
-	
-		for (int i = 0; i < scene->mNumMeshes; i++)
-		{
-			mesh* new_mesh = new mesh();
-			aiMesh* currentMesh = scene->mMeshes[i];
-
-			LOG("Loading Vertices from the %i mesh", i + 1);
-			LoadVerices(new_mesh, currentMesh);
-
-			LOG("Loading Normals from the %i mesh", i + 1);
-			LoadNormals(new_mesh, currentMesh);
-
-			LOG("Loading Textures from the %i mesh", i + 1);
-			LoadTextures(new_mesh, currentMesh, scene, file);
-			 
-			LOG("Loading Indices from the %i mesh", i + 1);
-			LoadIndices(new_mesh, currentMesh);
-
-			
-			App->renderer3D->mesh_list.push_back(new_mesh);
-		}
+		LoadAllNodesMeshes(rootNode, scene, file);
+		
+		LOG("Centering Camera around the model");
+		App->renderer3D->CalculateGlobalBoundingBox();
+		vec half_diagonal  = App->renderer3D->globalBoundingBox.CenterPoint();
+		vec center_point = App->renderer3D->globalBoundingBox.CenterPoint();
+		half_diagonal += App->renderer3D->globalBoundingBox.HalfDiagonal();
+		 
+		App->camera->CameraAdaptation({ half_diagonal.x,half_diagonal.y,half_diagonal.z }, { center_point.x,center_point.y,center_point.z });
 		aiReleaseImport(scene);
 	}
 
 	else
-		LOG("Error loading scene %s", file);
+		LOG("Error loading object from path: %s", file);
 
 	return true;
 }
 
 bool ModuleLoader::ImportTexture(const char* path)
 {
+	TexturePath = path;
 	bool ret = true;
 	ILuint imgName;
+	vec2 imgSize;
 	ilGenImages(1, &imgName);
 	ilBindImage(imgName);
 	uint dropped_texture = 0;
 	if (ilLoadImage(path))
 	{
 		ILinfo imgData;
+
 		iluGetImageInfo(&imgData);
+
 		if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
 			iluFlipImage();
 
@@ -122,7 +127,8 @@ bool ModuleLoader::ImportTexture(const char* path)
 		}
 		else
 		{
-			
+			imgSize.x = imgData.Width;
+			imgSize.y = imgData.Height;
 			glGenTextures(1, &dropped_texture);
 			glBindTexture(GL_TEXTURE_2D, dropped_texture);
 
@@ -147,7 +153,7 @@ bool ModuleLoader::ImportTexture(const char* path)
 	while (item != App->renderer3D->mesh_list.end())
 	{
 		(*item)->id_texture = dropped_texture;
-
+		(*item)->image_size = imgSize;
 		item++;
 	}
 
@@ -168,6 +174,37 @@ void ModuleLoader::ReceivedFile(const char * path)
 	}
 }
 
+void ModuleLoader::LoadInfo(mesh * new_mesh, aiMesh * currentMesh, aiNode* node)
+{
+	if (currentMesh->mName.length != NULL)
+	{
+		memcpy(new_mesh->name, currentMesh->mName.C_Str(), currentMesh->mName.length);
+	}
+	else
+		memcpy(new_mesh->name, "No_name", 8);
+
+
+	aiQuaternion rotation;
+	aiVector3D position, scaling, rotationEuler;
+
+	node->mTransformation.Decompose(scaling, rotation, position);
+
+	rotationEuler = rotation.GetEuler();
+
+	new_mesh->rotation.x = math::RadToDeg(rotationEuler.x);
+	new_mesh->rotation.y = math::RadToDeg(rotationEuler.y);
+	new_mesh->rotation.z = math::RadToDeg(rotationEuler.z);
+	new_mesh->position.x = position.x;
+	new_mesh->position.y = position.y;
+	new_mesh->position.z = position.z;
+	new_mesh->scale.x = scaling.x;
+	new_mesh->scale.y = scaling.y;
+	new_mesh->scale.z = scaling.z;
+
+	new_mesh->num_faces = currentMesh->mNumFaces;
+
+}
+
 void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
 {
 	new_mesh->num_vertex = currentMesh->mNumVertices;
@@ -177,11 +214,21 @@ void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
 	LOG("New mesh with %d vertices", new_mesh->num_vertex);
 }
 
+void ModuleLoader::LoadColor(mesh* new_mesh, aiMaterial* mat)
+{
+	aiColor3D color(1.f, 1.f, 1.f);
+	mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
+	new_mesh->color.x = color.r;
+	new_mesh->color.y = color.g;
+	new_mesh->color.z = color.b;
+}
+
 bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene, const std::string& file)
 {
 	bool ret = true;
 	if (currentMesh->HasTextureCoords(0))
 	{
+		new_mesh->hasTextCoords = true;
 		new_mesh->texCoords = new float[new_mesh->num_vertex * 2];
 
 		for (int k = 0; k < new_mesh->num_vertex * 2; k += 2)
@@ -193,45 +240,62 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
 		aiString texPath;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
-		std::string texFullPath = file;
-
-		LOG("Image being loaded %s", texPath.C_Str());
-		ILuint imgName;
-		ilGenImages(1, &imgName);
-		ilBindImage(imgName);
-		if (CheckTexturePaths(file, texPath))
+		if (texPath.length > 0)
 		{
-			ILinfo imgData;
-			iluGetImageInfo(&imgData);
-			if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
-				iluFlipImage();
+			std::string texFullPath = file;
 
-			if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+			LOG("Image being loaded %s", texPath.C_Str());
+			ILuint imgName;
+			vec2 imgSize;
+			ilGenImages(1, &imgName);
+			ilBindImage(imgName);
+			if (CheckTexturePaths(file, texPath))
 			{
-				LOG("DevIL Error: %s", iluErrorString(ilGetError()));
-				ret = false;
+				ILinfo imgData;
+				iluGetImageInfo(&imgData);
+				if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
+					iluFlipImage();
+
+				new_mesh->image_size.x = imgData.Width;
+				new_mesh->image_size.y = imgData.Height;
+
+				if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
+				{
+					LOG("DevIL Error: %s", iluErrorString(ilGetError()));
+					ret = false;
+				}
+				else
+				{
+					glGenTextures(1, &new_mesh->id_texture);
+					glBindTexture(GL_TEXTURE_2D, new_mesh->id_texture);
+
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgData.Width, imgData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
 			}
 			else
 			{
-				glGenTextures(1, &new_mesh->id_texture);
-				glBindTexture(GL_TEXTURE_2D, new_mesh->id_texture);
-
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgData.Width, imgData.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-
-				glBindTexture(GL_TEXTURE_2D, 0);
+				LOG("Error loading texture file");
+				ret = false;
 			}
+			ilDeleteImage(imgName);
 		}
 		else
 		{
 			LOG("Error loading texture file");
 			ret = false;
 		}
-		ilDeleteImage(imgName);
+	}
+	else
+	{
+		LOG("Item doesn't have texture coordinates");
+		new_mesh->hasTextCoords = false;
 	}
 	return ret;
 }
@@ -245,24 +309,79 @@ void ModuleLoader::LoadNormals(mesh* new_mesh, aiMesh* currentMesh)
 
 void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 {
-	if (currentMesh->HasFaces())
-	{
-		new_mesh->num_index = currentMesh->mNumFaces * 3;
-		new_mesh->index = new uint[new_mesh->num_index]; // assume each face is a triangle
+	new_mesh->num_index = currentMesh->mNumFaces * 3; // assume each face is a triangle
+	new_mesh->index = new uint[new_mesh->num_index]; 
 
-		for (uint j = 0; j < currentMesh->mNumFaces; ++j)
+	for (uint j = 0; j < currentMesh->mNumFaces; ++j)
+	{
+		if (currentMesh->mFaces[j].mNumIndices != 3)
 		{
-			if (currentMesh->mFaces[j].mNumIndices != 3)
-				LOG("WARNING, geometry face with != 3 indices!");
-			else
-				memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
+			LOG("---WARNING--- Geometry face with != 3 indices, Won't be drawn on screen");
+			new_mesh->hasTriangleFaces = false;
+			break;
+
 		}
-		LOG("New mesh with %d indices", new_mesh->num_index);
+		else
+			memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 	}
+	LOG("New mesh with %d indices", new_mesh->num_index);
+
 	glGenBuffers(1, (GLuint*)&(new_mesh->id_index));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void ModuleLoader::LoadBoundingBox(mesh * new_mesh, aiMesh * currentMesh)
+{
+	
+	AABB bounding_box;
+	bounding_box.SetNegativeInfinity();
+	bounding_box.Enclose((float3*)new_mesh->vertex, currentMesh->mNumVertices);
+	
+	new_mesh->bounding_box = bounding_box;
+}
+
+void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file)
+{
+	for (int i = 0; i < node->mNumMeshes; i++)
+	{
+		mesh* new_mesh = new mesh();
+		
+		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
+		LOG("Loading Info for the %i mesh", i + 1);
+		LoadInfo(new_mesh, currentMesh, node);
+
+		LOG("Loading Vertices from the %i mesh", i + 1);
+		LoadVerices(new_mesh, currentMesh);
+
+		LOG("Loading Color from the %i mesh", i + 1);
+		LoadColor(new_mesh, scene->mMaterials[currentMesh->mMaterialIndex]);
+
+		LOG("Loading Normals from the %i mesh", i + 1);
+		if (currentMesh->HasNormals())
+			LoadNormals(new_mesh, currentMesh);
+
+		LOG("Loading Textures from the %i mesh", i + 1);
+		if (currentMesh->HasTextureCoords(0))
+			LoadTextures(new_mesh, currentMesh, scene, file);
+
+
+		LOG("Loading Indices from the %i mesh", i + 1);
+		if (currentMesh->HasFaces())
+			LoadIndices(new_mesh, currentMesh);
+
+		LOG("Generating BoundingBox for the %i mesh", i + 1);
+		LoadBoundingBox(new_mesh, currentMesh);
+
+		App->renderer3D->mesh_list.push_back(new_mesh);
+	}
+	
+	if (node->mNumChildren > 0)
+	{
+		for (int i = 0; i < node->mNumChildren; i++)
+			LoadAllNodesMeshes(node->mChildren[i], scene, file);
+	}
 }
 
 bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
@@ -272,6 +391,7 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 	file.append(texPath.C_Str());
 	if (ilLoadImage(file.data()))
 	{
+		TexturePath = file;
 		LOG("Texture found at the same file as the object");
 		ret = true;
 	}
@@ -281,6 +401,7 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 		file.append(texPath.C_Str());
 		if (ilLoadImage(file.data()))
 		{
+			TexturePath = file;
 			LOG("Texture found at the library folder");
 			ret = true;
 		}
@@ -290,14 +411,39 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 			file.append(texPath.C_Str());
 			if (ilLoadImage(file.data()))
 			{
+				TexturePath = file;
 				LOG("Texture found at the source folder");
 				ret = true;
 			}
 		}
-
 	}
 	return ret;
 }
 
+void ModuleLoader::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
 
+	rapidjson::Value obj(rapidjson::kObjectType);
+	obj.AddMember("Mesh Path", (rapidjson::Value::StringRefType)MeshPath.data(), allocator);
+	if(TexturePath.size())
+		obj.AddMember("Texture Path", (rapidjson::Value::StringRefType)TexturePath.data(), allocator);
+	
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
 
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+}
+
+void ModuleLoader::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+
+	MeshPath = node["Mesh Path"].GetString();
+	Import(MeshPath);
+	if (node.HasMember("Texture Path"))
+	{
+		TexturePath = node["Texture Path"].GetString();
+		ImportTexture(TexturePath.data());
+	}
+
+}

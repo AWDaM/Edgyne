@@ -26,7 +26,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
 // Called before render is available
-bool ModuleRenderer3D::Init(rapidjson::Document& document)
+bool ModuleRenderer3D::Init(rapidjson::Value& node)
 {
 	App->Log("Creating 3D Renderer context");
 	bool ret = true;
@@ -50,8 +50,10 @@ bool ModuleRenderer3D::Init(rapidjson::Document& document)
 	{
 		
 		//Use Vsync
-		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		App->vsync_on = node["VSync"].GetBool();
+		if(App->vsync_on && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -119,18 +121,57 @@ bool ModuleRenderer3D::Init(rapidjson::Document& document)
 		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	}
 
-	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	// Projection matrix for
+	OnResize(App->window->window_w, App->window->window_h);
+	GenerateFramebuffer();
+
+	return ret;
+}
+
+bool ModuleRenderer3D::GenerateFramebuffer()
+{
+	bool ret = true;
+	glGenFramebuffers(1, &framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+
+	glGenTextures(1, &framebuffer_texture);
+	glBindTexture(GL_TEXTURE_2D, framebuffer_texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,App->window->window_w, App->window->window_h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebuffer_texture, 0);
+
+
+	glGenRenderbuffers(1, &framebuffer_depth_and_stencil);
+	glBindRenderbuffer(GL_RENDERBUFFER, framebuffer_depth_and_stencil);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, App->window->window_w, App->window->window_h);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer_depth_and_stencil);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		LOG("Problem generating framebuffer: %s", glGetError());
+		ret = false;
+	}
+
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	return ret;
 }
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	if (!App->imGui->EditorOff)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glViewport(0, 0, App->window->window_w, App->window->window_h);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
@@ -155,18 +196,29 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	App->debug->Draw();
 
+	if (App->debug->draw_globalBoundingBox)
+	{
+		DrawGlobalBoundingBox();
+	}
 
 	std::list<mesh*>::iterator item = mesh_list.begin();
 
 	while (item != mesh_list.end())
 	{
-		(*item)->Draw();
-		if (App->debug->draw_normals)
-			(*item)->DrawNormals();
+		if ((*item)->hasTriangleFaces)
+		{
+			(*item)->Draw();
+			if (App->debug->draw_normals)
+				(*item)->DrawNormals();
+			if (App->debug->draw_meshBoundingBox)
+				(*item)->DrawBoundingBox();
+		}
 		item++;
 	}
 
-
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	App->imGui->Draw();
 
 	if (App->imGui->to_close == true) // A bit hardcoded, but cant find any other way
@@ -182,19 +234,18 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
-
+	glDeleteFramebuffers(1, &framebuffer);
 	SDL_GL_DeleteContext(context);
 
 	return true;
 }
 
-void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
-{
-}
-
-
 void ModuleRenderer3D::OnResize(int width, int height)
 {
+	App->window->window_w = width;
+	App->window->window_h = height;
+	GenerateFramebuffer();
+
 	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
@@ -204,6 +255,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+
 }
 
 void ModuleRenderer3D::Configuration()
@@ -225,6 +278,64 @@ void ModuleRenderer3D::Configuration()
 		if (ImGui::Checkbox("Scissor Test", &scissor_test))
 			glSwitch(scissor_test, SCISSOR_TEST);
 	}
+}
+
+void ModuleRenderer3D::CalculateGlobalBoundingBox()
+{
+	globalBoundingBox.SetNegativeInfinity();
+	std::list<mesh*>::iterator item = mesh_list.begin();
+	while (item != mesh_list.end())
+	{
+		globalBoundingBox.Enclose((*item)->bounding_box);
+		item++;
+	}
+}
+
+void ModuleRenderer3D::DrawGlobalBoundingBox()
+{
+	glLineWidth(4.0f);
+	glColor3f(1, 0, 1);
+	glBegin(GL_LINES);
+
+	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
+	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
+	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
+	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
+	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
+	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
+	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
+	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
+	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
+	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
+	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
+	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
+	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
+
+	glEnd();
+	glColor3f(1, 1, 1);
+	glLineWidth(1.0f);
 }
 
 void ModuleRenderer3D::glSwitch(bool var, glRenderOptions option)
@@ -309,12 +420,11 @@ bool mesh::Draw()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
+	if(hasTextCoords)
+		glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
 
 	//Draw The Mesh
-	glDrawElements(GL_TRIANGLES,num_index, GL_UNSIGNED_INT, NULL);
-
-
+	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
 	//Disable All The Data
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -322,12 +432,17 @@ bool mesh::Draw()
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+
+	else
+		glColor3f(1, 1, 1);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 
 	return true;
 }
+
 
 void mesh::DrawNormals()
 {
@@ -345,4 +460,111 @@ void mesh::DrawNormals()
 	glColor3f(1, 1, 1);
 
 	glLineWidth(1.0f);
+}
+
+void mesh::DrawBoundingBox()
+{
+	glLineWidth(2.0f);
+	glColor3f(0, 0, 1);
+	glBegin(GL_LINES);
+
+	glVertex3f(bounding_box.CornerPoint(0).x, bounding_box.CornerPoint(0).y, bounding_box.CornerPoint(0).z);
+	glVertex3f(bounding_box.CornerPoint(1).x, bounding_box.CornerPoint(1).y, bounding_box.CornerPoint(1).z);
+
+	glVertex3f(bounding_box.CornerPoint(0).x, bounding_box.CornerPoint(0).y, bounding_box.CornerPoint(0).z);
+	glVertex3f(bounding_box.CornerPoint(2).x, bounding_box.CornerPoint(2).y, bounding_box.CornerPoint(2).z);
+
+	glVertex3f(bounding_box.CornerPoint(0).x, bounding_box.CornerPoint(0).y, bounding_box.CornerPoint(0).z);
+	glVertex3f(bounding_box.CornerPoint(4).x, bounding_box.CornerPoint(4).y, bounding_box.CornerPoint(4).z);
+
+	glVertex3f(bounding_box.CornerPoint(7).x, bounding_box.CornerPoint(7).y, bounding_box.CornerPoint(7).z);
+	glVertex3f(bounding_box.CornerPoint(6).x, bounding_box.CornerPoint(6).y, bounding_box.CornerPoint(6).z);
+
+	glVertex3f(bounding_box.CornerPoint(6).x, bounding_box.CornerPoint(6).y, bounding_box.CornerPoint(6).z);
+	glVertex3f(bounding_box.CornerPoint(2).x, bounding_box.CornerPoint(2).y, bounding_box.CornerPoint(2).z);
+
+	glVertex3f(bounding_box.CornerPoint(7).x, bounding_box.CornerPoint(7).y, bounding_box.CornerPoint(7).z);
+	glVertex3f(bounding_box.CornerPoint(5).x, bounding_box.CornerPoint(5).y, bounding_box.CornerPoint(5).z);
+
+	glVertex3f(bounding_box.CornerPoint(7).x, bounding_box.CornerPoint(7).y, bounding_box.CornerPoint(7).z);
+	glVertex3f(bounding_box.CornerPoint(3).x, bounding_box.CornerPoint(3).y, bounding_box.CornerPoint(3).z);
+
+	glVertex3f(bounding_box.CornerPoint(3).x, bounding_box.CornerPoint(3).y, bounding_box.CornerPoint(3).z);
+	glVertex3f(bounding_box.CornerPoint(1).x, bounding_box.CornerPoint(1).y, bounding_box.CornerPoint(1).z);
+
+	glVertex3f(bounding_box.CornerPoint(1).x, bounding_box.CornerPoint(1).y, bounding_box.CornerPoint(1).z);
+	glVertex3f(bounding_box.CornerPoint(5).x, bounding_box.CornerPoint(5).y, bounding_box.CornerPoint(5).z);
+
+	glVertex3f(bounding_box.CornerPoint(3).x, bounding_box.CornerPoint(3).y, bounding_box.CornerPoint(3).z);
+	glVertex3f(bounding_box.CornerPoint(2).x, bounding_box.CornerPoint(2).y, bounding_box.CornerPoint(2).z);
+
+	glVertex3f(bounding_box.CornerPoint(4).x, bounding_box.CornerPoint(4).y, bounding_box.CornerPoint(4).z);
+	glVertex3f(bounding_box.CornerPoint(5).x, bounding_box.CornerPoint(5).y, bounding_box.CornerPoint(5).z);
+
+	glVertex3f(bounding_box.CornerPoint(6).x, bounding_box.CornerPoint(6).y, bounding_box.CornerPoint(6).z);
+	glVertex3f(bounding_box.CornerPoint(4).x, bounding_box.CornerPoint(4).y, bounding_box.CornerPoint(4).z);
+
+	glEnd();
+	glColor3f(1, 1, 1);
+	glLineWidth(1.0f);
+}
+
+void ModuleRenderer3D::DeleteMesh()
+{
+	for (std::list<mesh*>::iterator it = mesh_list.begin(); it != mesh_list.end(); ++it)
+	{
+		mesh* element = (*it);
+		delete(element->index);
+		element->index = nullptr;
+		delete(element->vertex);
+		element->vertex = nullptr;
+		delete(element->texCoords);
+		element->texCoords = nullptr;
+		(*it) = nullptr;
+	}
+
+}
+
+void ModuleRenderer3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+	rapidjson::Value obj(rapidjson::kObjectType);
+	obj.AddMember("depth_test", depth_test, allocator);
+	obj.AddMember("cull_face", cull_face, allocator);
+	obj.AddMember("lighting", lighting, allocator);
+	obj.AddMember("color_material", color_material, allocator);
+	obj.AddMember("texture_2d", texture_2d, allocator);
+	obj.AddMember("line_smooth", line_smooth, allocator);
+	obj.AddMember("scissor_test", scissor_test, allocator);
+
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+}
+
+void ModuleRenderer3D::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+
+	depth_test = node["depth_test"].GetBool();
+	glSwitch(depth_test, DEPTH_TEST);
+
+	cull_face = node["cull_face"].GetBool();
+	glSwitch(cull_face, CULL_FACE);
+
+	lighting = node["lighting"].GetBool();
+	glSwitch(lighting, LIGHTING);
+
+	color_material = node["color_material"].GetBool();
+	glSwitch(color_material, COLOR_MATERIAL);
+
+	texture_2d = node["texture_2d"].GetBool();
+	glSwitch(texture_2d, TEXTURE_2D);
+
+	line_smooth = node["line_smooth"].GetBool();
+	glSwitch(line_smooth, LINE_SMOOTH);
+
+	scissor_test = node["scissor_test"].GetBool();
+	glSwitch(scissor_test, SCISSOR_TEST);
 }

@@ -14,7 +14,7 @@
     <ProjectGuid>{746CC4C3-787F-4B0E-AA66-E388FE3FF4F6}</ProjectGuid>
     <RootNamespace>SDLGame</RootNamespace>
     <ProjectName>Edgyne</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -84,7 +84,9 @@
     <ClInclude Include="GUIConfiguration.h" />
     <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="GUIElements.h" />
+    <ClInclude Include="GUIInspector.h" />
     <ClInclude Include="GUIRandomNumberTest.h" />
+    <ClInclude Include="GUIScene.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_opengl2.h" />
@@ -165,11 +167,9 @@
     <ClInclude Include="ModuleLevel.h" />
     <ClInclude Include="ModuleLoader.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
-    <ClInclude Include="ModuleTest.h" />
     <ClInclude Include="p2Defs.h" />
     <ClInclude Include="p2List.h" />
     <ClInclude Include="Module.h" />
-    <ClInclude Include="ModuleAudio.h" />
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="p2DynArray.h" />
@@ -187,7 +187,9 @@
     <ClCompile Include="GUIConfiguration.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="GUIElements.cpp" />
+    <ClCompile Include="GUIInspector.cpp" />
     <ClCompile Include="GUIRandomNumberTest.cpp" />
+    <ClCompile Include="GUIScene.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -233,7 +235,6 @@
     <ClCompile Include="MathGeoLib\Math\SSEMath.cpp" />
     <ClCompile Include="MathGeoLib\Math\TransformOps.cpp" />
     <ClCompile Include="MathGeoLib\Time\Clock.cpp" />
-    <ClCompile Include="ModuleAudio.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleDebug.cpp" />
     <ClCompile Include="ModuleImGui.cpp" />
@@ -241,7 +242,6 @@
     <ClCompile Include="ModuleLevel.cpp" />
     <ClCompile Include="ModuleLoader.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
-    <ClCompile Include="ModuleTest.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Timer.cpp" />

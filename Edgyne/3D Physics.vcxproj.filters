@@ -54,9 +54,6 @@
     <ClInclude Include="Module.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleAudio.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleCamera3D.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -321,9 +318,6 @@
     <ClInclude Include="MathGeoLib\MathGeoLibFwd.h">
       <Filter>Sources\MathGeoLib</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleTest.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="GUIElements.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
@@ -354,11 +348,14 @@
     <ClInclude Include="GUIRandomNumberTest.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="GUIInspector.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIScene.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ModuleAudio.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleCamera3D.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
@@ -515,9 +512,6 @@
     <ClCompile Include="MathGeoLib\Time\Clock.cpp">
       <Filter>Sources\MathGeoLib\Time</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleTest.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="GUIElements.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
@@ -552,6 +546,12 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="GUIRandomNumberTest.cpp">
+      <Filter>Sources\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIInspector.cpp">
+      <Filter>Sources\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIScene.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
   </ItemGroup>

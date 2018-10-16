@@ -4,9 +4,11 @@ class GUIAbout :
 	public GUIElements
 {
 public:
-	GUIAbout();
+	GUIAbout(bool active);
 	~GUIAbout();
 
 	void Draw();
+	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
+	bool Load(rapidjson::Value& Node);
 };
 

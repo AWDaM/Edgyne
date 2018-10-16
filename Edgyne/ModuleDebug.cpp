@@ -10,7 +10,7 @@
 
 ModuleDebug::ModuleDebug(Application* app, bool start_enabled) : Module(start_enabled)
 {
-	name = "debug";
+	name = "Debug";
 }
 
 
@@ -18,6 +18,10 @@ ModuleDebug::~ModuleDebug()
 {
 }
 
+bool ModuleDebug::Init(rapidjson::Value& node)
+{
+	return true;
+}
 
 bool ModuleDebug::Start()
 {
@@ -46,7 +50,52 @@ bool ModuleDebug::Start()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 
+	glBindTexture(GL_TEXTURE_2D, 0);
 	return true;
+}
+
+void ModuleDebug::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+{
+	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+	
+	rapidjson::Value obj(rapidjson::kObjectType);
+	obj.AddMember("draw_wireframe", draw_wireframe, allocator);
+	obj.AddMember("direct_mode_cube", direct_mode_cube, allocator);
+	obj.AddMember("vertex_cube", vertex_cube, allocator);
+	obj.AddMember("indices_cube", indices_cube, allocator);
+	obj.AddMember("sphere", sphere, allocator);
+	obj.AddMember("draw_plane", draw_plane, allocator);
+	obj.AddMember("draw_axis", draw_axis, allocator);
+	obj.AddMember("draw_normals", draw_normals, allocator);
+	obj.AddMember("draw_meshBoundingBox", draw_meshBoundingBox, allocator);
+	obj.AddMember("draw_globalBoundingBox", draw_globalBoundingBox, allocator);
+
+	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+}
+
+void ModuleDebug::Load(rapidjson::Document& doc)
+{
+	rapidjson::Value& node = doc[name.data()];
+
+	draw_wireframe = node["draw_wireframe"].GetBool();
+	if (draw_wireframe)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	direct_mode_cube = node["direct_mode_cube"].GetBool();
+	vertex_cube = node["vertex_cube"].GetBool();
+	indices_cube = node["indices_cube"].GetBool();
+	sphere = node["sphere"].GetBool();
+	draw_plane = node["draw_plane"].GetBool();
+	draw_axis = node["draw_axis"].GetBool();
+	draw_normals = node["draw_normals"].GetBool();
+	draw_meshBoundingBox = node["draw_meshBoundingBox"].GetBool();
+	draw_globalBoundingBox = node["draw_globalBoundingBox"].GetBool();
+
 }
 
 update_status ModuleDebug::Update(float dt)
@@ -68,11 +117,14 @@ void ModuleDebug::Draw()
 		Draw_Plane();
 	if (draw_axis)
 		Draw_Axis();
-	
-	Draw_Sphere();
+	if(sphere)
+		Draw_Sphere();
 
+	if(vertex_cube)
 	Draw_Cube_Vertex();
-	glColor3f(1.0f, 0, 0);
+
+
+	if(indices_cube)
 	Draw_Cube_Indices();
 		
 
@@ -94,9 +146,14 @@ void ModuleDebug::Configuration()
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		ImGui::Checkbox("Direct Mode Cube", &direct_mode_cube);
+		ImGui::Checkbox("Vertex Cube", &vertex_cube);
+		ImGui::Checkbox("Indices Cube", &indices_cube);
+		ImGui::Checkbox("Sphere", &sphere);
 		ImGui::Checkbox("Plane", &draw_plane);
 		ImGui::Checkbox("Axis", &draw_axis);
 		ImGui::Checkbox("Mesh Normals", &draw_normals);
+		ImGui::Checkbox("Mesh Bounding Box", &draw_meshBoundingBox);
+		ImGui::Checkbox("Global Bounding Box", &draw_globalBoundingBox);
 	}
 }
 
@@ -323,6 +380,7 @@ void ModuleDebug::Draw_Sphere()
 
 void ModuleDebug::Draw_Cube_Indices()
 {
+	glColor3f(1.0f, 0, 0);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id_array);
