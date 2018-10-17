@@ -8,8 +8,10 @@ class Transform :
 {
 public:
 	Transform();
+	Transform(GameObject* game_object);
 	~Transform();
 
+	void OnEditor();
 
 private:
 public:

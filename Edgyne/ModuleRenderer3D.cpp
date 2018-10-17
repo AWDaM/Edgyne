@@ -439,7 +439,6 @@ bool mesh::Draw()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-
 	return true;
 }
 
