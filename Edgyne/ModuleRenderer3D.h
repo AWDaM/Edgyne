@@ -38,7 +38,6 @@ struct mesh
 	vec2 image_size = { 0,0 };
 
 	AABB bounding_box;
-
 	vec3 color = { 0,0,0 };
 
 	vec3 position;

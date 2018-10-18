@@ -27,9 +27,9 @@ void Transform::OnEditor()
 		ImGui::Text("Rotation Y: %f", rotation.y);
 		ImGui::Text("Rotation Z: %f", rotation.z);
 		ImGui::Dummy({ 10,10 });
-		ImGui::Text("Scale X: %f", (*item)->scale.x);
-		ImGui::Text("Scale Y: %f", (*item)->scale.y);
-		ImGui::Text("Scale Z: %f", (*item)->scale.z);
+		ImGui::Text("Scale X: %f", scale.x);
+		ImGui::Text("Scale Y: %f", scale.y);
+		ImGui::Text("Scale Z: %f", scale.z);
 
 		ImGui::TreePop();
 	}

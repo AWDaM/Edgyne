@@ -10,6 +10,9 @@ public:
 	~Mesh();
 
 	void OnEditor();
+
+	void SetBoundingVolume();
+
 private:
 public:
 

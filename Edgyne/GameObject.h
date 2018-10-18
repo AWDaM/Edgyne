@@ -1,5 +1,9 @@
 #pragma once
+#include "MathGeoLib/Geometry/AABB.h"
+#include "MathGeoLib/Geometry/Sphere.h"
+#include "MathGeoLib/Geometry/OBB.h"
 #include <vector>
+
 enum Tag {
 	NO_TAG
 };
@@ -26,6 +30,9 @@ public:
 	bool active = false;
 	GameObject* parent = nullptr;
 
+	AABB aligned_bounding_box;
+	Sphere bounding_sphere;
+	OBB bounding_box;
 
 private:
 	std::vector<GameObject*> childs;

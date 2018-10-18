@@ -4,6 +4,7 @@
 
 GameObject::GameObject()
 {
+	aligned_bounding_box.SetNegativeInfinity();
 }
 
 
