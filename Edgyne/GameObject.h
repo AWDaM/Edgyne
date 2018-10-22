@@ -1,7 +1,6 @@
 #pragma once
-#include "MathGeoLib/Geometry/AABB.h"
-#include "MathGeoLib/Geometry/Sphere.h"
-#include "MathGeoLib/Geometry/OBB.h"
+#include "MathGeoLib/MathGeoLib.h"
+
 #include <vector>
 
 enum Tag {

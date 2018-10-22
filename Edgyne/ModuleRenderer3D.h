@@ -1,7 +1,6 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-#include "glmath.h"
 #include "Light.h"
 
 #define MAX_LIGHTS 8
@@ -35,14 +34,14 @@ struct mesh
 
 	uint id_texture = 0;
 	float* texCoords = nullptr;
-	vec2 image_size = { 0,0 };
+	float2 image_size = { 0,0 };
 
 	AABB bounding_box;
-	vec3 color = { 0,0,0 };
+	vec color = { 0,0,0 };
 
-	vec3 position;
-	vec3 rotation;
-	vec3 scale;
+	vec position;
+	vec rotation;
+	vec scale;
 	uint num_faces;
 
 	bool hasTextCoords = false;
@@ -89,8 +88,8 @@ public:
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	mat3x3 NormalMatrix;
-	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+	float3x3 NormalMatrix;
+	float4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
 	bool depth_test = true;
 	bool cull_face = true;

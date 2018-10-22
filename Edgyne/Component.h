@@ -16,6 +16,10 @@ public:
 	Component(GameObject* game_object, ComponentType type);
 	~Component();
 
+	virtual bool ComponentStart() {};
+	virtual bool ComponentUpdate() {};
+	virtual bool ComponentCleanUp() {};
+
 	virtual void OnEditor() {};
 
 private:
