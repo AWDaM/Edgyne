@@ -163,6 +163,7 @@
     <ClInclude Include="MathGeoLib\Time\Clock.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleDebug.h" />
+    <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleImGui.h" />
     <ClInclude Include="ModuleLevel.h" />
     <ClInclude Include="ModuleLoader.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="MathGeoLib\Time\Clock.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleDebug.cpp" />
+    <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleImGui.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleLevel.cpp" />

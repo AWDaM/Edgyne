@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleLoader.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleFileSystem.h"
 #include "ModuleCamera3D.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -375,6 +376,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		LoadBoundingBox(new_mesh, currentMesh);
 
 		App->renderer3D->mesh_list.push_back(new_mesh);
+		App->fileSystem->SaveToFile(new_mesh);
 	}
 	
 	if (node->mNumChildren > 0)
@@ -397,7 +399,7 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 	}
 	else
 	{
-		file = "Library/";
+		file = "Assets/";
 		file.append(texPath.C_Str());
 		if (ilLoadImage(file.data()))
 		{

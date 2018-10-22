@@ -4,6 +4,8 @@
 #include "glmath.h"
 #include "Light.h"
 
+#include "SDL/include/SDL.h"
+
 #define MAX_LIGHTS 8
 
 enum glRenderOptions
@@ -72,7 +74,7 @@ public:
 	bool CleanUp();
 
 
-	void OnResize(int width, int height);
+	//void OnResize(int width, int height);
 	void Configuration();
 
 	void CalculateGlobalBoundingBox();

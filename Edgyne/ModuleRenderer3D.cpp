@@ -123,7 +123,7 @@ bool ModuleRenderer3D::Init(rapidjson::Value& node)
 
 
 	// Projection matrix for
-	OnResize(App->window->window_w, App->window->window_h);
+	//OnResize(App->window->window_w, App->window->window_h);
 	GenerateFramebuffer();
 
 	return ret;
@@ -240,24 +240,24 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-void ModuleRenderer3D::OnResize(int width, int height)
-{
-	App->window->window_w = width;
-	App->window->window_h = height;
-	GenerateFramebuffer();
-
-	glViewport(0, 0, width, height);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-
-}
+//void ModuleRenderer3D::OnResize(int width, int height)
+//{
+//	App->window->window_w = width;
+//	App->window->window_h = height;
+//	GenerateFramebuffer();
+//
+//	glViewport(0, 0, width, height);
+//
+//	glMatrixMode(GL_PROJECTION);
+//	glLoadIdentity();
+//	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+//	glLoadMatrixf(&ProjectionMatrix);
+//
+//	glMatrixMode(GL_MODELVIEW);
+//	glLoadIdentity();
+//
+//
+//}
 
 void ModuleRenderer3D::Configuration()
 {

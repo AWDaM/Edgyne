@@ -354,6 +354,7 @@
     <ClInclude Include="GUIScene.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleFileSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -554,6 +555,7 @@
     <ClCompile Include="GUIScene.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleFileSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">

@@ -4,6 +4,10 @@
 #include "rapidjson/filewritestream.h"
 
 #include<string>
+#include <list>
+
+
+#include "Globals.h"
 
 class Application;
 struct PhysBody3D;
