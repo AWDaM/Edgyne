@@ -17,6 +17,9 @@
   },
   "Input": {
   },
+  "FileSystem": {
+    "File Extension":  ".edgy"
+  },
   "ImGui": {
   },
   "Level": {

@@ -7,13 +7,20 @@
 #include "ModuleLevel.h"
 #include "ModuleDebug.h"
 #include "ModuleLoader.h"
+#include "ModuleFileSystem.h"
 #include "p2Defs.h"
-
 
 #include "rapidjson/filereadstream.h"
 
-Application::Application() 
+Application::Application(char* projectFile) 
 {
+	std::string tmp = projectFile;
+
+	tmp = tmp.substr(0, tmp.find_last_of("\\"));
+	tmp = tmp.substr(0, tmp.find_last_of("\\"));
+	tmp = tmp.append("\\Game\\");
+	this->projectFile = new char[tmp.size()];
+	strcpy(this->projectFile, tmp.data());
 
 
 	PERF_START(ptimer);
@@ -25,6 +32,7 @@ Application::Application()
 	level = new ModuleLevel(this);
 	debug = new ModuleDebug(this);
 	loader = new ModuleLoader(this);
+	fileSystem = new ModuleFileSystem(this);
 
 	framerate = 1000 / 60;
 	
@@ -44,6 +52,7 @@ Application::Application()
 	AddModule(level);
 	AddModule(debug);
 	AddModule(loader);
+	AddModule(fileSystem);
 
 	// Scenes
 
@@ -352,6 +361,8 @@ void Application::SaveData()
 void Application::LoadData()
 {
 	rapidjson::Document saveFile;
+
+	App->fileSystem->LoadFromFile();
 
 	FILE* file = fopen("save.json", "rb");
 	if (file)

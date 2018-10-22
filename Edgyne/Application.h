@@ -25,6 +25,7 @@ class ModuleImGui;
 class ModuleLevel;
 class ModuleDebug;
 class ModuleLoader;
+class ModuleFileSystem;
 
 class Application
 {
@@ -37,6 +38,7 @@ public:
 	ModuleLevel* level;
 	ModuleDebug* debug;
 	ModuleLoader* loader;
+	ModuleFileSystem* fileSystem;
 
 	std::list<Module*> list_modules;
 
@@ -59,7 +61,7 @@ private:
 
 public:
 
-	Application();
+	Application(char* projectFile);
 	~Application();
 
 	bool Init();
@@ -84,6 +86,7 @@ private:
 
 
 public:
+	char* projectFile;
 	const char* window_name = nullptr;
 	bool vsync_on = true;
 	bool toSave = false;
