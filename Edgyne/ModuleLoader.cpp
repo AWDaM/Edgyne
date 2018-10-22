@@ -48,9 +48,7 @@ bool ModuleLoader::Init(rapidjson::Value& node)
 	ilInit();
 	iluInit();
 	ilutRenderer(ILUT_OPENGL);
-	ILenum error;
-	error = iluLoadImage("Lenna_(test_image).png");
-	LOG("%d: %s/n", error, iluErrorString(error));
+
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	stream.callback = AssimpLoggerLoad;
 	aiAttachLogStream(&stream);	
