@@ -24,7 +24,7 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 
 bool ModuleLevel::Start()
 {
-	//App->loader->ReceivedFile("Assets\\BakerHouse\\BakerHouse.FBX");
+	App->loader->ReceivedFile("Assets\\BakerHouse\\BakerHouse.FBX");
 	return true;
 }
 
