@@ -378,6 +378,9 @@
     <ClInclude Include="Camera.h">
       <Filter>Sources\GameObject\Component</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleChechu.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -595,6 +598,9 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Sources\GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleChechu.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

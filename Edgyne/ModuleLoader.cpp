@@ -108,7 +108,7 @@ bool ModuleLoader::ImportTexture(const char* path)
 	TexturePath = path;
 	bool ret = true;
 	ILuint imgName;
-	vec2 imgSize;
+	float2 imgSize;
 	ilGenImages(1, &imgName);
 	ilBindImage(imgName);
 	uint dropped_texture = 0;
@@ -247,7 +247,7 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 
 			LOG("Image being loaded %s", texPath.C_Str());
 			ILuint imgName;
-			vec2 imgSize;
+			float2 imgSize;
 			ilGenImages(1, &imgName);
 			ilBindImage(imgName);
 			if (CheckTexturePaths(file, texPath))

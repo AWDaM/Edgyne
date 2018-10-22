@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ModuleDebug.h"
+#include "Camera.h"
 #include "SDL\include\SDL_opengl.h"
 #include <cmath>
 #include <vector>
@@ -394,6 +395,54 @@ void ModuleDebug::Draw_Cube_Indices()
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 }
+
+void ModuleDebug::Draw_Camera(Camera * camera)
+{
+	glLineWidth(4.0f);
+	glColor3f(1, 0, 1);
+	glBegin(GL_LINES);
+
+	glVertex3f(camera->frustum.CornerPoint(0).x, camera->frustum.CornerPoint(0).y, camera->frustum.CornerPoint(0).z);
+	glVertex3f(camera->frustum.CornerPoint(1).x, camera->frustum.CornerPoint(1).y, camera->frustum.CornerPoint(1).z);
+
+	glVertex3f(camera->frustum.CornerPoint(0).x, camera->frustum.CornerPoint(0).y, camera->frustum.CornerPoint(0).z);
+	glVertex3f(camera->frustum.CornerPoint(2).x, camera->frustum.CornerPoint(2).y, camera->frustum.CornerPoint(2).z);
+
+	glVertex3f(camera->frustum.CornerPoint(0).x, camera->frustum.CornerPoint(0).y, camera->frustum.CornerPoint(0).z);
+	glVertex3f(camera->frustum.CornerPoint(4).x, camera->frustum.CornerPoint(4).y, camera->frustum.CornerPoint(4).z);
+
+	glVertex3f(camera->frustum.CornerPoint(7).x, camera->frustum.CornerPoint(7).y, camera->frustum.CornerPoint(7).z);
+	glVertex3f(camera->frustum.CornerPoint(6).x, camera->frustum.CornerPoint(6).y, camera->frustum.CornerPoint(6).z);
+
+	glVertex3f(camera->frustum.CornerPoint(6).x, camera->frustum.CornerPoint(6).y, camera->frustum.CornerPoint(6).z);
+	glVertex3f(camera->frustum.CornerPoint(2).x, camera->frustum.CornerPoint(2).y, camera->frustum.CornerPoint(2).z);
+
+	glVertex3f(camera->frustum.CornerPoint(7).x, camera->frustum.CornerPoint(7).y, camera->frustum.CornerPoint(7).z);
+	glVertex3f(camera->frustum.CornerPoint(5).x, camera->frustum.CornerPoint(5).y, camera->frustum.CornerPoint(5).z);
+
+	glVertex3f(camera->frustum.CornerPoint(7).x, camera->frustum.CornerPoint(7).y, camera->frustum.CornerPoint(7).z);
+	glVertex3f(camera->frustum.CornerPoint(3).x, camera->frustum.CornerPoint(3).y, camera->frustum.CornerPoint(3).z);
+
+	glVertex3f(camera->frustum.CornerPoint(3).x, camera->frustum.CornerPoint(3).y, camera->frustum.CornerPoint(3).z);
+	glVertex3f(camera->frustum.CornerPoint(1).x, camera->frustum.CornerPoint(1).y, camera->frustum.CornerPoint(1).z);
+
+	glVertex3f(camera->frustum.CornerPoint(1).x, camera->frustum.CornerPoint(1).y, camera->frustum.CornerPoint(1).z);
+	glVertex3f(camera->frustum.CornerPoint(5).x, camera->frustum.CornerPoint(5).y, camera->frustum.CornerPoint(5).z);
+
+	glVertex3f(camera->frustum.CornerPoint(3).x, camera->frustum.CornerPoint(3).y, camera->frustum.CornerPoint(3).z);
+	glVertex3f(camera->frustum.CornerPoint(2).x, camera->frustum.CornerPoint(2).y, camera->frustum.CornerPoint(2).z);
+
+	glVertex3f(camera->frustum.CornerPoint(4).x, camera->frustum.CornerPoint(4).y, camera->frustum.CornerPoint(4).z);
+	glVertex3f(camera->frustum.CornerPoint(5).x, camera->frustum.CornerPoint(5).y, camera->frustum.CornerPoint(5).z);
+
+	glVertex3f(camera->frustum.CornerPoint(6).x, camera->frustum.CornerPoint(6).y, camera->frustum.CornerPoint(6).z);
+	glVertex3f(camera->frustum.CornerPoint(4).x, camera->frustum.CornerPoint(4).y, camera->frustum.CornerPoint(4).z);
+
+	glEnd();
+	glColor3f(1, 1, 1);
+	glLineWidth(1.0f);
+}
+
 
 void ModuleDebug::Vertex_Array_Cube()
 {

@@ -1,13 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-enum ComponentType
-{
-	NO_TYPE,
-	TRANSFORM,
-	MESH,
-	MATERIAL
-};
+
 
 class Component
 {
@@ -16,9 +10,9 @@ public:
 	Component(GameObject* game_object, ComponentType type);
 	~Component();
 
-	virtual bool ComponentStart() {};
-	virtual bool ComponentUpdate() {};
-	virtual bool ComponentCleanUp() {};
+	virtual bool ComponentStart() { return true; };
+	virtual bool ComponentUpdate() { return true; };
+	virtual bool ComponentCleanUp() { return true; };
 
 	virtual void OnEditor() {};
 

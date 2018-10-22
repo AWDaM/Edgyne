@@ -75,6 +75,7 @@ public:
 
 	void CalculateGlobalBoundingBox();
 	void DrawGlobalBoundingBox();
+	void DrawMainCameraFrustum();
 
 	void glSwitch(bool var, glRenderOptions option);
 	void DeleteMesh();

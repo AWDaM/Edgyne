@@ -6,7 +6,7 @@ class Camera :
 	public Component
 {
 public:
-	Camera();
+	Camera(GameObject* game_object);
 	~Camera();
 
 	bool ComponentStart();
@@ -24,9 +24,9 @@ private:
 	void CalculateViewMatrix();
 
 public:
-
-private:
 	Frustum frustum;
+private:
+
 	vec X, Y, Z, Position, Reference;
 	float4x4 ViewMatrix, ViewMatrixInverse;
 };

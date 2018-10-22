@@ -8,6 +8,9 @@ Transform::Transform()
 
 Transform::Transform(GameObject * game_object) : Component(game_object,TRANSFORM)
 {
+	position = { 0,0,0 };
+	scale = { 1,1,1 };
+	rotation = rotation.FromEulerXYZ(0, 0, 0);
 }
 
 
