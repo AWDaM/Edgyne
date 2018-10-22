@@ -46,14 +46,14 @@ Application::Application(char* projectFile)
 
 	// Main Modules
 	AddModule(window);
-	AddModule(camera);
+
 	AddModule(input);
 	AddModule(imGui);
 	AddModule(level);
 	AddModule(debug);
 	AddModule(loader);
 	AddModule(fileSystem);
-
+	AddModule(camera);
 	// Scenes
 
 	// Renderer last!

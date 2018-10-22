@@ -379,6 +379,8 @@
       <Filter>Sources\GameObject\Component</Filter>
     </ClInclude>
     <ClInclude Include="ModuleFileSystem.h" />
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -598,6 +600,8 @@
       <Filter>Sources\GameObject\Component</Filter>
     </ClCompile>
     <ClCompile Include="ModuleFileSystem.cpp" />
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">

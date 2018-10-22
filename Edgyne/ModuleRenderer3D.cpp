@@ -6,6 +6,7 @@
 #include "ModuleImGui.h"
 #include "ModuleLevel.h"
 #include "ModuleDebug.h"
+#include "Camera.h"
 #include "GL/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -123,7 +124,7 @@ bool ModuleRenderer3D::Init(rapidjson::Value& node)
 
 
 	// Projection matrix for
-	//OnResize(App->window->window_w, App->window->window_h);
+	OnResize(App->window->window_w, App->window->window_h);
 	GenerateFramebuffer();
 
 	return ret;
@@ -240,24 +241,28 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
-//void ModuleRenderer3D::OnResize(int width, int height)
-//{
-//	App->window->window_w = width;
-//	App->window->window_h = height;
-//	GenerateFramebuffer();
-//
-//	glViewport(0, 0, width, height);
-//
-//	glMatrixMode(GL_PROJECTION);
-//	glLoadIdentity();
-//	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-//	glLoadMatrixf(&ProjectionMatrix);
-//
-//	glMatrixMode(GL_MODELVIEW);
-//	glLoadIdentity();
-//
-//
-//}
+
+void ModuleRenderer3D::OnResize(int width, int height)
+{
+	App->window->window_w = width;
+	App->window->window_h = height;
+	GenerateFramebuffer();
+
+	glViewport(0, 0, width, height);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	ProjectionMatrix = App->camera->editor_camera->frustum.ProjectionMatrix();
+	
+	glLoadMatrixf(&ProjectionMatrix[0][0]);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+
+}
+
 
 void ModuleRenderer3D::Configuration()
 {
@@ -292,6 +297,53 @@ void ModuleRenderer3D::CalculateGlobalBoundingBox()
 }
 
 void ModuleRenderer3D::DrawGlobalBoundingBox()
+{
+	glLineWidth(4.0f);
+	glColor3f(1, 0, 1);
+	glBegin(GL_LINES);
+
+	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
+	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
+	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
+	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
+	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
+	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
+	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
+	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
+	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
+	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
+	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
+	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
+
+	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
+	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
+
+	glEnd();
+	glColor3f(1, 1, 1);
+	glLineWidth(1.0f);
+}
+
+void ModuleRenderer3D::DrawMainCameraFrustum()
 {
 	glLineWidth(4.0f);
 	glColor3f(1, 0, 1);

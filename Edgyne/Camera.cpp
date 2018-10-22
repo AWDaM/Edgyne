@@ -2,8 +2,9 @@
 
 
 
-Camera::Camera()
+Camera::Camera(GameObject* game_object) : Component(game_object,CAMERA)
 {
+	
 }
 
 
@@ -22,10 +23,15 @@ bool Camera::ComponentStart()
 	Position = vec(5.0f, 5.0f, 5.0f);
 	Reference = vec(0.0f, 0.0f, 0.0f);
 
-	frustum.SetPos(Position);
+	frustum.SetPerspective(DegToRad(106.67), DegToRad(60));
 	frustum.SetViewPlaneDistances(0.5, 500);
-	
 
+	frustum.SetUp({ 0,1,0 });
+	frustum.SetPos({ 0,0,0 });
+	frustum.SetWorldMatrix(float3x4::identity);
+	
+	frustum.Translate(Position);
+	frustum.ComputeProjectionMatrix();
 	LookAt(Reference);
 	return true;
 }
@@ -77,9 +83,11 @@ void Camera::Move(const vec & Movement)
 	CalculateViewMatrix();
 }
 
+
+
 float * Camera::GetViewMatrix()
 {
-	return 	return &ViewMatrix[0][0];;
+	return  &ViewMatrix[0][0];;
 }
 
 void Camera::CalculateViewMatrix()

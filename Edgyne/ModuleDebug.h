@@ -5,6 +5,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+class Camera;
+
 class ModuleDebug :
 	public Module
 {
@@ -27,6 +29,8 @@ public:
 	void Draw_Sphere();
 	void Draw_Cube_Vertex();
 	void Draw_Cube_Indices();
+
+	void Draw_Camera(Camera* camera);
 
 	void Vertex_Array_Cube();
 	void Indices_Array_Cube();

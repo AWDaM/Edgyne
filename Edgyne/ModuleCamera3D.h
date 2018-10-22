@@ -4,7 +4,8 @@
 #include <vector>
 
 class Timer;
-
+class Camera;
+class GameObject;
 
 class ModuleCamera3D : public Module
 {
@@ -32,7 +33,8 @@ private:
 	void CalculateViewMatrix();
 
 public:
-	
+	Camera* editor_camera;
+
 	vec X, Y, Z, Position, Reference;
 	float4x4 ViewMatrix, ViewMatrixInverse;
 };

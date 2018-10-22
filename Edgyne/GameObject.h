@@ -3,8 +3,18 @@
 
 #include <vector>
 
+enum ComponentType
+{
+	NO_TYPE,
+	TRANSFORM,
+	MESH,
+	MATERIAL,
+	CAMERA
+};
+
 enum Tag {
-	NO_TAG
+	NO_TAG,
+	MAIN_CAMERA
 };
 
 enum Layer {
@@ -16,15 +26,21 @@ class Component;
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(std::string _name = "new GameObject");
 	~GameObject();
 
 	bool InitComponents();
 	bool UpdateComponents();
 	bool CleanUpComopnents();
 
+	void OnHierarchy();
+
+
+	Component* AddComponent(ComponentType type);
+
 private:
 public:
+	std::string name;
 	bool Static = false;
 	bool active = false;
 	GameObject* parent = nullptr;

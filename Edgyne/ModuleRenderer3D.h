@@ -72,11 +72,12 @@ public:
 	bool CleanUp();
 
 
-	//void OnResize(int width, int height);
+	void OnResize(int width, int height);
 	void Configuration();
 
 	void CalculateGlobalBoundingBox();
 	void DrawGlobalBoundingBox();
+	void DrawMainCameraFrustum();
 
 	void glSwitch(bool var, glRenderOptions option);
 	void DeleteMesh();
