@@ -178,10 +178,10 @@ void ModuleLoader::LoadInfo(mesh * new_mesh, aiMesh * currentMesh, aiNode* node)
 {
 	if (currentMesh->mName.length != NULL)
 	{
-		memcpy(new_mesh->name, currentMesh->mName.C_Str(), currentMesh->mName.length);
+		new_mesh->name = (char*)currentMesh->mName.C_Str();
 	}
 	else
-		memcpy(new_mesh->name, "No_name", 8);
+		new_mesh->name = (char*)"No_name";
 
 
 	aiQuaternion rotation;
@@ -342,6 +342,15 @@ void ModuleLoader::LoadBoundingBox(mesh * new_mesh, aiMesh * currentMesh)
 	new_mesh->bounding_box = bounding_box;
 }
 
+void ModuleLoader::LoadMeshesFromFile(mesh* _mesh)
+{
+
+	//Index IDs
+
+
+
+}
+
 void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file)
 {
 	for (int i = 0; i < node->mNumMeshes; i++)
@@ -374,7 +383,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		LOG("Generating BoundingBox for the %i mesh", i + 1);
 		LoadBoundingBox(new_mesh, currentMesh);
 
-		App->renderer3D->mesh_list.push_back(new_mesh);
+		//App->renderer3D->mesh_list.push_back(new_mesh);
 		App->fileSystem->SaveToFile(new_mesh);
 	}
 	

@@ -72,7 +72,7 @@ void GUIInspector::Draw()
 		}*/
 		if (App->level->selected_game_object)
 		{
-			ImGui::Text(App->level->selected_game_object->name.c_str);
+			ImGui::Text(App->level->selected_game_object->name.c_str());
 			ImGui::Checkbox("Active", &App->level->selected_game_object->active);
 			ImGui::SameLine();
 			ImGui::Checkbox("Static", &App->level->selected_game_object->Static);
