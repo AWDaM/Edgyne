@@ -38,6 +38,8 @@ private:
 	void LoadIndices(mesh* new_mesh, aiMesh* currentMesh);
 	void LoadBoundingBox(mesh* new_mesh, aiMesh* currentMesh);
 
+	void LoadMeshesFromFile(mesh* _mesh);
+
 	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file);
 	bool CheckTexturePaths(std::string file, aiString texPath);
 public:

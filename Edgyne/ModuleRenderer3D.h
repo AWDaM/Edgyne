@@ -21,7 +21,7 @@ enum glRenderOptions
 
 struct mesh
 {
-	char name[25];
+	char* name;
 
 	uint id_index = 0;
 	uint num_index = 0;
