@@ -1,6 +1,9 @@
 #include "GUIInspector.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleLevel.h"
+#include "GameObject.h"
+#include "Component.h"
 
 
 #include <list>
@@ -21,7 +24,7 @@ void GUIInspector::Draw()
 {
 	ImGui::Begin("Inspector", &active);
 		Move();
-		std::list<mesh*>::iterator item = App->renderer3D->mesh_list.begin();
+	/*	std::list<mesh*>::iterator item = App->renderer3D->mesh_list.begin();
 
 		while (item != App->renderer3D->mesh_list.end())
 		{
@@ -66,7 +69,22 @@ void GUIInspector::Draw()
 
 
 			item++;
+		}*/
+		if (App->level->selected_game_object)
+		{
+			ImGui::Text(App->level->selected_game_object->name.c_str);
+			ImGui::Checkbox("Active", &App->level->selected_game_object->active);
+			ImGui::SameLine();
+			ImGui::Checkbox("Static", &App->level->selected_game_object->Static);
+			std::vector<Component*>::iterator item = App->level->selected_game_object->components.begin();
+
+			while (item != App->level->selected_game_object->components.end())
+			{
+				(*item)->OnEditor();
+				item++;
+			}
 		}
+		
 		ImGui::End();
 }
 

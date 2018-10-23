@@ -49,9 +49,10 @@ public:
 	AABB aligned_bounding_box;
 	Sphere bounding_sphere;
 	OBB bounding_box;
+	std::vector<Component*> components;
 
 private:
 	std::vector<GameObject*> childs;
-	std::vector<Component*> components;
+
 };
 

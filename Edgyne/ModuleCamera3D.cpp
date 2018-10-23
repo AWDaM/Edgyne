@@ -91,6 +91,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		editor_camera->Move(newPos);
+		editor_camera->frustum.SetPos(editor_camera->frustum.Pos() + newPos);
 
 		// Mouse motion ----------------
 

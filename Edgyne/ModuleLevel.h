@@ -20,5 +20,6 @@ private:
 public:
 	std::vector<GameObject*> game_objects;
 	GameObject* root = nullptr;
+	GameObject* selected_game_object = nullptr;
 };
 
