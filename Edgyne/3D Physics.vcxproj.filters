@@ -72,15 +72,6 @@
     <ClInclude Include="ModuleWindow.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="p2DynArray.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2List.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Sources</Filter>
     </ClInclude>
@@ -95,9 +86,6 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Queue.h">
-      <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="p2Defs.h">
       <Filter>Sources\Containers</Filter>
@@ -380,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTreeChechu.h">
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

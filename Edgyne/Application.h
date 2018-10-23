@@ -61,7 +61,7 @@ private:
 
 public:
 
-	Application(char* projectFile);
+	Application();
 	~Application();
 
 	bool Init();
@@ -86,8 +86,7 @@ private:
 
 
 public:
-	char* projectFile;
-	const char* window_name = nullptr;
+	char* window_name = nullptr;
 	bool vsync_on = true;
 	bool toSave = false;
 	bool toLoad = false;

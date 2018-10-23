@@ -12,17 +12,8 @@
 
 #include "rapidjson/filereadstream.h"
 
-Application::Application(char* projectFile) 
+Application::Application() 
 {
-	std::string tmp = projectFile;
-
-	tmp = tmp.substr(0, tmp.find_last_of("\\"));
-	tmp = tmp.substr(0, tmp.find_last_of("\\"));
-	tmp = tmp.append("\\Game\\");
-	this->projectFile = new char[tmp.size()];
-	strcpy(this->projectFile, tmp.data());
-
-
 	PERF_START(ptimer);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);

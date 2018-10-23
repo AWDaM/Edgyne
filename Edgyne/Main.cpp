@@ -32,10 +32,7 @@ int main(int argc, char ** argv)
 		{
 		case MAIN_CREATION:
 
-			App = new Application(argv[argc - 1]);
-
-			LOG("%s", App->projectFile);
-
+			App = new Application();
 			LOG("-------------- Application Creation --------------");
 			state = MAIN_START;
 			break;

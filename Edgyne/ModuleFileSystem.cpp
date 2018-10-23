@@ -71,8 +71,8 @@ bool ModuleFileSystem::SaveToFile(mesh* mesh)
 bool ModuleFileSystem::LoadFromFile()
 {
 	std::vector<std::string> filenames;
-	std::string str = App->projectFile;
-	str.append("Library\\");
+	std::string str = "Library\\";
+
 
 	const std::experimental::filesystem::directory_iterator end{};
 

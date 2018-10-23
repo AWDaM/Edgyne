@@ -64,7 +64,7 @@ bool ModuleWindow::Init(rapidjson::Value& node)
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 			desktop_fullscreen = true;
 		}
-		App->window_name = node["Application Name"].GetString();
+		App->window_name = (char*)node["Application Name"].GetString();
 		window = SDL_CreateWindow(App->window_name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, flags);
 
 		if(window == NULL)

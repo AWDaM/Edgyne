@@ -174,14 +174,11 @@
     <ClInclude Include="ModuleLoader.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="p2Defs.h" />
-    <ClInclude Include="p2List.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleWindow.h" />
-    <ClInclude Include="p2DynArray.h" />
-    <ClInclude Include="p2Point.h" />
-    <ClInclude Include="p2Queue.h" />
     <ClInclude Include="PerfTimer.h" />
+    <ClInclude Include="QuadTreeChechu.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
