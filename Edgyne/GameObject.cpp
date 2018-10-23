@@ -70,6 +70,10 @@ void GameObject::OnHierarchy()
 	}
 }
 
+void GameObject::OnInspector()
+{
+}
+
 Component * GameObject::AddComponent(ComponentType type)
 {
 	Component* ret;

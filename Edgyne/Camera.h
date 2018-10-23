@@ -18,16 +18,18 @@ public:
 	void Move(const vec &Movement);
 
 	float* GetViewMatrix();
+	void CalculateViewMatrix();
 
 private:
 
-	void CalculateViewMatrix();
+
 
 public:
 	Frustum frustum;
-private:
-
 	vec X, Y, Z, Position, Reference;
 	float4x4 ViewMatrix, ViewMatrixInverse;
+private:
+
+
 };
 
