@@ -378,7 +378,7 @@
     <ClInclude Include="Camera.h">
       <Filter>Sources\GameObject\Component</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleFileSystem.h" />
+    <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
@@ -599,7 +599,7 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Sources\GameObject\Component</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleFileSystem.cpp" />
+    <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
