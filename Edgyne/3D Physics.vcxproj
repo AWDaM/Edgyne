@@ -87,6 +87,7 @@
     <ClInclude Include="GUIConfiguration.h" />
     <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="GUIElements.h" />
+    <ClInclude Include="GUIHierarchy.h" />
     <ClInclude Include="GUIInspector.h" />
     <ClInclude Include="GUIRandomNumberTest.h" />
     <ClInclude Include="GUIScene.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="GUIConfiguration.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="GUIElements.cpp" />
+    <ClCompile Include="GUIHierarchy.cpp" />
     <ClCompile Include="GUIInspector.cpp" />
     <ClCompile Include="GUIRandomNumberTest.cpp" />
     <ClCompile Include="GUIScene.cpp" />

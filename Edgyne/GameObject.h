@@ -35,6 +35,7 @@ public:
 
 	void OnHierarchy();
 
+	void OnInspector();
 
 	Component* AddComponent(ComponentType type);
 

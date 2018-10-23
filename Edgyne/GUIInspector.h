@@ -2,6 +2,8 @@
 #include "GUIElements.h"
 #include "MathGeoLib\Math\float3.h"
 
+class GameObject;
+
 struct transformation
 {
 	vec position;
@@ -19,6 +21,7 @@ public:
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
 private:
 public:
+	GameObject* highlighted_game_object = nullptr;
 private:
 
 };

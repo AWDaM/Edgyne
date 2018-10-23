@@ -372,6 +372,9 @@
     <ClInclude Include="QuadTreeChechu.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="GUIHierarchy.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -593,6 +596,9 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="GUIHierarchy.cpp" >
+	  <Filter>Sources\GUI</Filter>
+	</ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">

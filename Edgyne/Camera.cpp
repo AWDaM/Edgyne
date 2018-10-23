@@ -29,7 +29,7 @@ bool Camera::ComponentStart()
 	frustum.SetUp({ 0,1,0 });
 	frustum.SetPos({ 0,0,0 });
 	frustum.SetWorldMatrix(float3x4::identity);
-	
+	frustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
 	frustum.Translate(Position);
 	frustum.ComputeProjectionMatrix();
 	LookAt(Reference);
