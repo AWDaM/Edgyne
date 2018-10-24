@@ -375,6 +375,7 @@
     <ClInclude Include="GUIHierarchy.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="QuadTreeLorien.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -596,9 +597,10 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="GUIHierarchy.cpp" >
-	  <Filter>Sources\GUI</Filter>
-	</ClCompile>
+    <ClCompile Include="GUIHierarchy.cpp">
+      <Filter>Sources\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTreeLorien.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">
