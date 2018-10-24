@@ -383,7 +383,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		LOG("Generating BoundingBox for the %i mesh", i + 1);
 		LoadBoundingBox(new_mesh, currentMesh);
 
-		//App->renderer3D->mesh_list.push_back(new_mesh);
+		App->renderer3D->mesh_list.push_back(new_mesh);
 		App->fileSystem->SaveToFile(new_mesh);
 	}
 	

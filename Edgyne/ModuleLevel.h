@@ -14,7 +14,8 @@ public:
 	bool Init(rapidjson::Value& node);
 	bool Start();
 
-	GameObject* NewGameObject(bool with_transform = true);
+	GameObject* NewGameObject(std::string name, bool with_transform = true);
+	
 	void Draw();
 private:
 public:

@@ -12,6 +12,7 @@
 #include "GUIRandomNumberTest.h"
 #include "GUIInspector.h"
 #include "GUIScene.h"
+#include "GUIHierarchy.h"
 #include <stdio.h>
 
 
@@ -36,6 +37,7 @@ bool ModuleImGui::Init(rapidjson::Value& node)
 	GUIElement.push_back(random_number_test = new GUIRandomNumberTest(false));
 	GUIElement.push_back(inspector = new GUIInspector(true));
 	GUIElement.push_back(scene = new GUIScene(true));
+	GUIElement.push_back(hierarchy = new GUIHierarchy(true));
 
 	App->canLog = true;
 
@@ -194,6 +196,7 @@ void ModuleImGui::MainMenu()
 			ImGui::MenuItem("RandomNumberTest", NULL, &random_number_test->active);
 			ImGui::MenuItem("Configuration", NULL, &configuration->active);
 			ImGui::MenuItem("Inspector", NULL, &inspector->active);
+			ImGui::MenuItem("Hierarchy", NULL, &hierarchy->active);
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Console"))

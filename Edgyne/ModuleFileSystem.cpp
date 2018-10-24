@@ -1,6 +1,9 @@
 #include "ModuleFileSystem.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleLevel.h"
 #include "Application.h"
+#include "Mesh.h"
+#include "GameObject.h"
 #include <experimental/filesystem>
 
 #include "GL/glew.h"
@@ -122,8 +125,6 @@ bool ModuleFileSystem::LoadFromFile()
 
 void ModuleFileSystem::CopyDataFromFile(std::string& path)
 {
-	mesh* _mesh = new mesh();
-
 	FILE* file = fopen(path.data(), "rb");
 	char* buffer;
 	if (file != NULL)
@@ -142,11 +143,13 @@ void ModuleFileSystem::CopyDataFromFile(std::string& path)
 	memcpy(ranges, bookmark, bytes);
 
 	path = path.erase(0, sizeof("Library\\Meshes\\")-1);
-	_mesh->name = (char*)path.erase(path.find_last_of("."),sizeof(".edgy")).data();
+	GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(".edgy")).data());
+	
+	Mesh* _mesh = (Mesh*)game_object->AddComponent(MESH);
 
 	_mesh->num_vertex = ranges[0];
 	_mesh->num_index = ranges[1];
-	_mesh->num_faces = _mesh->num_index / 3;
+	//_mesh->num_faces = _mesh->num_index / 3;
 
 	bookmark += bytes;
 	bytes = sizeof(float)*_mesh->num_vertex * 3;
@@ -174,18 +177,15 @@ void ModuleFileSystem::CopyDataFromFile(std::string& path)
 
 	fclose(file);
 
-	_mesh->scale.x = 100;
-	_mesh->scale.y = 100;
-	_mesh->scale.z = 100;
-
-	_mesh->hasTextCoords = true;
+	//_mesh->hasTextCoords = true;
 
 	glGenBuffers(1, (GLuint*)&(_mesh->id_index));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * _mesh->num_index, &_mesh->index[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	App->renderer3D->mesh_list.push_back(_mesh);
+	
+	//App->renderer3D->mesh_list.push_back(_mesh);
 }
 
 void ModuleFileSystem::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
