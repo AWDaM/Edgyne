@@ -141,8 +141,10 @@ void ModuleFileSystem::CopyDataFromFile(std::string& path)
 	
 	memcpy(ranges, bookmark, bytes);
 
-	path = path.erase(0, sizeof("Library\\Meshes\\")-1);
-	_mesh->name = (char*)path.erase(path.find_last_of("."),sizeof(".edgy")).data();
+	path = path.erase(0, sizeof("Library\\Meshes\\") - 1);
+	path = path.erase(path.find_last_of("."), sizeof(".edgy"));
+	_mesh->name = new char[path.size()];
+	_mesh->name = (char*)path.data();
 
 	_mesh->num_vertex = ranges[0];
 	_mesh->num_index = ranges[1];

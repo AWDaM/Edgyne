@@ -463,34 +463,36 @@ void ModuleRenderer3D::glSwitch(bool var, glRenderOptions option)
 bool mesh::Draw()
 {
 	//Enable All The Data
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	 if (id_texture)
+	if (id_index > 0)
 	{
-		glBindTexture(GL_TEXTURE_2D, id_texture);
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		if (id_texture)
+		{
+			glBindTexture(GL_TEXTURE_2D, id_texture);
+		}
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+		glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		if (hasTextCoords)
+			glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
+
+		//Draw The Mesh
+		glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+
+		//Disable All The Data
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		if (id_texture)
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+
+		else
+			glColor3f(1, 1, 1);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	}
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	if(hasTextCoords)
-		glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
-
-	//Draw The Mesh
-	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
-
-	//Disable All The Data
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	if (id_texture)
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-	else
-		glColor3f(1, 1, 1);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
 	return true;
 }
 
