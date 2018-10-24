@@ -10,13 +10,12 @@ public:
 	~Mesh();
 
 	void OnEditor();
-
+	bool ComponentUpdate();
+	bool ComponentDraw();
 	void SetBoundingVolume();
 
 private:
 public:
-
-private:
 	uint id_index = 0;
 	uint num_index = 0;
 	uint* index = nullptr;
@@ -29,5 +28,7 @@ private:
 
 	uint id_texture = 0;
 	float* texCoords = nullptr;
+private:
+	
 };
 

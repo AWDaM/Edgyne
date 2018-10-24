@@ -19,6 +19,24 @@ GameObject::~GameObject()
 {
 }
 
+bool GameObject::Update()
+{
+	UpdateComponents();
+	return true;
+}
+
+bool GameObject::Draw()
+{
+	std::vector<Component*>::iterator item = components.begin();
+
+	while (item != components.end())
+	{
+		(*item)->ComponentDraw();
+		item++;
+	}
+	return true;
+}
+
 bool GameObject::InitComponents()
 {
 	std::vector<Component*>::iterator item = components.begin();

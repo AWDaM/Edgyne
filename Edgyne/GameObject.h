@@ -29,6 +29,9 @@ public:
 	GameObject(std::string _name = "new GameObject");
 	~GameObject();
 
+	bool Update();
+	bool Draw();
+
 	bool InitComponents();
 	bool UpdateComponents();
 	bool CleanUpComopnents();

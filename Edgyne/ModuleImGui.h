@@ -13,6 +13,7 @@ class GUIConfiguration;
 class GUIRandomNumberTest;
 class GUIInspector;
 class GUIScene;
+class GUIHierarchy;
 
 class ModuleImGui : public Module
 {
@@ -51,6 +52,7 @@ public:
 	GUIRandomNumberTest* random_number_test = nullptr;
 	GUIInspector* inspector = nullptr;
 	GUIScene* scene = nullptr;
+	GUIHierarchy* hierarchy = nullptr;
 
 	std::vector<GUIElements*> GUIElement;
 

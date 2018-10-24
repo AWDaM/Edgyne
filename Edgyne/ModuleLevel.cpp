@@ -20,7 +20,6 @@ ModuleLevel::~ModuleLevel()
 
 bool ModuleLevel::Init(rapidjson::Value& node)
 {
-	root = NewGameObject();
 	AABB test({ -1,-1,-1 }, { 10, 2, 10 });
 
 	QuadTreeChechu quadTree(1);
@@ -31,6 +30,8 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 
 	quadTree.Insert(firstCube);
 	quadTree.Insert(secondCube);
+	root = NewGameObject("root");
+
 	return true;
 }
 
@@ -40,19 +41,25 @@ bool ModuleLevel::Start()
 	return true;
 }
 
-GameObject * ModuleLevel::NewGameObject(bool with_transform)
+GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 {
-	GameObject* ret = new GameObject();
+	GameObject* ret = new GameObject(name);
 	if (with_transform)
 	{
 		ret->AddComponent(TRANSFORM);
 	}
-
+	game_objects.push_back(ret);
 	return ret;
 }
 
 void ModuleLevel::Draw()
 {
+	std::vector<GameObject*>::iterator item = game_objects.begin();
 
+	while (item != game_objects.end())
+	{
+		(*item)->Draw();
+		item++;
+	}
 
 }
