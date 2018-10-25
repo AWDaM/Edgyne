@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleLevel.h"
 #include "GameObject.h"
+#include "ModuleDebug.h"
 
 #include "SDL\include\SDL_opengl.h"
 
@@ -28,8 +29,8 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 	AABB* firstCube = new AABB({ 1,0,1 }, { 2,1,2 });
 	AABB* secondCube = new AABB({7,0,7}, {8,1,8});
 
-	quadTree.Insert(firstCube);
-	quadTree.Insert(secondCube);
+	/*quadTree.Insert(firstCube);
+	quadTree.Insert(secondCube);*/
 	root = NewGameObject("root");
 
 	return true;
@@ -37,8 +38,12 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 
 bool ModuleLevel::Start()
 {
-	App->loader->ReceivedFile("Assets\\BakerHouse\\BakerHouse.FBX");
-	return true;
+	//App->loader->ReceivedFile("Assets\\BakerHouse\\BakerHouse.FBX");
+	GameObject* camera = NewGameObject("Camera");
+	camera->AddComponent(CAMERA);
+	camera->tag = MAIN_CAMERA;
+		
+		return true;
 }
 
 GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
@@ -59,6 +64,10 @@ void ModuleLevel::Draw()
 	while (item != game_objects.end())
 	{
 		(*item)->Draw();
+		if ((*item)->tag == MAIN_CAMERA)
+		{
+			App->debug->Draw_Camera((Camera*)(*item)->components[0]);
+		}
 		item++;
 	}
 

@@ -49,6 +49,7 @@ public:
 	bool active = false;
 	GameObject* parent = nullptr;
 
+	Tag tag = NO_TAG;
 	AABB aligned_bounding_box;
 	Sphere bounding_sphere;
 	OBB bounding_box;
