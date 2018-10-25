@@ -3,48 +3,42 @@
 #include "GameObject.h"
 #include <vector>
 #include "Globals.h"
-#include <stdio.h>
-
 
 struct quadTreeNode
 {
 public:
 	quadTreeNode(AABB bb, uint bucketSize = 1) : boundingBox(bb), bucketSize(bucketSize) 
 	{ 
-		myObjects = new AABB[bucketSize]; 
 		for (int i = 0; i < 4; i++)
-		{
 			children[i] = nullptr;
-		}
 	};
-
 public:
-	quadTreeNode* children[4];
 	AABB boundingBox;
+	quadTreeNode* children[4];
 	uint bucketSize;
-	AABB* myObjects;
+	std::vector<AABB> myObjects;
 
-	uint numOfObjects = 0;
+	bool isDivided = false;
 
 
 	void SubdivideNode(AABB bb, uint bucketSize = 1)
 	{
 		AABB childrenBB;
 		
-		//								from min x and middle y													to middle x and max y
-		childrenBB = AABB({ (bb.maxPoint.x + bb.minPoint.x) / 2, 0, bb.minPoint.z },							{ bb.maxPoint.x, 0, (bb.maxPoint.z + bb.minPoint.z) / 2 });	
+		//								from min x and middle z																to middle x and max z
+		childrenBB = AABB({bb.minPoint.x, bb.minPoint.y, (bb.maxPoint.z + bb.minPoint.z) / 2 },								{ (bb.maxPoint.x + bb.minPoint.x) / 2, bb.maxPoint.y, bb.maxPoint.z });
 		children[0] = new quadTreeNode(childrenBB, bucketSize);
 
-		//								from middle x and middle y												to max x and max y
-		childrenBB = AABB({ (bb.maxPoint.x + bb.minPoint.x) / 2, 0, (bb.maxPoint.z + bb.minPoint.z) / 2 },		bb.maxPoint);
+		//								from middle x and middle z															to max x and max z
+		childrenBB = AABB({ (bb.maxPoint.x + bb.minPoint.x) / 2, bb.minPoint.y, (bb.maxPoint.z + bb.minPoint.z) / 2 },		bb.maxPoint);
 		children[1] = new quadTreeNode(childrenBB, bucketSize);
 
-		//								from min x and min y													to middle x and middle y
-		childrenBB = AABB(bb.minPoint,																			{ (bb.maxPoint.x + bb.minPoint.x) / 2, 0, (bb.maxPoint.z + bb.minPoint.z) / 2 });
+		//								from min x and min z																to middle x and middle z
+		childrenBB = AABB(bb.minPoint,																						{ (bb.maxPoint.x + bb.minPoint.x) / 2, bb.maxPoint.y, (bb.maxPoint.z + bb.minPoint.z) / 2 });
 		children[2] = new quadTreeNode(childrenBB, bucketSize);
 
-		//								from middle x and min y													to max x and middle y
-		childrenBB = AABB({ (bb.maxPoint.x + bb.minPoint.x) / 2, 0, bb.minPoint.z },							{ bb.maxPoint.x, 0, (bb.maxPoint.z + bb.minPoint.z) / 2 });
+		//								from middle x and min z																to max x and middle y
+		childrenBB = AABB({ (bb.maxPoint.x + bb.minPoint.x) / 2, bb.minPoint.y, bb.minPoint.z },							{ bb.maxPoint.x, bb.minPoint.y, (bb.maxPoint.z + bb.minPoint.z) / 2 });
 		children[3] = new quadTreeNode(childrenBB, bucketSize);
 
 		AddPreviousNodesToTheirCorrespondingChild();
@@ -52,44 +46,46 @@ public:
 	
 	void AddPreviousNodesToTheirCorrespondingChild()
 	{
-		for (int i = 0; i < numOfObjects; i++)
+		for (int i = 0; i < myObjects.size(); i++)
 		{
-			CheckChildrenIntersections(&myObjects[i])->InsertPrimitive(&myObjects[i]);
+			CheckChildrenIntersections(myObjects[i])->InsertPrimitive(myObjects[i]);
 		}
 	}
 
-	quadTreeNode* CheckChildrenIntersections(AABB* obj)
+	quadTreeNode* CheckChildrenIntersections(AABB obj)
 	{
 		quadTreeNode* ret;
-		if (children[0]->boundingBox.Intersects(*obj))
-			ret = children[0];
-		else if (children[1]->boundingBox.Intersects(*obj))
-			ret = children[1];
-		else if (children[2]->boundingBox.Intersects(*obj))
-			ret = children[2];
-		else if (children[3]->boundingBox.Intersects(*obj))
-			ret = children[3];
-
-		return ret;
+		if (children[0]->boundingBox.Intersects(obj))
+			return children[0];
+		else if (children[1]->boundingBox.Intersects(obj))
+			return children[1];
+		else if (children[2]->boundingBox.Intersects(obj))
+			return children[2];
+		else if (children[3]->boundingBox.Intersects(obj))
+			return children[3];
 	}
 
-	bool InsertPrimitive(AABB* obj)
+	bool InsertPrimitive(AABB obj)
 	{
 		bool ret = false;
-		numOfObjects += 1;
+		
 		//compare if gameobject is inside the boundingBox
-		if (boundingBox.Intersects(*obj))
+		if (boundingBox.Intersects(obj))
 		{
-			if (numOfObjects > bucketSize)
+			if (myObjects.size() + 1 > bucketSize && isDivided)
 			{
-				quadTreeNode* intersectingChild = nullptr;
-				numOfObjects -= 1;
-				SubdivideNode(boundingBox, bucketSize);
 				ret = CheckChildrenIntersections(obj)->InsertPrimitive(obj);
+			}
+			else if (myObjects.size() + 1 > bucketSize)
+			{
+				SubdivideNode(boundingBox, bucketSize);
+				isDivided = true;
+				ret = CheckChildrenIntersections(obj)->InsertPrimitive(obj);
+				myObjects.clear();
 			}
 			else
 			{
-				myObjects[numOfObjects - 1] = *obj;
+				myObjects.push_back(obj);
 				ret = true;
 			}
 		}
@@ -112,7 +108,7 @@ public:
 		rootNode = new quadTreeNode(limits, bucketSize);
 	};
 	void Clear();
-	bool Insert(AABB* obj)
+	bool Insert(AABB obj)
 	{
 		return rootNode->InsertPrimitive(obj);
 	};

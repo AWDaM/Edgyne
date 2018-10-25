@@ -115,5 +115,6 @@ Component * GameObject::AddComponent(ComponentType type)
 	default:
 		break;
 	}
+	components.push_back(ret);
 	return ret;
 }

@@ -55,6 +55,7 @@ public:
 	GUIHierarchy* hierarchy = nullptr;
 
 	std::vector<GUIElements*> GUIElement;
+	std::string ImGuiIniLocation;
 
 	bool show_demo_window = false;
 

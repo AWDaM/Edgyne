@@ -28,9 +28,19 @@ ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(start_en
 bool ModuleImGui::Init(rapidjson::Value& node)
 {
 	IMGUI_CHECKVERSION();
+
 	ImGui::CreateContext();
+
 	ImGuiIO& io = ImGui::GetIO(); 
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;  // Enable Keyboard Controls
+	ImGuiIniLocation = ("Settings\\");
+	ImGuiIniLocation.append(io.IniFilename);
+	io.IniFilename = ImGuiIniLocation.c_str();
+	ImGui::LoadIniSettingsFromDisk(io.IniFilename);
+	//ImGuiIniLocation.("Settings\\");
+	//io.IniFilename = ImGuiIniLocation.c_str();
+	
+
 	GUIElement.push_back(console = new GUIConsole(App->log, true));
 	GUIElement.push_back(about = new GUIAbout(false));
 	GUIElement.push_back(configuration = new GUIConfiguration(true));

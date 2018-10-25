@@ -84,7 +84,7 @@ int main(int argc, char ** argv)
 
 		}
 	}
-	LOG("Exiting game '%s'...\n", App->window_name);
+	//LOG("Exiting game '%s'...\n", App->window_name);
 	delete App;
 	App = nullptr;
 	return main_return;
