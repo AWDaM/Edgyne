@@ -66,7 +66,7 @@ void ModuleLevel::Draw()
 		(*item)->Draw();
 		if ((*item)->tag == MAIN_CAMERA)
 		{
-			App->debug->Draw_Camera((Camera*)(*item)->components[0]);
+			App->debug->Draw_Camera((Camera*)(*item)->components[1]);
 		}
 		item++;
 	}
