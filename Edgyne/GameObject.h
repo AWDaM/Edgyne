@@ -41,6 +41,7 @@ public:
 	void OnInspector();
 
 	Component* AddComponent(ComponentType type);
+	GameObject* AddGameObject(std::string name, bool with_transform);
 
 private:
 public:

@@ -1,3 +1,5 @@
+#include "Application.h"
+#include "ModuleLevel.h"
 #include "GameObject.h"
 #include "Globals.h"
 #include "Component.h"
@@ -82,6 +84,8 @@ void GameObject::OnHierarchy()
 		if (ImGui::TreeNode((*item)->name.c_str()))
 		{
 			(*item)->OnHierarchy();
+			App->level->selected_game_object = (*item);
+			ImGui::TreePop();
 		}
 
 		item++;
@@ -116,5 +120,17 @@ Component * GameObject::AddComponent(ComponentType type)
 		break;
 	}
 	components.push_back(ret);
+	return ret;
+}
+
+GameObject * GameObject::AddGameObject(std::string name, bool with_transform)
+{
+	GameObject* ret = new GameObject(name);
+	if (with_transform)
+	{
+		ret->AddComponent(TRANSFORM);
+	}
+	App->level->game_objects.push_back(ret);
+	childs.push_back(ret);
 	return ret;
 }
