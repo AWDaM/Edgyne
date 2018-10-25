@@ -14,7 +14,7 @@ Camera::~Camera()
 
 bool Camera::ComponentStart()
 {
-	CalculateViewMatrix();
+
 	X = vec(1.0f, 0.0f, 0.0f);
 	Y = vec(0.0f, 1.0f, 0.0f);
 	Z = vec(0.0f, 0.0f, 1.0f);
@@ -31,7 +31,7 @@ bool Camera::ComponentStart()
 	frustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
 	frustum.Translate(Position);
 	frustum.ComputeProjectionMatrix();
-
+	CalculateViewMatrix();
 	LookAt(Reference);
 	return true;
 }

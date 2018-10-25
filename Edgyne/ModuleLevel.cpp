@@ -34,7 +34,7 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 
 	/*quadTree.Insert(firstCube);
 	quadTree.Insert(secondCube);*/
-	root = NewGameObject("root");
+	root = new GameObject("root");
 
 	return true;
 }
@@ -51,11 +51,8 @@ bool ModuleLevel::Start()
 
 GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 {
-	GameObject* ret = new GameObject(name);
-	if (with_transform)
-	{
-		ret->AddComponent(TRANSFORM);
-	}
+	GameObject* ret = root->AddGameObject(name, with_transform);
+
 	game_objects.push_back(ret);
 	return ret;
 }
@@ -69,7 +66,7 @@ void ModuleLevel::Draw()
 		(*item)->Draw();
 		if ((*item)->tag == MAIN_CAMERA)
 		{
-			App->debug->Draw_Camera((Camera*)(*item)->components[0]);
+			App->debug->Draw_Camera((Camera*)(*item)->components[1]);
 		}
 		item++;
 	}
