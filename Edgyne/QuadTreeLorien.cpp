@@ -5,7 +5,7 @@
 
 QuadTreeLorien::QuadTreeLorien(AABB root)
 {
-	root_node = new QuadTreeNodeLorien(root);
+	root_node = new QuadTreeNodeLorien(root,this);
 }
 
 QuadTreeLorien::~QuadTreeLorien()
@@ -58,8 +58,8 @@ void QuadTreeNodeLorien::SubdivideAndFit(GameObject* game_object)
 {
 	AABB tmp;
 
-	tmp.maxPoint = aabb.maxPoint - vec(aabb.HalfSize.x, 0, 0);
-	tmp.minPoint = aabb.minPoint + vec(0, 0, aabb.HalfSize.z);
+	tmp.maxPoint = aabb.maxPoint - vec(aabb.HalfSize().x, 0, 0);
+	tmp.minPoint = aabb.minPoint + vec(0, 0, aabb.HalfSize().z);
 	children[0] = new QuadTreeNodeLorien(tmp,tree);
 
 	tmp.maxPoint = aabb.CenterPoint() + vec(0, aabb.HalfSize().y, 0);

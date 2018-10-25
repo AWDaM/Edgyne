@@ -2,6 +2,7 @@
 #include "MathGeoLib\MathGeoLib.h"
 
 class GameObject;
+class QuadTreeNodeLorien;
 
 class QuadTreeLorien
 {
