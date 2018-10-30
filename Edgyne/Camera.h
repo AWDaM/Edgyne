@@ -20,6 +20,10 @@ public:
 	float* GetViewMatrix();
 	void CalculateViewMatrix();
 
+	void OnEditor();
+
+	void ChangeFrustum();
+
 private:
 
 
@@ -28,6 +32,8 @@ public:
 	Frustum frustum;
 	vec X, Y, Z, Position, Reference;
 	float4x4 ViewMatrix, ViewMatrixInverse;
+	float near_plane_distance, far_plane_distance, horizontal_fov, vertical_fov, aspect_ratio;
+
 private:
 
 

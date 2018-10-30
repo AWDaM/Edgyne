@@ -10,7 +10,7 @@
 #include "ImGui\imgui.h"
 
 
-GameObject::GameObject(std::string _name)
+GameObject::GameObject(std::string _name) : active(true)
 {
 	aligned_bounding_box.SetNegativeInfinity();
 	name = _name;
@@ -81,6 +81,10 @@ void GameObject::OnHierarchy()
 
 	while (item != childs.end())
 	{
+		//if (!active)
+		//{
+		//	ImGui::t
+		//}
 		if (ImGui::TreeNode((*item)->name.c_str()))
 		{
 			(*item)->OnHierarchy();

@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Application.h"
 
 
 
@@ -22,8 +23,11 @@ bool Camera::ComponentStart()
 	Position = vec(5.0f, 5.0f, 5.0f);
 	Reference = vec(0.0f, 0.0f, 0.0f);
 
-	frustum.SetPerspective(DegToRad(106.67), DegToRad(60));
-	frustum.SetViewPlaneDistances(0.5, 500);
+	near_plane_distance = 0.5;
+	far_plane_distance = 500;
+	horizontal_fov = 106.67;
+	vertical_fov = 60;
+	ChangeFrustum();
 
 	frustum.SetUp({ 0,1,0 });
 	frustum.SetPos({ 0,0,0 });
@@ -94,4 +98,26 @@ void Camera::CalculateViewMatrix()
 {
 	ViewMatrix = float4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -X.Dot(Position), -Y.Dot(Position), -Z.Dot(Position), 1.0f);
 	ViewMatrixInverse = ViewMatrix.Inverted();
+}
+
+void Camera::OnEditor()
+{
+	if (ImGui::TreeNode("Camera"))
+	{
+		if (ImGui::SliderFloat("Near Plane Distance", &near_plane_distance, 0.1, 1000))
+			ChangeFrustum();
+		if(ImGui::SliderFloat("Far Plane Distance", &far_plane_distance, 0.2, 1001))
+			ChangeFrustum();
+		if(ImGui::SliderFloat("Horizontal  field of view", &horizontal_fov, 0.1, 180))
+			ChangeFrustum();
+		if(ImGui::SliderFloat("Vertical field of view", &vertical_fov, 0.1, 180))
+			ChangeFrustum();
+		ImGui::TreePop();
+	}
+}
+
+void Camera::ChangeFrustum()
+{
+	frustum.SetPerspective(DegToRad(horizontal_fov), DegToRad(vertical_fov));
+	frustum.SetViewPlaneDistances(near_plane_distance, far_plane_distance);
 }

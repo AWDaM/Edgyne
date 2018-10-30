@@ -63,10 +63,13 @@ void ModuleLevel::Draw()
 
 	while (item != game_objects.end())
 	{
-		(*item)->Draw();
-		if ((*item)->tag == MAIN_CAMERA)
+		if ((*item)->active)
 		{
-			App->debug->Draw_Camera((Camera*)(*item)->components[1]);
+			(*item)->Draw();
+			if ((*item)->tag == MAIN_CAMERA)
+			{
+				App->debug->Draw_Camera((Camera*)(*item)->components[1]);
+			}
 		}
 		item++;
 	}
