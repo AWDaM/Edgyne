@@ -20,10 +20,12 @@ public:
 
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
 
+
 	void Look(const vec &Position, const vec &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec &Spot);
 	void Move(const vec &Movement);
 
+	LineSegment getMouseClickRay();
 	void CameraAdaptation(vec new_pos, vec new_ref);
 	float* GetViewMatrix();
 
@@ -33,6 +35,8 @@ private:
 	void CalculateViewMatrix();
 
 public:
+	bool scene_clicked = false;
+
 	Camera* editor_camera;
 
 	vec X, Y, Z, Position, Reference;

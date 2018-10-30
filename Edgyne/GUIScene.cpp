@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleImgui.h"
+#include "ModuleCamera3D.h"
 
 
 
@@ -24,6 +25,13 @@ void GUIScene::Draw()
 	
 		Move();
 		ImGui::BeginChild("", ImGui::GetWindowSize(), false, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking|ImGuiWindowFlags_NoNav);
+		if (ImGui::IsMouseHoveringWindow() && ImGui::IsMouseClicked(0))
+		{
+			App->camera->scene_clicked = true;
+			LOG("clicked");
+		}
+		else
+			App->camera->scene_clicked = false;
 		hovered = ImGui::IsMouseHoveringWindow();
 		ImGui::Image((ImTextureID)App->renderer3D->framebuffer_texture, { (float)App->window->window_w,(float)App->window->window_h }, { 0,1 }, { 1,0 });
 		ImGui::EndChild();

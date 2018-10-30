@@ -191,6 +191,13 @@ void ModuleCamera3D::Move(const vec &Movement)
 	CalculateViewMatrix();
 }
 
+LineSegment ModuleCamera3D::getMouseClickRay()
+{
+	LineSegment ret;
+	//ret = editor_camera->frustum.UnProjectLineSegment();
+	return ret;
+}
+
 void ModuleCamera3D::CameraAdaptation(vec new_pos, vec new_ref)
 {
 	Position = new_pos;

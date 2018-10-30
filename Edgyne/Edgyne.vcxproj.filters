@@ -324,9 +324,6 @@
     <ClInclude Include="GUIAbout.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleLevel.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="GUIConfiguration.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
@@ -375,7 +372,12 @@
     <ClInclude Include="GUIHierarchy.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="QuadTreeLorien.h" />
+    <ClInclude Include="ModuleLevel.h">
+      <Filter>Sources\Modules\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTreeLorien.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -549,9 +551,6 @@
     <ClCompile Include="GUIAbout.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleLevel.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="GUIConfiguration.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
@@ -600,7 +599,12 @@
     <ClCompile Include="GUIHierarchy.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="QuadTreeLorien.cpp" />
+    <ClCompile Include="ModuleLevel.cpp">
+      <Filter>Sources\Modules\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTreeLorien.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">
