@@ -10,7 +10,7 @@
 #include "ImGui\imgui.h"
 
 
-GameObject::GameObject(std::string _name) : active(true)
+GameObject::GameObject(GameObject* parent, std::string _name) : active(true), parent(parent)
 {
 	aligned_bounding_box.SetNegativeInfinity();
 	name = _name;
@@ -81,17 +81,20 @@ void GameObject::OnHierarchy()
 
 	while (item != childs.end())
 	{
-		//if (!active)
-		//{
-		//	ImGui::t
-		//}
+		if (!(*item)->active)
+		{
+			ImGui::PushStyleColor(1, { 128,128,128,128 });
+		}
 		if (ImGui::TreeNode((*item)->name.c_str()))
 		{
 			(*item)->OnHierarchy();
 			App->level->selected_game_object = (*item);
 			ImGui::TreePop();
 		}
-
+		if (!(*item)->active)
+		{
+			ImGui::PopStyleColor();
+		}
 		item++;
 	}
 }
@@ -130,7 +133,7 @@ Component * GameObject::AddComponent(ComponentType type)
 
 GameObject * GameObject::AddGameObject(std::string name, bool with_transform)
 {
-	GameObject* ret = new GameObject(name);
+	GameObject* ret = new GameObject(this,name);
 	if (with_transform)
 	{
 		ret->AddComponent(TRANSFORM);

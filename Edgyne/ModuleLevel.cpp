@@ -34,7 +34,7 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 
 	/*quadTree.Insert(firstCube);
 	quadTree.Insert(secondCube);*/
-	root = new GameObject("root");
+	root = new GameObject(nullptr, "root");
 
 	return true;
 }

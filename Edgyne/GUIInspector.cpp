@@ -76,6 +76,7 @@ void GUIInspector::Draw()
 			ImGui::Checkbox("Active", &App->level->selected_game_object->active);
 			ImGui::SameLine();
 			ImGui::Checkbox("Static", &App->level->selected_game_object->Static);
+
 			std::vector<Component*>::iterator item = App->level->selected_game_object->components.begin();
 
 			while (item != App->level->selected_game_object->components.end())

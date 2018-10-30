@@ -26,7 +26,7 @@ class Component;
 class GameObject
 {
 public:
-	GameObject(std::string _name = "new GameObject");
+	GameObject(GameObject* parent, std::string _name = "new GameObject");
 	~GameObject();
 
 	bool Update();
