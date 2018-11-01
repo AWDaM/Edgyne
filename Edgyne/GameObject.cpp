@@ -75,22 +75,26 @@ bool GameObject::CleanUpComopnents()
 	return false;
 }
 
-void GameObject::OnHierarchy()
+void GameObject::OnHierarchy(int id)
 {
 	std::vector<GameObject*>::iterator item = childs.begin();
-
 	while (item != childs.end())
 	{
 		if (!(*item)->active)
 		{
 			ImGui::PushStyleColor(1, { 128,128,128,128 });
 		}
+		id++;
+		ImGui::PushID(id);
 		if (ImGui::TreeNode((*item)->name.c_str()))
 		{
-			(*item)->OnHierarchy();
-			App->level->selected_game_object = (*item);
+			if(ImGui::IsItemClicked())
+				App->level->selected_game_object = (*item);
+
+			(*item)->OnHierarchy(id);
 			ImGui::TreePop();
 		}
+		ImGui::PopID();
 		if (!(*item)->active)
 		{
 			ImGui::PopStyleColor();
@@ -102,6 +106,7 @@ void GameObject::OnHierarchy()
 void GameObject::OnInspector()
 {
 }
+
 
 Component * GameObject::AddComponent(ComponentType type)
 {

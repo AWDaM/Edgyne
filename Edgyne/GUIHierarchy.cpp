@@ -16,7 +16,19 @@ GUIHierarchy::~GUIHierarchy()
 void GUIHierarchy::Draw()
 {
 	ImGui::Begin("Hierarchy", &active);
-	App->level->root->OnHierarchy();
+	if (ImGui::Button("Add New GameObject"))
+	{
+		if (App->level->selected_game_object == nullptr)
+		{
+			App->level->NewGameObject("GameObject");
+		}
+		else
+		{
+			App->level->selected_game_object->AddGameObject("GameObject");
+		}
+	}
+	int id = 0;
+	App->level->root->OnHierarchy(id);
 	ImGui::End();
 }
 

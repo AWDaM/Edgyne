@@ -36,12 +36,13 @@ public:
 	bool UpdateComponents();
 	bool CleanUpComopnents();
 
-	void OnHierarchy();
+	void OnHierarchy(int id);
 
 	void OnInspector();
 
+	char* GetName();
 	Component* AddComponent(ComponentType type);
-	GameObject* AddGameObject(std::string name, bool with_transform);
+	GameObject* AddGameObject(std::string name, bool with_transform = true);
 
 private:
 public:

@@ -49,6 +49,7 @@ bool ModuleLevel::Start()
 		return true;
 }
 
+
 GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 {
 	GameObject* ret = root->AddGameObject(name, with_transform);

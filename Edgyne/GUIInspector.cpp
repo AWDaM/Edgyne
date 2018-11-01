@@ -72,7 +72,12 @@ void GUIInspector::Draw()
 		}*/
 		if (App->level->selected_game_object)
 		{
-			ImGui::Text(App->level->selected_game_object->name.c_str());
+			static char name[25];
+			strcpy_s(name, 25, App->level->selected_game_object->name.c_str());
+			if (ImGui::InputText("Name", name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+			{
+				App->level->selected_game_object->name = name;
+			}
 			ImGui::Checkbox("Active", &App->level->selected_game_object->active);
 			ImGui::SameLine();
 			ImGui::Checkbox("Static", &App->level->selected_game_object->Static);
