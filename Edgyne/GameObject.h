@@ -22,6 +22,7 @@ enum Layer {
 };
 
 class Component;
+class Transform;
 
 class GameObject
 {
@@ -40,9 +41,9 @@ public:
 
 	void OnInspector();
 
-	char* GetName();
 	Component* AddComponent(ComponentType type);
 	GameObject* AddGameObject(std::string name, bool with_transform = true);
+	void CalcGlobalTransform(const float4x4& parent);
 
 private:
 public:
@@ -56,6 +57,8 @@ public:
 	Sphere bounding_sphere;
 	OBB bounding_box;
 	std::vector<Component*> components;
+	Transform* transform = nullptr;
+	float4x4 global_transform_matrix;
 
 private:
 	std::vector<GameObject*> childs;

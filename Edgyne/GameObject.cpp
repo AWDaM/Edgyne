@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "Camera.h"
+#include "GL\glew.h"
 #include "ImGui\imgui.h"
 
 
@@ -14,6 +15,7 @@ GameObject::GameObject(GameObject* parent, std::string _name) : active(true), pa
 {
 	aligned_bounding_box.SetNegativeInfinity();
 	name = _name;
+	global_transform_matrix.SetIdentity();
 }
 
 
@@ -29,13 +31,16 @@ bool GameObject::Update()
 
 bool GameObject::Draw()
 {
+	glPushMatrix();
+	glMultMatrixf(global_transform_matrix.ptr());
 	std::vector<Component*>::iterator item = components.begin();
-
+	
 	while (item != components.end())
 	{
 		(*item)->ComponentDraw();
 		item++;
 	}
+	glPopMatrix();
 	return true;
 }
 
@@ -141,9 +146,22 @@ GameObject * GameObject::AddGameObject(std::string name, bool with_transform)
 	GameObject* ret = new GameObject(this,name);
 	if (with_transform)
 	{
-		ret->AddComponent(TRANSFORM);
+		ret->transform = (Transform*)ret->AddComponent(TRANSFORM);
 	}
 	App->level->game_objects.push_back(ret);
 	childs.push_back(ret);
 	return ret;
+}
+
+void GameObject::CalcGlobalTransform(const float4x4 & parent)
+{
+	global_transform_matrix = parent * float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
+
+	std::vector<GameObject*>::iterator item = childs.begin();
+
+	while (item != childs.end())
+	{
+		(*item)->CalcGlobalTransform(global_transform_matrix);
+		item++;
+	}
 }

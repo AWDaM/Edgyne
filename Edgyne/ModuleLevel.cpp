@@ -35,6 +35,7 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 	/*quadTree.Insert(firstCube);
 	quadTree.Insert(secondCube);*/
 	root = new GameObject(nullptr, "root");
+	root->transform = (Transform*)root->AddComponent(TRANSFORM);
 
 	return true;
 }
@@ -60,6 +61,7 @@ GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 
 void ModuleLevel::Draw()
 {
+	root->CalcGlobalTransform(root->global_transform_matrix);
 	std::vector<GameObject*>::iterator item = game_objects.begin();
 
 	while (item != game_objects.end())
