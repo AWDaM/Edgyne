@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __CAMERA_H__
+#define __CAMERA_H__
+
+
 #include "Component.h"
 
 
@@ -39,3 +42,4 @@ private:
 
 };
 
+#endif // !__CAMERA__

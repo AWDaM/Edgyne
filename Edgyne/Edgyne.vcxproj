@@ -81,7 +81,6 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GUIAbout.h" />
     <ClInclude Include="GUIConfiguration.h" />
@@ -190,7 +189,6 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="glmath.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="GUIAbout.cpp" />
     <ClCompile Include="GUIConfiguration.cpp" />

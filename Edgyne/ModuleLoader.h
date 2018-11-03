@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __MODULE_LOADER_H__
+#define __MODULE_LOADER_H__
+
+
 #include "Module.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -51,3 +54,5 @@ private:
 	std::string TexturePath;
 
 };
+
+#endif // !__MODULE_LOADER_H__

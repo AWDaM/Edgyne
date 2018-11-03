@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __GUI_ELEMENTS_H__
+#define __GUI_ELEMENTS_H__
+
+
 #include "Globals.h"
 #include <string>
 #include "Imgui/imgui.h"
@@ -34,3 +37,4 @@ public:
 protected:
 };
 
+#endif // !__GUI_ELEMENTS_H__

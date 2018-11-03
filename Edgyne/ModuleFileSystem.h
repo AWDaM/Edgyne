@@ -1,4 +1,8 @@
-#pragma once
+#ifndef __MODULE_FILE_SYSTEM__
+#define __MODULE_FILE_SYSTEM__
+
+
+
 
 #include "Module.h"
 #include "Globals.h"
@@ -27,3 +31,5 @@ public:
 	char* fileExtension = ".edgy";
 	char* libraryPath = "Library\\";
 };
+
+#endif // !__MODULE_FILE_SYSTEM__

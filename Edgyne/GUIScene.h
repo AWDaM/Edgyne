@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __GUI_SCENE__
+#define __GUI_SCENE__
+
+
 #include "GUIElements.h"
 class GUIScene :
 	public GUIElements
@@ -19,3 +22,4 @@ public:
 
 };
 
+#endif // !__GUI_SCENE__

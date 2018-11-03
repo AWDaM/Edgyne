@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __GUI_CONSOLE_H__
+#define __GUI_CONSOLE_H__
+
+
 
 #include "GUIElements.h"
 
@@ -25,3 +28,4 @@ public:
 	bool ScrollToBottom;
 };
 
+#endif // !__GUI_CONSOLE_H__

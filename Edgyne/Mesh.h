@@ -1,4 +1,8 @@
-#pragma once
+#ifndef __MESH_H__
+#define __MESH_H__
+
+
+
 #include "Component.h"
 #include "Globals.h"
 
@@ -32,3 +36,4 @@ private:
 	
 };
 
+#endif // !__MESH_H__

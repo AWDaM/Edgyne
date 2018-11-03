@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __GUI_RANDOM_NUMBER_TEST_H__
+#define __GUI_RANDOM_NUMBER_TEST_H__
+
+
 #include "GUIElements.h"
 #include "pcg_variants.h"
 
@@ -26,3 +29,4 @@ private:
 	int tmpBoundMax = 100;
 };
 
+#endif // !__GUI_RANDOM_NUMBER_TEST_H_

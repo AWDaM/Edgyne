@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __COMPONENT_H__
+#define __COMPONENT_H__
+
+
 #include "GameObject.h"
 
 
@@ -26,3 +29,4 @@ private:
 
 };
 
+#endif // !__COMPONENT_H__

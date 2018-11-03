@@ -22,7 +22,7 @@ void Transform::OnEditor()
 {
 	if (ImGui::TreeNode("Transform"))
 	{
-		ImGui::Text("Position X: %f", position.x);
+		ImGui::InputFloat("Position X", &position.x, 1.0f, 10.0f, 0.01f);
 		ImGui::Text("Position Y: %f", position.y);
 		ImGui::Text("Position Z: %f", position.z);
 		ImGui::Dummy({ 10,10 });
