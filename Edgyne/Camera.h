@@ -20,9 +20,11 @@ public:
 	void LookAt(const vec &Spot);
 	void Move(const vec &Movement);
 
+	float* GetProjectionMatrix();
 	float* GetViewMatrix();
 	void CalculateViewMatrix();
 
+	void TransformChanged();
 	void OnEditor();
 
 	void ChangeFrustum();

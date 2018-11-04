@@ -43,13 +43,28 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 bool ModuleLevel::Start()
 {
 	//App->loader->ReceivedFile("Assets\\BakerHouse\\BakerHouse.FBX");
-	GameObject* camera = NewGameObject("Camera");
+	/*GameObject* camera = NewGameObject("Camera");
 	camera->AddComponent(CAMERA);
-	camera->tag = MAIN_CAMERA;
+	camera->tag = MAIN_CAMERA;*/
 		
 		return true;
 }
 
+
+update_status ModuleLevel::Update(float dt)
+{
+	std::vector<GameObject*>::iterator item = game_objects.begin();
+
+	while (item != game_objects.end())
+	{
+		if ((*item)->active)
+		{
+			(*item)->Update();
+		}
+		item++;
+	}
+	return UPDATE_CONTINUE;
+}
 
 GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 {

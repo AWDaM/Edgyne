@@ -176,7 +176,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadIdentity();
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf((float*)App->camera->editor_camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->editor_camera->GetViewMatrix());
 
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
@@ -253,9 +253,9 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	ProjectionMatrix = App->camera->editor_camera->frustum.ProjectionMatrix();
+	ProjectionMatrix.Set(App->camera->editor_camera->GetProjectionMatrix());
 	
-	glLoadMatrixf(&ProjectionMatrix[0][0]);
+	glLoadMatrixf(App->camera->editor_camera->GetProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

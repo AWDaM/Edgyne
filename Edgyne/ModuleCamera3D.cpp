@@ -16,7 +16,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(st
 {
 	name = "Camera";
 
-	CalculateViewMatrix();
+	//CalculateViewMatrix();
 	X = vec(1.0f, 0.0f, 0.0f);
 	Y = vec(0.0f, 1.0f, 0.0f);
 	Z = vec(0.0f, 0.0f, 1.0f);
@@ -62,91 +62,92 @@ void ModuleCamera3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream 
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
-	if (App->imGui->scene->IsMouseHovering())
-	{
-		vec newPos(0.f, 0.f, 0.f);
-		float speed = CAMERA_SPEED * dt;
-		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-			speed *= CAMERA_SPEED_MULTIPLIER;
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-		{
-			if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-			if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
-			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= editor_camera->Z * speed;
-			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += editor_camera->Z * speed;
+	//if (App->imGui->scene->IsMouseHovering())
+	//{
+	//	vec newPos(0.f, 0.f, 0.f);
+	//	float speed = CAMERA_SPEED * dt;
+	//	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+	//		speed *= CAMERA_SPEED_MULTIPLIER;
+	//	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	//	{
+	//		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+	//		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
+	//		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= editor_camera->Z * speed;
+	//		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += editor_camera->Z * speed;
 
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= editor_camera->X * speed;
-			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += editor_camera->X * speed;
-			
-		}
+	//		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= editor_camera->X * speed;
+	//		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += editor_camera->X * speed;
+	//		
+	//	}
 
-		if (App->input->GetMouseZ() > 0)
-		{
-			newPos += editor_camera->Z * speed * CAMERA_SPEED_MULTIPLIER;
-		}
-		else if (App->input->GetMouseZ() < 0)
-		{
-			newPos -= editor_camera->Z * speed * CAMERA_SPEED_MULTIPLIER;
-		}
+	//	if (App->input->GetMouseZ() > 0)
+	//	{
+	//		newPos += editor_camera->Z * speed * CAMERA_SPEED_MULTIPLIER;
+	//	}
+	//	else if (App->input->GetMouseZ() < 0)
+	//	{
+	//		newPos -= editor_camera->Z * speed * CAMERA_SPEED_MULTIPLIER;
+	//	}
 
-		editor_camera->Move(newPos);
-		editor_camera->frustum.SetPos(editor_camera->frustum.Pos() + newPos);
+	//	editor_camera->Move(newPos);
+	//	editor_camera->frustum.SetPos(editor_camera->frustum.Pos() + newPos);
 
-		// Mouse motion ----------------
+	//	// Mouse motion ----------------
 
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
-		{
-			int dx = -App->input->GetMouseXMotion();
-			int dy = -App->input->GetMouseYMotion();
+	//	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+	//	{
+	//		int dx = -App->input->GetMouseXMotion();
+	//		int dy = -App->input->GetMouseYMotion();
 
-			float Sensitivity = 0.25f;
+	//		float Sensitivity = 0.25f;
 
-			editor_camera->Position -= editor_camera->Reference;
+	//		editor_camera->Position -= editor_camera->Reference;
 
-			if (dx != 0)
-			{
-				float DeltaX = (float)dx * Sensitivity;
+	//		if (dx != 0)
+	//		{
+	//			float DeltaX = (float)dx * Sensitivity;
 
-				editor_camera->X = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->X, 1.0f));
-				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Y, 1.0f));
-				editor_camera->Z = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Z, 1.0f));
-			}
+	//			editor_camera->X = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->X, 1.0f));
+	//			editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Y, 1.0f));
+	//			editor_camera->Z = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Z, 1.0f));
+	//		}
 
-			if (dy != 0)
-			{
-				float DeltaY = (float)dy * Sensitivity;
+	//		if (dy != 0)
+	//		{
+	//			float DeltaY = (float)dy * Sensitivity;
 
-				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(editor_camera->X, DeltaY)*float4(editor_camera->Y, 1.0f));
-				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(editor_camera->X, DeltaY)*float4(editor_camera->Z, 1.0f));
+	//			editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(editor_camera->X, DeltaY)*float4(editor_camera->Y, 1.0f));
+	//			editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(editor_camera->X, DeltaY)*float4(editor_camera->Z, 1.0f));
 
-				if (editor_camera->Y.y < 0.0f)
-				{
-					editor_camera->Z = vec(0.0f, editor_camera->Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-					editor_camera->Y = editor_camera->Z.Cross(editor_camera->X);
-				}
-			}
+	//			if (editor_camera->Y.y < 0.0f)
+	//			{
+	//				editor_camera->Z = vec(0.0f, editor_camera->Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+	//				editor_camera->Y = editor_camera->Z.Cross(editor_camera->X);
+	//			}
+	//		}
 
-			editor_camera->Position = editor_camera->Reference + editor_camera->Z * editor_camera->Position.Length();
-			editor_camera->Look(editor_camera->Position, { 0,0,0 }, true);
-		}
+	//		editor_camera->Position = editor_camera->Reference + editor_camera->Z * editor_camera->Position.Length();
+	//		editor_camera->Look(editor_camera->Position, { 0,0,0 }, true);
+	//	}
 
-		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-		{
-			editor_camera->X = vec(1.0f, 0.0f, 0.0f);
-			editor_camera->Y = vec(0.0f, 1.0f, 0.0f);
-			editor_camera->Z = vec(0.0f, 0.0f, 1.0f);
+	//	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	//	{
+	//		editor_camera->X = vec(1.0f, 0.0f, 0.0f);
+	//		editor_camera->Y = vec(0.0f, 1.0f, 0.0f);
+	//		editor_camera->Z = vec(0.0f, 0.0f, 1.0f);
 
-			editor_camera->Position = vec(5.0f, 5.0f, 5.0f);
-			editor_camera->Reference = { 0,0,0 };
-			editor_camera->Look(editor_camera->Position, editor_camera->Reference);
-		}
+	//		editor_camera->Position = vec(5.0f, 5.0f, 5.0f);
+	//		editor_camera->Reference = { 0,0,0 };
+	//		editor_camera->Look(editor_camera->Position, editor_camera->Reference);
+	//	}
 
-		// Recalculate matrix -------------
+	//	// Recalculate matrix -------------
 
-
-	editor_camera->CalculateViewMatrix();
-	}
+	////editor_camera->frustum.SetPos()
+	//
+	//editor_camera->CalculateViewMatrix();
+	//}
 	return UPDATE_CONTINUE;
 }
 

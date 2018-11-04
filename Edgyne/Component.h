@@ -17,6 +17,7 @@ public:
 	virtual bool ComponentUpdate() { return true; };
 	virtual bool ComponentCleanUp() { return true; };
 	virtual bool ComponentDraw() { return true; };
+	virtual void TransformChanged() {};
 
 	virtual void OnEditor() {};
 

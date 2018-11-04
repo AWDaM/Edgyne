@@ -63,6 +63,7 @@ public:
 	std::vector<Component*> components;
 	Transform* transform = nullptr;
 	float4x4 global_transform_matrix;
+	bool transform_changed = false;
 
 private:
 	std::vector<GameObject*> childs;
