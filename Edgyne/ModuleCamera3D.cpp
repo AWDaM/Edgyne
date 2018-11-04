@@ -25,7 +25,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(st
 	
 	Position = vec(5.0f, 5.0f, 5.0f);
 	Reference = vec(0.0f, 0.0f, 0.0f);	
-	LookAt(Reference);
+
 }
 
 ModuleCamera3D::~ModuleCamera3D()

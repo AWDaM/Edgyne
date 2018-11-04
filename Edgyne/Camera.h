@@ -17,7 +17,7 @@ public:
 	bool ComponentCleanUp();
 
 	void Look(const vec &Position, const vec &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec &Spot);
+	void LookAt(const vec& Spot);
 	void Move(const vec &Movement);
 
 	float* GetProjectionMatrix();
@@ -35,7 +35,7 @@ private:
 
 public:
 	Frustum frustum;
-	vec X, Y, Z, Position, Reference;
+	vec X, Y, Z, Position , Reference = { 0,0,0 };
 	float4x4 ViewMatrix, ViewMatrixInverse;
 	float near_plane_distance, far_plane_distance, horizontal_fov, vertical_fov, aspect_ratio;
 

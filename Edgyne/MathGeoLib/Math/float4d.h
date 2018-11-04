@@ -46,7 +46,7 @@ public:
 
 	float4d(){}
 	float4d(double x, double y, double z, double w):x(x), y(y), z(z), w(w) {}
-	float4d(const float4 &rhs):x(rhs.x), y(rhs.y), z(rhs.z), w(rhs.w) {}
+	float4d(const float4d &rhs):x(rhs.x), y(rhs.y), z(rhs.z), w(rhs.w) {}
 
 	double Dot(const float4d &rhs) const
 	{
@@ -175,14 +175,14 @@ public:
 #endif
 	}
 
-	float4 ToFloat4() const
+	float4d ToFloat4() const
 	{
 #if defined(MATH_SSE2) && defined(MATH_AUTOMATIC_SSE)
 		simd4f lo = _mm_cvtpd_ps(v[0]);
 		simd4f hi = _mm_cvtpd_ps(v[1]);
 		return _mm_movelh_ps(lo, hi);
 #else
-		return float4((float)x, (float)y, float(z), float(w));
+		return float4d((float)x, (float)y, float(z), float(w));
 #endif
 	}
 

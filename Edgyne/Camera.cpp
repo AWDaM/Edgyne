@@ -30,17 +30,23 @@ bool Camera::ComponentStart()
 	vertical_fov = 60;
 
 	//frustum.SetWorldMatrix(float3x4::identity);
-	frustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
+	/*frustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
 
 	frustum.SetPos(Position);
 	frustum.SetFront(Reference);
-	frustum.SetUp({ 0,1,0 });
+	frustum.SetUp({ 0,1,0 });*/
+	frustum.type = math::FrustumType::PerspectiveFrustum;
+	frustum.pos = Position;
+	frustum.front = Reference;
+	frustum.up = { 0.0f,1.0f,0.0f };
+
 	ChangeFrustum();
 
 	//CalculateViewMatrix();
 	//LookAt(Reference);
 	//frustum.ComputeViewMatrix();
 	//frustum.ComputeProjectionMatrix();
+	LookAt(Reference);
 	return true;
 }
 
@@ -72,16 +78,24 @@ void Camera::Look(const vec & Position, const vec & Reference, bool RotateAround
 	CalculateViewMatrix();
 }
 
-void Camera::LookAt(const vec & Spot)
+void Camera::LookAt(const vec& Spot)
 {
-	Reference = Spot;
+	/*Reference = Spot;
 
 	vec front = frustum.Pos() - Reference;
 
 	float3x3 look = float3x3::LookAt(frustum.Front(), front.Normalized(), frustum.Up(), { 0,1,0 });
 
 	frustum.SetFront(look.MulDir(frustum.Front().Normalized()));
-	frustum.SetUp(look.MulDir(frustum.Up().Normalized()));
+	frustum.SetUp(look.MulDir(frustum.Up().Normalized()));*/
+	Reference = Spot;
+
+	vec front = Reference - frustum.pos;
+
+	float3x3 look = float3x3::LookAt(frustum.front.Normalized(), front.Normalized(), frustum.up.Normalized(), { 0,1,0 });
+
+	frustum.front = look.MulDir(frustum.front).Normalized();
+	frustum.up = look.MulDir(frustum.up).Normalized();
 }
 
 void Camera::Move(const vec & Movement)
@@ -96,14 +110,16 @@ void Camera::Move(const vec & Movement)
 
 float * Camera::GetProjectionMatrix()
 {
-	float4x4 matrix = frustum.ProjectionMatrix();
+	static float4x4 matrix;
+	matrix = frustum.ProjectionMatrix();
 	matrix.Transpose();
 	return (float*)matrix.v;
 }
 
 float * Camera::GetViewMatrix()
 {
-	float4x4 matrix = frustum.ViewMatrix();
+	static float4x4 matrix;
+	matrix = frustum.ViewMatrix();
 	matrix.Transpose();
 	return  (float*)matrix.v;
 }
@@ -116,7 +132,7 @@ void Camera::CalculateViewMatrix()
 
 void Camera::TransformChanged()
 {
-	frustum.SetPos(game_object->transform->position);
+	frustum.pos = game_object->transform->position;
 
 }
 
@@ -138,6 +154,11 @@ void Camera::OnEditor()
 
 void Camera::ChangeFrustum()
 {
-	frustum.SetPerspective(DegToRad(horizontal_fov), DegToRad(vertical_fov));
-	frustum.SetViewPlaneDistances(near_plane_distance, far_plane_distance);
+	//frustum.SetPerspective(DegToRad(horizontal_fov), DegToRad(vertical_fov));
+	//frustum.SetViewPlaneDistances(near_plane_distance, far_plane_distance);
+	frustum.nearPlaneDistance = 0.1f;
+	frustum.farPlaneDistance = 1000.0f;
+
+	frustum.verticalFov = DEGTORAD * 90.0f;
+	frustum.horizontalFov = 2.f * Atan(Tan(frustum.verticalFov*0.5f)*16.0f / 9.0f);
 }
