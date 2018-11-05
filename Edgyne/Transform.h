@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __TRANSFORM_H__
+#define __TRANSFORM_H__
+
+
 #include "Component.h"
 #include "MathGeoLib/Math/float3.h"
 #include "MathGeoLib/Math/Quat.h"
@@ -22,3 +25,4 @@ private:
 
 };
 
+#endif // !__TRANSFORM_H__

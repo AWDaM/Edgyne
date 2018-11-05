@@ -16,7 +16,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(st
 {
 	name = "Camera";
 
-	CalculateViewMatrix();
+	//CalculateViewMatrix();
 	X = vec(1.0f, 0.0f, 0.0f);
 	Y = vec(0.0f, 1.0f, 0.0f);
 	Z = vec(0.0f, 0.0f, 1.0f);
@@ -25,7 +25,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(st
 	
 	Position = vec(5.0f, 5.0f, 5.0f);
 	Reference = vec(0.0f, 0.0f, 0.0f);	
-	LookAt(Reference);
+
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -91,7 +91,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		editor_camera->Move(newPos);
-		editor_camera->frustum.SetPos(editor_camera->frustum.Pos() + newPos);
+		editor_camera->frustum.pos = editor_camera->frustum.pos + newPos;
 
 		// Mouse motion ----------------
 
@@ -144,7 +144,8 @@ update_status ModuleCamera3D::Update(float dt)
 
 		// Recalculate matrix -------------
 
-
+	//editor_camera->frustum.SetPos()
+	
 	editor_camera->CalculateViewMatrix();
 	}
 	return UPDATE_CONTINUE;

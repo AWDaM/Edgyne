@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __GUI_ABOUT_H__
+#define __GUI_ABOUT_H__
+
+
 #include "GUIElements.h"
 class GUIAbout :
 	public GUIElements
@@ -12,3 +15,4 @@ public:
 	bool Load(rapidjson::Value& Node);
 };
 
+#endif // !__GUI_ABOUT_H__

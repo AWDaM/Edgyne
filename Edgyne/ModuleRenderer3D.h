@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __MODULE_RENDERER_3D_H__
+#define __MODULE_RENDERER_3D_H__
+
+
 #include "Module.h"
 #include "Globals.h"
 #include "Light.h"
@@ -108,3 +111,5 @@ public:
 
 	std::list<mesh*> mesh_list;
 };
+
+#endif // !__MODULE_RENDERER_3D_H__

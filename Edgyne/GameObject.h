@@ -1,4 +1,8 @@
-#pragma once
+#ifndef __GAME_OBJECT_H__
+#define __GAME_OBJECT_H__
+
+
+
 #include "MathGeoLib/MathGeoLib.h"
 
 #include <vector>
@@ -59,9 +63,11 @@ public:
 	std::vector<Component*> components;
 	Transform* transform = nullptr;
 	float4x4 global_transform_matrix;
+	bool transform_changed = false;
 
 private:
 	std::vector<GameObject*> childs;
 
 };
 
+#endif // !__GAME_OBJECT_H__

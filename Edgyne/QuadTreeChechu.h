@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __QUAD_TREE_CHECHU_H__
+#define __QUAD_TREE_CHECHU_H__
+
+
 #include "MathGeoLib/MathGeoLib.h"
 #include "GameObject.h"
 #include <vector>
@@ -124,3 +127,5 @@ public:
 	uint bucketSize;
 	quadTreeNode* rootNode = nullptr;
 };
+
+#endif // !__QUAD_TREE_CHECHU_H__

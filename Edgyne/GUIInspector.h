@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __GUI_INSPECTOR_H__
+#define __GUI_INSPECTOR_H__
+
+
 #include "GUIElements.h"
 #include "MathGeoLib\Math\float3.h"
 
@@ -26,3 +29,4 @@ private:
 
 };
 
+#endif // !__GUI_INSPECTOR_H__

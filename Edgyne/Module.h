@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __MODULE_H__
+#define __MODULE_H__
+
+
 #include "rapidjson/document.h"// rapidjson's DOM-style API
 #include "rapidjson/prettywriter.h" // for stringify JSON
 #include "rapidjson/filewritestream.h"
@@ -62,3 +65,5 @@ public:
 public:
 	std::string name = "";
 };
+
+#endif // !__MODULE_H__

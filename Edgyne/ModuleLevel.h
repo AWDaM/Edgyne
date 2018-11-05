@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __MODULE_LEVEL_H__
+#define __MODULE_LEVEL_H__
+
+
 #include "Module.h"
 #include "QuadTreeChechu.h"
 
@@ -15,6 +18,7 @@ public:
 	bool Init(rapidjson::Value& node);
 	bool Start();
 
+	update_status Update(float dt);
 	GameObject* NewGameObject(std::string name, bool with_transform = true);
 	
 	void Draw();
@@ -26,3 +30,4 @@ public:
 	GameObject* selected_game_object = nullptr;
 };
 
+#endif // !__MODULE_LEVEL_H__

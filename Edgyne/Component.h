@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __COMPONENT_H__
+#define __COMPONENT_H__
+
+
 #include "GameObject.h"
 
 
@@ -14,6 +17,7 @@ public:
 	virtual bool ComponentUpdate() { return true; };
 	virtual bool ComponentCleanUp() { return true; };
 	virtual bool ComponentDraw() { return true; };
+	virtual void TransformChanged() {};
 
 	virtual void OnEditor() {};
 
@@ -26,3 +30,4 @@ private:
 
 };
 
+#endif // !__COMPONENT_H__

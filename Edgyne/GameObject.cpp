@@ -26,13 +26,24 @@ GameObject::~GameObject()
 bool GameObject::Update()
 {
 	UpdateComponents();
+	if (transform_changed)
+	{
+		std::vector<Component*>::iterator item = components.begin();
+
+		while (item != components.end())
+		{
+			(*item)->TransformChanged();
+			item++;
+		}
+		transform_changed = false;
+	}
 	return true;
 }
 
 bool GameObject::Draw()
 {
 	glPushMatrix();
-	glMultMatrixf(global_transform_matrix.ptr());
+	glMultMatrixf(global_transform_matrix.Transposed().ptr());
 	std::vector<Component*>::iterator item = components.begin();
 	
 	while (item != components.end())

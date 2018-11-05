@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __MODULE_DEBUG_H__
+#define __MODULE_DEBUG_H__
+
+
 #include "Module.h"
 #include <array>
 #include "GL/glew.h"
@@ -76,3 +79,5 @@ public:
 	bool toDrawSphere = true;
 
 };
+
+#endif // !__MODULE_DEBUG_H__

@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __MODULE_IMGUI_H__
+#define __MODULE_IMGUI_H__
+
+
 #include "Module.h"
 #include "GUIElements.h"
 
@@ -64,4 +67,6 @@ public:
 	bool perma_true_2 = true;
 	bool to_close = false;
 };
+
+#endif // !__MODULE_IMGUI_H__
 

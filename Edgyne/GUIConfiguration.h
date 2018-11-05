@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __GUI_CONFIGURATION__
+#define __GUI_CONFIGURATION__
+
+
 #include "GUIElements.h"
 class GUIConfiguration :
 	public GUIElements
@@ -11,3 +14,4 @@ public:
 	bool Load(rapidjson::Value& Node);
 };
 
+#endif // !__GUI_CONFIGURATION__

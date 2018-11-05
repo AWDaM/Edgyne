@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __QUAD_TREE_LORIEN_H__
+#define __QUAD_TREE_LORIEN_H__
+
+
 #include "MathGeoLib\MathGeoLib.h"
 
 class GameObject;
@@ -41,5 +44,7 @@ public:
 	void FitGameObject(GameObject* game_object);
 	std::vector<GameObject*> leaves;
 };
+
+#endif // !__QUAD_TREE_LORIEN_H__
 
 

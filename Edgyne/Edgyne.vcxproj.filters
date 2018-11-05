@@ -327,9 +327,6 @@
     <ClInclude Include="GUIConfiguration.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="glmath.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleDebug.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -553,9 +550,6 @@
     </ClCompile>
     <ClCompile Include="GUIConfiguration.cpp">
       <Filter>Sources\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="glmath.cpp">
-      <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="ModuleDebug.cpp">
       <Filter>Sources\Modules</Filter>
