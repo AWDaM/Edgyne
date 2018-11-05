@@ -117,6 +117,17 @@ void Camera::TransformChanged()
 	frustum.up = rotation.Mul(frustum.up).Normalized();
 }
 
+void Camera::SetBoundingVolume()
+{
+	game_object->aligned_bounding_box.Enclose(frustum);
+	//for (int i = 0; i < num_vertex*3; i+3)
+	//{
+	//	game_object->bounding_box.Enclose((float3)vertex[i]);
+	//}
+
+	game_object->bounding_sphere.Enclose(frustum);
+}
+
 void Camera::OnEditor()
 {
 	if (ImGui::TreeNode("Camera"))

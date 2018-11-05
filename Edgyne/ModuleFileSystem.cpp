@@ -175,6 +175,7 @@ void ModuleFileSystem::CopyDataFromFile(std::string& path)
 	_mesh->normals = new float[_mesh->num_vertex * 3];
 	memcpy(_mesh->normals, bookmark, bytes);
 
+	_mesh->SetBoundingVolume();
 	fclose(file);
 
 

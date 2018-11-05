@@ -18,7 +18,7 @@ public:
 	virtual bool ComponentCleanUp() { return true; };
 	virtual bool ComponentDraw() { return true; };
 	virtual void TransformChanged() {};
-
+	virtual void SetBoundingVolume() {};
 	virtual void OnEditor() {};
 
 private:

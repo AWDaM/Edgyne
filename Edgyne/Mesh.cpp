@@ -17,6 +17,7 @@ Mesh::Mesh()
 
 Mesh::Mesh(GameObject * game_object) : Component(game_object,MESH)
 {
+	SetBoundingVolume();
 }
 
 
@@ -70,6 +71,15 @@ bool Mesh::ComponentDraw()
 void Mesh::SetBoundingVolume()
 {
 	game_object->aligned_bounding_box.Enclose((float3*)vertex, num_vertex);
-	//game_object->bounding_box.Enclose((float3*)vertex, num_vertex);
+	//for (int i = 0; i < num_vertex*3; i+3)
+	//{
+	//	game_object->bounding_box.Enclose((float3)vertex[i]);
+	//}
+	
 	game_object->bounding_sphere.Enclose((float3*)vertex, num_vertex);
+}
+
+void Mesh::TransformChanged()
+{
+	
 }

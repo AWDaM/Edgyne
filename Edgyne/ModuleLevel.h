@@ -8,6 +8,7 @@
 #include <vector>
 
 class GameObject;
+class Camera;
 
 class ModuleLevel :
 	public Module
@@ -27,6 +28,7 @@ public:
 	QuadTreeChechu quadTree;
 	std::vector<GameObject*> game_objects;
 	GameObject* root = nullptr;
+	Camera* game_camera = nullptr;
 	GameObject* selected_game_object = nullptr;
 };
 

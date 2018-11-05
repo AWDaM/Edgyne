@@ -88,7 +88,7 @@ bool GameObject::CleanUpComopnents()
 		(*item)->ComponentCleanUp();
 		item++;
 	}
-	return false;
+	return true;
 }
 
 void GameObject::OnHierarchy(int id)
@@ -175,4 +175,19 @@ void GameObject::CalcGlobalTransform(const float4x4 & parent)
 		(*item)->CalcGlobalTransform(global_transform_matrix);
 		item++;
 	}
+}
+
+Component * GameObject::GetComponent(ComponentType type)
+{
+	Component* ret;
+
+	std::vector<Component*>::iterator item = components.begin();
+
+	while (item != components.end())
+	{
+		if ((*item)->component_type == type)
+			ret = (*item);
+	}
+
+	return ret;
 }

@@ -17,6 +17,7 @@ public:
 	bool ComponentUpdate();
 	bool ComponentDraw();
 	void SetBoundingVolume();
+	void TransformChanged();
 
 private:
 public:

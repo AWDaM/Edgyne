@@ -5,8 +5,7 @@
 #include "Component.h"
 
 
-class Camera :
-	public Component
+class Camera : public Component
 {
 public:
 	Camera(GameObject* game_object);
@@ -25,6 +24,7 @@ public:
 	void CalculateViewMatrix();
 
 	void TransformChanged();
+	void SetBoundingVolume();
 	void OnEditor();
 
 	void ChangeFrustum();
