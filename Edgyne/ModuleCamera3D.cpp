@@ -72,22 +72,44 @@ update_status ModuleCamera3D::Update(float dt)
 		{
 			if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
 			if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
-			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= editor_camera->frustum.front.Normalized() * speed;
-			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += editor_camera->frustum.front.Normalized() * speed;
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			{
+				vec tmp = editor_camera->frustum.front.Normalized() * speed;
+				tmp.y = 0;
+				newPos += tmp;
+			}
+			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) 
+			{
+				vec tmp = editor_camera->frustum.front.Normalized() * speed;
+				tmp.y = 0;
+				newPos -= tmp;
+			}
 
-
-			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= editor_camera->X * speed;
-			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += editor_camera->X * speed;
-			
+			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
+			{
+				vec tmp;
+				tmp.x = editor_camera->frustum.front.Normalized().z;
+				tmp.z = - editor_camera->frustum.front.Normalized().x;
+				tmp.y = 0;
+				newPos += tmp * speed;
+			}
+			if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+			{
+				vec tmp;
+				tmp.x = - editor_camera->frustum.front.Normalized().z;
+				tmp.z = editor_camera->frustum.front.Normalized().x;
+				tmp.y = 0;
+				newPos += tmp * speed;
+			}
 		}
 
 		if (App->input->GetMouseZ() > 0)
 		{
-			newPos += editor_camera->Z * speed * CAMERA_SPEED_MULTIPLIER;
+			newPos += editor_camera->frustum.front.Normalized() * speed * CAMERA_SPEED_MULTIPLIER;
 		}
 		else if (App->input->GetMouseZ() < 0)
 		{
-			newPos -= editor_camera->Z * speed * CAMERA_SPEED_MULTIPLIER;
+			newPos -= editor_camera->frustum.front.Normalized() * speed * CAMERA_SPEED_MULTIPLIER;
 		}
 
 		editor_camera->Move(newPos);
