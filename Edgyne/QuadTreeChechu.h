@@ -54,21 +54,21 @@ public:
 	{
 		for (int i = 0; i < myObjects.size(); i++)
 		{
-			CheckChildrenIntersections(myObjects[i])->InsertPrimitive(myObjects[i]);
+			CheckChildrenIntersections(myObjects[i]);
 		}
 	}
 
-	quadTreeNode* CheckChildrenIntersections(AABB obj)
+	bool CheckChildrenIntersections(AABB obj)
 	{
-		quadTreeNode* ret;
+		bool ret = false;
 		if (children[0]->boundingBox.Intersects(obj))
-			ret = children[0];
-		else if (children[1]->boundingBox.Intersects(obj))
-			ret = children[1];
-		else if (children[2]->boundingBox.Intersects(obj))
-			ret = children[2];
-		else if (children[3]->boundingBox.Intersects(obj))
-			ret = children[3];
+			ret = children[0]->InsertPrimitive(obj);
+		if (children[1]->boundingBox.Intersects(obj))
+			ret = children[1]->InsertPrimitive(obj);
+		if (children[2]->boundingBox.Intersects(obj))
+			ret = children[2]->InsertPrimitive(obj);
+		if (children[3]->boundingBox.Intersects(obj))
+			ret = children[3]->InsertPrimitive(obj);
 
 		return ret;
 	}
@@ -82,13 +82,13 @@ public:
 		{
 			if (myObjects.size() + 1 > bucketSize && isDivided && myDepth < maximumDepth)
 			{
-				ret = CheckChildrenIntersections(obj)->InsertPrimitive(obj);
+				ret = CheckChildrenIntersections(obj);
 			}
 			else if (myObjects.size() + 1 > bucketSize && myDepth < maximumDepth)
 			{
 				SubdivideNode(boundingBox, myDepth + 1, bucketSize);
 				isDivided = true;
-				ret = CheckChildrenIntersections(obj)->InsertPrimitive(obj);
+				ret = CheckChildrenIntersections(obj);
 				myObjects.clear();
 			}
 			else
@@ -108,7 +108,7 @@ public:
 class QuadTreeChechu
 {
 public:
-	QuadTreeChechu(uint bucketSize) : bucketSize(bucketSize) {};
+	QuadTreeChechu(uint bucketSize = 1) : bucketSize(bucketSize) {};
 	~QuadTreeChechu() {};
 
 	void Create(AABB limits)

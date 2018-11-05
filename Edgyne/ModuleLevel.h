@@ -3,6 +3,7 @@
 
 
 #include "Module.h"
+#include "QuadTreeChechu.h"
 
 #include <vector>
 
@@ -23,6 +24,7 @@ public:
 	void Draw();
 private:
 public:
+	QuadTreeChechu quadTree;
 	std::vector<GameObject*> game_objects;
 	GameObject* root = nullptr;
 	GameObject* selected_game_object = nullptr;

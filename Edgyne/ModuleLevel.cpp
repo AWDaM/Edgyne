@@ -7,7 +7,6 @@
 
 #include "ModuleLoader.h"
 
-#include "QuadTreeChechu.h"
 
 ModuleLevel::ModuleLevel(Application* app, bool start_enabled) : Module(start_enabled)
 {
@@ -23,7 +22,6 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 {
 	AABB test({ -1,-1,-1 }, { 10, 2, 10 });
 
-	QuadTreeChechu quadTree(1);
 	quadTree.Create(test);
 
 	AABB firstCube({ 1,0,1 }, { 2,1,2 });
@@ -32,8 +30,12 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 	AABB fourthCube({5,0,5}, {6,1,8});
 	AABB fifthCube({2,0,1}, {4,1,4});
 
-	/*quadTree.Insert(firstCube);
-	quadTree.Insert(secondCube);*/
+	quadTree.Insert(firstCube);
+	quadTree.Insert(secondCube);
+	quadTree.Insert(thirdCube);
+	quadTree.Insert(fourthCube);
+	quadTree.Insert(fifthCube);
+
 	root = new GameObject(nullptr, "root");
 	root->transform = (Transform*)root->AddComponent(TRANSFORM);
 
