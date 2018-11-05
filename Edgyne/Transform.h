@@ -14,12 +14,14 @@ public:
 	Transform(GameObject* game_object);
 	~Transform();
 
+	void TransformChanged();
 	void OnEditor();
 
 private:
 public:
 	vec position;
 	Quat rotation;
+	vec rotation_euler;
 	vec scale;
 private:
 
