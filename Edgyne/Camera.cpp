@@ -80,6 +80,7 @@ void Camera::Look(const vec & Position, const vec & Reference, bool RotateAround
 
 void Camera::LookAt(const vec& Spot)
 {
+
 	Reference = Spot;
 
 	vec front = Reference - frustum.pos;
