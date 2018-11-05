@@ -28,7 +28,6 @@ void GUIScene::Draw()
 		if (ImGui::IsMouseHoveringWindow() && ImGui::IsMouseClicked(0))
 		{
 			App->camera->scene_clicked = true;
-			LOG("clicked");
 		}
 		else
 			App->camera->scene_clicked = false;

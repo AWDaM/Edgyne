@@ -80,14 +80,6 @@ void Camera::Look(const vec & Position, const vec & Reference, bool RotateAround
 
 void Camera::LookAt(const vec& Spot)
 {
-	/*Reference = Spot;
-
-	vec front = frustum.Pos() - Reference;
-
-	float3x3 look = float3x3::LookAt(frustum.Front(), front.Normalized(), frustum.Up(), { 0,1,0 });
-
-	frustum.SetFront(look.MulDir(frustum.Front().Normalized()));
-	frustum.SetUp(look.MulDir(frustum.Up().Normalized()));*/
 	Reference = Spot;
 
 	vec front = Reference - frustum.pos;
@@ -102,8 +94,7 @@ void Camera::Move(const vec & Movement)
 {
 	Position += Movement;
 	Reference += Movement;
-
-	CalculateViewMatrix();
+	frustum.pos += Movement;
 }
 
 

@@ -113,31 +113,35 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		editor_camera->Move(newPos);
-		editor_camera->frustum.pos = editor_camera->frustum.pos + newPos;
 
 		// Mouse motion ----------------
 
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
 		{
-			int dx = -App->input->GetMouseXMotion();
-			int dy = -App->input->GetMouseYMotion();
+			int dx = (float)App->input->GetMouseXMotion()*CAMERA_ROTATION_SPEED*dt*-1;
+			LOG("%f",dx);
+			int dy = (float)App->input->GetMouseYMotion()*CAMERA_ROTATION_SPEED*dt*-1;
+			LOG("%f", dy);
 
 			float Sensitivity = 0.25f;
 
-			editor_camera->Position -= editor_camera->Reference;
+			//editor_camera->Position -= editor_camera->Reference;
 
 			if (dx != 0)
 			{
-				float DeltaX = (float)dx * Sensitivity;
+				/*float DeltaX = (float)dx * Sensitivity;
 
 				editor_camera->X = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->X, 1.0f));
 				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Y, 1.0f));
-				editor_camera->Z = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Z, 1.0f));
+				editor_camera->Z = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Z, 1.0f));*/
+				Quat rotationX = Quat::RotateY(dx);
+				editor_camera->frustum.front = rotationX.Mul(editor_camera->frustum.front).Normalized();
+				editor_camera->frustum.up = rotationX.Mul(editor_camera->frustum.up).Normalized();
 			}
 
 			if (dy != 0)
 			{
-				float DeltaY = (float)dy * Sensitivity;
+				/*float DeltaY = (float)dy * Sensitivity;
 
 				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(editor_camera->X, DeltaY)*float4(editor_camera->Y, 1.0f));
 				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(editor_camera->X, DeltaY)*float4(editor_camera->Z, 1.0f));
@@ -146,6 +150,15 @@ update_status ModuleCamera3D::Update(float dt)
 				{
 					editor_camera->Z = vec(0.0f, editor_camera->Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
 					editor_camera->Y = editor_camera->Z.Cross(editor_camera->X);
+				}*/
+				Quat rotationY = Quat::RotateAxisAngle(editor_camera->frustum.WorldRight(), dy);
+
+				float3 new_up = rotationY.Mul(editor_camera->frustum.up).Normalized();
+
+				if (new_up.y > 0.0f)
+				{
+					editor_camera->frustum.up = new_up;
+					editor_camera->frustum.front = rotationY.Mul(editor_camera->frustum.front).Normalized();
 				}
 			}
 

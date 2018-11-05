@@ -42,6 +42,7 @@ enum update_status
 
 // Configuration -----------
 #define CAMERA_SPEED 10
+#define CAMERA_ROTATION_SPEED 5
 #define CAMERA_SPEED_MULTIPLIER 2
 
 #endif // !__GLOBALS_H__
