@@ -443,6 +443,53 @@ void ModuleDebug::Draw_Camera(Camera * camera)
 	glLineWidth(1.0f);
 }
 
+void ModuleDebug::Draw_AABB(const AABB & box)
+{
+	glLineWidth(2.0f);
+	glColor3f(0, 0, 1);
+	glBegin(GL_LINES);
+
+	glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
+	glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
+					 																	 
+	glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
+	glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
+																						 
+	glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
+	glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
+																						 
+	glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
+	glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
+																						 
+	glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
+	glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
+																						 
+	glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
+	glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
+					 								   									 
+	glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
+	glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
+																						 
+	glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
+	glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
+																						 
+	glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
+	glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
+					  																	 
+	glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
+	glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
+					  																	 
+	glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
+	glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
+					  																	 
+	glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
+	glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
+
+	glEnd();
+	glColor3f(1, 1, 1);
+	glLineWidth(1.0f);
+}
+
 
 void ModuleDebug::Vertex_Array_Cube()
 {

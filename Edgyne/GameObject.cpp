@@ -123,6 +123,18 @@ void GameObject::OnInspector()
 {
 }
 
+void GameObject::RecursiveSetChildsActive(bool _active)
+{
+	active = _active;
+	std::vector<GameObject*>::iterator item = childs.begin();
+
+	while (item != childs.end())
+	{
+		(*item)->RecursiveSetChildsActive(_active);
+		item++;
+	}
+}
+
 
 Component * GameObject::AddComponent(ComponentType type)
 {

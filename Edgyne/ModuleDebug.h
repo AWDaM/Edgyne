@@ -34,6 +34,7 @@ public:
 	void Draw_Cube_Indices();
 
 	void Draw_Camera(Camera* camera);
+	void Draw_AABB(const AABB& box);
 
 	void Vertex_Array_Cube();
 	void Indices_Array_Cube();
@@ -49,6 +50,7 @@ public:
 	bool draw_normals = false;
 	bool draw_meshBoundingBox = true;
 	bool draw_globalBoundingBox = true;
+	
 
 	uint my_id_vertex = 0;
 	uint my_id_array = 0;

@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ModuleLevel.h"
+#include "ModuleRenderer3D.h"
 #include "GameObject.h"
 #include "Camera.h"
 #include "ModuleDebug.h"
@@ -87,11 +88,20 @@ void ModuleLevel::Draw()
 	{
 		if ((*item)->active)
 		{
-			if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box))
+			if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box)&& App->renderer3D->camera_culling)
+			{
+				(*item)->Draw();
+			}
+	
+			else if (!App->renderer3D->camera_culling)
 			{
 				(*item)->Draw();
 			}
 
+			if (selected_game_object)
+			{
+				App->debug->Draw_AABB(selected_game_object->aligned_bounding_box);
+			}
 
 		App->debug->Draw_Camera(game_camera);
 

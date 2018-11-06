@@ -78,7 +78,10 @@ void GUIInspector::Draw()
 			{
 				App->level->selected_game_object->name = name;
 			}
-			ImGui::Checkbox("Active", &App->level->selected_game_object->active);
+			if (ImGui::Checkbox("Active", &App->level->selected_game_object->active))
+			{
+				App->level->selected_game_object->RecursiveSetChildsActive(App->level->selected_game_object->active);
+			}
 			ImGui::SameLine();
 			ImGui::Checkbox("Static", &App->level->selected_game_object->Static);
 

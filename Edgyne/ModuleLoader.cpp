@@ -80,8 +80,7 @@ bool ModuleLoader::Import(const std::string & file)
 {
 	MeshPath = file;
 	TexturePath.clear();
-	App->renderer3D->DeleteMesh();
-	App->renderer3D->mesh_list.clear();
+
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
@@ -97,7 +96,7 @@ bool ModuleLoader::Import(const std::string & file)
 		vec center_point = App->renderer3D->globalBoundingBox.CenterPoint();
 		half_diagonal += App->renderer3D->globalBoundingBox.HalfDiagonal();
 		 
-		App->camera->CameraAdaptation({ half_diagonal.x,half_diagonal.y,half_diagonal.z }, { center_point.x,center_point.y,center_point.z });
+		//App->camera->CameraAdaptation({ half_diagonal.x,half_diagonal.y,half_diagonal.z }, { center_point.x,center_point.y,center_point.z });
 		aiReleaseImport(scene);
 	}
 
@@ -265,8 +264,8 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 				}
 				else
 				{
-					glGenTextures(1, &new_mesh->id_texture);
-					glBindTexture(GL_TEXTURE_2D, new_mesh->id_texture);
+					glGenTextures(1, &_material->id_texture);
+					glBindTexture(GL_TEXTURE_2D, _material->id_texture);
 
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -352,13 +351,19 @@ void ModuleLoader::LoadMeshesFromFile(Mesh* _mesh)
 
 void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file, GameObject* parent)
 {
-	GameObject* local_parent = parent->AddGameObject("Node GameObject");
+	GameObject* local_parent;
+	if (node->mNumMeshes > 0)
+	{
+		local_parent = parent->AddGameObject("Node GameObject");
+	}
+	else
+		local_parent = parent;
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
 		GameObject* game_object;
-		if (scene->mMeshes[i]->mName.length != NULL)
+		if (node->mName.C_Str() != NULL)
 		{
-			game_object = local_parent->AddGameObject((char*)scene->mMeshes[i]->mName.C_Str());
+			game_object = local_parent->AddGameObject(node->mName.C_Str());
 		}
 		else
 			game_object = local_parent->AddGameObject("Game Object");
@@ -373,7 +378,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		LoadVerices(mesh, currentMesh);
 
 		Material* material = (Material*)game_object->AddComponent(MATERIAL);
-		//mesh->material = material;
+		mesh->material = material;
 		LOG("Loading Color from the %i mesh", i + 1);
 		LoadColor(material, scene->mMaterials[currentMesh->mMaterialIndex]);
 
@@ -393,8 +398,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		LOG("Generating BoundingBox for the %i mesh", i + 1);
 		LoadBoundingBox(mesh, currentMesh);
 
-		//App->renderer3D->mesh_list.push_back(new_mesh);
-		App->fileSystem->SaveToFile(mesh);
+		//App->fileSystem->SaveToFile(mesh);
 	}
 	
 	if (node->mNumChildren > 0)

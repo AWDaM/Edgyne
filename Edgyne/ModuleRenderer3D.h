@@ -104,6 +104,7 @@ public:
 	bool texture_2d = true;
 	bool line_smooth = false;
 	bool scissor_test = false;
+	bool camera_culling = false;
 
 	uint  DroppedTexture;
 

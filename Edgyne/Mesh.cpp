@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "Application.h"
 #include "Material.h"
-
+#include "Transform.h"
 #include "GL/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -44,57 +44,61 @@ bool Mesh::ComponentUpdate()
 
 bool Mesh::ComponentDraw()
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
+	if (has_triangle_faces)
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
 
-	/*if (material)
-	{
-		material->MaterialBind();
-	}*/
-	//--------
-	if (id_texture)
-	{
-		glBindTexture(GL_TEXTURE_2D, id_texture);
+		if (material->id_texture)
+		{
+			glBindTexture(GL_TEXTURE_2D, material->id_texture);
+		}
+		//--------
+
+		/*else
+			glColor3f(color.x, color.y, color.z);*/
+
+			//---------
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+		glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
+
+		/*if (has_texture_coordinates)
+			glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);*/
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		//Draw The Mesh
+		glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+
+		//Disable All The Data
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		if (material->id_texture)
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+
+		else
+			glColor3f(1, 1, 1);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	}
-
-	/*else
-		glColor3f(color.x, color.y, color.z);*/
-
-	//---------
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	if (has_texture_coordinates)
-		glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
-
-	//Draw The Mesh
-	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
-
-	//Disable All The Data
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	if (id_texture)
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
 	return true;
 }
 
 void Mesh::SetBoundingVolume()
 {
+	game_object->aligned_bounding_box.SetNegativeInfinity();
 	game_object->aligned_bounding_box.Enclose((float3*)vertex, num_vertex);
+	game_object->aligned_bounding_box.Translate(game_object->transform->position);
 	//for (int i = 0; i < num_vertex*3; i+3)
 	//{
 	//	game_object->bounding_box.Enclose((float3)vertex[i]);
 	//}
-	
+	game_object->bounding_sphere.SetNegativeInfinity();
 	game_object->bounding_sphere.Enclose((float3*)vertex, num_vertex);
+	game_object->bounding_sphere.Translate(game_object->transform->position);
 }
 
 void Mesh::TransformChanged()
 {
-	
+	SetBoundingVolume();
 }
