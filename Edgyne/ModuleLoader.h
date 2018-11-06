@@ -36,7 +36,7 @@ public:
 private:
 	void SaveScene();
 	void SaveMesh(Mesh* mesh);
-	void SaveMaterial();
+	void SaveMaterial(const std::string& path);
 	void LoadScene();
 
 	void LoadInfo(GameObject* game_object, aiMesh* currentMesh,aiNode* node);
@@ -50,7 +50,7 @@ private:
 	void LoadMeshesFromFile(Mesh* _mesh);
 
 	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file, GameObject* parent);
-	bool CheckTexturePaths(std::string file, std::string texPath);
+	bool CheckTexturePaths(std::string file, std::string texPath, std::string& texActualPath);
 
 public:
 	//char* assimpLog;

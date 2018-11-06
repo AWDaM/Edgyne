@@ -227,6 +227,29 @@ void ModuleImporter::CopyDataFromFile(std::string& path)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+const char* ModuleImporter::LoadDataFromFile(const char* file, uint& size)
+{
+	FILE* fp = fopen(file, "rb");
+	char* buffer;
+	if (fp != NULL)
+	{
+		fseek(fp, 0, SEEK_END);
+		size = ftell(fp);
+		rewind(fp);
+		buffer = new char[size];
+		fread(buffer, 1, size, fp);
+	}
+	fclose(fp);
+	return buffer;
+}
+
+void ModuleImporter::WriteDataOnFile(const void* data, uint size, const char* file)
+{
+	FILE* fp = fopen(file, "wb");
+	fwrite(data, sizeof(char), size, fp);
+	fclose(fp);
+}
+
 void ModuleImporter::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
 {
 }

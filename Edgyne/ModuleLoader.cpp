@@ -244,15 +244,16 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
 		if (texPath.length > 0)
 		{
-			std::string texFullPath = file;
+			std::string texFullPath;
 
 			LOG("Image being loaded %s", texPath.C_Str());
 			ILuint imgName;
 			float2 imgSize;
 			ilGenImages(1, &imgName);
 			ilBindImage(imgName);
-			if (CheckTexturePaths(file, texPath.C_Str()))
+			if (CheckTexturePaths(file, texPath.C_Str(), texFullPath))
 			{
+				SaveMaterial(texFullPath);
 				ILinfo imgData;
 				iluGetImageInfo(&imgData);
 				if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
@@ -412,7 +413,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 	}
 }
 
-bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath)
+bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std::string& texActualPath)
 {
 	bool ret = false;
 	path = path.substr(0, path.find_last_of("\\"));
@@ -424,6 +425,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath)
 		if (ilLoadImage(tmp_path.data()))
 		{
 			LOG("Texture found at the expected path");
+			texActualPath = tmp_path;
 			ret = true;
 		}
 		else
@@ -433,6 +435,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath)
 			if (ilLoadImage(path.data()))
 			{
 				LOG("Texture found at the same path as the object");
+				texActualPath = path;
 				ret = true;
 			}
 		}
@@ -443,6 +446,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath)
 		if (ilLoadImage(path.data()))
 		{
 			LOG("Texture found at the expected path");
+			texActualPath = path;
 			ret = true;
 		}
 	}
@@ -453,6 +457,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath)
 		if (ilLoadImage(path.data()))
 		{
 			LOG("Texture found at the assets folder");
+			texActualPath = path;
 			ret = true;
 		}
 		else
@@ -462,6 +467,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath)
 			if (ilLoadImage(path.data()))
 			{
 				LOG("Texture found at the source folder");
+				texActualPath = path;
 				ret = true;
 			}
 		}
@@ -477,11 +483,11 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 {
 	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
 	uint fileSize;
-	if(mesh->has_texture_coordinates)
-	//					RANGES OF DATA					VERTICES							INDICES						TEX COORDS							NORMALS
+	if (mesh->has_texture_coordinates)
+		//					RANGES OF DATA					VERTICES							INDICES						TEX COORDS							NORMALS
 		fileSize = sizeof(ranges) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index + sizeof(float)*mesh->num_vertex * 2 + sizeof(float)*mesh->num_vertex * 3;
 	else
-	//					RANGES OF DATA					VERTICES							INDICES						NORMALS
+		//					RANGES OF DATA					VERTICES							INDICES						NORMALS
 		fileSize = sizeof(ranges) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index + sizeof(float)*mesh->num_vertex * 3;
 
 	char* data = new char[fileSize];
@@ -523,14 +529,47 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 	str.append(mesh->game_object->name);
 	str.append(App->importer->meshExtension);
 
-
-	FILE* file = fopen(str.data(), "wb");
-	fwrite(data, sizeof(char), fileSize, file);
-	fclose(file);
+	App->importer->WriteDataOnFile(data, fileSize, str.c_str());
 }
 
-void ModuleLoader::SaveMaterial()
+void ModuleLoader::SaveMaterial(const std::string& path)
 {
+	std::string fileName = path;
+	fileName = fileName.erase(0, fileName.find_last_of("\\") + 1);
+	fileName = fileName.substr(0, fileName.find("."));
+
+	uint size;
+	const char* buffer = App->importer->LoadDataFromFile(path.c_str(), size);
+
+
+	ILuint img = ilGenImage();
+	ilBindImage(img);
+
+	if (ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, size))
+	{
+		ILuint ilSize;
+		ILubyte* data;
+
+		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+
+		ilSize = ilSaveL(IL_DDS, NULL, 0);
+		if (ilSize > 0)
+		{
+			data = new ILubyte[ilSize];
+			if (ilSaveL(IL_DDS, data, ilSize))
+			{
+				std::string currMaterialPath = App->importer->materialLibraryPath;
+				currMaterialPath.append(fileName);
+				currMaterialPath.append(App->importer->materialExtension);
+
+
+				FILE* file = fopen(currMaterialPath.data(), "wb");
+				fwrite(data, sizeof(char), ilSize, file);
+				fclose(file);
+				App->importer->WriteDataOnFile(data, ilSize, currMaterialPath.c_str());
+			}
+		}
+	}
 }
 
 void ModuleLoader::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
