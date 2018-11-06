@@ -61,8 +61,9 @@ bool Mesh::ComponentDraw()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 		glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
 
-		/*if (has_texture_coordinates)
-			glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);*/
+		if (has_texture_coordinates)
+			glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
+
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		//Draw The Mesh
 		glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
