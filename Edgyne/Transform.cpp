@@ -21,7 +21,7 @@ Transform::~Transform()
 
 void Transform::TransformChanged()
 {
-	rotation = rotation.FromEulerXYZ(rotation_euler.x, rotation_euler.y, rotation_euler.z);
+	rotation = rotation.FromEulerXYZ(DEGTORAD*rotation_euler.x, DEGTORAD*rotation_euler.y, DEGTORAD*rotation_euler.z);
 }
 
 void Transform::OnEditor()

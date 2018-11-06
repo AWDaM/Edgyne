@@ -32,7 +32,7 @@ bool ModuleFileSystem::Init(rapidjson::Value& node)
 
 
 // Method to save on our own file format. Header reads in order: Vertex - Index - Tex Coords - Normals 
-bool ModuleFileSystem::SaveToFile(mesh* mesh)
+bool ModuleFileSystem::SaveToFile(Mesh* mesh)
 {
 	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
 
@@ -71,7 +71,7 @@ bool ModuleFileSystem::SaveToFile(mesh* mesh)
 	memcpy(bookmark, mesh->normals, bytes);
 
 	std::string str = "Library\\Meshes\\";
-	str.append(mesh->name);
+	str.append(mesh->game_object->name);
 	str.append(".edgy");
 
 	FILE* file = fopen(str.data(), "wb");

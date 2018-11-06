@@ -148,9 +148,9 @@ void Camera::ChangeFrustum()
 {
 	//frustum.SetPerspective(DegToRad(horizontal_fov), DegToRad(vertical_fov));
 	//frustum.SetViewPlaneDistances(near_plane_distance, far_plane_distance);
-	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 1000.0f;
+	frustum.nearPlaneDistance = near_plane_distance;
+	frustum.farPlaneDistance =far_plane_distance;
 
-	frustum.verticalFov = DEGTORAD * 90.0f;
+	frustum.verticalFov = DEGTORAD * vertical_fov;
 	frustum.horizontalFov = 2.f * Atan(Tan(frustum.verticalFov*0.5f)*(16.0f / 9.0f));
 }

@@ -7,7 +7,7 @@
 #include "Module.h"
 #include "Globals.h"
 
-struct mesh;
+class Mesh;
 
 class ModuleFileSystem : public Module
 {
@@ -17,7 +17,7 @@ public:
 
 	bool Init(rapidjson::Value& node);
 
-	bool SaveToFile(mesh* mesh);
+	bool SaveToFile(Mesh* mesh);
 	void SaveTexture(std::string& path, std::string& fileName);
 
 	bool LoadFromFile();
