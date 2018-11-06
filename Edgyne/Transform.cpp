@@ -12,6 +12,7 @@ Transform::Transform(GameObject * game_object) : Component(game_object,TRANSFORM
 	scale = { 1,1,1 };
 	rotation = rotation.FromEulerXYZ(0, 0, 0);
 	rotation_euler = { 0,0,0 };
+	previous_rotation_euler = { 0,0,0 };
 }
 
 
@@ -21,7 +22,8 @@ Transform::~Transform()
 
 void Transform::TransformChanged()
 {
-	rotation = rotation.FromEulerXYZ(DEGTORAD*rotation_euler.x, DEGTORAD*rotation_euler.y, DEGTORAD*rotation_euler.z);
+	rotation = rotation.FromEulerXYZ(DEGTORAD*(rotation_euler.x-previous_rotation_euler.x), DEGTORAD*(rotation_euler.y-previous_rotation_euler.y), DEGTORAD*(rotation_euler.z-previous_rotation_euler.z));
+	previous_rotation_euler = rotation_euler;
 }
 
 void Transform::OnEditor()
