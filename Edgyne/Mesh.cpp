@@ -54,8 +54,8 @@ bool Mesh::ComponentDraw()
 		}
 		//--------
 
-		/*else
-			glColor3f(color.x, color.y, color.z);*/
+		else
+			glColor3f(material->color.x, material->color.y, material->color.z);
 
 			//---------
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
@@ -90,6 +90,7 @@ void Mesh::SetBoundingVolume()
 	game_object->aligned_bounding_box.SetNegativeInfinity();
 	game_object->aligned_bounding_box.Enclose((float3*)vertex, num_vertex);
 	game_object->aligned_bounding_box.Translate(game_object->transform->position);
+
 	//for (int i = 0; i < num_vertex*3; i+3)
 	//{
 	//	game_object->bounding_box.Enclose((float3)vertex[i]);
@@ -103,3 +104,5 @@ void Mesh::TransformChanged()
 {
 	SetBoundingVolume();
 }
+
+

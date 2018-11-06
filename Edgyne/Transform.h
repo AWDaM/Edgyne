@@ -22,6 +22,7 @@ public:
 	vec position;
 	Quat rotation;
 	vec rotation_euler;
+	vec previous_rotation_euler;
 	vec scale;
 private:
 
