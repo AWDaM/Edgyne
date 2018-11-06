@@ -15,17 +15,6 @@
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(start_enabled)
 {
 	name = "Camera";
-
-	//CalculateViewMatrix();
-	X = vec(1.0f, 0.0f, 0.0f);
-	Y = vec(0.0f, 1.0f, 0.0f);
-	Z = vec(0.0f, 0.0f, 1.0f);
-	
-	
-	
-	Position = vec(5.0f, 5.0f, 5.0f);
-	Reference = vec(0.0f, 0.0f, 0.0f);	
-
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -123,15 +112,8 @@ update_status ModuleCamera3D::Update(float dt)
 
 			float Sensitivity = 0.25f;
 
-			//editor_camera->Position -= editor_camera->Reference;
-
 			if (dx != 0)
 			{
-				/*float DeltaX = (float)dx * Sensitivity;
-
-				editor_camera->X = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->X, 1.0f));
-				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Y, 1.0f));
-				editor_camera->Z = *(float3*)&(float4x4::RotateAxisAngle(vec(0.0f, 1.0f, 0.0f), DeltaX)*float4(editor_camera->Z, 1.0f));*/
 				Quat rotationX = Quat::RotateY(dx);
 				editor_camera->frustum.front = rotationX.Mul(editor_camera->frustum.front).Normalized();
 				editor_camera->frustum.up = rotationX.Mul(editor_camera->frustum.up).Normalized();
@@ -139,16 +121,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 			if (dy != 0)
 			{
-				/*float DeltaY = (float)dy * Sensitivity;
-
-				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(editor_camera->X, DeltaY)*float4(editor_camera->Y, 1.0f));
-				editor_camera->Y = *(float3*)&(float4x4::RotateAxisAngle(editor_camera->X, DeltaY)*float4(editor_camera->Z, 1.0f));
-
-				if (editor_camera->Y.y < 0.0f)
-				{
-					editor_camera->Z = vec(0.0f, editor_camera->Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-					editor_camera->Y = editor_camera->Z.Cross(editor_camera->X);
-				}*/
 				Quat rotationY = Quat::RotateAxisAngle(editor_camera->frustum.WorldRight(), dy);
 
 				float3 new_up = rotationY.Mul(editor_camera->frustum.up).Normalized();
@@ -159,70 +131,18 @@ update_status ModuleCamera3D::Update(float dt)
 					editor_camera->frustum.front = rotationY.Mul(editor_camera->frustum.front).Normalized();
 				}
 			}
-
-			editor_camera->Position = editor_camera->Reference + editor_camera->Z * editor_camera->Position.Length();
-			editor_camera->Look(editor_camera->Position, { 0,0,0 }, true);
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 		{
-			editor_camera->X = vec(1.0f, 0.0f, 0.0f);
-			editor_camera->Y = vec(0.0f, 1.0f, 0.0f);
-			editor_camera->Z = vec(0.0f, 0.0f, 1.0f);
-
 			editor_camera->Position = vec(5.0f, 5.0f, 5.0f);
 			editor_camera->Reference = { 0,0,0 };
-			editor_camera->Look(editor_camera->Position, editor_camera->Reference);
 		}
 
-		// Recalculate matrix -------------
 
-	//editor_camera->frustum.SetPos()
-	
-	editor_camera->CalculateViewMatrix();
+
 	}
 	return UPDATE_CONTINUE;
-}
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::Look(const vec &Position, const vec &Reference, bool RotateAroundReference)
-{
-	this->Position = Position;
-	this->Reference = Reference;
-
-	Z = (Position - Reference).Normalized();
-	X = vec(0.0f, 1.0f, 0.0f).Cross(Z).Normalized();
-	Y = Z.Cross(X);
-
-	if(!RotateAroundReference)
-	{
-		this->Reference = this->Position;
-		this->Position += Z * 0.05f;
-	}
-
-	CalculateViewMatrix();
-}
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::LookAt( const vec &Spot)
-{
-	Reference = Spot;
-
-	Z = (Position - Reference).Normalized();
-	X = vec(0.0f, 1.0f, 0.0f).Cross(Z).Normalized();
-	Y = Z.Cross(X);
-
-	CalculateViewMatrix();
-}
-
-
-// -----------------------------------------------------------------
-void ModuleCamera3D::Move(const vec &Movement)
-{
-	Position += Movement;
-	Reference += Movement;
-
-	CalculateViewMatrix();
 }
 
 LineSegment ModuleCamera3D::getMouseClickRay()
@@ -234,24 +154,15 @@ LineSegment ModuleCamera3D::getMouseClickRay()
 
 void ModuleCamera3D::CameraAdaptation(vec new_pos, vec new_ref)
 {
-	Position = new_pos;
-	Position += CAMERA_OFFSET*new_pos;
-	Reference = new_ref;
+	editor_camera->Position = new_pos;
+	editor_camera->Position += CAMERA_OFFSET*new_pos;
+	editor_camera->Reference = new_ref;
 
-	Look(Position, Reference);
-	CalculateViewMatrix();
+	editor_camera->LookAt(editor_camera->Reference);
+
 }
 
 
 // -----------------------------------------------------------------
-float* ModuleCamera3D::GetViewMatrix()
-{
-	return &ViewMatrix[0][0];
-}
 
-// -----------------------------------------------------------------
-void ModuleCamera3D::CalculateViewMatrix()
-{
-	ViewMatrix = float4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -X.Dot(Position), -Y.Dot(Position), -Z.Dot(Position), 1.0f);
-	ViewMatrixInverse = ViewMatrix.Inverted();
-}
+

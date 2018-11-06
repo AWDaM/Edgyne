@@ -18,10 +18,6 @@ Camera::~Camera()
 bool Camera::ComponentStart()
 {
 
-	X = vec(1.0f, 0.0f, 0.0f);
-	Y = vec(0.0f, 1.0f, 0.0f);
-	Z = vec(0.0f, 0.0f, 1.0f);
-
 	if (game_object == App->level->root)
 	{
 		Position = vec(-10.0f, 5.0f, 7.0f);
@@ -101,12 +97,6 @@ float * Camera::GetViewMatrix()
 	matrix = frustum.ViewMatrix();
 	matrix.Transpose();
 	return  (float*)matrix.v;
-}
-
-void Camera::CalculateViewMatrix()
-{
-	ViewMatrix = float4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -X.Dot(Position), -Y.Dot(Position), -Z.Dot(Position), 1.0f);
-	ViewMatrixInverse = ViewMatrix.Inverted();
 }
 
 void Camera::TransformChanged()
