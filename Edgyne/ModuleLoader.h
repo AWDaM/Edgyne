@@ -6,11 +6,13 @@
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
-#include "ModuleRenderer3D.h"
 
 //class mesh;
 void AssimpLoggerLoad(const char* message, char* user);
 
+class GameObject;
+class Mesh;
+class Material;
 
 class ModuleLoader : public Module
 {
@@ -32,33 +34,29 @@ public:
 	void ReceivedFile(const char* path);
 
 private:
-	void LoadInfo(mesh* new_mesh, aiMesh* currentMesh,aiNode* node);
-	void LoadVerices(mesh* new_mesh, aiMesh* currentMesh);
-	void LoadColor(mesh* new_mesh, aiMaterial* mat);
-	bool LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene, const std::string& file);
-	void LoadNormals(mesh* new_mesh, aiMesh* currentMesh);
-	void LoadIndices(mesh* new_mesh, aiMesh* currentMesh);
-	void LoadBoundingBox(mesh* new_mesh, aiMesh* currentMesh);
-
-	void LoadMeshesFromFile(mesh* _mesh);
-
-	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file);
-	bool CheckTexturePaths(std::string file, aiString texPath);
-
 	void SaveScene();
-	void SaveMesh(mesh* mesh);
+	void SaveMesh(Mesh* mesh);
 	void SaveMaterial();
 	void LoadScene();
+
+	void LoadInfo(GameObject* game_object, aiMesh* currentMesh,aiNode* node);
+	void LoadVerices(Mesh* new_mesh, aiMesh* currentMesh);
+	void LoadColor(Material* new_mesh, aiMaterial* mat);
+	bool LoadTextures(Mesh* new_mesh,Material* material, aiMesh* currentMesh, const aiScene* scene, const std::string& file);
+	void LoadNormals(Mesh* new_mesh, aiMesh* currentMesh);
+	void LoadIndices(Mesh* new_mesh, aiMesh* currentMesh);
+	void LoadBoundingBox(Mesh* new_mesh, aiMesh* currentMesh);
+
+	void LoadMeshesFromFile(Mesh* _mesh);
+
+	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file, GameObject* parent);
+	bool CheckTexturePaths(std::string file, std::string texPath);
+
 public:
 	//char* assimpLog;
 	//char* user;
 private:
 	struct aiLogStream stream;
-	std::string MeshPath;
-	std::string TexturePath;
-
-
-
 };
 
 #endif // !__MODULE_LOADER_H__

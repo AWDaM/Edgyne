@@ -344,6 +344,26 @@ bool Frustum::Contains(const Polyhedron &polyhedron) const
 	return true;
 }
 
+bool Frustum::ContainsAABBCustom(const AABB & aabb) const
+{
+	vec corners[8];
+	
+	aabb.GetCornerPoints(corners);
+
+	for (int p = 0; p < 6; p++)
+	{
+		int InCount = 8;
+		for (int i = 0; i < 8; i++)
+		{
+			if (GetPlane(p).IsOnPositiveSide(corners[i]))
+				InCount--;
+		}
+		if (InCount == 0)
+			return false;
+	}
+	return true;
+}
+
 float3 Frustum::ClosestPoint(const float3 &point) const
 {
 	return ToPolyhedron().ClosestPointConvex(point);

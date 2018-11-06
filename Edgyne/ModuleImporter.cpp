@@ -51,8 +51,8 @@ void ModuleImporter::LoadAllExtensionsAndPaths(rapidjson::Value & node)
 	strcpy(materialLibraryPath, node["Material Library Path"].GetString());
 }
 
-// Method to save on our own file format. Header reads in order: Vertex - Index - Tex Coords - Normals 
-bool ModuleImporter::SaveToFile(mesh* mesh)
+// Method to save on our own file format. Header reads in order: Vertex - Index - Tex Coords - Normals
+bool ModuleImporter::SaveToFile(Mesh* mesh)
 {
 	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
 
@@ -90,9 +90,11 @@ bool ModuleImporter::SaveToFile(mesh* mesh)
 	bytes = sizeof(float)*mesh->num_vertex * 3;
 	memcpy(bookmark, mesh->normals, bytes);
 
+
 	std::string str = meshLibraryPath;
-	str.append(mesh->name);
+	str.append(mesh->game_object->name);
 	str.append(meshExtension);
+
 
 	FILE* file = fopen(str.data(), "wb");
 	fwrite(data, sizeof(char), fileSize, file);
@@ -215,6 +217,7 @@ void ModuleImporter::CopyDataFromFile(std::string& path)
 	_mesh->normals = new float[_mesh->num_vertex * 3];
 	memcpy(_mesh->normals, bookmark, bytes);
 
+	_mesh->SetBoundingVolume();
 	fclose(file);
 
 

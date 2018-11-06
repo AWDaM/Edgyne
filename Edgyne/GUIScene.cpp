@@ -28,10 +28,11 @@ void GUIScene::Draw()
 		if (ImGui::IsMouseHoveringWindow() && ImGui::IsMouseClicked(0))
 		{
 			App->camera->scene_clicked = true;
-			LOG("clicked");
 		}
 		else
 			App->camera->scene_clicked = false;
+
+		ImGui::SetCursorPos({ -(App->window->window_w - size.x) / 2,-(App->window->window_h - size.y) / 2 });
 		hovered = ImGui::IsMouseHoveringWindow();
 		ImGui::Image((ImTextureID)App->renderer3D->framebuffer_texture, { (float)App->window->window_w,(float)App->window->window_h }, { 0,1 }, { 1,0 });
 		ImGui::EndChild();

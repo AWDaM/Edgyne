@@ -5,8 +5,7 @@
 #include "Component.h"
 
 
-class Camera :
-	public Component
+class Camera : public Component
 {
 public:
 	Camera(GameObject* game_object);
@@ -22,9 +21,9 @@ public:
 
 	float* GetProjectionMatrix();
 	float* GetViewMatrix();
-	void CalculateViewMatrix();
 
 	void TransformChanged();
+	void SetBoundingVolume();
 	void OnEditor();
 
 	void ChangeFrustum();
@@ -35,7 +34,7 @@ private:
 
 public:
 	Frustum frustum;
-	vec X, Y, Z, Position , Reference = { 0,0,0 };
+	vec Position , Reference = { 0,0,0 };
 	float4x4 ViewMatrix, ViewMatrixInverse;
 	float near_plane_distance, far_plane_distance, horizontal_fov, vertical_fov, aspect_ratio;
 

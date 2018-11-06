@@ -6,6 +6,8 @@
 #include "Component.h"
 #include "Globals.h"
 
+class Material;
+
 class Mesh : public Component
 {
 public:
@@ -17,6 +19,7 @@ public:
 	bool ComponentUpdate();
 	bool ComponentDraw();
 	void SetBoundingVolume();
+	void TransformChanged();
 
 private:
 public:
@@ -27,11 +30,15 @@ public:
 	uint num_vertex = 0;
 	float* vertex = nullptr;
 
-	uint id_normals = 0;
 	float* normals = nullptr;
 
 	uint id_texture = 0;
 	float* texCoords = nullptr;
+	bool has_texture_coordinates = false;
+	bool has_triangle_faces = true;
+
+	Material* material = nullptr;
+
 private:
 	
 };

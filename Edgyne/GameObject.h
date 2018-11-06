@@ -45,9 +45,13 @@ public:
 
 	void OnInspector();
 
+	void RecursiveSetChildsActive(bool active);
+
 	Component* AddComponent(ComponentType type);
 	GameObject* AddGameObject(std::string name, bool with_transform = true);
 	void CalcGlobalTransform(const float4x4& parent);
+
+	Component* GetComponent(ComponentType type);
 
 private:
 public:

@@ -3,7 +3,11 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleImporter.h"
 #include "ModuleCamera3D.h"
+#include "ModuleLevel.h"
 #include "GameObject.h"
+#include "Mesh.h"
+#include "Transform.h"
+#include "Material.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
@@ -77,17 +81,14 @@ bool ModuleLoader::CleanUp()
 
 bool ModuleLoader::Import(const std::string & file)
 {
-	MeshPath = file;
-	TexturePath.clear();
-	App->renderer3D->DeleteMesh();
-	App->renderer3D->mesh_list.clear();
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		LOG("-------Loading new mesh--------");
 		aiNode* rootNode = scene->mRootNode;
-		LoadAllNodesMeshes(rootNode, scene, file);
+		GameObject* rootGameObject = App->level->NewGameObject(rootNode->mName.C_Str());
+		LoadAllNodesMeshes(rootNode, scene, file,rootGameObject);
 		
 		LOG("Centering Camera around the model");
 		App->renderer3D->CalculateGlobalBoundingBox();
@@ -95,7 +96,7 @@ bool ModuleLoader::Import(const std::string & file)
 		vec center_point = App->renderer3D->globalBoundingBox.CenterPoint();
 		half_diagonal += App->renderer3D->globalBoundingBox.HalfDiagonal();
 		 
-		App->camera->CameraAdaptation({ half_diagonal.x,half_diagonal.y,half_diagonal.z }, { center_point.x,center_point.y,center_point.z });
+		//App->camera->CameraAdaptation({ half_diagonal.x,half_diagonal.y,half_diagonal.z }, { center_point.x,center_point.y,center_point.z });
 		aiReleaseImport(scene);
 	}
 
@@ -181,15 +182,8 @@ void ModuleLoader::ReceivedFile(const char * path)
 	}
 }
 
-void ModuleLoader::LoadInfo(mesh * new_mesh, aiMesh * currentMesh, aiNode* node)
+void ModuleLoader::LoadInfo(GameObject* game_object, aiMesh * currentMesh, aiNode* node)
 {
-	if (currentMesh->mName.length != NULL)
-	{
-		new_mesh->name = (char*)currentMesh->mName.C_Str();
-	}
-	else
-		new_mesh->name = (char*)"No_name";
-
 
 	aiQuaternion rotation;
 	aiVector3D position, scaling, rotationEuler;
@@ -198,21 +192,22 @@ void ModuleLoader::LoadInfo(mesh * new_mesh, aiMesh * currentMesh, aiNode* node)
 
 	rotationEuler = rotation.GetEuler();
 
-	new_mesh->rotation.x = math::RadToDeg(rotationEuler.x);
-	new_mesh->rotation.y = math::RadToDeg(rotationEuler.y);
-	new_mesh->rotation.z = math::RadToDeg(rotationEuler.z);
-	new_mesh->position.x = position.x;
-	new_mesh->position.y = position.y;
-	new_mesh->position.z = position.z;
-	new_mesh->scale.x = scaling.x;
-	new_mesh->scale.y = scaling.y;
-	new_mesh->scale.z = scaling.z;
+	game_object->transform->rotation.x = math::RadToDeg(rotationEuler.x);
+	game_object->transform->rotation.y = math::RadToDeg(rotationEuler.y);
+	game_object->transform->rotation.z = math::RadToDeg(rotationEuler.z);
+	game_object->transform->position.x = position.x;
+	game_object->transform->position.y = position.y;
+	game_object->transform->position.z = position.z;
+	game_object->transform->scale.x = scaling.x;
+	game_object->transform->scale.y = scaling.y;
+	game_object->transform->scale.z = scaling.z;
 
-	new_mesh->num_faces = currentMesh->mNumFaces;
+	game_object->transform_changed = true;
+	//new_mesh->num_faces = currentMesh->mNumFaces;
 
 }
 
-void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
+void ModuleLoader::LoadVerices(Mesh* new_mesh, aiMesh* currentMesh)
 {
 	new_mesh->num_vertex = currentMesh->mNumVertices;
 	new_mesh->vertex = new float[new_mesh->num_vertex * 3];
@@ -221,21 +216,21 @@ void ModuleLoader::LoadVerices(mesh* new_mesh, aiMesh* currentMesh)
 	LOG("New mesh with %d vertices", new_mesh->num_vertex);
 }
 
-void ModuleLoader::LoadColor(mesh* new_mesh, aiMaterial* mat)
+void ModuleLoader::LoadColor(Material* new_material, aiMaterial* mat)
 {
 	aiColor3D color(1.f, 1.f, 1.f);
 	mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-	new_mesh->color.x = color.r;
-	new_mesh->color.y = color.g;
-	new_mesh->color.z = color.b;
+	new_material->color.x = color.r;
+	new_material->color.y = color.g;
+	new_material->color.z = color.b;
 }
 
-bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiScene* scene, const std::string& file)
+bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* currentMesh, const aiScene* scene, const std::string& file)
 {
 	bool ret = true;
 	if (currentMesh->HasTextureCoords(0))
 	{
-		new_mesh->hasTextCoords = true;
+		new_mesh->has_texture_coordinates = true;
 		new_mesh->texCoords = new float[new_mesh->num_vertex * 2];
 
 		for (int k = 0; k < new_mesh->num_vertex * 2; k += 2)
@@ -256,15 +251,15 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 			float2 imgSize;
 			ilGenImages(1, &imgName);
 			ilBindImage(imgName);
-			if (CheckTexturePaths(file, texPath))
+			if (CheckTexturePaths(file, texPath.C_Str()))
 			{
 				ILinfo imgData;
 				iluGetImageInfo(&imgData);
 				if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
 					iluFlipImage();
 
-				new_mesh->image_size.x = imgData.Width;
-				new_mesh->image_size.y = imgData.Height;
+				_material->img_size.x = imgData.Width;
+				_material->img_size.y = imgData.Height;
 
 				if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 				{
@@ -273,8 +268,8 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 				}
 				else
 				{
-					glGenTextures(1, &new_mesh->id_texture);
-					glBindTexture(GL_TEXTURE_2D, new_mesh->id_texture);
+					glGenTextures(1, &_material->id_texture);
+					glBindTexture(GL_TEXTURE_2D, _material->id_texture);
 
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -302,19 +297,19 @@ bool ModuleLoader::LoadTextures(mesh* new_mesh, aiMesh* currentMesh, const aiSce
 	else
 	{
 		LOG("Item doesn't have texture coordinates");
-		new_mesh->hasTextCoords = false;
+		new_mesh->has_texture_coordinates = false;
 	}
 	return ret;
 }
 
-void ModuleLoader::LoadNormals(mesh* new_mesh, aiMesh* currentMesh)
+void ModuleLoader::LoadNormals(Mesh* new_mesh, aiMesh* currentMesh)
 {
 	new_mesh->normals = new float[new_mesh->num_vertex * 3];
 	memcpy(new_mesh->normals, currentMesh->mNormals, sizeof(float)*new_mesh->num_vertex * 3);
 	LOG("Normals loaded correctly");
 }
 
-void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
+void ModuleLoader::LoadIndices(Mesh* new_mesh, aiMesh* currentMesh)
 {
 	new_mesh->num_index = currentMesh->mNumFaces * 3; // assume each face is a triangle
 	new_mesh->index = new uint[new_mesh->num_index]; 
@@ -324,7 +319,7 @@ void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 		if (currentMesh->mFaces[j].mNumIndices != 3)
 		{
 			LOG("---WARNING--- Geometry face with != 3 indices, Won't be drawn on screen");
-			new_mesh->hasTriangleFaces = false;
+			new_mesh->has_triangle_faces = false;
 			break;
 
 		}
@@ -339,17 +334,17 @@ void ModuleLoader::LoadIndices(mesh* new_mesh, aiMesh* currentMesh)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void ModuleLoader::LoadBoundingBox(mesh * new_mesh, aiMesh * currentMesh)
+void ModuleLoader::LoadBoundingBox(Mesh * new_mesh, aiMesh * currentMesh)
 {
-	
-	AABB bounding_box;
-	bounding_box.SetNegativeInfinity();
-	bounding_box.Enclose((float3*)new_mesh->vertex, currentMesh->mNumVertices);
-	
-	new_mesh->bounding_box = bounding_box;
+	new_mesh->SetBoundingVolume();
+	//AABB bounding_box;
+	//bounding_box.SetNegativeInfinity();
+	//bounding_box.Enclose((float3*)new_mesh->vertex, currentMesh->mNumVertices);
+	//
+	//new_mesh->bounding_box = bounding_box;
 }
 
-void ModuleLoader::LoadMeshesFromFile(mesh* _mesh)
+void ModuleLoader::LoadMeshesFromFile(Mesh* _mesh)
 {
 
 	//Index IDs
@@ -358,76 +353,114 @@ void ModuleLoader::LoadMeshesFromFile(mesh* _mesh)
 
 }
 
-void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file)
+void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file, GameObject* parent)
 {
+	GameObject* local_parent;
+	if (node->mNumMeshes > 0)
+	{
+		local_parent = parent->AddGameObject("Node GameObject");
+	}
+	else
+		local_parent = parent;
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
-		mesh* new_mesh = new mesh();
+		GameObject* game_object;
+		if (node->mName.C_Str() != NULL)
+		{
+			game_object = local_parent->AddGameObject(node->mName.C_Str());
+		}
+		else
+			game_object = local_parent->AddGameObject("Game Object");
+		
 		
 		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
 		LOG("Loading Info for the %i mesh", i + 1);
-		LoadInfo(new_mesh, currentMesh, node);
+		LoadInfo(game_object, currentMesh, node);
 
 		LOG("Loading Vertices from the %i mesh", i + 1);
-		LoadVerices(new_mesh, currentMesh);
+		Mesh* mesh = (Mesh*)game_object->AddComponent(MESH);
+		LoadVerices(mesh, currentMesh);
 
+		Material* material = (Material*)game_object->AddComponent(MATERIAL);
+		mesh->material = material;
 		LOG("Loading Color from the %i mesh", i + 1);
-		LoadColor(new_mesh, scene->mMaterials[currentMesh->mMaterialIndex]);
+		LoadColor(material, scene->mMaterials[currentMesh->mMaterialIndex]);
 
 		LOG("Loading Normals from the %i mesh", i + 1);
 		if (currentMesh->HasNormals())
-			LoadNormals(new_mesh, currentMesh);
+			LoadNormals(mesh, currentMesh);
 
 		LOG("Loading Textures from the %i mesh", i + 1);
 		if (currentMesh->HasTextureCoords(0))
-			LoadTextures(new_mesh, currentMesh, scene, file);
+			LoadTextures(mesh,material, currentMesh, scene, file);
 
 		LOG("Loading Indices from the %i mesh", i + 1);
 		if (currentMesh->HasFaces())
-			LoadIndices(new_mesh, currentMesh);
+			LoadIndices(mesh, currentMesh);
 
 		LOG("Generating BoundingBox for the %i mesh", i + 1);
-		LoadBoundingBox(new_mesh, currentMesh);
+		LoadBoundingBox(mesh, currentMesh);
 
-		App->renderer3D->mesh_list.push_back(new_mesh);
-		App->importer->SaveToFile(new_mesh);
+		SaveMesh(mesh);
+
 	}
 	
 	if (node->mNumChildren > 0)
 	{
 		for (int i = 0; i < node->mNumChildren; i++)
-			LoadAllNodesMeshes(node->mChildren[i], scene, file);
+			LoadAllNodesMeshes(node->mChildren[i], scene, file,local_parent);
 	}
 }
 
-bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
+bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath)
 {
 	bool ret = false;
-	file = file.substr(0,file.find_last_of("\\")+1);
-	file.append(texPath.C_Str());
-	if (ilLoadImage(file.data()))
+	path = path.substr(0, path.find_last_of("\\"));
+	if (texPath.find("\\"))
 	{
-		TexturePath = file;
-		LOG("Texture found at the same file as the object");
-		ret = true;
-	}
-	else
-	{
-		file = App->importer->materialLibraryPath;
-		file.append(texPath.C_Str());
-		if (ilLoadImage(file.data()))
+		texPath.erase(0, texPath.find_first_of("\\"));
+		std::string tmp_path = path;
+		tmp_path.append(texPath.c_str());
+		if (ilLoadImage(tmp_path.data()))
 		{
-			TexturePath = file;
-			LOG("Texture found at the library folder");
+			LOG("Texture found at the expected path");
 			ret = true;
 		}
 		else
 		{
-			file.clear();
-			file.append(texPath.C_Str());
-			if (ilLoadImage(file.data()))
+			texPath.erase(0, texPath.find_last_of("\\"));
+			path.append(texPath.c_str());
+			if (ilLoadImage(path.data()))
 			{
-				TexturePath = file;
+				LOG("Texture found at the same path as the object");
+				ret = true;
+			}
+		}
+	}
+	else
+	{
+		path.append(texPath.c_str());
+		if (ilLoadImage(path.data()))
+		{
+			LOG("Texture found at the expected path");
+			ret = true;
+		}
+	}
+	if(!ret)
+	{
+		path = "Assets/";
+		path.append(texPath.c_str());
+		if (ilLoadImage(path.data()))
+		{
+			LOG("Texture found at the assets folder");
+			ret = true;
+		}
+		else
+		{
+			path.clear();
+			path.append(texPath.c_str());
+			if (ilLoadImage(path.data()))
+			{
 				LOG("Texture found at the source folder");
 				ret = true;
 			}
@@ -440,12 +473,16 @@ void ModuleLoader::SaveScene()
 {
 }
 
-void ModuleLoader::SaveMesh(mesh* mesh)
+void ModuleLoader::SaveMesh(Mesh* mesh)
 {
 	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
-
-	//					RANGES OF DATA					VERTICES							INDICES							TEX COORDS							NORMALS
-	uint fileSize = sizeof(ranges) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index + sizeof(float)*mesh->num_vertex * 2 + sizeof(float)*mesh->num_vertex * 3;
+	uint fileSize;
+	if(mesh->has_texture_coordinates)
+	//					RANGES OF DATA					VERTICES							INDICES						TEX COORDS							NORMALS
+		fileSize = sizeof(ranges) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index + sizeof(float)*mesh->num_vertex * 2 + sizeof(float)*mesh->num_vertex * 3;
+	else
+	//					RANGES OF DATA					VERTICES							INDICES						NORMALS
+		fileSize = sizeof(ranges) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index + sizeof(float)*mesh->num_vertex * 3;
 
 	char* data = new char[fileSize];
 	char* bookmark = data;
@@ -468,19 +505,24 @@ void ModuleLoader::SaveMesh(mesh* mesh)
 
 	bookmark += bytes;
 
-	// Saving the data of the texture coordinates
-	bytes = sizeof(float)*mesh->num_vertex * 2;
-	memcpy(bookmark, mesh->texCoords, bytes);
+	if (mesh->has_texture_coordinates)
+	{
+		// Saving the data of the texture coordinates
+		bytes = sizeof(float)*mesh->num_vertex * 2;
+		memcpy(bookmark, mesh->texCoords, bytes);
 
-	bookmark += bytes;
+		bookmark += bytes;
+	}
 
 	// Saving the data of the normals
 	bytes = sizeof(float)*mesh->num_vertex * 3;
 	memcpy(bookmark, mesh->normals, bytes);
 
-	std::string str = "Library\\Meshes\\";
-	str.append(mesh->name);
-	str.append(".edgy");
+
+	std::string str = App->importer->meshLibraryPath;
+	str.append(mesh->game_object->name);
+	str.append(App->importer->meshExtension);
+
 
 	FILE* file = fopen(str.data(), "wb");
 	fwrite(data, sizeof(char), fileSize, file);
@@ -493,28 +535,8 @@ void ModuleLoader::SaveMaterial()
 
 void ModuleLoader::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
 {
-	rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
-
-	rapidjson::Value obj(rapidjson::kObjectType);
-	obj.AddMember("Mesh Path", (rapidjson::Value::StringRefType)MeshPath.data(), allocator);
-	if(TexturePath.size())
-		obj.AddMember("Texture Path", (rapidjson::Value::StringRefType)TexturePath.data(), allocator);
-	
-	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
-
-	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
 }
 
 void ModuleLoader::Load(rapidjson::Document& doc)
 {
-	rapidjson::Value& node = doc[name.data()];
-
-	MeshPath = node["Mesh Path"].GetString();
-	Import(MeshPath);
-	if (node.HasMember("Texture Path"))
-	{
-		TexturePath = node["Texture Path"].GetString();
-		ImportTexture(TexturePath.data());
-	}
-
 }

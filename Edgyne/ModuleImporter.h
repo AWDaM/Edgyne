@@ -1,13 +1,10 @@
 #ifndef __MODULE_FILE_SYSTEM__
 #define __MODULE_FILE_SYSTEM__
 
-
-
-
 #include "Module.h"
 #include "Globals.h"
 
-struct mesh;
+class Mesh;
 
 class ModuleImporter : public Module
 {
@@ -18,7 +15,7 @@ public:
 	bool Init(rapidjson::Value& node);
 	void LoadAllExtensionsAndPaths(rapidjson::Value& node);
 
-	bool SaveToFile(mesh* mesh);
+	bool SaveToFile(Mesh* mesh);
 	void SaveTexture(std::string& path);
 
 	bool LoadMeshFromFile();

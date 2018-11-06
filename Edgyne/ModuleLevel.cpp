@@ -1,11 +1,14 @@
 #include "Application.h"
 #include "ModuleLevel.h"
+#include "ModuleRenderer3D.h"
 #include "GameObject.h"
+#include "Camera.h"
 #include "ModuleDebug.h"
 
 #include "SDL\include\SDL_opengl.h"
 
 #include "ModuleLoader.h"
+
 
 
 ModuleLevel::ModuleLevel(Application* app, bool start_enabled) : Module(start_enabled)
@@ -45,9 +48,9 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 bool ModuleLevel::Start()
 {
 	//App->loader->ReceivedFile("Assets\\BakerHouse\\BakerHouse.FBX");
-	/*GameObject* camera = NewGameObject("Camera");
-	camera->AddComponent(CAMERA);
-	camera->tag = MAIN_CAMERA;*/
+	GameObject* camera = NewGameObject("Camera");
+	game_camera = (Camera*)camera->AddComponent(CAMERA);
+	camera->tag = MAIN_CAMERA;
 		
 		return true;
 }
@@ -85,11 +88,23 @@ void ModuleLevel::Draw()
 	{
 		if ((*item)->active)
 		{
-			(*item)->Draw();
-			if ((*item)->tag == MAIN_CAMERA)
+			if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box)&& App->renderer3D->camera_culling)
 			{
-				App->debug->Draw_Camera((Camera*)(*item)->components[1]);
+				(*item)->Draw();
 			}
+	
+			else if (!App->renderer3D->camera_culling)
+			{
+				(*item)->Draw();
+			}
+
+			if (selected_game_object)
+			{
+				App->debug->Draw_AABB(selected_game_object->aligned_bounding_box);
+			}
+
+		App->debug->Draw_Camera(game_camera);
+
 		}
 		item++;
 	}
