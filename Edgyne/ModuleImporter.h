@@ -9,18 +9,19 @@
 
 struct mesh;
 
-class ModuleFileSystem : public Module
+class ModuleImporter : public Module
 {
 public:
-	ModuleFileSystem(Application* app, bool start_enabled = true);
-	~ModuleFileSystem();
+	ModuleImporter(Application* app, bool start_enabled = true);
+	~ModuleImporter();
 
 	bool Init(rapidjson::Value& node);
+	void LoadAllExtensionsAndPaths(rapidjson::Value& node);
 
 	bool SaveToFile(mesh* mesh);
-	void SaveTexture(std::string& path, std::string& fileName);
+	void SaveTexture(std::string& path);
 
-	bool LoadFromFile();
+	bool LoadMeshFromFile();
 
 	void CopyDataFromFile(std::string& path);
 
@@ -28,8 +29,10 @@ public:
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
 	void Load(rapidjson::Document& doc);
 public:
-	char* fileExtension = ".edgy";
-	char* libraryPath = "Library\\";
+	char* meshExtension = nullptr;
+	char* meshLibraryPath = nullptr;
+	char* materialExtension = nullptr;
+	char* materialLibraryPath = nullptr;
 };
 
 #endif // !__MODULE_FILE_SYSTEM__

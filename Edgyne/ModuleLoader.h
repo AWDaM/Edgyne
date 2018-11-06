@@ -20,7 +20,6 @@ public:
 
 	bool Init(rapidjson::Value& node);
 
-
 	update_status Update(float dt);
 	bool CleanUp();
 	void Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os);
@@ -45,6 +44,11 @@ private:
 
 	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file);
 	bool CheckTexturePaths(std::string file, aiString texPath);
+
+	void SaveScene();
+	void SaveMesh(mesh* mesh);
+	void SaveMaterial();
+	void LoadScene();
 public:
 	//char* assimpLog;
 	//char* user;
@@ -52,6 +56,8 @@ private:
 	struct aiLogStream stream;
 	std::string MeshPath;
 	std::string TexturePath;
+
+
 
 };
 

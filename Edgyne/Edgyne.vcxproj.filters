@@ -360,9 +360,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Sources\GameObject\Component</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleFileSystem.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="QuadTreeChechu.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
@@ -374,6 +371,9 @@
     </ClInclude>
     <ClInclude Include="QuadTreeLorien.h">
       <Filter>Sources\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleImporter.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -587,9 +587,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Sources\GameObject\Component</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleFileSystem.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="GUIHierarchy.cpp">
       <Filter>Sources\GUI</Filter>
     </ClCompile>
@@ -598,6 +595,9 @@
     </ClCompile>
     <ClCompile Include="QuadTreeLorien.cpp">
       <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleImporter.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -624,6 +624,9 @@
     </None>
     <None Include="MathGeoLib\Math\Matrix.inl">
       <Filter>Sources\MathGeoLib\Math</Filter>
+    </None>
+    <None Include="Game\config.json">
+      <Filter>Sources\Modules</Filter>
     </None>
   </ItemGroup>
 </Project>

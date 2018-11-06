@@ -17,8 +17,11 @@
   },
   "Input": {
   },
-  "FileSystem": {
-    "File Extension":  ".edgy"
+  "Importer": {
+    "Mesh Extension": ".edgymesh",
+    "Material Extension": ".dds",
+    "Mesh Library Path": "Library\\Meshes\\",
+    "Material Library Path": "Library\\Materials\\"
   },
   "ImGui": {
   },
@@ -27,6 +30,7 @@
   "Debug": {
   },
   "Loader": {
+
   },
   "Render3D": {
     "VSync": true

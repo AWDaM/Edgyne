@@ -33,6 +33,9 @@ public:
 	void Draw_Cube_Vertex();
 	void Draw_Cube_Indices();
 
+	void Draw_Quadtree();
+	void Draw_Quadtree_node();
+
 	void Draw_Camera(Camera* camera);
 
 	void Vertex_Array_Cube();

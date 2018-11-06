@@ -1,4 +1,4 @@
-#include "ModuleFileSystem.h"
+#include "ModuleImporter.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleLevel.h"
 #include "Application.h"
@@ -11,28 +11,48 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "DevIL\include\ilu.h"
+#include "DevIL\include\ilut.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "GL/lib/glew32.lib")
 
-ModuleFileSystem::ModuleFileSystem(Application* app, bool start_enabled) : Module(start_enabled)
+ModuleImporter::ModuleImporter(Application* app, bool start_enabled) : Module(start_enabled)
 {
-	name = "FileSystem";
+	name = "Importer";
 }
 
 
-ModuleFileSystem::~ModuleFileSystem()
+ModuleImporter::~ModuleImporter()
 {
 }
-bool ModuleFileSystem::Init(rapidjson::Value& node)
+bool ModuleImporter::Init(rapidjson::Value& node)
 {
+	LoadAllExtensionsAndPaths(node);
+
 	return true;
 }
 
+void ModuleImporter::LoadAllExtensionsAndPaths(rapidjson::Value & node)
+{
+	//Extensions
+	meshExtension = new char[node["Mesh Extension"].GetStringLength()];
+	strcpy(meshExtension, node["Mesh Extension"].GetString());
+
+	materialExtension = new char[node["Material Extension"].GetStringLength()];
+	strcpy(materialExtension, node["Material Extension"].GetString());
+
+	//Paths
+	meshLibraryPath = new char[node["Mesh Library Path"].GetStringLength()];
+	strcpy(meshLibraryPath, node["Mesh Library Path"].GetString());
+
+	materialLibraryPath = new char[node["Material Library Path"].GetStringLength()];
+	strcpy(materialLibraryPath, node["Material Library Path"].GetString());
+}
 
 // Method to save on our own file format. Header reads in order: Vertex - Index - Tex Coords - Normals 
-bool ModuleFileSystem::SaveToFile(mesh* mesh)
+bool ModuleImporter::SaveToFile(mesh* mesh)
 {
 	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
 
@@ -70,51 +90,71 @@ bool ModuleFileSystem::SaveToFile(mesh* mesh)
 	bytes = sizeof(float)*mesh->num_vertex * 3;
 	memcpy(bookmark, mesh->normals, bytes);
 
-	std::string str = "Library\\Meshes\\";
+	std::string str = meshLibraryPath;
 	str.append(mesh->name);
-	str.append(".edgy");
+	str.append(meshExtension);
 
 	FILE* file = fopen(str.data(), "wb");
 	fwrite(data, sizeof(char), fileSize, file);
 	fclose(file);
 
-
-
 	return true;
 }
 
-void ModuleFileSystem::SaveTexture(std::string& path, std::string& fileName) {}
-//{
-//	ILuint size;
-//	ILubyte* data;
-//
-//	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
-//
-//	size = ilSaveL(IL_DDS, NULL, 0);
-//	if (size > 0)
-//	{
-//		data = new ILubyte[size];
-//		if (ilSaveL(IL_DDS, data, 0))
-//		{
-//
-//		}
-//	}
-//
-//	std::string result = path;
-//	result.append("edgytexture_");
-//	result.append(fileName);
-//	result.append(".dds");
-//
-//}
-
-bool ModuleFileSystem::LoadFromFile()
+void ModuleImporter::SaveTexture(std::string& path)
 {
-	std::string str = "Library\\Meshes\\";
+	std::string fileName = path;
+	fileName = fileName.erase(0, fileName.find_last_of("\\")+1);
+	fileName = fileName.substr(0, fileName.find("."));
 
 
+	FILE* file = fopen(path.c_str(), "rb");
+
+	char* buffer = nullptr;
+	int size = 0;
+	if (file != NULL)
+	{
+		fseek(file, 0, SEEK_END);
+		size = ftell(file);
+		rewind(file);
+		buffer = new char[size];
+		fread(buffer, 1, size, file);
+	}
+
+	ILuint img = ilGenImage();
+	ilBindImage(img);
+
+	if (ilLoadL(IL_TYPE_UNKNOWN, (const void*)buffer, size))
+	{
+		ILuint ilSize;
+		ILubyte* data;
+
+		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+
+		ilSize = ilSaveL(IL_DDS, NULL, 0);
+		if (ilSize > 0)
+		{
+			data = new ILubyte[ilSize];
+			if (ilSaveL(IL_DDS, data, ilSize))
+			{
+				std::string currMaterialPath = materialLibraryPath;
+				currMaterialPath.append(fileName);
+				currMaterialPath.append(materialExtension);
+
+
+				FILE* file = fopen(currMaterialPath.data(), "wb");
+				fwrite(data, sizeof(char), ilSize, file);
+				fclose(file);
+			}
+		}
+	}
+}
+
+bool ModuleImporter::LoadMeshFromFile()
+{
 	const std::experimental::filesystem::directory_iterator end{};
 
-	for (std::experimental::filesystem::directory_iterator iter{ str.data() }; iter != end; ++iter)
+	for (std::experimental::filesystem::directory_iterator iter{ meshLibraryPath }; iter != end; ++iter)
 	{
 		if (std::experimental::filesystem::is_regular_file(*iter))
 			CopyDataFromFile(iter->path().string());
@@ -123,7 +163,7 @@ bool ModuleFileSystem::LoadFromFile()
 	return true;
 }
 
-void ModuleFileSystem::CopyDataFromFile(std::string& path)
+void ModuleImporter::CopyDataFromFile(std::string& path)
 {
 	FILE* file = fopen(path.data(), "rb");
 	char* buffer;
@@ -143,8 +183,8 @@ void ModuleFileSystem::CopyDataFromFile(std::string& path)
 	memcpy(ranges, bookmark, bytes);
 
 
-	path = path.erase(0, sizeof("Library\\Meshes\\")-1);
-	GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(".edgy")).data());
+	path = path.erase(0, sizeof(meshLibraryPath)-1);
+	GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
 	
 	Mesh* _mesh = (Mesh*)game_object->AddComponent(MESH);
 
@@ -182,15 +222,12 @@ void ModuleFileSystem::CopyDataFromFile(std::string& path)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->id_index);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * _mesh->num_index, &_mesh->index[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	
-	//App->renderer3D->mesh_list.push_back(_mesh);
 }
 
-void ModuleFileSystem::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
+void ModuleImporter::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
 {
 }
 
-void ModuleFileSystem::Load(rapidjson::Document& doc)
+void ModuleImporter::Load(rapidjson::Document& doc)
 {
 }

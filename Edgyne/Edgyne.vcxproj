@@ -88,7 +88,6 @@
     <ClInclude Include="GUIElements.h" />
     <ClInclude Include="GUIHierarchy.h" />
     <ClInclude Include="GUIInspector.h" />
-    <ClInclude Include="GUIQuadTreeMap.h" />
     <ClInclude Include="GUIRandomNumberTest.h" />
     <ClInclude Include="GUIScene.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -169,7 +168,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleDebug.h" />
-    <ClInclude Include="ModuleFileSystem.h" />
+    <ClInclude Include="ModuleImporter.h" />
     <ClInclude Include="ModuleImGui.h" />
     <ClInclude Include="ModuleLevel.h" />
     <ClInclude Include="ModuleLoader.h" />
@@ -197,7 +196,6 @@
     <ClCompile Include="GUIElements.cpp" />
     <ClCompile Include="GUIHierarchy.cpp" />
     <ClCompile Include="GUIInspector.cpp" />
-    <ClCompile Include="GUIQuadTreeMap.cpp" />
     <ClCompile Include="GUIRandomNumberTest.cpp" />
     <ClCompile Include="GUIScene.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -249,7 +247,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleDebug.cpp" />
-    <ClCompile Include="ModuleFileSystem.cpp" />
+    <ClCompile Include="ModuleImporter.cpp" />
     <ClCompile Include="ModuleImGui.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleLevel.cpp" />
@@ -262,6 +260,7 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Game\config.json" />
     <None Include="MathGeoLib\emscripten\library_system.js" />
     <None Include="MathGeoLib\Geometry\KDTree.inl" />
     <None Include="MathGeoLib\Geometry\QuadTree.inl" />

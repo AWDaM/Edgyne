@@ -28,7 +28,7 @@ class ModuleImGui;
 class ModuleLevel;
 class ModuleDebug;
 class ModuleLoader;
-class ModuleFileSystem;
+class ModuleImporter;
 
 class Application
 {
@@ -41,7 +41,7 @@ public:
 	ModuleLevel* level;
 	ModuleDebug* debug;
 	ModuleLoader* loader;
-	ModuleFileSystem* fileSystem;
+	ModuleImporter* importer;
 
 	std::list<Module*> list_modules;
 

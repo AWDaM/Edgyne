@@ -7,7 +7,7 @@
 #include "ModuleLevel.h"
 #include "ModuleDebug.h"
 #include "ModuleLoader.h"
-#include "ModuleFileSystem.h"
+#include "ModuleImporter.h"
 #include "p2Defs.h"
 
 #include "rapidjson/filereadstream.h"
@@ -23,7 +23,7 @@ Application::Application()
 	level = new ModuleLevel(this);
 	debug = new ModuleDebug(this);
 	loader = new ModuleLoader(this);
-	fileSystem = new ModuleFileSystem(this);
+	importer = new ModuleImporter(this);
 
 	framerate = 1000 / 60;
 	
@@ -43,7 +43,7 @@ Application::Application()
 	AddModule(level);
 	AddModule(debug);
 	AddModule(loader);
-	AddModule(fileSystem);
+	AddModule(importer);
 	AddModule(camera);
 	// Scenes
 
@@ -353,7 +353,7 @@ void Application::LoadData()
 {
 	rapidjson::Document saveFile;
 
-	App->fileSystem->LoadFromFile();
+	App->importer->LoadMeshFromFile();
 
 	FILE* file = fopen("save.json", "rb");
 	if (file)

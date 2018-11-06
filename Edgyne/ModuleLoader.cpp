@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "ModuleLoader.h"
 #include "ModuleRenderer3D.h"
-#include "ModuleFileSystem.h"
+#include "ModuleImporter.h"
 #include "ModuleCamera3D.h"
 #include "GameObject.h"
 #include "Assimp\include\cimport.h"
@@ -45,6 +45,7 @@ ModuleLoader::~ModuleLoader()
 
 bool ModuleLoader::Init(rapidjson::Value& node)
 {
+
 	ilInit();
 	iluInit();
 	ilutRenderer(ILUT_OPENGL);
@@ -55,6 +56,8 @@ bool ModuleLoader::Init(rapidjson::Value& node)
 
 	return true;
 }
+
+
 
 
 update_status ModuleLoader::Update(float dt)
@@ -104,12 +107,15 @@ bool ModuleLoader::Import(const std::string & file)
 
 bool ModuleLoader::ImportTexture(const char* path)
 {
-	TexturePath = path;
 	bool ret = true;
-	ILuint imgName;
+
+
+	App->importer->SaveTexture((std::string)path);
+
 	float2 imgSize;
-	ilGenImages(1, &imgName);
-	ilBindImage(imgName);
+	ILuint img = ilGenImage();
+	ilBindImage(img);
+
 	uint dropped_texture = 0;
 	if (ilLoadImage(path))
 	{
@@ -146,7 +152,8 @@ bool ModuleLoader::ImportTexture(const char* path)
 	{
 		ret = false;
 	}
-	ilDeleteImage(imgName);
+
+	ilDeleteImage(img);
 
 	std::list<mesh*>::iterator item = App->renderer3D->mesh_list.begin();
 
@@ -375,7 +382,6 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		if (currentMesh->HasTextureCoords(0))
 			LoadTextures(new_mesh, currentMesh, scene, file);
 
-
 		LOG("Loading Indices from the %i mesh", i + 1);
 		if (currentMesh->HasFaces())
 			LoadIndices(new_mesh, currentMesh);
@@ -384,7 +390,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		LoadBoundingBox(new_mesh, currentMesh);
 
 		App->renderer3D->mesh_list.push_back(new_mesh);
-		App->fileSystem->SaveToFile(new_mesh);
+		App->importer->SaveToFile(new_mesh);
 	}
 	
 	if (node->mNumChildren > 0)
@@ -407,7 +413,7 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 	}
 	else
 	{
-		file = "Assets/";
+		file = App->importer->materialLibraryPath;
 		file.append(texPath.C_Str());
 		if (ilLoadImage(file.data()))
 		{
@@ -428,6 +434,61 @@ bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
 		}
 	}
 	return ret;
+}
+
+void ModuleLoader::SaveScene()
+{
+}
+
+void ModuleLoader::SaveMesh(mesh* mesh)
+{
+	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
+
+	//					RANGES OF DATA					VERTICES							INDICES							TEX COORDS							NORMALS
+	uint fileSize = sizeof(ranges) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index + sizeof(float)*mesh->num_vertex * 2 + sizeof(float)*mesh->num_vertex * 3;
+
+	char* data = new char[fileSize];
+	char* bookmark = data;
+
+	// Saving the ranges of each of the components
+	uint bytes = sizeof(ranges);
+	memcpy(bookmark, ranges, bytes);
+
+	bookmark += bytes;
+
+	// Saving the data of the vertices
+	bytes = sizeof(float)*mesh->num_vertex * 3;
+	memcpy(bookmark, mesh->vertex, bytes);
+
+	bookmark += bytes;
+
+	// Saving the data of the indices
+	bytes = sizeof(uint)*mesh->num_index;
+	memcpy(bookmark, mesh->index, bytes);
+
+	bookmark += bytes;
+
+	// Saving the data of the texture coordinates
+	bytes = sizeof(float)*mesh->num_vertex * 2;
+	memcpy(bookmark, mesh->texCoords, bytes);
+
+	bookmark += bytes;
+
+	// Saving the data of the normals
+	bytes = sizeof(float)*mesh->num_vertex * 3;
+	memcpy(bookmark, mesh->normals, bytes);
+
+	std::string str = "Library\\Meshes\\";
+	str.append(mesh->name);
+	str.append(".edgy");
+
+	FILE* file = fopen(str.data(), "wb");
+	fwrite(data, sizeof(char), fileSize, file);
+	fclose(file);
+}
+
+void ModuleLoader::SaveMaterial()
+{
 }
 
 void ModuleLoader::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
