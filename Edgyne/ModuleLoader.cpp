@@ -247,7 +247,7 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 			float2 imgSize;
 			ilGenImages(1, &imgName);
 			ilBindImage(imgName);
-			if (CheckTexturePaths(file, texPath))
+			if (CheckTexturePaths(file, texPath.C_Str()))
 			{
 				ILinfo imgData;
 				iluGetImageInfo(&imgData);
@@ -408,34 +408,60 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 	}
 }
 
-bool ModuleLoader::CheckTexturePaths(std::string file, aiString texPath)
+bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath)
 {
 	bool ret = false;
-	file = file.substr(0,file.find_last_of("\\")+1);
-	file.append(texPath.C_Str());
-	if (ilLoadImage(file.data()))
+	path = path.substr(0, path.find_last_of("\\"));
+	if (texPath.find("\\"))
 	{
-		TexturePath = file;
-		LOG("Texture found at the same file as the object");
-		ret = true;
-	}
-	else
-	{
-		file = "Assets/";
-		file.append(texPath.C_Str());
-		if (ilLoadImage(file.data()))
+		texPath.erase(0, texPath.find_first_of("\\"));
+		std::string tmp_path = path;
+		tmp_path.append(texPath.c_str());
+		if (ilLoadImage(tmp_path.data()))
 		{
-			TexturePath = file;
-			LOG("Texture found at the library folder");
+			TexturePath = tmp_path;
+			LOG("Texture found at the expected path");
 			ret = true;
 		}
 		else
 		{
-			file.clear();
-			file.append(texPath.C_Str());
-			if (ilLoadImage(file.data()))
+			texPath.erase(0, texPath.find_last_of("\\"));
+			path.append(texPath.c_str());
+			if (ilLoadImage(path.data()))
 			{
-				TexturePath = file;
+				TexturePath = path;
+				LOG("Texture found at the same path as the object");
+				ret = true;
+			}
+		}
+	}
+	else
+	{
+		path.append(texPath.c_str());
+		if (ilLoadImage(path.data()))
+		{
+			TexturePath = path;
+			LOG("Texture found at the expected path");
+			ret = true;
+		}
+	}
+	if(!ret)
+	{
+		path = "Assets/";
+		path.append(texPath.c_str());
+		if (ilLoadImage(path.data()))
+		{
+			TexturePath = path;
+			LOG("Texture found at the assets folder");
+			ret = true;
+		}
+		else
+		{
+			path.clear();
+			path.append(texPath.c_str());
+			if (ilLoadImage(path.data()))
+			{
+				TexturePath = path;
 				LOG("Texture found at the source folder");
 				ret = true;
 			}

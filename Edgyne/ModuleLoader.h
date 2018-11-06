@@ -46,7 +46,7 @@ private:
 	void LoadMeshesFromFile(Mesh* _mesh);
 
 	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file, GameObject* parent);
-	bool CheckTexturePaths(std::string file, aiString texPath);
+	bool CheckTexturePaths(std::string file, std::string texPath);
 public:
 	//char* assimpLog;
 	//char* user;
