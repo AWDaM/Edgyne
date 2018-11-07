@@ -93,7 +93,7 @@ bool GameObject::CleanUpComopnents()
 
 void GameObject::OnHierarchy(int id)
 {
-	std::vector<GameObject*>::iterator item = childs.begin();
+	std::list<GameObject*>::iterator item = childs.begin();
 	while (item != childs.end())
 	{
 		if (!(*item)->active)
@@ -126,7 +126,7 @@ void GameObject::OnInspector()
 void GameObject::RecursiveSetChildsActive(bool _active)
 {
 	active = _active;
-	std::vector<GameObject*>::iterator item = childs.begin();
+	std::list<GameObject*>::iterator item = childs.begin();
 
 	while (item != childs.end())
 	{
@@ -180,13 +180,82 @@ void GameObject::CalcGlobalTransform(const float4x4 & parent)
 {
 	global_transform_matrix = parent * float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
 
-	std::vector<GameObject*>::iterator item = childs.begin();
+	std::list<GameObject*>::iterator item = childs.begin();
 
 	while (item != childs.end())
 	{
 		(*item)->CalcGlobalTransform(global_transform_matrix);
 		item++;
 	}
+}
+
+void GameObject::RecursiveSetToDelete()
+{
+	to_remove = true;
+
+	std::list<GameObject*>::iterator item = childs.begin();
+
+	while (item != childs.end())
+	{
+		(*item)->RecursiveSetToDelete();
+		item++;
+	}
+}
+
+void GameObject::RemoveSelfFromParent()
+{
+	std::list<GameObject*>::iterator self_item = parent->childs.begin();
+
+	while (self_item != parent->childs.end())
+	{
+		if ((*self_item) == this)
+		{
+			parent->childs.erase(self_item);
+			break;
+		}
+		self_item++;
+	}
+}
+
+void GameObject::RecursiveDeleteGameObject()
+{
+	std::vector<Component*>::iterator item = components.begin();
+
+	while (item != components.end())
+	{
+		(*item)->ComponentCleanUp();
+		RELEASE((*item));
+		item = components.erase(item);
+	}
+
+	std::list<GameObject*>::iterator g_item = childs.begin();
+
+	while (g_item != childs.end() || childs.size()>0)
+	{
+		(*g_item)->RecursiveDeleteGameObject();
+		RELEASE(*g_item);
+		g_item = childs.erase(g_item);
+	}
+
+	if (App->level->selected_game_object = this)
+	{
+		App->level->selected_game_object = nullptr;
+	}
+
+	std::list<GameObject*>::iterator _item = App->level->game_objects.begin();
+
+	while (_item != App->level->game_objects.end())
+	{
+		if ((*_item) == this)
+		{
+			App->level->game_objects.erase(_item);
+			break;
+		}
+		_item++;
+	}
+
+
+
 }
 
 Component * GameObject::GetComponent(ComponentType type)

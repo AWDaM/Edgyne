@@ -6,6 +6,7 @@
 #include "MathGeoLib/MathGeoLib.h"
 
 #include <vector>
+#include <list>
 
 enum ComponentType
 {
@@ -50,7 +51,9 @@ public:
 	Component* AddComponent(ComponentType type);
 	GameObject* AddGameObject(std::string name, bool with_transform = true);
 	void CalcGlobalTransform(const float4x4& parent);
-
+	void RecursiveSetToDelete();
+	void RemoveSelfFromParent();
+	void RecursiveDeleteGameObject();
 	Component* GetComponent(ComponentType type);
 
 private:
@@ -68,9 +71,9 @@ public:
 	Transform* transform = nullptr;
 	float4x4 global_transform_matrix;
 	bool transform_changed = false;
-
+	bool to_remove = false;
 private:
-	std::vector<GameObject*> childs;
+	std::list<GameObject*> childs;
 
 };
 

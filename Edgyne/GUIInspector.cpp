@@ -84,6 +84,7 @@ void GUIInspector::Draw()
 			}
 			ImGui::SameLine();
 			ImGui::Checkbox("Static", &App->level->selected_game_object->Static);
+			ImGui::Checkbox("Delete", &App->level->selected_game_object->to_remove);
 
 			std::vector<Component*>::iterator item = App->level->selected_game_object->components.begin();
 

@@ -19,6 +19,7 @@ public:
 	bool Init(rapidjson::Value& node);
 	bool Start();
 
+	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	GameObject* NewGameObject(std::string name, bool with_transform = true);
 	
@@ -26,7 +27,7 @@ public:
 private:
 public:
 	QuadTreeChechu quadTree;
-	std::vector<GameObject*> game_objects;
+	std::list<GameObject*> game_objects;
 	GameObject* root = nullptr;
 	Camera* game_camera = nullptr;
 	GameObject* selected_game_object = nullptr;

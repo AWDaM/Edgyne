@@ -346,22 +346,27 @@ bool Frustum::Contains(const Polyhedron &polyhedron) const
 
 bool Frustum::ContainsAABBCustom(const AABB & aabb) const
 {
-	vec corners[8];
-	
-	aabb.GetCornerPoints(corners);
-
-	for (int p = 0; p < 6; p++)
+	if (aabb.IsFinite())
 	{
-		int InCount = 8;
-		for (int i = 0; i < 8; i++)
+		vec corners[8];
+
+		aabb.GetCornerPoints(corners);
+
+		for (int p = 0; p < 6; p++)
 		{
-			if (GetPlane(p).IsOnPositiveSide(corners[i]))
-				InCount--;
+			int InCount = 8;
+			for (int i = 0; i < 8; i++)
+			{
+				if (GetPlane(p).IsOnPositiveSide(corners[i]))
+					InCount--;
+			}
+			if (InCount == 0)
+				return false;
 		}
-		if (InCount == 0)
-			return false;
+		return true;
 	}
-	return true;
+	else
+		return true;
 }
 
 float3 Frustum::ClosestPoint(const float3 &point) const
