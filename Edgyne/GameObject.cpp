@@ -45,7 +45,7 @@ bool GameObject::Draw()
 	glPushMatrix();
 	glMultMatrixf(global_transform_matrix.Transposed().ptr());
 	std::vector<Component*>::iterator item = components.begin();
-	
+
 	while (item != components.end())
 	{
 		(*item)->ComponentDraw();
@@ -98,13 +98,17 @@ void GameObject::OnHierarchy(int id)
 	{
 		if (!(*item)->active)
 		{
-			ImGui::PushStyleColor(1, { 128,128,128,128 });
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f,0.5f,0.5f,0.5f });
+		}
+		if ((*item) == App->level->selected_game_object)
+		{
+			ImGui::PushStyleColor(ImGuiCol_Text, { 0.0f,1.0f,0.0f,1.0f });
 		}
 		id++;
 		ImGui::PushID(id);
 		if (ImGui::TreeNode((*item)->name.c_str()))
 		{
-			if(ImGui::IsItemClicked())
+			if (ImGui::IsItemClicked())
 				App->level->selected_game_object = (*item);
 
 			(*item)->OnHierarchy(id);
@@ -115,6 +119,10 @@ void GameObject::OnHierarchy(int id)
 		{
 			ImGui::PopStyleColor();
 		}
+		if ((*item) == App->level->selected_game_object)
+		{
+			ImGui::PopStyleColor();
+		}	
 		item++;
 	}
 }
