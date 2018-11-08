@@ -204,18 +204,6 @@ void GameObject::CalcGlobalTransform(const float4x4 & parent)
 	}
 }
 
-void GameObject::RecursiveSetToDelete()
-{
-	to_remove = true;
-
-	std::list<GameObject*>::iterator item = childs.begin();
-
-	while (item != childs.end())
-	{
-		(*item)->RecursiveSetToDelete();
-		item++;
-	}
-}
 
 void GameObject::RemoveSelfFromParent()
 {

@@ -51,7 +51,6 @@ public:
 	Component* AddComponent(ComponentType type);
 	GameObject* AddGameObject(std::string name, bool with_transform = true);
 	void CalcGlobalTransform(const float4x4& parent);
-	void RecursiveSetToDelete();
 	void RemoveSelfFromParent();
 	void RecursiveDeleteGameObject();
 	Component* GetComponent(ComponentType type);
