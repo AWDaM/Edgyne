@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <string>
+#include <list>
 
 enum ComponentType
 {
@@ -57,7 +58,9 @@ public:
 	Component* AddComponent(ComponentType type);
 	GameObject* AddGameObject(std::string name, bool with_transform = true);
 	void CalcGlobalTransform(const float4x4& parent);
-
+	void RecursiveSetToDelete();
+	void RemoveSelfFromParent();
+	void RecursiveDeleteGameObject();
 	Component* GetComponent(ComponentType type);
 
 private:
@@ -78,9 +81,10 @@ public:
 	uint UID = 0;
 	uint parentUID = 0;
 	std::vector<uint> childrenUID;
+	bool to_remove = false;
 
 private:
-	std::vector<GameObject*> childs;
+	std::list<GameObject*> childs;
 
 };
 

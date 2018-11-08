@@ -58,9 +58,29 @@ bool ModuleLevel::Start()
 }
 
 
+update_status ModuleLevel::PreUpdate(float dt)
+{
+	std::list<GameObject*>::iterator item = game_objects.begin();
+
+	while (item != game_objects.end())
+	{
+
+		if ((*item)->to_remove)
+		{
+			(*item)->RemoveSelfFromParent();
+			(*item)->RecursiveDeleteGameObject();
+			item = game_objects.begin();
+		}
+		else
+			item++;
+
+	}
+	return UPDATE_CONTINUE;
+}
+
 update_status ModuleLevel::Update(float dt)
 {
-	std::vector<GameObject*>::iterator item = game_objects.begin();
+	std::list<GameObject*>::iterator item = game_objects.begin();
 
 	while (item != game_objects.end())
 	{
@@ -84,14 +104,13 @@ GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 {
 	GameObject* ret = root->AddGameObject(name, with_transform);
 
-	game_objects.push_back(ret);
 	return ret;
 }
 
 void ModuleLevel::Draw()
 {
 	root->CalcGlobalTransform(root->global_transform_matrix);
-	std::vector<GameObject*>::iterator item = game_objects.begin();
+	std::list<GameObject*>::iterator item = game_objects.begin();
 
 	while (item != game_objects.end())
 	{
@@ -112,7 +131,8 @@ void ModuleLevel::Draw()
 				App->debug->Draw_AABB(selected_game_object->aligned_bounding_box);
 			}
 
-		App->debug->Draw_Camera(game_camera);
+		if(game_camera)
+			App->debug->Draw_Camera(game_camera);
 
 		}
 		item++;

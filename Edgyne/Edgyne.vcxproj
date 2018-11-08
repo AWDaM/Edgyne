@@ -83,6 +83,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GUIAbout.h" />
+    <ClInclude Include="GUIAssets.h" />
     <ClInclude Include="GUIConfiguration.h" />
     <ClInclude Include="GUIConsole.h" />
     <ClInclude Include="GUIElements.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="GUIAbout.cpp" />
+    <ClCompile Include="GUIAssets.cpp" />
     <ClCompile Include="GUIConfiguration.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
     <ClCompile Include="GUIElements.cpp" />
