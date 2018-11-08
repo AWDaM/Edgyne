@@ -48,9 +48,9 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 bool ModuleLevel::Start()
 {
 	//App->loader->ReceivedFile("Assets\\BakerHouse\\BakerHouse.FBX");
-	//GameObject* camera = NewGameObject("Camera");
-	//game_camera = (Camera*)camera->AddComponent(CAMERA);
-	//camera->tag = MAIN_CAMERA;
+	GameObject* camera = NewGameObject("Camera");
+	game_camera = (Camera*)camera->AddComponent(CAMERA);
+	camera->tag = MAIN_CAMERA;
 		
 		return true;
 }

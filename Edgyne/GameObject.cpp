@@ -96,33 +96,40 @@ void GameObject::OnHierarchy(int id)
 	std::list<GameObject*>::iterator item = childs.begin();
 	while (item != childs.end())
 	{
+
 		if (!(*item)->active)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f,0.5f,0.5f,0.5f });
 		}
+
+
+		id++;
+		ImGui::PushID(id);
+
 		if ((*item) == App->level->selected_game_object)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.0f,1.0f,0.0f,1.0f });
 		}
-		id++;
-		ImGui::PushID(id);
 		if (ImGui::TreeNode((*item)->name.c_str()))
 		{
+			if ((*item) == App->level->selected_game_object)
+			{
+				ImGui::PopStyleColor();
+			}
+
 			if (ImGui::IsItemClicked())
 				App->level->selected_game_object = (*item);
 
 			(*item)->OnHierarchy(id);
 			ImGui::TreePop();
 		}
+
 		ImGui::PopID();
 		if (!(*item)->active)
 		{
 			ImGui::PopStyleColor();
 		}
-		if ((*item) == App->level->selected_game_object)
-		{
-			ImGui::PopStyleColor();
-		}	
+	
 		item++;
 	}
 }
