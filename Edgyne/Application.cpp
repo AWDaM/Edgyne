@@ -10,6 +10,8 @@
 #include "ModuleImporter.h"
 #include "p2Defs.h"
 
+#include <time.h>
+
 #include "rapidjson/filereadstream.h"
 
 Application::Application() 
@@ -65,7 +67,7 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
-
+	pcg32_srandom_r(&rng, time(NULL), (intptr_t)&rng);
 	rapidjson::Document document;
 
 	FILE* fp = fopen("config.json", "rb");

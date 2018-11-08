@@ -24,7 +24,7 @@ public:
 	vec color;
 	float2 img_size;
 	uint id_texture;
-
+	std::string fileName;
 private:
 
 };

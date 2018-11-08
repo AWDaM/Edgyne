@@ -17,6 +17,7 @@ public:
 	void TransformChanged();
 	void OnEditor();
 
+	rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator);
 private:
 public:
 	vec position;

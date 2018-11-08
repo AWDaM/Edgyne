@@ -1,0 +1,40 @@
+{
+  "Game Object": 
+  {
+    "UID": 1524076913,
+    "Parent UID": 3059819762,
+    "Object Name": "Camera",
+    "Components": {
+      "Transform": {
+        "UID": 1468724295,
+        "Type": 1,
+        "Position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "Rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 1.0
+        },
+        "Rotation Euler": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "Previous Rotation Euler": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "Scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        }
+      },
+      "Camera": null
+    }
+  },"Game Object":{"UID":1524076913,"Parent UID":3059819762,"Object Name":"Camera","Components":{"Transform":{"UID":1468724295,"Type":1,"Position":{"x":0.0,"y":0.0,"z":0.0},"Rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Previous Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Scale":{"x":1.0,"y":1.0,"z":1.0}},"Camera":null}}}

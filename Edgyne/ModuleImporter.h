@@ -19,11 +19,15 @@ public:
 	void SaveTexture(std::string& path);
 
 	bool LoadMeshFromFile();
-
 	void CopyDataFromFile(std::string& path);
+
 
 	const char* LoadDataFromFile(const char* file, uint& size); 
 	void WriteDataOnFile(const void* data, uint size, const char* file);
+
+
+
+
 	void Save(rapidjson::Document& doc, rapidjson::FileWriteStream& os);
 	void Load(rapidjson::Document& doc);
 public:
