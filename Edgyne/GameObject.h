@@ -1,11 +1,16 @@
 #ifndef __GAME_OBJECT_H__
 #define __GAME_OBJECT_H__
 
+#include "Globals.h"
 
-
+#include "rapidjson/document.h"// rapidjson's DOM-style API
+#include "rapidjson/prettywriter.h" // for stringify JSON
+#include "rapidjson/filewritestream.h"
+#include "rapidjson\allocators.h"
 #include "MathGeoLib/MathGeoLib.h"
 
 #include <vector>
+#include <string>
 #include <list>
 
 enum ComponentType
@@ -42,6 +47,8 @@ public:
 	bool UpdateComponents();
 	bool CleanUpComopnents();
 
+	void SaveToScene(rapidjson::Value& obj, rapidjson::Document::AllocatorType& al);
+
 	void OnHierarchy(int id);
 
 	void OnInspector();
@@ -70,7 +77,11 @@ public:
 	Transform* transform = nullptr;
 	float4x4 global_transform_matrix;
 	bool transform_changed = false;
+	uint UID = 0;
+	uint parentUID = 0;
+	std::vector<uint> childrenUID;
 	bool to_remove = false;
+
 private:
 	std::list<GameObject*> childs;
 

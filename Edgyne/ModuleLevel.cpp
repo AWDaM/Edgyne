@@ -1,5 +1,7 @@
 #include "Application.h"
 #include "ModuleLevel.h"
+#include "ModuleLoader.h"
+#include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
 #include "GameObject.h"
 #include "Camera.h"
@@ -88,6 +90,13 @@ update_status ModuleLevel::Update(float dt)
 		}
 		item++;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+	{
+		App->loader->SaveScene();
+	}
+
+
 	return UPDATE_CONTINUE;
 }
 

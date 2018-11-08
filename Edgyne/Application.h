@@ -14,7 +14,7 @@
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/filewritestream.h"
-
+#include "pcg_variants.h"
 #include <list>
 #include <vector>
 #include <string>
@@ -87,8 +87,8 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 
-
 public:
+	pcg32_random_t rng;
 	char* window_name = nullptr;
 	bool vsync_on = true;
 	bool toSave = false;

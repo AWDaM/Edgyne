@@ -253,7 +253,7 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 			ilBindImage(imgName);
 			if (CheckTexturePaths(file, texPath.C_Str(), texFullPath))
 			{
-				SaveMaterial(texFullPath);
+				_material->fileName = SaveMaterial(texFullPath);
 				ILinfo imgData;
 				iluGetImageInfo(&imgData);
 				if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
@@ -375,17 +375,19 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		
 		
 		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
-		LOG("Loading Info for the %i mesh", i + 1);
-		LoadInfo(game_object, currentMesh, node);
-
-		LOG("Loading Vertices from the %i mesh", i + 1);
 		Mesh* mesh = (Mesh*)game_object->AddComponent(MESH);
-		LoadVerices(mesh, currentMesh);
-
 		Material* material = (Material*)game_object->AddComponent(MATERIAL);
 		mesh->material = material;
+
+
+		LOG("Loading Info for the %i mesh", i + 1);
+			LoadInfo(game_object, currentMesh, node);
+
+		LOG("Loading Vertices from the %i mesh", i + 1);
+			LoadVerices(mesh, currentMesh);
+		
 		LOG("Loading Color from the %i mesh", i + 1);
-		LoadColor(material, scene->mMaterials[currentMesh->mMaterialIndex]);
+			LoadColor(material, scene->mMaterials[currentMesh->mMaterialIndex]);
 
 		LOG("Loading Normals from the %i mesh", i + 1);
 		if (currentMesh->HasNormals())
@@ -400,7 +402,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 			LoadIndices(mesh, currentMesh);
 
 		LOG("Generating BoundingBox for the %i mesh", i + 1);
-		LoadBoundingBox(mesh, currentMesh);
+			LoadBoundingBox(mesh, currentMesh);
 
 		SaveMesh(mesh);
 
@@ -477,6 +479,33 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std:
 
 void ModuleLoader::SaveScene()
 {
+	rapidjson::Document document;
+	document.SetObject();
+	FILE* fp = fopen("edgyscene.json", "wb");
+	char writeBuffer[1000000];
+	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+
+	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+
+	for (std::vector<GameObject*>::iterator iterator = App->level->game_objects.begin(); iterator != App->level->game_objects.end(); iterator++)
+	{
+		rapidjson::Value obj(rapidjson::kObjectType);
+		obj.AddMember("UID", (*iterator)->UID, allocator);
+		obj.AddMember("Parent UID", (*iterator)->parentUID, allocator);
+
+		obj.AddMember("Object Name", (rapidjson::Value::StringRefType)(*iterator)->name.c_str(), allocator);
+
+		rapidjson::Value component(rapidjson::kObjectType);
+		(*iterator)->SaveToScene(component, allocator);
+		obj.AddMember("Components", component, allocator);
+
+		document.AddMember("Game Object", obj, allocator);
+	}
+
+	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+	document.Accept(writer);
+
+	fclose(fp);
 }
 
 void ModuleLoader::SaveMesh(Mesh* mesh)
@@ -532,8 +561,9 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 	App->importer->WriteDataOnFile(data, fileSize, str.c_str());
 }
 
-void ModuleLoader::SaveMaterial(const std::string& path)
+std::string ModuleLoader::SaveMaterial(const std::string& path)
 {
+	std::string ddsTexPath = "No Path";
 	std::string fileName = path;
 	fileName = fileName.erase(0, fileName.find_last_of("\\") + 1);
 	fileName = fileName.substr(0, fileName.find("."));
@@ -563,13 +593,15 @@ void ModuleLoader::SaveMaterial(const std::string& path)
 				currMaterialPath.append(App->importer->materialExtension);
 
 
-				FILE* file = fopen(currMaterialPath.data(), "wb");
+				FILE* file = fopen(currMaterialPath.c_str(), "wb");
 				fwrite(data, sizeof(char), ilSize, file);
 				fclose(file);
 				App->importer->WriteDataOnFile(data, ilSize, currMaterialPath.c_str());
+				ddsTexPath = currMaterialPath;
 			}
 		}
 	}
+	return ddsTexPath;
 }
 
 void ModuleLoader::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)

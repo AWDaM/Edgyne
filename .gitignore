@@ -58,7 +58,7 @@ artifacts/
 StyleCopReport.xml
 
 # ImGUI ini file 
-*.ini
+Settings/
 
 # Files built by Visual Studio
 *_i.c

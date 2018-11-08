@@ -7,6 +7,7 @@
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
 
+
 //class mesh;
 void AssimpLoggerLoad(const char* message, char* user);
 
@@ -24,7 +25,7 @@ public:
 
 	update_status Update(float dt);
 	bool CleanUp();
-	void Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os);
+	void Save(rapidjson::Document & doc, rapidjson::FileWriteStream& os);
 	void Load(rapidjson::Document& doc);
 
 	bool Import(const std::string& file);
@@ -33,10 +34,11 @@ public:
 
 	void ReceivedFile(const char* path);
 
-private:
 	void SaveScene();
+
+private:
 	void SaveMesh(Mesh* mesh);
-	void SaveMaterial(const std::string& path);
+	std::string SaveMaterial(const std::string& path);
 	void LoadScene();
 
 	void LoadInfo(GameObject* game_object, aiMesh* currentMesh,aiNode* node);

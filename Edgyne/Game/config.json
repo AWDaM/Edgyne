@@ -30,7 +30,6 @@
   "Debug": {
   },
   "Loader": {
-
   },
   "Render3D": {
     "VSync": true

@@ -13,6 +13,15 @@
 
 GameObject::GameObject(GameObject* parent, std::string _name) : active(true), parent(parent)
 {
+	UID = pcg32_random_r(&App->rng);
+	if (parent)
+	{
+		parentUID = parent->UID;
+		parent->childrenUID.push_back(UID);
+	}
+	else
+		parentUID = 0;
+
 	aligned_bounding_box.SetNegativeInfinity();
 	name = _name;
 	global_transform_matrix.SetIdentity();
@@ -89,6 +98,31 @@ bool GameObject::CleanUpComopnents()
 		item++;
 	}
 	return true;
+}
+
+void GameObject::SaveToScene(rapidjson::Value& obj, rapidjson::Document::AllocatorType& al)
+{
+	std::vector<Component*>::iterator item = components.begin();
+
+	while (item != components.end())
+	{
+		switch ((*item)->component_type)
+		{
+		case ComponentType::TRANSFORM:
+			obj.AddMember("Transform",	(*item)->SaveToScene(al), al); break;
+		case ComponentType::MESH:
+			obj.AddMember("Mesh",		(*item)->SaveToScene(al), al); break;		
+		case ComponentType::MATERIAL:
+			obj.AddMember("Material",	(*item)->SaveToScene(al), al); break;
+		case ComponentType::CAMERA:
+			obj.AddMember("Camera",		(*item)->SaveToScene(al), al); break;
+		default:
+			break;
+		}
+		item++;
+	}
+
+
 }
 
 void GameObject::OnHierarchy(int id)

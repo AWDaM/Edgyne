@@ -58,3 +58,50 @@ void Transform::OnEditor()
 		ImGui::TreePop();
 	}
 }
+
+rapidjson::Value Transform::SaveToScene(rapidjson::Document::AllocatorType& allocator)
+{
+	rapidjson::Value myData(rapidjson::kObjectType);
+	myData.AddMember("UID", UID, allocator);
+	myData.AddMember("Type", component_type, allocator);
+
+	rapidjson::Value pos(rapidjson::kObjectType);
+
+	pos.AddMember("x", position.x, allocator);
+	pos.AddMember("y", position.y, allocator);
+	pos.AddMember("z", position.z, allocator);
+	myData.AddMember("Position", pos, allocator);
+
+	rapidjson::Value rot(rapidjson::kObjectType);
+
+	rot.AddMember("x", rotation.x, allocator);
+	rot.AddMember("y", rotation.y, allocator);
+	rot.AddMember("z", rotation.z, allocator);
+	rot.AddMember("w", rotation.w, allocator);
+	myData.AddMember("Rotation", rot, allocator);
+
+	rapidjson::Value eul(rapidjson::kObjectType);
+
+	eul.AddMember("x", rotation_euler.x, allocator);
+	eul.AddMember("y", rotation_euler.y, allocator);
+	eul.AddMember("z", rotation_euler.z, allocator);
+	myData.AddMember("Rotation Euler", eul, allocator);
+
+	rapidjson::Value peul(rapidjson::kObjectType);
+
+
+	peul.AddMember("x", previous_rotation_euler.x, allocator);
+	peul.AddMember("y", previous_rotation_euler.y, allocator);
+	peul.AddMember("z", previous_rotation_euler.z, allocator);
+	myData.AddMember("Previous Rotation Euler", peul, allocator);
+
+	rapidjson::Value sc(rapidjson::kObjectType);
+
+
+	sc.AddMember("x", scale.x, allocator);
+	sc.AddMember("y", scale.y, allocator);
+	sc.AddMember("z", scale.z, allocator);
+	myData.AddMember("Scale", sc, allocator);
+
+	return myData;
+}

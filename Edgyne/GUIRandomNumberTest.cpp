@@ -29,7 +29,6 @@ void GUIRandomNumberTest::Draw()
 		}
 		ImGui::Text("%d", rng);
 
-
 		//Random Number Between 0 And A Boundary
 		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Normal Random Number Between 0 and X");
 		ImGui::InputInt("Min Number", &tmpBoundMin);
