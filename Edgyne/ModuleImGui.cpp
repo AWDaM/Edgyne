@@ -13,6 +13,7 @@
 #include "GUIInspector.h"
 #include "GUIScene.h"
 #include "GUIHierarchy.h"
+#include "GUIAssets.h"
 #include <stdio.h>
 
 
@@ -48,6 +49,7 @@ bool ModuleImGui::Init(rapidjson::Value& node)
 	GUIElement.push_back(inspector = new GUIInspector(true));
 	GUIElement.push_back(scene = new GUIScene(true));
 	GUIElement.push_back(hierarchy = new GUIHierarchy(true));
+	GUIElement.push_back(assets = new GUIAssets(true));
 
 	App->canLog = true;
 

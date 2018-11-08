@@ -108,13 +108,13 @@ void GameObject::OnHierarchy(int id)
 
 		if ((*item) == App->level->selected_game_object)
 		{
-			ImGui::PushStyleColor(ImGuiCol_Text, { 0.0f,1.0f,0.0f,1.0f });
+			//ImGui::PushStyleColor(ImGuiCol_Text, { 0.0f,1.0f,0.0f,1.0f });
 		}
 		if (ImGui::TreeNode((*item)->name.c_str()))
 		{
 			if ((*item) == App->level->selected_game_object)
 			{
-				ImGui::PopStyleColor();
+				//ImGui::PopStyleColor();
 			}
 
 			if (ImGui::IsItemClicked())
