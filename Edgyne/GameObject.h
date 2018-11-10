@@ -55,9 +55,11 @@ public:
 
 	void RecursiveSetChildsActive(bool active);
 
+	void SetLocalBoundingVolume();
+
 	Component* AddComponent(ComponentType type);
 	GameObject* AddGameObject(std::string name, bool with_transform = true);
-	void CalcGlobalTransform(const float4x4& parent);
+	void RecursiveTransformChanged(const float4x4& parent);
 	void RemoveSelfFromParent();
 	void RecursiveDeleteGameObject();
 	Component* GetComponent(ComponentType type);
@@ -81,9 +83,9 @@ public:
 	uint parentUID = 0;
 	std::vector<uint> childrenUID;
 	bool to_remove = false;
-
-private:
 	std::list<GameObject*> childs;
+private:
+
 
 };
 

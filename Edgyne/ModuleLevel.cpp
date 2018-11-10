@@ -109,7 +109,7 @@ GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 
 void ModuleLevel::Draw()
 {
-	root->CalcGlobalTransform(root->global_transform_matrix);
+	root->RecursiveTransformChanged(root->global_transform_matrix);
 	std::list<GameObject*>::iterator item = game_objects.begin();
 
 	while (item != game_objects.end())

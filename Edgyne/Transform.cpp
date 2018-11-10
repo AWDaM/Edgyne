@@ -22,7 +22,8 @@ Transform::~Transform()
 
 void Transform::TransformChanged()
 {
-	rotation = rotation.FromEulerXYZ(DEGTORAD*(rotation_euler.x-previous_rotation_euler.x), DEGTORAD*(rotation_euler.y-previous_rotation_euler.y), DEGTORAD*(rotation_euler.z-previous_rotation_euler.z));
+	rotation = rotation.FromEulerXYZ(DEGTORAD*rotation_euler.x, DEGTORAD*rotation_euler.y, DEGTORAD*rotation_euler.z);
+	//rotation = rotation.FromEulerXYZ(DEGTORAD*(rotation_euler.x-previous_rotation_euler.x), DEGTORAD*(rotation_euler.y-previous_rotation_euler.y), DEGTORAD*(rotation_euler.z-previous_rotation_euler.z));
 	previous_rotation_euler = rotation_euler;
 }
 

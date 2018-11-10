@@ -102,20 +102,20 @@ float * Camera::GetViewMatrix()
 void Camera::TransformChanged()
 {
 	frustum.pos = game_object->transform->position;
-	Quat rotation = Quat(game_object->transform->rotation);
+	Quat rotation = rotation.FromEulerXYZ(DEGTORAD*(game_object->transform->rotation_euler.x - game_object->transform->previous_rotation_euler.x), DEGTORAD*(game_object->transform->rotation_euler.y - game_object->transform->previous_rotation_euler.y), DEGTORAD*(game_object->transform->rotation_euler.z - game_object->transform->previous_rotation_euler.z));
+
 	frustum.front = rotation.Mul(frustum.front).Normalized();
+
 	frustum.up = rotation.Mul(frustum.up).Normalized();
 }
 
 void Camera::SetBoundingVolume()
 {
 	game_object->aligned_bounding_box.Enclose(frustum);
-	//for (int i = 0; i < num_vertex*3; i+3)
-	//{
-	//	game_object->bounding_box.Enclose((float3)vertex[i]);
-	//}
+	game_object->aligned_bounding_box.Translate(-frustum.pos);
 
 	game_object->bounding_sphere.Enclose(frustum);
+	game_object->bounding_sphere.Translate(-frustum.pos);
 }
 
 void Camera::OnEditor()

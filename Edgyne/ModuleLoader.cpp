@@ -89,7 +89,16 @@ bool ModuleLoader::Import(const std::string & file)
 		aiNode* rootNode = scene->mRootNode;
 		GameObject* rootGameObject = App->level->NewGameObject(rootNode->mName.C_Str());
 		LoadAllNodesMeshes(rootNode, scene, file,rootGameObject);
-		
+
+		rootGameObject->RecursiveTransformChanged(App->level->root->global_transform_matrix);
+
+		/*std::list<GameObject*>::iterator item = rootGameObject->childs.begin();
+		while (item != rootGameObject->childs.end())
+		{
+			(*item)->SetLocalBoundingVolume();
+			item++;
+		}*/
+
 		LOG("Centering Camera around the model");
 		App->renderer3D->CalculateGlobalBoundingBox();
 		vec half_diagonal  = App->renderer3D->globalBoundingBox.CenterPoint();
@@ -479,7 +488,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std:
 
 void ModuleLoader::SaveScene()
 {
-	rapidjson::Document document;
+	/*rapidjson::Document document;
 	document.SetObject();
 	FILE* fp = fopen("edgyscene.json", "wb");
 	char writeBuffer[1000000];
@@ -505,7 +514,7 @@ void ModuleLoader::SaveScene()
 	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
 	document.Accept(writer);
 
-	fclose(fp);
+	fclose(fp);*/
 }
 
 void ModuleLoader::SaveMesh(Mesh* mesh)

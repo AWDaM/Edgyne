@@ -13,6 +13,7 @@
 
 GameObject::GameObject(GameObject* parent, std::string _name) : active(true), parent(parent)
 {
+	transform_changed = true;
 	UID = pcg32_random_r(&App->rng);
 	if (parent)
 	{
@@ -35,17 +36,8 @@ GameObject::~GameObject()
 bool GameObject::Update()
 {
 	UpdateComponents();
-	if (transform_changed)
-	{
-		std::vector<Component*>::iterator item = components.begin();
+	
 
-		while (item != components.end())
-		{
-			(*item)->TransformChanged();
-			item++;
-		}
-		transform_changed = false;
-	}
 	return true;
 }
 
@@ -170,6 +162,7 @@ void GameObject::OnHierarchy(int id)
 
 void GameObject::OnInspector()
 {
+
 }
 
 void GameObject::RecursiveSetChildsActive(bool _active)
@@ -182,6 +175,23 @@ void GameObject::RecursiveSetChildsActive(bool _active)
 		(*item)->RecursiveSetChildsActive(_active);
 		item++;
 	}
+}
+
+void GameObject::SetLocalBoundingVolume()
+{
+	aligned_bounding_box.SetNegativeInfinity();
+
+	std::vector<Component*>::iterator item = components.begin();
+
+	while (item != components.end())
+	{
+		(*item)->SetBoundingVolume();
+		item++;
+	}
+
+	aligned_bounding_box.TransformAsAABB(global_transform_matrix);
+
+
 }
 
 
@@ -210,6 +220,7 @@ Component * GameObject::AddComponent(ComponentType type)
 	}
 	ret->ComponentStart();
 	components.push_back(ret);
+	transform_changed = true;
 	return ret;
 }
 
@@ -225,15 +236,27 @@ GameObject * GameObject::AddGameObject(std::string name, bool with_transform)
 	return ret;
 }
 
-void GameObject::CalcGlobalTransform(const float4x4 & parent)
+void GameObject::RecursiveTransformChanged(const float4x4 & parent)
 {
-	global_transform_matrix = parent * float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
+	if (transform_changed)
+	{
+		global_transform_matrix = parent * float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
 
+		std::vector<Component*>::iterator item = components.begin();
+
+		while (item != components.end())
+		{
+			(*item)->TransformChanged();
+			item++;
+		}
+		SetLocalBoundingVolume();
+		transform_changed = false;
+	}
 	std::list<GameObject*>::iterator item = childs.begin();
 
 	while (item != childs.end())
 	{
-		(*item)->CalcGlobalTransform(global_transform_matrix);
+		(*item)->RecursiveTransformChanged(global_transform_matrix);
 		item++;
 	}
 }
