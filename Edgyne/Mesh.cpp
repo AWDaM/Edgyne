@@ -97,7 +97,7 @@ void Mesh::SetBoundingVolume()
 
 void Mesh::TransformChanged()
 {
-	SetBoundingVolume();
+
 }
 
 

@@ -13,7 +13,6 @@
 
 GameObject::GameObject(GameObject* parent, std::string _name) : active(true), parent(parent)
 {
-	transform_changed = true;
 	UID = pcg32_random_r(&App->rng);
 	if (parent)
 	{
@@ -77,7 +76,7 @@ bool GameObject::UpdateComponents()
 		(*item)->ComponentUpdate();
 		item++;
 	}
-	return false;
+	return true;
 }
 
 bool GameObject::CleanUpComopnents()
@@ -220,7 +219,6 @@ Component * GameObject::AddComponent(ComponentType type)
 	}
 	ret->ComponentStart();
 	components.push_back(ret);
-	transform_changed = true;
 	return ret;
 }
 

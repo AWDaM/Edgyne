@@ -197,11 +197,6 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	App->debug->Draw();
 
-	if (App->debug->draw_globalBoundingBox)
-	{
-		DrawGlobalBoundingBox();
-	}
-
 	//std::list<mesh*>::iterator item = mesh_list.begin();
 
 	//while (item != mesh_list.end())
@@ -286,63 +281,6 @@ void ModuleRenderer3D::Configuration()
 	}
 }
 
-void ModuleRenderer3D::CalculateGlobalBoundingBox()
-{
-	globalBoundingBox.SetNegativeInfinity();
-	std::list<mesh*>::iterator item = mesh_list.begin();
-	while (item != mesh_list.end())
-	{
-		globalBoundingBox.Enclose((*item)->bounding_box);
-		item++;
-	}
-}
-
-void ModuleRenderer3D::DrawGlobalBoundingBox()
-{
-	glLineWidth(4.0f);
-	glColor3f(1, 0, 1);
-	glBegin(GL_LINES);
-
-	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
-	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
-	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(0).x, globalBoundingBox.CornerPoint(0).y, globalBoundingBox.CornerPoint(0).z);
-	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
-	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
-	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
-	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(7).x, globalBoundingBox.CornerPoint(7).y, globalBoundingBox.CornerPoint(7).z);
-	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
-	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(1).x, globalBoundingBox.CornerPoint(1).y, globalBoundingBox.CornerPoint(1).z);
-	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(3).x, globalBoundingBox.CornerPoint(3).y, globalBoundingBox.CornerPoint(3).z);
-	glVertex3f(globalBoundingBox.CornerPoint(2).x, globalBoundingBox.CornerPoint(2).y, globalBoundingBox.CornerPoint(2).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
-	glVertex3f(globalBoundingBox.CornerPoint(5).x, globalBoundingBox.CornerPoint(5).y, globalBoundingBox.CornerPoint(5).z);
-
-	glVertex3f(globalBoundingBox.CornerPoint(6).x, globalBoundingBox.CornerPoint(6).y, globalBoundingBox.CornerPoint(6).z);
-	glVertex3f(globalBoundingBox.CornerPoint(4).x, globalBoundingBox.CornerPoint(4).y, globalBoundingBox.CornerPoint(4).z);
-
-	glEnd();
-	glColor3f(1, 1, 1);
-	glLineWidth(1.0f);
-}
 
 void ModuleRenderer3D::DrawMainCameraFrustum()
 {

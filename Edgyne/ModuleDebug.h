@@ -52,7 +52,6 @@ public:
 	bool draw_axis = true;
 	bool draw_normals = false;
 	bool draw_meshBoundingBox = true;
-	bool draw_globalBoundingBox = true;
 	
 
 	uint my_id_vertex = 0;

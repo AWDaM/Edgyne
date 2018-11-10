@@ -69,7 +69,6 @@ void ModuleDebug::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & o
 	obj.AddMember("draw_axis", draw_axis, allocator);
 	obj.AddMember("draw_normals", draw_normals, allocator);
 	obj.AddMember("draw_meshBoundingBox", draw_meshBoundingBox, allocator);
-	obj.AddMember("draw_globalBoundingBox", draw_globalBoundingBox, allocator);
 
 	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
 
@@ -95,7 +94,6 @@ void ModuleDebug::Load(rapidjson::Document& doc)
 	draw_axis = node["draw_axis"].GetBool();
 	draw_normals = node["draw_normals"].GetBool();
 	draw_meshBoundingBox = node["draw_meshBoundingBox"].GetBool();
-	draw_globalBoundingBox = node["draw_globalBoundingBox"].GetBool();
 
 }
 
@@ -154,7 +152,6 @@ void ModuleDebug::Configuration()
 		ImGui::Checkbox("Axis", &draw_axis);
 		ImGui::Checkbox("Mesh Normals", &draw_normals);
 		ImGui::Checkbox("Mesh Bounding Box", &draw_meshBoundingBox);
-		ImGui::Checkbox("Global Bounding Box", &draw_globalBoundingBox);
 	}
 }
 

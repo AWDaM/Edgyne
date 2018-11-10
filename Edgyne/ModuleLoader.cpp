@@ -100,7 +100,7 @@ bool ModuleLoader::Import(const std::string & file)
 		}*/
 
 		LOG("Centering Camera around the model");
-		App->renderer3D->CalculateGlobalBoundingBox();
+
 		vec half_diagonal  = App->renderer3D->globalBoundingBox.CenterPoint();
 		vec center_point = App->renderer3D->globalBoundingBox.CenterPoint();
 		half_diagonal += App->renderer3D->globalBoundingBox.HalfDiagonal();
@@ -201,9 +201,8 @@ void ModuleLoader::LoadInfo(GameObject* game_object, aiMesh * currentMesh, aiNod
 
 	rotationEuler = rotation.GetEuler();
 
-	game_object->transform->rotation.x = math::RadToDeg(rotationEuler.x);
-	game_object->transform->rotation.y = math::RadToDeg(rotationEuler.y);
-	game_object->transform->rotation.z = math::RadToDeg(rotationEuler.z);
+	
+	game_object->transform->rotation.FromEulerXYZ(DEGTORAD*rotationEuler.x, DEGTORAD*rotationEuler.y, DEGTORAD*rotationEuler.z);
 	game_object->transform->position.x = position.x;
 	game_object->transform->position.y = position.y;
 	game_object->transform->position.z = position.z;
