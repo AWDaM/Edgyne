@@ -23,7 +23,7 @@ private:
 public:
 	vec color;
 	float2 img_size;
-	uint id_texture;
+	uint id_texture = 0;
 	std::string fileName;
 private:
 

@@ -273,6 +273,7 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 				if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 				{
 					LOG("DevIL Error: %s", iluErrorString(ilGetError()));
+					_material->id_texture = 0;
 					ret = false;
 				}
 				else
@@ -293,6 +294,7 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 			else
 			{
 				LOG("Error loading texture file");
+				_material->id_texture = 0;
 				ret = false;
 			}
 			ilDeleteImage(imgName);
@@ -300,6 +302,7 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 		else
 		{
 			LOG("Error loading texture file");
+			_material->id_texture = 0;
 			ret = false;
 		}
 	}
