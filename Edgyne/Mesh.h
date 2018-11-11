@@ -39,6 +39,8 @@ public:
 	bool has_texture_coordinates = false;
 	bool has_triangle_faces = true;
 
+	std::string fileName;
+
 	Material* material = nullptr;
 
 private:

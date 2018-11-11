@@ -429,10 +429,10 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std::string& texActualPath)
 {
 	bool ret = false;
-	path = path.substr(0, path.find_last_of("\\"));
-	if (texPath.find("\\"))
+	path = path.substr(0, path.find_last_of("\\")+1);
+	if (texPath.find("\\") < texPath.size())
 	{
-		texPath.erase(0, texPath.find_first_of("\\"));
+		texPath.erase(0, texPath.find_first_of("\\")+1);
 		std::string tmp_path = path;
 		tmp_path.append(texPath.c_str());
 		if (ilLoadImage(tmp_path.data()))
@@ -443,7 +443,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std:
 		}
 		else
 		{
-			texPath.erase(0, texPath.find_last_of("\\"));
+			texPath.erase(0, texPath.find_last_of("\\")+1);
 			path.append(texPath.c_str());
 			if (ilLoadImage(path.data()))
 			{
@@ -465,7 +465,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std:
 	}
 	if(!ret)
 	{
-		path = "Assets/";
+		path = "Assets\\";
 		path.append(texPath.c_str());
 		if (ilLoadImage(path.data()))
 		{
@@ -570,6 +570,9 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 	str.append(App->importer->meshExtension);
 
 	App->importer->WriteDataOnFile(data, fileSize, str.c_str());
+	mesh->fileName = str;
+	mesh->fileName = mesh->fileName.erase(0, mesh->fileName.find_last_of("\\") + 1);
+	mesh->fileName = mesh->fileName.substr(0, mesh->fileName.find("."));
 }
 
 std::string ModuleLoader::SaveMaterial(const std::string& path)
@@ -609,9 +612,12 @@ std::string ModuleLoader::SaveMaterial(const std::string& path)
 				fclose(file);
 				App->importer->WriteDataOnFile(data, ilSize, currMaterialPath.c_str());
 				ddsTexPath = currMaterialPath;
+				ddsTexPath = ddsTexPath.erase(0, ddsTexPath.find_last_of("\\") + 1);
+				ddsTexPath = ddsTexPath.substr(0, ddsTexPath.find("."));
 			}
 		}
 	}
+
 	return ddsTexPath;
 }
 

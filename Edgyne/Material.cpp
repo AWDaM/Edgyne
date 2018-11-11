@@ -23,7 +23,27 @@ Material::~Material()
 
 rapidjson::Value Material::SaveToScene(rapidjson::Document::AllocatorType& allocator)
 {
-	return rapidjson::Value();
+	rapidjson::Value myData(rapidjson::kObjectType);
+
+	myData.AddMember("UID", UID, allocator);
+	myData.AddMember("Type", component_type, allocator);
+	myData.AddMember("Texture Name", (rapidjson::Value::StringRefType)fileName.c_str(), allocator);
+
+	rapidjson::Value col(rapidjson::kObjectType);
+
+	col.AddMember("r", color.x, allocator);
+	col.AddMember("g", color.y, allocator);
+	col.AddMember("b", color.z, allocator);
+	myData.AddMember("Color", col, allocator);
+
+
+	rapidjson::Value img(rapidjson::kObjectType);
+
+	img.AddMember("Width", img_size.x, allocator);
+	img.AddMember("Height", img_size.y, allocator);
+	myData.AddMember("Size", img, allocator);
+
+	return myData;
 }
 
 bool Material::ComponentDraw()
