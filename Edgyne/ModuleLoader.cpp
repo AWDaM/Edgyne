@@ -504,6 +504,11 @@ void ModuleLoader::SaveScene()
 		obj.AddMember("UID", (*iterator)->UID, allocator);
 		obj.AddMember("Parent UID", (*iterator)->parentUID, allocator);
 
+		rapidjson::Value children(rapidjson::kObjectType);
+		for (std::vector<uint>::iterator item = (*iterator)->childrenUID.begin(); item != (*iterator)->childrenUID.end(); item++)
+			children.AddMember("UID", (*item), allocator);
+
+		obj.AddMember("Children UID", children, allocator);
 		obj.AddMember("Object Name", (rapidjson::Value::StringRefType)(*iterator)->name.c_str(), allocator);
 
 		rapidjson::Value component(rapidjson::kObjectType);
@@ -512,7 +517,8 @@ void ModuleLoader::SaveScene()
 
 		document.AddMember("Game Object", obj, allocator);
 	}
-
+	//for(rapidjson::Value::ConstMemberIterator itr = document.MemberBegin(); itr != document.MemberEnd(); ++itr) {   //iterate through object   
+	//	const  rapidjson::Value& objName = document[itr->name.GetString()];
 	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
 	document.Accept(writer);
 
