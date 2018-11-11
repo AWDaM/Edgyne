@@ -157,9 +157,6 @@ bool ModuleRenderer3D::GenerateFramebuffer()
 	}
 
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
 	return ret;
 }
 
@@ -248,7 +245,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	ProjectionMatrix.Set(App->camera->editor_camera->GetProjectionMatrix());
 	
 	glLoadMatrixf(App->camera->editor_camera->GetProjectionMatrix());
 
@@ -256,6 +252,9 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 
 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 
