@@ -32,8 +32,8 @@ bool Camera::ComponentStart()
 	}
 	near_plane_distance = 0.1;
 	far_plane_distance = 1000;
-	horizontal_fov = 106.67;
 	vertical_fov = 60;
+	aspect_ratio = 1.8;
 
 	frustum.type = math::FrustumType::PerspectiveFrustum;
 	frustum.pos = Position;
@@ -126,8 +126,6 @@ void Camera::OnEditor()
 			ChangeFrustum();
 		if(ImGui::SliderFloat("Far Plane Distance", &far_plane_distance, 0.2, 1001))
 			ChangeFrustum();
-		if(ImGui::SliderFloat("Horizontal  field of view", &horizontal_fov, 0.1, 180))
-			ChangeFrustum();
 		if(ImGui::SliderFloat("Vertical field of view", &vertical_fov, 0.1, 180))
 			ChangeFrustum();
 		ImGui::TreePop();
@@ -142,5 +140,5 @@ void Camera::ChangeFrustum()
 	frustum.farPlaneDistance =far_plane_distance;
 
 	frustum.verticalFov = DEGTORAD * vertical_fov;
-	frustum.horizontalFov = 2.f * Atan(Tan(frustum.verticalFov*0.5f)*(16.0f / 9.0f));
+	frustum.horizontalFov = 2.f * Atan(Tan(frustum.verticalFov*0.5f)*(aspect_ratio));
 }
