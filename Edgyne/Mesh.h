@@ -15,6 +15,8 @@ public:
 	Mesh(GameObject* game_object);
 	~Mesh();
 
+	rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator);
+
 	void OnEditor();
 	bool ComponentUpdate();
 	bool ComponentDraw();
