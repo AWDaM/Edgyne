@@ -159,6 +159,8 @@ void Camera::OnEditor()
 			ChangeFrustum();
 		if(ImGui::SliderFloat("Vertical field of view", &vertical_fov, 0.1, 180))
 			ChangeFrustum();
+		if (ImGui::SliderFloat("Aspect Ratio", &aspect_ratio, 0.1, 5))
+			ChangeFrustum();
 		ImGui::TreePop();
 	}
 }
