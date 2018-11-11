@@ -35,7 +35,6 @@ private:
 public:
 	Frustum frustum;
 	vec Position , Reference = { 0,0,0 };
-	float4x4 ViewMatrix, ViewMatrixInverse;
 	float near_plane_distance, far_plane_distance, horizontal_fov, vertical_fov, aspect_ratio;
 
 private:

@@ -55,6 +55,13 @@ void Material::OnEditor()
 {
 	if (ImGui::TreeNode("Material"))
 	{
+		if (id_texture > 0)
+		{
+			ImGui::Text("Image size %ix%i", (int)img_size.x, (int)img_size.y);
+			ImGui::Image((void *)(intptr_t)id_texture, ImVec2(256, 256));
+		}
+		
+		ImGui::InputFloat3("Color", color.ptr(), 100);
 		ImGui::TreePop();
 	}
 
