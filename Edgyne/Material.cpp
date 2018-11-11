@@ -21,6 +21,11 @@ Material::~Material()
 {
 }
 
+rapidjson::Value Material::SaveToScene(rapidjson::Document::AllocatorType& allocator)
+{
+	return rapidjson::Value();
+}
+
 bool Material::ComponentDraw()
 {
 	return true;

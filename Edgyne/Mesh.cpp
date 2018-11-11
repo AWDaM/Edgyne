@@ -26,6 +26,11 @@ Mesh::~Mesh()
 {
 }
 
+rapidjson::Value Mesh::SaveToScene(rapidjson::Document::AllocatorType& allocator)
+{
+	return rapidjson::Value();
+}
+
 void Mesh::OnEditor()
 {
 	if (ImGui::TreeNode("Mesh"))
