@@ -116,7 +116,7 @@ void ModuleLevel::Draw()
 	{
 		if ((*item)->active)
 		{
-			if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box)&& game_camera->frustum.Contains((*item)->bounding_sphere) && App->renderer3D->camera_culling)
+			if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box)&& game_camera->frustum.Intersects((*item)->bounding_sphere) && App->renderer3D->camera_culling)
 			{
 				(*item)->Draw();
 			}
