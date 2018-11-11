@@ -30,31 +30,53 @@ void Transform::TransformChanged()
 void Transform::OnEditor()
 {
 	if (ImGui::TreeNode("Transform"))
-	{
-		if (ImGui::InputFloat("Position X", &position.x, 1.0f, 10.0f, 6))
-			game_object->transform_changed = true;
-		if (ImGui::InputFloat("Position Y", &position.y, 1.0f, 10.0f, 6))
-			game_object->transform_changed = true;
-		if (ImGui::InputFloat("Position Z", &position.z, 1.0f, 10.0f, 6))
-			game_object->transform_changed = true;
+	{	
+		if (!game_object->Static)
+		{
+			if (ImGui::InputFloat("Position X", &position.x, 1.0f, 10.0f, 6))
+				game_object->transform_changed = true;
+			if (ImGui::InputFloat("Position Y", &position.y, 1.0f, 10.0f, 6))
+				game_object->transform_changed = true;
+			if (ImGui::InputFloat("Position Z", &position.z, 1.0f, 10.0f, 6))
+				game_object->transform_changed = true;
 
-		ImGui::Dummy({ 10,10 });
+			ImGui::Dummy({ 10,10 });
 
-		if (ImGui::InputFloat("Rotation X", &rotation_euler.x, .1f, 1.0f, 6))
-			game_object->transform_changed = true;
-		if (ImGui::InputFloat("Rotation Y", &rotation_euler.y, 0.1f, 1.0f, 6))
-			game_object->transform_changed = true;
-		if (ImGui::InputFloat("Rotation Z", &rotation_euler.z, 0.1f, 1.0f, 6))
-			game_object->transform_changed = true;
-		
-		ImGui::Dummy({ 10,10 });
+			if (ImGui::InputFloat("Rotation X", &rotation_euler.x, .1f, 1.0f, 6))
+				game_object->transform_changed = true;
+			if (ImGui::InputFloat("Rotation Y", &rotation_euler.y, 0.1f, 1.0f, 6))
+				game_object->transform_changed = true;
+			if (ImGui::InputFloat("Rotation Z", &rotation_euler.z, 0.1f, 1.0f, 6))
+				game_object->transform_changed = true;
 
-		if (ImGui::InputFloat("Scale X", &scale.x, 1.0f, 10.0f, 6))
-			game_object->transform_changed = true;
-		if (ImGui::InputFloat("Scale Y", &scale.y, 1.0f, 10.0f, 6))
-			game_object->transform_changed = true;
-		if (ImGui::InputFloat("Scale Z", &scale.z, 1.0f, 10.0f, 6))
-			game_object->transform_changed = true;
+			ImGui::Dummy({ 10,10 });
+
+			if (ImGui::InputFloat("Scale X", &scale.x, 1.0f, 10.0f, 6))
+				game_object->transform_changed = true;
+			if (ImGui::InputFloat("Scale Y", &scale.y, 1.0f, 10.0f, 6))
+				game_object->transform_changed = true;
+			if (ImGui::InputFloat("Scale Z", &scale.z, 1.0f, 10.0f, 6))
+				game_object->transform_changed = true;
+		}
+
+		else
+		{
+			ImGui::Text("Position X: %f", position.x);
+			ImGui::Text("Position Y: %f", position.y);
+			ImGui::Text("Position Z: %f", position.z);
+
+			ImGui::Dummy({ 10,10 });
+
+			ImGui::Text("Rotation X: %f", rotation_euler.x);
+			ImGui::Text("Rotation Y: %f", rotation_euler.y);
+			ImGui::Text("Rotation Z: %f", rotation_euler.z);
+
+			ImGui::Dummy({ 10,10 });
+
+			ImGui::Text("Scale X: %f", scale.x);
+			ImGui::Text("Scale Y: %f", scale.y);
+			ImGui::Text("Scale Z: %f", scale.z);
+		}
 
 		ImGui::TreePop();
 	}
