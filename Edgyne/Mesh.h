@@ -15,6 +15,8 @@ public:
 	Mesh(GameObject* game_object);
 	~Mesh();
 
+	rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator);
+
 	void OnEditor();
 	bool ComponentUpdate();
 	bool ComponentDraw();
@@ -36,6 +38,8 @@ public:
 	float* texCoords = nullptr;
 	bool has_texture_coordinates = false;
 	bool has_triangle_faces = true;
+
+	std::string fileName;
 
 	Material* material = nullptr;
 

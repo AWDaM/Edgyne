@@ -56,6 +56,37 @@ bool Camera::ComponentCleanUp()
 	return true;
 }
 
+rapidjson::Value Camera::SaveToScene(rapidjson::Document::AllocatorType& allocator)
+{
+	rapidjson::Value myData(rapidjson::kObjectType);
+
+	myData.AddMember("UID", UID, allocator);
+	myData.AddMember("Type", component_type, allocator);
+
+	myData.AddMember("Near Plane", near_plane_distance, allocator);
+	myData.AddMember("Far Plane", far_plane_distance, allocator);
+	myData.AddMember("Horizontal FoV", horizontal_fov, allocator);
+	myData.AddMember("Vertical FoV", vertical_fov, allocator);
+
+
+	rapidjson::Value pos(rapidjson::kObjectType);
+
+	pos.AddMember("x", Position.x, allocator);
+	pos.AddMember("y", Position.y, allocator);
+	pos.AddMember("z", Position.z, allocator);
+	myData.AddMember("Position", pos, allocator);
+
+
+	rapidjson::Value ref(rapidjson::kObjectType);
+
+	ref.AddMember("x", Reference.x, allocator);
+	ref.AddMember("y", Reference.y, allocator);
+	ref.AddMember("z", Reference.z, allocator);
+	myData.AddMember("Reference", ref, allocator);
+
+	return myData;
+}
+
 void Camera::Look(const vec & Position, const vec & Reference, bool RotateAroundReference)
 {
 	

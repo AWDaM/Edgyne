@@ -26,6 +26,19 @@ Mesh::~Mesh()
 {
 }
 
+rapidjson::Value Mesh::SaveToScene(rapidjson::Document::AllocatorType& allocator)
+{
+	rapidjson::Value myData(rapidjson::kObjectType);
+
+	myData.AddMember("UID", UID, allocator);
+	myData.AddMember("Type", component_type, allocator);
+	myData.AddMember("Mesh File Name", (rapidjson::Value::StringRefType)fileName.c_str(), allocator);
+	myData.AddMember("Texture Coordinates", has_texture_coordinates, allocator);
+	myData.AddMember("Triangle Faces", has_triangle_faces, allocator);
+
+	return myData;
+}
+
 void Mesh::OnEditor()
 {
 	if (ImGui::TreeNode("Mesh"))

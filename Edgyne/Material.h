@@ -14,6 +14,8 @@ public:
 	Material(GameObject* game_object);
 	~Material();
 
+	rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator);
+	
 	bool ComponentDraw();
 	void MaterialBind();
 	void MaterialUnbind();

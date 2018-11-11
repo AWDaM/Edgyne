@@ -29,17 +29,6 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 
 	quadTree.Create(test);
 
-	AABB firstCube({ 1,0,1 }, { 2,1,2 });
-	AABB secondCube({7,0,7}, {8,1,8});
-	AABB thirdCube({2,0,1}, {4,1,3});
-	AABB fourthCube({5,0,5}, {6,1,8});
-	AABB fifthCube({2,0,1}, {4,1,4});
-
-	quadTree.Insert(firstCube);
-	quadTree.Insert(secondCube);
-	quadTree.Insert(thirdCube);
-	quadTree.Insert(fourthCube);
-	quadTree.Insert(fifthCube);
 
 	root = new GameObject(nullptr, "root");
 	root->transform = (Transform*)root->AddComponent(TRANSFORM);
