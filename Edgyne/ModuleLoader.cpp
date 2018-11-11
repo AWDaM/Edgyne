@@ -490,7 +490,7 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std:
 
 void ModuleLoader::SaveScene()
 {
-	/*rapidjson::Document document;
+	rapidjson::Document document;
 	document.SetObject();
 	FILE* fp = fopen("edgyscene.json", "wb");
 	char writeBuffer[1000000];
@@ -498,7 +498,7 @@ void ModuleLoader::SaveScene()
 
 	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
 
-	for (std::vector<GameObject*>::iterator iterator = App->level->game_objects.begin(); iterator != App->level->game_objects.end(); iterator++)
+	for (std::list<GameObject*>::iterator iterator = App->level->game_objects.begin(); iterator != App->level->game_objects.end(); iterator++)
 	{
 		rapidjson::Value obj(rapidjson::kObjectType);
 		obj.AddMember("UID", (*iterator)->UID, allocator);
@@ -516,7 +516,7 @@ void ModuleLoader::SaveScene()
 	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
 	document.Accept(writer);
 
-	fclose(fp);*/
+	fclose(fp);
 }
 
 void ModuleLoader::SaveMesh(Mesh* mesh)

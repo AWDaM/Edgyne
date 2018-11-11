@@ -74,7 +74,7 @@ rapidjson::Value Camera::SaveToScene(rapidjson::Document::AllocatorType& allocat
 	pos.AddMember("x", Position.x, allocator);
 	pos.AddMember("y", Position.y, allocator);
 	pos.AddMember("z", Position.z, allocator);
-	myData.AddMember("Position", horizontal_fov, allocator);
+	myData.AddMember("Position", pos, allocator);
 
 
 	rapidjson::Value ref(rapidjson::kObjectType);
@@ -82,7 +82,7 @@ rapidjson::Value Camera::SaveToScene(rapidjson::Document::AllocatorType& allocat
 	ref.AddMember("x", Reference.x, allocator);
 	ref.AddMember("y", Reference.y, allocator);
 	ref.AddMember("z", Reference.z, allocator);
-	myData.AddMember("Reference", vertical_fov, allocator);
+	myData.AddMember("Reference", ref, allocator);
 
 	return myData;
 }
