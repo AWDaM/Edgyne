@@ -101,11 +101,11 @@ public:
 		return ret;
 	}
 };
-class QuadTreeChechu
+class EdgyQuadTree
 {
 public:
-	QuadTreeChechu(uint bucketSize = 1) : bucketSize(bucketSize) {};
-	~QuadTreeChechu() {};
+	EdgyQuadTree(uint bucketSize = 1) : bucketSize(bucketSize) {};
+	~EdgyQuadTree() {};
 
 	void Create(AABB limits)
 	{

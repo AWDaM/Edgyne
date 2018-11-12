@@ -343,7 +343,7 @@ void GameObject::RecursiveDeleteGameObject()
 
 Component * GameObject::GetComponent(ComponentType type)
 {
-	Component* ret;
+	Component* ret = nullptr;
 
 	std::vector<Component*>::iterator item = components.begin();
 
@@ -351,6 +351,7 @@ Component * GameObject::GetComponent(ComponentType type)
 	{
 		if ((*item)->component_type == type)
 			ret = (*item);
+		item++;
 	}
 
 	return ret;

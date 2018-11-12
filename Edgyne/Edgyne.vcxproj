@@ -180,7 +180,7 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="PerfTimer.h" />
-    <ClInclude Include="QuadTreeChechu.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="QuadTreeLorien.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />

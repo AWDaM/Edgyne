@@ -246,8 +246,11 @@ const char* ModuleImporter::LoadDataFromFile(const char* file, uint& size)
 void ModuleImporter::WriteDataOnFile(const void* data, uint size, const char* file)
 {
 	FILE* fp = fopen(file, "wb");
-	fwrite(data, sizeof(char), size, fp);
-	fclose(fp);
+	if (fp)
+	{
+		fwrite(data, sizeof(char), size, fp);
+		fclose(fp);
+	}
 }
 
 

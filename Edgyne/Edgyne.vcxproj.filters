@@ -363,9 +363,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Sources\GameObject\Component</Filter>
     </ClInclude>
-    <ClInclude Include="QuadTreeChechu.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="GUIHierarchy.h">
       <Filter>Sources\GUI</Filter>
     </ClInclude>
@@ -381,6 +378,9 @@
     <ClInclude Include="GUIAssets.h" />
     <ClInclude Include="ImGuizmo\ImGuizmo.h">
       <Filter>Sources\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

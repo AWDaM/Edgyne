@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ModuleDebug.h"
 #include "Camera.h"
+#include "QuadTree.h"
 #include "SDL\include\SDL_opengl.h"
 #include <cmath>
 #include <vector>
@@ -68,7 +69,6 @@ void ModuleDebug::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & o
 	obj.AddMember("draw_plane", draw_plane, allocator);
 	obj.AddMember("draw_axis", draw_axis, allocator);
 	obj.AddMember("draw_normals", draw_normals, allocator);
-	obj.AddMember("draw_meshBoundingBox", draw_meshBoundingBox, allocator);
 
 	doc.AddMember((rapidjson::Value::StringRefType)name.data(), obj, allocator);
 
@@ -93,7 +93,6 @@ void ModuleDebug::Load(rapidjson::Document& doc)
 	draw_plane = node["draw_plane"].GetBool();
 	draw_axis = node["draw_axis"].GetBool();
 	draw_normals = node["draw_normals"].GetBool();
-	draw_meshBoundingBox = node["draw_meshBoundingBox"].GetBool();
 
 }
 
@@ -150,8 +149,9 @@ void ModuleDebug::Configuration()
 		ImGui::Checkbox("Sphere", &sphere);
 		ImGui::Checkbox("Plane", &draw_plane);
 		ImGui::Checkbox("Axis", &draw_axis);
-		ImGui::Checkbox("Mesh Normals", &draw_normals);
-		ImGui::Checkbox("Mesh Bounding Box", &draw_meshBoundingBox);
+		//ImGui::Checkbox("Normals", &draw_normals);
+		ImGui::Checkbox("BoundingBoxes", &draw_boundingboxes);
+		ImGui::Checkbox("Quad Tree", &draw_quadtree);
 	}
 }
 
@@ -393,7 +393,38 @@ void ModuleDebug::Draw_Cube_Indices()
 
 }
 
-void ModuleDebug::Draw_Camera(Camera * camera)
+void ModuleDebug::Draw_Normals(float * vertex, float * normals, int num_vertex)
+{
+	glLineWidth(2.0f);
+	glColor3f(0, 1, 0);
+
+	glBegin(GL_LINES);
+	for (int i = 0; i < num_vertex * 3; i = i + 3)
+	{
+		glVertex3f(vertex[i] - normals[i], vertex[i + 1] - normals[i + 1], vertex[i + 2] - normals[i + 2]);
+		glVertex3f(vertex[i], vertex[i + 1], vertex[i + 2]);
+	}
+	glEnd();
+
+	glColor3f(1, 1, 1);
+
+	glLineWidth(1.0f);
+}
+
+void ModuleDebug::RecursiveDrawQuadtree(const quadTreeNode * node) 
+{
+	Draw_AABB(node->boundingBox);
+
+	if (node->isDivided)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			RecursiveDrawQuadtree(node->children[i]);
+		}
+	}
+}
+
+void ModuleDebug::Draw_Camera(const Camera * camera)
 {
 	glLineWidth(4.0f);
 	glColor3f(1, 0, 1);
@@ -440,51 +471,54 @@ void ModuleDebug::Draw_Camera(Camera * camera)
 	glLineWidth(1.0f);
 }
 
-void ModuleDebug::Draw_AABB(const AABB & box)
+void ModuleDebug::Draw_AABB(const AABB & box) 
 {
-	glLineWidth(2.0f);
-	glColor3f(0, 0, 1);
-	glBegin(GL_LINES);
+	if (box.IsFinite())
+	{
+		glLineWidth(2.0f);
+		glColor3f(0, 0, 1);
+		glBegin(GL_LINES);
 
-	glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
-	glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
-					 																	 
-	glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
-	glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
-																						 
-	glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
-	glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
-																						 
-	glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
-	glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
-																						 
-	glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
-	glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
-																						 
-	glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
-	glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
-					 								   									 
-	glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
-	glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
-																						 
-	glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
-	glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
-																						 
-	glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
-	glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
-					  																	 
-	glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
-	glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
-					  																	 
-	glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
-	glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
-					  																	 
-	glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
-	glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
+		glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
+		glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
 
-	glEnd();
-	glColor3f(1, 1, 1);
-	glLineWidth(1.0f);
+		glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
+		glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
+
+		glVertex3f(box.CornerPoint(0).x, box.CornerPoint(0).y, box.CornerPoint(0).z);
+		glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
+
+		glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
+		glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
+
+		glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
+		glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
+
+		glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
+		glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
+
+		glVertex3f(box.CornerPoint(7).x, box.CornerPoint(7).y, box.CornerPoint(7).z);
+		glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
+
+		glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
+		glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
+
+		glVertex3f(box.CornerPoint(1).x, box.CornerPoint(1).y, box.CornerPoint(1).z);
+		glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
+
+		glVertex3f(box.CornerPoint(3).x, box.CornerPoint(3).y, box.CornerPoint(3).z);
+		glVertex3f(box.CornerPoint(2).x, box.CornerPoint(2).y, box.CornerPoint(2).z);
+
+		glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
+		glVertex3f(box.CornerPoint(5).x, box.CornerPoint(5).y, box.CornerPoint(5).z);
+
+		glVertex3f(box.CornerPoint(6).x, box.CornerPoint(6).y, box.CornerPoint(6).z);
+		glVertex3f(box.CornerPoint(4).x, box.CornerPoint(4).y, box.CornerPoint(4).z);
+
+		glEnd();
+		glColor3f(1, 1, 1);
+		glLineWidth(1.0f);
+	}
 }
 
 

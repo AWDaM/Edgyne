@@ -6,6 +6,8 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "ModuleDebug.h"
+#include "QuadTree.h"
+#include "Mesh.h"
 
 #include "SDL\include\SDL_opengl.h"
 
@@ -26,8 +28,8 @@ ModuleLevel::~ModuleLevel()
 bool ModuleLevel::Init(rapidjson::Value& node)
 {
 	AABB test({ -1,-1,-1 }, { 10, 2, 10 });
-
-	quadTree.Create(test);
+	quad_tree = new EdgyQuadTree();
+	quad_tree->Create(test);
 
 
 	root = new GameObject(nullptr, "root");
@@ -120,6 +122,17 @@ void ModuleLevel::Draw()
 				App->debug->Draw_AABB(selected_game_object->aligned_bounding_box);
 			}
 
+			if (App->debug->draw_boundingboxes)
+			{
+				App->debug->Draw_AABB((*item)->aligned_bounding_box);
+			}
+
+			if (App->debug->draw_normals)
+			{
+				Mesh* mesh = (Mesh*)(*item)->GetComponent(MESH);
+				if(mesh)
+					App->debug->Draw_Normals(mesh->vertex,mesh->normals,mesh->num_vertex);
+			}
 		if(game_camera)
 			App->debug->Draw_Camera(game_camera);
 

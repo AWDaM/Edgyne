@@ -3,12 +3,13 @@
 
 
 #include "Module.h"
-#include "QuadTreeChechu.h"
+
 
 #include <vector>
 
 class GameObject;
 class Camera;
+class EdgyQuadTree;
 
 class ModuleLevel :
 	public Module
@@ -26,7 +27,7 @@ public:
 	void Draw();
 private:
 public:
-	QuadTreeChechu quadTree;
+	EdgyQuadTree* quad_tree;
 	std::list<GameObject*> game_objects;
 	GameObject* root = nullptr;
 	Camera* game_camera = nullptr;

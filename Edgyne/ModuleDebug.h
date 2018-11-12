@@ -9,6 +9,7 @@
 #include <gl/GLU.h>
 
 class Camera;
+class quadTreeNode;
 
 class ModuleDebug :
 	public Module
@@ -32,11 +33,14 @@ public:
 	void Draw_Sphere();
 	void Draw_Cube_Vertex();
 	void Draw_Cube_Indices();
+	void Draw_Normals(float* vertex,float*normals,int num_vertex);
 
 	void Draw_Quadtree();
 	void Draw_Quadtree_node();
 
-	void Draw_Camera(Camera* camera);
+	void RecursiveDrawQuadtree(const quadTreeNode* node);
+
+	void Draw_Camera(const Camera* camera);
 	void Draw_AABB(const AABB& box);
 
 	void Vertex_Array_Cube();
@@ -51,7 +55,9 @@ public:
 	bool draw_plane = true;
 	bool draw_axis = true;
 	bool draw_normals = false;
-	bool draw_meshBoundingBox = true;
+	bool draw_quadtree = false;
+	bool draw_boundingboxes = false;
+	
 	
 
 	uint my_id_vertex = 0;
