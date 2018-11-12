@@ -33,6 +33,7 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 
 
 	root = new GameObject(nullptr, "root");
+	game_objects.push_back(root);
 	root->transform = (Transform*)root->AddComponent(TRANSFORM);
 
 	return true;

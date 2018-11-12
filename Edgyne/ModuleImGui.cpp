@@ -4,7 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
-
+#include "ImGuizmo\ImGuizmo.h"
 
 #include "GUIConsole.h"
 #include "GUIAbout.h"
@@ -115,6 +115,7 @@ update_status ModuleImGui::PreUpdate(float dt)
 		ImGui_ImplOpenGL2_NewFrame();
 		ImGui_ImplSDL2_NewFrame(App->window->window);
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 
 	return status;
 }

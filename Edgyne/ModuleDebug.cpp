@@ -2,9 +2,11 @@
 #include "ModuleDebug.h"
 #include "Camera.h"
 #include "QuadTree.h"
+#include "ImGuizmo\ImGuizmo.h"
 #include "SDL\include\SDL_opengl.h"
 #include <cmath>
 #include <vector>
+
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
