@@ -54,12 +54,14 @@ update_status ModuleLevel::PreUpdate(float dt)
 {
 	std::list<GameObject*>::iterator item = game_objects.begin();
 
-	while (item != game_objects.end())
+	while (item != game_objects.end() && game_objects.size() > 1)
 	{
 
 		if ((*item)->to_remove)
 		{
-			(*item)->RemoveSelfFromParent();
+			if((*item) != root)
+				(*item)->RemoveSelfFromParent();
+
 			(*item)->RecursiveDeleteGameObject();
 			item = game_objects.begin();
 		}
@@ -99,9 +101,23 @@ GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 	return ret;
 }
 
+void ModuleLevel::DeleteLevel()
+{
+	std::list<GameObject*>::iterator item = game_objects.end();
+
+	while (item != game_objects.begin())
+	{
+		(*item)->CleanUp();
+		--item;
+		game_objects.pop_back();
+	}
+}
+
 void ModuleLevel::Draw()
 {
-	root->RecursiveTransformChanged(root->global_transform_matrix);
+	if(root)
+		root->RecursiveTransformChanged(root->global_transform_matrix);
+
 	std::list<GameObject*>::iterator item = game_objects.begin();
 
 	while (item != game_objects.end())

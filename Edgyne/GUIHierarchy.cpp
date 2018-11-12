@@ -27,6 +27,13 @@ void GUIHierarchy::Draw()
 			App->level->selected_game_object->AddGameObject("GameObject");
 		}
 	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("DELET THIS"))
+	{
+		App->level->root->to_remove = true;
+	}
 	int id = 0;
 	App->level->root->OnHierarchy(id);
 	ImGui::End();

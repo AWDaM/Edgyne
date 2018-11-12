@@ -41,6 +41,7 @@ public:
 	~GameObject();
 
 	bool Update();
+	bool CleanUp();
 	bool Draw();
 
 	bool InitComponents();

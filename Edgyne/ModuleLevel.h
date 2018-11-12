@@ -23,6 +23,7 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	GameObject* NewGameObject(std::string name, bool with_transform = true);
+	void DeleteLevel();
 	
 	void Draw();
 private:

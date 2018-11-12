@@ -10,6 +10,7 @@
 
 class Camera;
 class quadTreeNode;
+class GameObject;
 
 class ModuleDebug :
 	public Module
@@ -35,13 +36,12 @@ public:
 	void Draw_Cube_Indices();
 	void Draw_Normals(float* vertex,float*normals,int num_vertex);
 
-	void Draw_Quadtree();
-	void Draw_Quadtree_node();
-
 	void RecursiveDrawQuadtree(const quadTreeNode* node);
 
 	void Draw_Camera(const Camera* camera);
 	void Draw_AABB(const AABB& box);
+
+	void Draw_Guizmo(GameObject* game_object);
 
 	void Vertex_Array_Cube();
 	void Indices_Array_Cube();

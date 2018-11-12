@@ -40,6 +40,12 @@ bool GameObject::Update()
 	return true;
 }
 
+bool GameObject::CleanUp()
+{
+	CleanUpComopnents();
+	return true;
+}
+
 bool GameObject::Draw()
 {
 	glPushMatrix();
@@ -302,15 +308,17 @@ void GameObject::RemoveSelfFromParent()
 
 void GameObject::RecursiveDeleteGameObject()
 {
-	std::vector<Component*>::iterator item = components.begin();
-
-	while (item != components.end())
+	if (this != App->level->root)
 	{
-		(*item)->ComponentCleanUp();
-		RELEASE((*item));
-		item = components.erase(item);
-	}
+		std::vector<Component*>::iterator item = components.begin();
 
+		while (item != components.end())
+		{
+			(*item)->ComponentCleanUp();
+			RELEASE((*item));
+			item = components.erase(item);
+		}
+	}
 	std::list<GameObject*>::iterator g_item = childs.begin();
 
 	while (g_item != childs.end() || childs.size()>0)
@@ -325,18 +333,20 @@ void GameObject::RecursiveDeleteGameObject()
 		App->level->selected_game_object = nullptr;
 	}
 
-	std::list<GameObject*>::iterator _item = App->level->game_objects.begin();
-
-	while (_item != App->level->game_objects.end())
+	if (this != App->level->root)
 	{
-		if ((*_item) == this)
-		{
-			App->level->game_objects.erase(_item);
-			break;
-		}
-		_item++;
-	}
+		std::list<GameObject*>::iterator _item = App->level->game_objects.begin();
 
+		while (_item != App->level->game_objects.end())
+		{
+			if ((*_item) == this)
+			{
+				App->level->game_objects.erase(_item);
+				break;
+			}
+			_item++;
+		}
+	}
 
 
 }

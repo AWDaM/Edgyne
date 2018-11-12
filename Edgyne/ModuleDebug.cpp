@@ -1,6 +1,9 @@
 #include "Application.h"
 #include "ModuleDebug.h"
+#include "GameObject.h"
 #include "Camera.h"
+#include "ModuleCamera3D.h"
+#include "ModuleLevel.h"
 #include "QuadTree.h"
 #include "ImGuizmo\ImGuizmo.h"
 #include "SDL\include\SDL_opengl.h"
@@ -108,6 +111,8 @@ void ModuleDebug::Draw()
 
 	glLineWidth(3.0f);
 
+	if(App->level->selected_game_object)
+		Draw_Guizmo(App->level->selected_game_object);
 
 	if (direct_mode_cube)
 	{
@@ -521,6 +526,16 @@ void ModuleDebug::Draw_AABB(const AABB & box)
 		glColor3f(1, 1, 1);
 		glLineWidth(1.0f);
 	}
+}
+
+void ModuleDebug::Draw_Guizmo(GameObject* game_object)
+{
+
+	float4x4 view_matrix = App->camera->editor_camera->frustum.ViewMatrix();
+	float4x4 projection_matrix = App->camera->editor_camera->frustum.ProjectionMatrix();
+
+	
+	ImGuizmo::Manipulate((float*)view_matrix.v, (float*)projection_matrix.v, ImGuizmo::TRANSLATE, ImGuizmo::WORLD, (float*)game_object->global_transform_matrix.v);
 }
 
 
