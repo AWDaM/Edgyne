@@ -55,6 +55,9 @@
     <Filter Include="Sources\GameObject\Component">
       <UniqueIdentifier>{5e192b09-a7ff-44c6-8d13-d1f9b83e8553}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\ImGuizmo">
+      <UniqueIdentifier>{67d0a1f1-4d19-47ff-89ea-661ff8090d82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -376,6 +379,9 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="GUIAssets.h" />
+    <ClInclude Include="ImGuizmo\ImGuizmo.h">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -601,6 +607,9 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="GUIAssets.cpp" />
+    <ClCompile Include="ImGuizmo\ImGuizmo.cpp">
+      <Filter>Sources\ImGuizmo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">

@@ -176,6 +176,31 @@ void GameObject::RecursiveSetChildsActive(bool _active)
 	}
 }
 
+void GameObject::RecursiveSetChildsStatic(bool _static)
+{
+	Static = _static;
+	std::list<GameObject*>::iterator item = childs.begin();
+
+	while (item != childs.end())
+	{
+		(*item)->RecursiveSetChildsStatic(_static);
+		item++;
+	}
+}
+
+void GameObject::RecursiveSetChildsTransformChanged(bool _transform_changed)
+{
+	transform_changed = _transform_changed;
+	std::list<GameObject*>::iterator item = childs.begin();
+
+	while (item != childs.end())
+	{
+		(*item)->RecursiveSetChildsTransformChanged(_transform_changed);
+		item++;
+	}
+
+}
+
 void GameObject::SetLocalBoundingVolume()
 {
 	aligned_bounding_box.SetNegativeInfinity();

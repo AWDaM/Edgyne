@@ -54,6 +54,8 @@ public:
 	void OnInspector();
 
 	void RecursiveSetChildsActive(bool active);
+	void RecursiveSetChildsStatic(bool _static);
+	void RecursiveSetChildsTransformChanged(bool transform_changed);
 
 	void SetLocalBoundingVolume();
 
