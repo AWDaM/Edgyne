@@ -557,10 +557,14 @@ void ModuleDebug::Draw_Guizmo(GameObject* game_object)
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	
 	float4x4 localMat = game_object->transform->LocalTransformationMatrix();
-	ImGuizmo::Manipulate((float*)view_matrix.v, (float*)projection_matrix.v, operation_type, ImGuizmo::LOCAL, (float*)localMat.v,	NULL,NULL);
+	localMat.Transpose();
+	ImGuizmo::Manipulate((float*)view_matrix.v, (float*)projection_matrix.v, operation_type, ImGuizmo::WORLD, (float*)localMat.v,	NULL,NULL);
 	localMat.Transpose();
 	game_object->transform->position = localMat.TranslatePart();
-	game_object->transform->rotation = localMat.RotatePart().ToQuat();
+	game_object->transform->rotation_euler = localMat.RotatePart().ToEulerXYZ();
+	game_object->transform->rotation_euler.x *=RADTODEG;
+	game_object->transform->rotation_euler.y*=RADTODEG;
+	game_object->transform->rotation_euler.z*=RADTODEG;
 	game_object->transform->scale = localMat.GetScale();
 	game_object->RecursiveSetChildsTransformChanged(true);
 	/*game_object->transform_changed = true;*/

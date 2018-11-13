@@ -5,6 +5,7 @@
 #include "Module.h"
 #include <array>
 #include "GL/glew.h"
+#include "ImGuizmo/ImGuizmo.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
