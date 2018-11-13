@@ -59,8 +59,10 @@ update_status ModuleLevel::PreUpdate(float dt)
 
 		if ((*item)->to_remove)
 		{
-			if((*item) != root)
+			if ((*item) != root)
 				(*item)->RemoveSelfFromParent();
+			else
+				(*item)->to_remove = false;
 
 			(*item)->RecursiveDeleteGameObject();
 			item = game_objects.begin();

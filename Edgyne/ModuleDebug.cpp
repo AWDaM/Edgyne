@@ -560,13 +560,22 @@ void ModuleDebug::Draw_Guizmo(GameObject* game_object)
 	localMat.Transpose();
 	ImGuizmo::Manipulate((float*)view_matrix.v, (float*)projection_matrix.v, operation_type, ImGuizmo::WORLD, (float*)localMat.v,	NULL,NULL);
 	localMat.Transpose();
-	game_object->transform->position = localMat.TranslatePart();
-	game_object->transform->rotation_euler = localMat.RotatePart().ToEulerXYZ();
-	game_object->transform->rotation_euler.x *=RADTODEG;
-	game_object->transform->rotation_euler.y*=RADTODEG;
-	game_object->transform->rotation_euler.z*=RADTODEG;
-	game_object->transform->scale = localMat.GetScale();
-	game_object->RecursiveSetChildsTransformChanged(true);
+	if (ImGuizmo::IsUsing())
+	{
+		if(operation_type == ImGuizmo::TRANSLATE)
+			game_object->transform->position = localMat.TranslatePart();
+		else if (operation_type == ImGuizmo::ROTATE)
+		{
+			game_object->transform->rotation_euler = localMat.RotatePart().ToEulerXYZ();
+			game_object->transform->rotation_euler.x *= RADTODEG;
+			game_object->transform->rotation_euler.y *= RADTODEG;
+			game_object->transform->rotation_euler.z *= RADTODEG;
+		}
+		else if(operation_type == ImGuizmo::SCALE)
+			game_object->transform->scale = localMat.GetScale();
+
+		game_object->RecursiveSetChildsTransformChanged(true);
+	}
 	/*game_object->transform_changed = true;*/
 }
 
