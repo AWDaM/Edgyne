@@ -35,12 +35,12 @@ public:
 	void ReceivedFile(const char* path);
 
 	void SaveScene();
-
+	void LoadScene();
+	void AddGameObjectsFromFile(GameObject* parent, rapidjson::Document& document);
 private:
 	void SaveMesh(Mesh* mesh);
 	std::string SaveMaterial(const std::string& path);
-	void LoadScene();
-
+	
 	void LoadInfo(GameObject* game_object, aiMesh* currentMesh,aiNode* node);
 	void LoadVerices(Mesh* new_mesh, aiMesh* currentMesh);
 	void LoadColor(Material* new_mesh, aiMaterial* mat);
