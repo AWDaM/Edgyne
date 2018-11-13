@@ -12,6 +12,7 @@ class Camera;
 class quadTreeNode;
 class GameObject;
 
+
 class ModuleDebug :
 	public Module
 {
@@ -58,6 +59,7 @@ public:
 	bool draw_quadtree = false;
 	bool draw_boundingboxes = false;
 	
+	ImGuizmo::OPERATION operation_type;
 	
 
 	uint my_id_vertex = 0;

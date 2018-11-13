@@ -20,6 +20,11 @@ Transform::~Transform()
 {
 }
 
+float4x4 Transform::LocalTransformationMatrix()
+{
+	return float4x4::FromTRS(position, rotation, scale);;
+}
+
 void Transform::TransformChanged()
 {
 	rotation = rotation.FromEulerXYZ(DEGTORAD*rotation_euler.x, DEGTORAD*rotation_euler.y, DEGTORAD*rotation_euler.z);

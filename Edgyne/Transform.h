@@ -14,6 +14,7 @@ public:
 	Transform(GameObject* game_object);
 	~Transform();
 
+	float4x4 LocalTransformationMatrix();
 	void TransformChanged();
 	void OnEditor();
 

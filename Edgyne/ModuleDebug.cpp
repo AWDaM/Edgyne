@@ -1,7 +1,9 @@
 #include "Application.h"
 #include "ModuleDebug.h"
+#include "ModuleInput.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "Transform.h"
 #include "ModuleCamera3D.h"
 #include "ModuleLevel.h"
 #include "QuadTree.h"
@@ -103,6 +105,17 @@ void ModuleDebug::Load(rapidjson::Document& doc)
 
 update_status ModuleDebug::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_Q))
+	{
+		operation_type = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_W))
+	{
+		operation_type = ImGuizmo::OPERATION::ROTATE;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_E))
+		operation_type = ImGuizmo::OPERATION::SCALE;
+
 	return UPDATE_CONTINUE;
 }
 
@@ -531,11 +544,26 @@ void ModuleDebug::Draw_AABB(const AABB & box)
 void ModuleDebug::Draw_Guizmo(GameObject* game_object)
 {
 
-	float4x4 view_matrix = App->camera->editor_camera->frustum.ViewMatrix();
-	float4x4 projection_matrix = App->camera->editor_camera->frustum.ProjectionMatrix();
+	/*float4x4 view_matrix = App->camera->editor_camera->frustum.ViewMatrix();
+	float4x4 projection_matrix = App->camera->editor_camera->frustum.ProjectionMatrix();*/
+	ImGuizmo::Enable(true);
+	float4x4 view_matrix;
+	float4x4 projection_matrix;
+	glGetFloatv(GL_MODELVIEW_MATRIX, (float*)view_matrix.v);
+	glGetFloatv(GL_PROJECTION_MATRIX, (float*)projection_matrix.v);
 
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuizmo::SetOrthographic(true);
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	
-	ImGuizmo::Manipulate((float*)view_matrix.v, (float*)projection_matrix.v, ImGuizmo::TRANSLATE, ImGuizmo::WORLD, (float*)game_object->global_transform_matrix.v);
+	float4x4 localMat = game_object->transform->LocalTransformationMatrix();
+	ImGuizmo::Manipulate((float*)view_matrix.v, (float*)projection_matrix.v, operation_type, ImGuizmo::LOCAL, (float*)localMat.v,	NULL,NULL);
+	localMat.Transpose();
+	game_object->transform->position = localMat.TranslatePart();
+	game_object->transform->rotation = localMat.RotatePart().ToQuat();
+	game_object->transform->scale = localMat.GetScale();
+	game_object->RecursiveSetChildsTransformChanged(true);
+	/*game_object->transform_changed = true;*/
 }
 
 
