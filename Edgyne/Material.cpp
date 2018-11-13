@@ -46,6 +46,19 @@ rapidjson::Value Material::SaveToScene(rapidjson::Document::AllocatorType& alloc
 	return myData;
 }
 
+void Material::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
+{
+	UID = comp->value["UID"].GetUint();
+	fileName = comp->value["Texture Name"].GetString();
+
+
+	img_size.Set(comp->value["Size"]["Width"].GetFloat(), comp->value["Size"]["Height"].GetFloat());
+
+	color.Set(comp->value["Color"]["r"].GetFloat(), comp->value["Color"]["g"].GetFloat(), comp->value["Color"]["b"].GetFloat());
+
+
+}
+
 bool Material::ComponentDraw()
 {
 	return true;

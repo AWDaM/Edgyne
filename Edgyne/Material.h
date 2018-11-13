@@ -15,7 +15,8 @@ public:
 	~Material();
 
 	rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator);
-	
+	void LoadComponent(rapidjson::Value::ConstMemberIterator comp);
+
 	bool ComponentDraw();
 	void MaterialBind();
 	void MaterialUnbind();

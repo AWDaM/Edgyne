@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "Application.h"
+#include "ModuleImporter.h"
 #include "Material.h"
 #include "Transform.h"
 #include "GL/glew.h"
@@ -34,9 +35,22 @@ rapidjson::Value Mesh::SaveToScene(rapidjson::Document::AllocatorType& allocator
 	myData.AddMember("Type", component_type, allocator);
 	myData.AddMember("Mesh File Name", (rapidjson::Value::StringRefType)fileName.c_str(), allocator);
 	myData.AddMember("Texture Coordinates", has_texture_coordinates, allocator);
+	myData.AddMember("Normals", has_normals, allocator);
 	myData.AddMember("Triangle Faces", has_triangle_faces, allocator);
 
 	return myData;
+}
+
+void Mesh::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
+{
+	UID = comp->value["UID"].GetUint();
+	has_texture_coordinates = comp->value["Texture Coordinates"].GetBool();
+	has_triangle_faces = comp->value["Triangle Faces"].GetBool();
+	has_normals = comp->value["Normals"].GetBool();
+	fileName = comp->value["Mesh File Name"].GetString();
+
+	App->importer->CopyDataFromFile(App->importer->FindFileInFolder(fileName));
+
 }
 
 void Mesh::OnEditor()

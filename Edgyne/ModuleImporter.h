@@ -19,8 +19,8 @@ public:
 	void SaveTexture(std::string& path);
 
 	bool LoadMeshFromFile();
-	void CopyDataFromFile(std::string& path);
-
+	void CopyDataFromFile(std::string& path, Mesh* _mesh = nullptr);
+	std::string FindFileInFolder(std::string& fileName);
 
 	const char* LoadDataFromFile(const char* file, uint& size); 
 	void WriteDataOnFile(const void* data, uint size, const char* file);

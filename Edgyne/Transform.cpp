@@ -133,3 +133,18 @@ rapidjson::Value Transform::SaveToScene(rapidjson::Document::AllocatorType& allo
 
 	return myData;
 }
+
+void Transform::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
+{
+	UID = comp->value["UID"].GetUint();
+
+	position.Set(comp->value["Position"]["x"].GetFloat(), comp->value["Position"]["y"].GetFloat(), comp->value["Position"]["z"].GetFloat());
+
+	rotation.Set(comp->value["Rotation"]["x"].GetFloat(), comp->value["Rotation"]["y"].GetFloat(), comp->value["Rotation"]["z"].GetFloat(), comp->value["Rotation"]["w"].GetFloat());
+
+	rotation_euler.Set(comp->value["Rotation Euler"]["x"].GetFloat(), comp->value["Rotation Euler"]["y"].GetFloat(), comp->value["Rotation Euler"]["z"].GetFloat());
+
+	previous_rotation_euler.Set(comp->value["Previous Rotation Euler"]["x"].GetFloat(), comp->value["Previous Rotation Euler"]["y"].GetFloat(), comp->value["Previous Rotation Euler"]["z"].GetFloat());
+
+	scale.Set(comp->value["Scale"]["x"].GetFloat(), comp->value["Scale"]["y"].GetFloat(), comp->value["Scale"]["z"].GetFloat());
+}

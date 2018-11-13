@@ -13,15 +13,17 @@
 
 GameObject::GameObject(GameObject* parent, std::string _name) : active(true), parent(parent)
 {
-	UID = pcg32_random_r(&App->rng);
 	if (parent)
 	{
+		UID = pcg32_random_r(&App->rng);
 		parentUID = parent->UID;
 		parent->childrenUID.push_back(UID);
 	}
 	else
+	{
+		UID = 1;
 		parentUID = 0;
-
+	}
 	aligned_bounding_box.SetNegativeInfinity();
 	name = _name;
 	global_transform_matrix.SetIdentity();

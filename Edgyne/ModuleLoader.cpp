@@ -6,6 +6,7 @@
 #include "ModuleLevel.h"
 #include "GameObject.h"
 #include "Mesh.h"
+#include "Camera.h"
 #include "Transform.h"
 #include "Material.h"
 #include "Assimp\include\cimport.h"
@@ -489,11 +490,11 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std:
 	return ret;
 }
 
-void ModuleLoader::SaveScene()
+void ModuleLoader::SaveScene(std::string name)
 {
 	rapidjson::Document document;
 	document.SetObject();
-	FILE* fp = fopen("edgyscene.json", "wb");
+	FILE* fp = fopen(name.append(".json").c_str(), "wb");
 	char writeBuffer[1000000];
 	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 
@@ -506,13 +507,19 @@ void ModuleLoader::SaveScene()
 		rapidjson::Value obj(rapidjson::kObjectType);
 		obj.AddMember("UID", (*iterator)->UID, allocator);
 		obj.AddMember("Parent UID", (*iterator)->parentUID, allocator);
+		obj.AddMember("Active", (*iterator)->active, allocator);
+		obj.AddMember("Static", (*iterator)->Static, allocator);
 
-		rapidjson::Value children(rapidjson::kObjectType);
+		/*rapidjson::Value children(rapidjson::kObjectType);
 		for (std::vector<uint>::iterator item = (*iterator)->childrenUID.begin(); item != (*iterator)->childrenUID.end(); item++)
-			children.AddMember("UID", (*item), allocator);
+			children.AddMember("UID", (*item), allocator);*/
 
-		obj.AddMember("Children UID", children, allocator);
 		obj.AddMember("Object Name", (rapidjson::Value::StringRefType)(*iterator)->name.c_str(), allocator);
+
+		if((*iterator)->childrenUID.size() > 0)
+			obj.AddMember("Has Children", true, allocator);
+		else
+			obj.AddMember("Has Children", false, allocator);
 
 		rapidjson::Value component(rapidjson::kObjectType);
 		(*iterator)->SaveToScene(component, allocator);
@@ -529,11 +536,11 @@ void ModuleLoader::SaveScene()
 	fclose(fp);
 }
 
-void ModuleLoader::LoadScene()
+void ModuleLoader::LoadScene(std::string name)
 {
 	rapidjson::Document document;
 
-	FILE* file = fopen("edgyscene.json", "rb");
+	FILE* file = fopen(name.append(".json").c_str(), "rb");
 	if (file)
 	{
 		char readBuffer[65536];
@@ -550,11 +557,55 @@ void ModuleLoader::AddGameObjectsFromFile(GameObject* parent, rapidjson::Documen
 {
 	const rapidjson::Value& scene = document["Scene"];
 
-	for (rapidjson::Value::ConstMemberIterator itr = scene.MemberBegin(); itr != scene.MemberEnd(); ++itr)
+	for (rapidjson::Value::ConstMemberIterator itr = scene.MemberBegin(); itr != scene.MemberEnd(); itr++)
 	{
-		if (itr->value["Parent UID"].GetUint() == parent->UID)
+		if (itr->value["Parent UID"].GetUint() != 0 && itr->value["Parent UID"].GetUint() == parent->UID)
 		{
 			GameObject* go = parent->AddGameObject(itr->value["Object Name"].GetString());
+			go->active = itr->value["Active"].GetBool();
+			go->Static = itr->value["Static"].GetBool();
+			go->parentUID = itr->value["Parent UID"].GetUint();
+			go->UID = itr->value["UID"].GetUint();
+			parent->childrenUID.push_back(go->UID);
+
+			if (itr->value["Has Children"].GetBool())
+			{
+				AddGameObjectsFromFile(go, document);
+			}
+			const rapidjson::Value& components = itr->value["Components"];
+
+			for (rapidjson::Value::ConstMemberIterator comp = components.MemberBegin(); comp != components.MemberEnd(); comp++)
+			{
+				switch (comp->value["Type"].GetInt())
+				{
+				case ComponentType::TRANSFORM:
+				{
+					Transform* t = (Transform*)go->AddComponent(ComponentType::TRANSFORM); 
+					t->LoadComponent(comp);
+					break;
+				}
+				case ComponentType::CAMERA:
+				{
+					Camera* c = (Camera*)go->AddComponent(ComponentType::CAMERA);
+					c->LoadComponent(comp);
+					break;
+				}
+				case ComponentType::MATERIAL:
+				{
+					Material* ma = (Material*)go->AddComponent(ComponentType::MATERIAL);
+					ma->LoadComponent(comp);
+					break;
+				}
+				case ComponentType::MESH:
+				{
+					Mesh* me = (Mesh*)go->AddComponent(ComponentType::MESH);
+					me->LoadComponent(comp);
+					break;
+				}
+				default:
+					break;
+				}
+			}
 
 		}
 	}
@@ -563,13 +614,15 @@ void ModuleLoader::AddGameObjectsFromFile(GameObject* parent, rapidjson::Documen
 void ModuleLoader::SaveMesh(Mesh* mesh)
 {
 	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
+	bool optatives[3] = { mesh->has_texture_coordinates, mesh->has_triangle_faces, mesh->has_normals };
 	uint fileSize;
+
+	fileSize = sizeof(ranges) + sizeof(optatives) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index;
+
 	if (mesh->has_texture_coordinates)
-		//					RANGES OF DATA					VERTICES							INDICES						TEX COORDS							NORMALS
-		fileSize = sizeof(ranges) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index + sizeof(float)*mesh->num_vertex * 2 + sizeof(float)*mesh->num_vertex * 3;
-	else
-		//					RANGES OF DATA					VERTICES							INDICES						NORMALS
-		fileSize = sizeof(ranges) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index + sizeof(float)*mesh->num_vertex * 3;
+		fileSize += sizeof(float)*mesh->num_vertex * 2;
+	if(mesh->has_normals)
+		fileSize += sizeof(float)*mesh->num_vertex * 3;
 
 	char* data = new char[fileSize];
 	char* bookmark = data;
@@ -600,11 +653,12 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 
 		bookmark += bytes;
 	}
-
-	// Saving the data of the normals
-	bytes = sizeof(float)*mesh->num_vertex * 3;
-	memcpy(bookmark, mesh->normals, bytes);
-
+	if (mesh->has_normals)
+	{
+		// Saving the data of the normals
+		bytes = sizeof(float)*mesh->num_vertex * 3;
+		memcpy(bookmark, mesh->normals, bytes);
+	}
 
 	std::string str = App->importer->meshLibraryPath;
 	str.append(mesh->game_object->name);

@@ -34,8 +34,8 @@ public:
 
 	void ReceivedFile(const char* path);
 
-	void SaveScene();
-	void LoadScene();
+	void SaveScene(std::string name);
+	void LoadScene(std::string name);
 	void AddGameObjectsFromFile(GameObject* parent, rapidjson::Document& document);
 private:
 	void SaveMesh(Mesh* mesh);

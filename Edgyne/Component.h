@@ -21,6 +21,8 @@ public:
 	virtual void SetBoundingVolume()	{};
 	virtual void OnEditor()				{};
 	virtual rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator) { return rapidjson::Value(); }
+
+	virtual void LoadComponent(rapidjson::Value::ConstMemberIterator comp) {};
 private:
 public:
 	bool active = false;

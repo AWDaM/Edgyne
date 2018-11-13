@@ -19,6 +19,7 @@ public:
 	void OnEditor();
 
 	rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator);
+	void LoadComponent(rapidjson::Value::ConstMemberIterator comp);
 private:
 public:
 	vec position;

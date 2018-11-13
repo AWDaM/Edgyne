@@ -16,6 +16,7 @@ public:
 	bool ComponentCleanUp();
 
 	rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator);
+	void LoadComponent(rapidjson::Value::ConstMemberIterator comp);
 
 	void Look(const vec &Position, const vec &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec& Spot);

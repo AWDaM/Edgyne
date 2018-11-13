@@ -65,6 +65,7 @@ rapidjson::Value Camera::SaveToScene(rapidjson::Document::AllocatorType& allocat
 
 	myData.AddMember("Near Plane", near_plane_distance, allocator);
 	myData.AddMember("Far Plane", far_plane_distance, allocator);
+	myData.AddMember("Aspect Ratio", aspect_ratio, allocator);
 	myData.AddMember("Horizontal FoV", horizontal_fov, allocator);
 	myData.AddMember("Vertical FoV", vertical_fov, allocator);
 
@@ -85,6 +86,30 @@ rapidjson::Value Camera::SaveToScene(rapidjson::Document::AllocatorType& allocat
 	myData.AddMember("Reference", ref, allocator);
 
 	return myData;
+}
+
+void Camera::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
+{
+	UID = comp->value["UID"].GetUint();
+	near_plane_distance = comp->value["Near Plane"].GetFloat();
+	far_plane_distance = comp->value["Far Plane"].GetFloat();
+	aspect_ratio = comp->value["Aspect Ratio"].GetFloat();
+	horizontal_fov = comp->value["Horizontal FoV"].GetFloat();
+	vertical_fov = comp->value["Vertical FoV"].GetFloat();
+
+	Position.Set(comp->value["Position"]["x"].GetFloat(), comp->value["Position"]["y"].GetFloat(), comp->value["Position"]["z"].GetFloat());
+
+	Reference.Set(comp->value["Reference"]["x"].GetFloat(), comp->value["Reference"]["y"].GetFloat(), comp->value["Reference"]["z"].GetFloat());
+
+
+	frustum.type = math::FrustumType::PerspectiveFrustum;
+	frustum.pos = Position;
+	frustum.front = Reference;
+	frustum.up = { 0.0f,1.0f,0.0f };
+
+	ChangeFrustum();
+
+	LookAt(Reference);
 }
 
 void Camera::Look(const vec & Position, const vec & Reference, bool RotateAroundReference)
