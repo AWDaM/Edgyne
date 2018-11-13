@@ -4,6 +4,7 @@
 #include "ModuleLevel.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "QuadTree.h"
 
 
 #include <list>
@@ -41,6 +42,7 @@ void GUIInspector::Draw()
 			if (ImGui::Checkbox("Static", &App->level->selected_game_object->Static))
 			{
 				App->level->selected_game_object->RecursiveSetChildsStatic(App->level->selected_game_object->Static);
+				//App->level->quad_tree->Clear
 			}
 			ImGui::Checkbox("Delete", &App->level->selected_game_object->to_remove);
 

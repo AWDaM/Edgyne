@@ -269,7 +269,7 @@ void GameObject::RecursiveTransformChanged(const float4x4 & parent)
 {
 	if (transform_changed)
 	{
-		global_transform_matrix = parent * float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
+		global_transform_matrix = parent * transform->LocalTransformationMatrix();
 
 		std::vector<Component*>::iterator item = components.begin();
 
