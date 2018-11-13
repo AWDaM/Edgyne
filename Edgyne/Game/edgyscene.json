@@ -1,292 +1,115 @@
 {
-  "Game Object": {
-    "UID": 30553482,
-    "Parent UID": 798237205,
-    "Children UID": {},
-    "Object Name": "Camera",
-    "Components": {
-      "Transform": {
-        "UID": 1698782851,
-        "Type": 1,
-        "Position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Rotation": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "w": 1.0
-        },
-        "Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Previous Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      },
-      "Camera": {
-        "UID": 4270980970,
-        "Type": 4,
-        "Near Plane": 0.10000000149011612,
-        "Far Plane": 1000.0,
-        "Horizontal FoV": 106.66999816894531,
-        "Vertical FoV": 60.0,
-        "Position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Reference": {
-          "x": 1.0,
-          "y": 0.0,
-          "z": 0.0
-        }
-      }
-    }
-  },
-  "Game Object": {
-    "UID": 2149666435,
-    "Parent UID": 798237205,
-    "Children UID": {
-      "UID": 1637229362,
-      "UID": 1005610382
-    },
-    "Object Name": "RootNode",
-    "Components": {
-      "Transform": {
-        "UID": 1152268972,
-        "Type": 1,
-        "Position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Rotation": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "w": 1.0
-        },
-        "Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Previous Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    }
-  },
-  "Game Object": {
-    "UID": 1637229362,
-    "Parent UID": 2149666435,
-    "Children UID": { "UID": 2599339587 },
-    "Object Name": "Node GameObject",
-    "Components": {
-      "Transform": {
-        "UID": 799111543,
-        "Type": 1,
-        "Position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Rotation": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "w": 1.0
-        },
-        "Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Previous Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    }
-  },
-  "Game Object": {
-    "UID": 2599339587,
-    "Parent UID": 1637229362,
-    "Children UID": {},
-    "Object Name": "Chimney",
-    "Components": {
-      "Transform": {
-        "UID": 2620340211,
-        "Type": 1,
-        "Position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Rotation": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "w": 1.0
-        },
-        "Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Previous Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Scale": {
-          "x": 100.0,
-          "y": 100.0,
-          "z": 100.0
-        }
-      },
-      "Mesh": {
-        "UID": 151633578,
-        "Type": 2,
-        "Mesh File Name": "Chimney",
-        "Texture Coordinates": true,
-        "Triangle Faces": true
-      },
-      "Material": {
-        "UID": 4137156821,
-        "Type": 3,
-        "Texture Name": "Baker_house",
-        "Color": {
-          "r": 0.47040000557899477,
-          "g": 0.47040000557899477,
-          "b": 0.47040000557899477
-        },
-        "Size": {
-          "Width": 1024.0,
-          "Height": 1024.0
-        }
-      }
-    }
-  },
-  "Game Object": {
-    "UID": 1005610382,
-    "Parent UID": 2149666435,
-    "Children UID": { "UID": 3594683418 },
-    "Object Name": "Node GameObject",
-    "Components": {
-      "Transform": {
-        "UID": 3423542025,
-        "Type": 1,
-        "Position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Rotation": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "w": 1.0
-        },
-        "Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Previous Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Scale": {
-          "x": 1.0,
-          "y": 1.0,
-          "z": 1.0
-        }
-      }
-    }
-  },
-  "Game Object": 
+  "Scene": 
   {
-    "UID": 3594683418,
-    "Parent UID": 1005610382,
-    "Children UID": {},
-    "Object Name": "Baker_house",
-    "Components": {
-      "Transform": {
-        "UID": 562567273,
-        "Type": 1,
-        "Position": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
+    "Game Object": {
+      "UID": 3327604646,
+      "Parent UID": 0,
+      "Children UID": { "UID": 3506530449 },
+      "Object Name": "root",
+      "Components": {
+        "Transform": {
+          "UID": 1708857529,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
         },
-        "Rotation": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0,
-          "w": 1.0
-        },
-        "Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Previous Rotation Euler": {
-          "x": 0.0,
-          "y": 0.0,
-          "z": 0.0
-        },
-        "Scale": {
-          "x": 100.0,
-          "y": 100.0,
-          "z": 100.0
+        "Camera": {
+          "UID": 72995881,
+          "Type": 4,
+          "Near Plane": 0.10000000149011612,
+          "Far Plane": 1000.0,
+          "Horizontal FoV": -431602080.0,
+          "Vertical FoV": 60.0,
+          "Position": {
+            "x": -10.0,
+            "y": 5.0,
+            "z": 7.0
+          },
+          "Reference": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          }
         }
-      },
-      "Mesh": {
-        "UID": 3161345932,
-        "Type": 2,
-        "Mesh File Name": "Baker_house",
-        "Texture Coordinates": true,
-        "Triangle Faces": true
-      },
-      "Material": {
-        "UID": 2254489463,
-        "Type": 3,
-        "Texture Name": "Baker_house",
-        "Color": {
-          "r": 0.47040000557899477,
-          "g": 0.47040000557899477,
-          "b": 0.47040000557899477
+      }
+    },
+    "Game Object": {
+      "UID": 3506530449,
+      "Parent UID": 3327604646,
+      "Children UID": {},
+      "Object Name": "Camera",
+      "Components": {
+        "Transform": {
+          "UID": 500343093,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
         },
-        "Size": {
-          "Width": 1024.0,
-          "Height": 1024.0
+        "Camera": {
+          "UID": 3319135188,
+          "Type": 4,
+          "Near Plane": 0.10000000149011612,
+          "Far Plane": 1000.0,
+          "Horizontal FoV": -431602080.0,
+          "Vertical FoV": 60.0,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Reference": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          }
         }
       }
     }

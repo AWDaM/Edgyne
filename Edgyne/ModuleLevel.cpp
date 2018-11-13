@@ -89,7 +89,12 @@ update_status ModuleLevel::Update(float dt)
 	{
 		App->loader->SaveScene();
 	}
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+	{
+		DeleteLevel();
+		App->loader->LoadScene();
 
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -103,14 +108,14 @@ GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 
 void ModuleLevel::DeleteLevel()
 {
-	std::list<GameObject*>::iterator item = game_objects.end();
+	std::list<GameObject*>::reverse_iterator item = game_objects.rbegin();
 
-	while (item != game_objects.begin())
+	while (item != game_objects.rend())
 	{
 		(*item)->CleanUp();
-		--item;
 		game_objects.pop_back();
 	}
+	root->childrenUID.clear();
 }
 
 void ModuleLevel::Draw()

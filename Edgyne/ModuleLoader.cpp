@@ -20,6 +20,7 @@
 #include "DevIL\include\ilu.h"
 #include "DevIL\include\ilut.h"
 
+#include "rapidjson/filereadstream.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -497,9 +498,11 @@ void ModuleLoader::SaveScene()
 	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 
 	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+	rapidjson::Value scene(rapidjson::kObjectType);
 
 	for (std::list<GameObject*>::iterator iterator = App->level->game_objects.begin(); iterator != App->level->game_objects.end(); iterator++)
 	{
+
 		rapidjson::Value obj(rapidjson::kObjectType);
 		obj.AddMember("UID", (*iterator)->UID, allocator);
 		obj.AddMember("Parent UID", (*iterator)->parentUID, allocator);
@@ -515,14 +518,46 @@ void ModuleLoader::SaveScene()
 		(*iterator)->SaveToScene(component, allocator);
 		obj.AddMember("Components", component, allocator);
 
-		document.AddMember("Game Object", obj, allocator);
+		scene.AddMember("Game Object", obj, allocator);
 	}
+	document.AddMember("Scene", scene, allocator);
 	//for(rapidjson::Value::ConstMemberIterator itr = document.MemberBegin(); itr != document.MemberEnd(); ++itr) {   //iterate through object   
 	//	const  rapidjson::Value& objName = document[itr->name.GetString()];
 	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
 	document.Accept(writer);
 
 	fclose(fp);
+}
+
+void ModuleLoader::LoadScene()
+{
+	rapidjson::Document document;
+
+	FILE* file = fopen("edgyscene.json", "rb");
+	if (file)
+	{
+		char readBuffer[65536];
+
+		rapidjson::FileReadStream inputStream(file, readBuffer, sizeof(readBuffer));
+
+		document.ParseStream(inputStream);
+
+		AddGameObjectsFromFile(App->level->root, document);
+	}
+}
+
+void ModuleLoader::AddGameObjectsFromFile(GameObject* parent, rapidjson::Document& document)
+{
+	const rapidjson::Value& scene = document["Scene"];
+
+	for (rapidjson::Value::ConstMemberIterator itr = scene.MemberBegin(); itr != scene.MemberEnd(); ++itr)
+	{
+		if (itr->value["Parent UID"].GetUint() == parent->UID)
+		{
+			GameObject* go = parent->AddGameObject(itr->value["Object Name"].GetString());
+
+		}
+	}
 }
 
 void ModuleLoader::SaveMesh(Mesh* mesh)
