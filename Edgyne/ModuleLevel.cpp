@@ -27,7 +27,7 @@ ModuleLevel::~ModuleLevel()
 
 bool ModuleLevel::Init(rapidjson::Value& node)
 {
-	AABB test({ -1,-1,-1 }, { 10, 2, 10 });
+	AABB test({ -100,-100,-100 }, { 100, 100, 100 });
 	quad_tree = new EdgyQuadTree();
 	quad_tree->Create(test);
 
@@ -59,8 +59,10 @@ update_status ModuleLevel::PreUpdate(float dt)
 
 		if ((*item)->to_remove)
 		{
-			if((*item) != root)
+			if ((*item) != root)
 				(*item)->RemoveSelfFromParent();
+			else
+				(*item)->to_remove = false;
 
 			(*item)->RecursiveDeleteGameObject();
 			item = game_objects.begin();

@@ -27,7 +27,6 @@ public:
 
 	bool isDivided = false;
 
-
 	void SubdivideNode(AABB bb, uint currentDepth, uint bucketSize = 1)
 	{
 		AABB childrenBB;
@@ -74,6 +73,26 @@ public:
 		return ret;
 	}
 
+	template<typename TYPE>
+	void CollectIntersections(std::vector<GameObject*>& buffer, const TYPE & primitive)
+	{
+		if (primitive.Intersects(aabb))
+		{
+			std::vector<GameObject*>::iterator item = children.begin();
+
+			while (item != children.end())
+			{
+				if (primitive.Intersects((*item)->aligned_bounding_box))
+					buffer.push_back(*item);
+				item++;
+			}
+
+			for (int i = 0; i < 4; i++)
+				if (children[i] != nullptr)
+					children[i]->CollectIntersections(buffer, primitive);
+		}
+	}
+
 	bool InsertPrimitive(GameObject* obj)
 	{
 		bool ret = false;
@@ -109,22 +128,41 @@ public:
 
 	void Create(AABB limits)
 	{
-		rootNode = new quadTreeNode(limits, bucketSize);
+		root_node = new quadTreeNode(limits, bucketSize);
 	};
 	void Clear();
 	bool Insert(GameObject* obj)
 	{
-		return rootNode->InsertPrimitive(obj);
+		return root_node->InsertPrimitive(obj);
 	};
 	bool Remove(GameObject*);
-	bool Intersect(std::vector<GameObject*>& intersectingGO)
-	{
 
+	template<typename TYPE>
+	void CollectIntersections(std::vector<GameObject*>& buffer, const TYPE & primitive)
+	{
+		if (primitive.Intersects(root_node->aabb))
+		{
+			std::vector<GameObject*>::iterator item = root_node->children.begin();
+
+			while (item != root_node->children.end())
+			{
+				if (primitive.Intersects((*item)->aligned_bounding_box))
+					buffer.push_back(*item);
+				item++;
+			}
+
+			for (int i = 0; i < 4; i++)
+				if (root_node->children[i] != nullptr)
+					root_node->children[i]->CollectIntersections(buffer, primitive);
+		}
 	}
+
+
+	
 
 public:
 	uint bucketSize;
-	quadTreeNode* rootNode = nullptr;
+	quadTreeNode* root_node = nullptr;
 };
 
 #endif // !__QUAD_TREE_CHECHU_H__

@@ -69,10 +69,6 @@ void ModuleDebug::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & o
 	
 	rapidjson::Value obj(rapidjson::kObjectType);
 	obj.AddMember("draw_wireframe", draw_wireframe, allocator);
-	obj.AddMember("direct_mode_cube", direct_mode_cube, allocator);
-	obj.AddMember("vertex_cube", vertex_cube, allocator);
-	obj.AddMember("indices_cube", indices_cube, allocator);
-	obj.AddMember("sphere", sphere, allocator);
 	obj.AddMember("draw_plane", draw_plane, allocator);
 	obj.AddMember("draw_axis", draw_axis, allocator);
 	obj.AddMember("draw_normals", draw_normals, allocator);
@@ -93,10 +89,6 @@ void ModuleDebug::Load(rapidjson::Document& doc)
 	}
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	direct_mode_cube = node["direct_mode_cube"].GetBool();
-	vertex_cube = node["vertex_cube"].GetBool();
-	indices_cube = node["indices_cube"].GetBool();
-	sphere = node["sphere"].GetBool();
 	draw_plane = node["draw_plane"].GetBool();
 	draw_axis = node["draw_axis"].GetBool();
 	draw_normals = node["draw_normals"].GetBool();
@@ -127,24 +119,10 @@ void ModuleDebug::Draw()
 	if(App->level->selected_game_object)
 		Draw_Guizmo(App->level->selected_game_object);
 
-	if (direct_mode_cube)
-	{
-		Draw_Cube_Direct_Mode();
-	}
 	if (draw_plane)
 		Draw_Plane();
 	if (draw_axis)
 		Draw_Axis();
-	if(sphere)
-		Draw_Sphere();
-
-	if(vertex_cube)
-	Draw_Cube_Vertex();
-
-
-	if(indices_cube)
-	Draw_Cube_Indices();
-		
 
 	glColor3f(1.0f, 1.0, 1.0);
 	
@@ -163,10 +141,6 @@ void ModuleDebug::Configuration()
 			else
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
-		ImGui::Checkbox("Direct Mode Cube", &direct_mode_cube);
-		ImGui::Checkbox("Vertex Cube", &vertex_cube);
-		ImGui::Checkbox("Indices Cube", &indices_cube);
-		ImGui::Checkbox("Sphere", &sphere);
 		ImGui::Checkbox("Plane", &draw_plane);
 		ImGui::Checkbox("Axis", &draw_axis);
 		//ImGui::Checkbox("Normals", &draw_normals);
@@ -175,108 +149,13 @@ void ModuleDebug::Configuration()
 	}
 }
 
-void ModuleDebug::Draw_Cube_Direct_Mode()
-{
-	glColor3f(1, 1, 1);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindTexture(GL_TEXTURE_2D, ImageName);
-	glBegin(GL_TRIANGLES);
-
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 0, 1); //v3
-	glTexCoord2f(0, 1);
-	glVertex3f(-1, 0, 1); //v2
-	glTexCoord2f(0, 0);
-	glVertex3f(-1, 0, -1); // v7
-
-	glTexCoord2f(0, 0);
-	glVertex3f(-1, 0, -1); 
-	glTexCoord2f(1, 0);
-	glVertex3f(1, 0, -1); //v4
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 0, 1);
-
-	glTexCoord2f(0, 0);
-	glVertex3f(-1, 0, 1); //v2
-	glTexCoord2f(1, 0);
-	glVertex3f(1, 0, 1);//v3
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 2, 1); //v0
-
-	glTexCoord2f(0, 0);
-	glVertex3f(-1, 0, 1); //v2
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 2, 1); //v0
-	glTexCoord2f(0, 1);
-	glVertex3f(-1, 2, 1); //v1
-
-	glTexCoord2f(0, 1);
-	glVertex3f(1, 2, 1); //vo
-	glTexCoord2f(0, 0);
-	glVertex3f(1, 0, 1); //v3
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 2, -1); //v5
-
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 2, -1);
-	glTexCoord2f(0, 0);
-	glVertex3f(1, 0, 1);
-	glTexCoord2f(1, 0);
-	glVertex3f(1, 0, -1);
-
-	glTexCoord2f(0, 0);
-	glVertex3f(-1, 2, 1);
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 2, -1);
-	glTexCoord2f(1, 0);
-	glVertex3f(-1, 2, -1);
-
-	glTexCoord2f(1, 0);
-	glVertex3f(1, 2, 1);
-	glTexCoord2f(1, 1);
-	glVertex3f(1, 2, -1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-1, 2, 1);
-
-	glTexCoord2f(1, 1);
-	glVertex3f(-1, 2, 1);
-	glTexCoord2f(0, 0);
-	glVertex3f(-1, 0, -1);
-	glTexCoord2f(0, 1);
-	glVertex3f(-1, 0, 1);
-
-	glTexCoord2f(0,1);
-	glVertex3f(-1, 2, -1);
-	glTexCoord2f(0,0);
-	glVertex3f(-1, 0, -1);
-	glTexCoord2f(1, 1);
-	glVertex3f(-1, 2, 1);
-
-	glTexCoord2f(1, 1);
-	glVertex3f(-1, 2, -1);
-	glTexCoord2f(0, 1);
-	glVertex3f(1, 2, -1);
-	glTexCoord2f(1, 0);
-	glVertex3f(-1, 0, -1);
-
-	glTexCoord2f(0,0);
-	glVertex3f(1, 0, -1);
-	glTexCoord2f(1, 0);
-	glVertex3f(-1, 0, -1);
-	glTexCoord2f(0, 1);
-	glVertex3f(1, 2, -1);
-
-	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
 void ModuleDebug::Draw_Plane()
 {
 	glBegin(GL_LINES);
 	//-----Is this a plane?
 
 	glColor3f(0.5f, 0.5f, 0.5f);
-	float d = 20.0f;
+	float d = 50.0f;
 	for (float i = -d; i <= d; i += 1.0f)
 	{
 		glVertex3f(i, 0.0f, -d);
@@ -305,112 +184,6 @@ void ModuleDebug::Draw_Axis()
 
 	glEnd();
 	glLineWidth(1.0f);
-}
-
-void ModuleDebug::Draw_Cube_Vertex()
-{
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id_vertex);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDisableClientState(GL_VERTEX_ARRAY);
-}
-
-
-void ModuleDebug::Draw_Sphere()
-{
-
-
-	//TEMP
-	if (toDrawSphere)
-	{
-		vec initialPos = pos;
-
-		float x, y, z, xz;                              // vertex position
-
-		float sectorStep = 2 * pi / sectors;
-		float stackStep = pi / rings;
-		float sectorAngle, stackAngle;
-
-		for (int i = 0; i <= rings; ++i)
-		{
-			stackAngle = pi / 2 - i * stackStep;					// starting from pi/2 to -pi/2
-			xz = radius * cosf(stackAngle);							// r * cos(u)
-			y = initialPos.y + radius * sinf(stackAngle);			// r * sin(u)
-
-																	// add (sectorCount+1) vertices per stack
-																	// the first and last vertices have same position and normal, but different tex coods
-			for (int j = 0; j <= sectors; ++j)
-			{
-				sectorAngle = j * sectorStep;
-
-				// vertex position (x, y, z)
-				z = initialPos.z + xz * cosf(sectorAngle);			// r * cos(u) * cos(v)
-				x = initialPos.x + xz * sinf(sectorAngle);			// r * cos(u) * sin(v)
-				shape.push_back(x);
-				shape.push_back(y);
-				shape.push_back(z);
-			}
-		}
-
-		int k1, k2;
-		for (int i = 0; i < rings; ++i)
-		{
-			k1 = i * (sectors + 1);     // beginning of current stack
-			k2 = k1 + sectors + 1;      // beginning of next stack
-
-			for (int j = 0; j < sectors; ++j, ++k1, ++k2)
-			{
-				// 2 triangles per sector excluding 1st and last stacks
-				if (i != 0)
-				{
-					indicesS.push_back(k1);
-					indicesS.push_back(k2);
-					indicesS.push_back(k1 + 1);
-				}
-
-				if (i != (rings - 1))
-				{
-					indicesS.push_back(k1 + 1);
-					indicesS.push_back(k2);
-					indicesS.push_back(k2 + 1);
-				}
-			}
-		}
-
-		glGenBuffers(1, (GLuint*)&(my_id));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indicesS.size(), &indicesS[0], GL_STATIC_DRAW);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		toDrawSphere = false;
-	}
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id);
-	glVertexPointer(3, GL_FLOAT, 0, &shape[0]);
-	glDrawElements(GL_TRIANGLES, indicesS.size(), GL_UNSIGNED_INT, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-}
-
-
-void ModuleDebug::Draw_Cube_Indices()
-{
-	glColor3f(1.0f, 0, 0);
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_id_array);
-
-	glVertexPointer(3, GL_FLOAT, 0, &cube_indices_array[0]);
-
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
 }
 
 void ModuleDebug::Draw_Normals(float * vertex, float * normals, int num_vertex)
@@ -557,12 +330,25 @@ void ModuleDebug::Draw_Guizmo(GameObject* game_object)
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	
 	float4x4 localMat = game_object->transform->LocalTransformationMatrix();
-	ImGuizmo::Manipulate((float*)view_matrix.v, (float*)projection_matrix.v, operation_type, ImGuizmo::LOCAL, (float*)localMat.v,	NULL,NULL);
 	localMat.Transpose();
-	game_object->transform->position = localMat.TranslatePart();
-	game_object->transform->rotation = localMat.RotatePart().ToQuat();
-	game_object->transform->scale = localMat.GetScale();
-	game_object->RecursiveSetChildsTransformChanged(true);
+	ImGuizmo::Manipulate((float*)view_matrix.v, (float*)projection_matrix.v, operation_type, ImGuizmo::WORLD, (float*)localMat.v,	NULL,NULL);
+	localMat.Transpose();
+	if (ImGuizmo::IsUsing())
+	{
+		if(operation_type == ImGuizmo::TRANSLATE)
+			game_object->transform->position = localMat.TranslatePart();
+		else if (operation_type == ImGuizmo::ROTATE)
+		{
+			game_object->transform->rotation_euler = localMat.RotatePart().ToEulerXYZ();
+			game_object->transform->rotation_euler.x *= RADTODEG;
+			game_object->transform->rotation_euler.y *= RADTODEG;
+			game_object->transform->rotation_euler.z *= RADTODEG;
+		}
+		else if(operation_type == ImGuizmo::SCALE)
+			game_object->transform->scale = localMat.GetScale();
+
+		game_object->RecursiveSetChildsTransformChanged(true);
+	}
 	/*game_object->transform_changed = true;*/
 }
 

@@ -610,6 +610,7 @@
     <ClCompile Include="ImGuizmo\ImGuizmo.cpp">
       <Filter>Sources\ImGuizmo</Filter>
     </ClCompile>
+    <ClCompile Include="QuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">
