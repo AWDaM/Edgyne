@@ -38,6 +38,12 @@ rapidjson::Value Mesh::SaveToScene(rapidjson::Document::AllocatorType& allocator
 	myData.AddMember("Normals", has_normals, allocator);
 	myData.AddMember("Triangle Faces", has_triangle_faces, allocator);
 
+	rapidjson::Value mat(rapidjson::kObjectType);
+
+	mat = material->SaveToScene(allocator);
+
+	myData.AddMember("Material", mat, allocator);
+
 	return myData;
 }
 
@@ -50,6 +56,10 @@ void Mesh::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 	fileName = comp->value["Mesh File Name"].GetString();
 
 	App->importer->CopyDataFromFile(App->importer->FindFileInFolder(fileName));
+
+	material = new Material();
+
+	material->LoadAsMeshComponent(comp);
 
 }
 

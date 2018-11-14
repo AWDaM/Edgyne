@@ -30,7 +30,7 @@ public:
 
 	bool Import(const std::string& file);
 
-	bool ImportTexture(const char* path);
+	void LoadTextureFromLibrary(const char* path, Material* material);
 
 	void ReceivedFile(const char* path);
 

@@ -114,7 +114,7 @@ bool ModuleImporter::LoadMeshFromFile()
 	return true;
 }
 
-void ModuleImporter::CopyDataFromFile(std::string & path, Mesh * _mesh)
+void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh)
 {
 	if (path != "No File")
 	{
@@ -193,8 +193,6 @@ void ModuleImporter::CopyDataFromFile(std::string & path, Mesh * _mesh)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }
-
-//void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh = nullptr)
 
 
 std::string ModuleImporter::FindFileInFolder(std::string & fileName)
