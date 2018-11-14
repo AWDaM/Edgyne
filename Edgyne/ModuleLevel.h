@@ -33,6 +33,7 @@ public:
 	GameObject* root = nullptr;
 	Camera* game_camera = nullptr;
 	GameObject* selected_game_object = nullptr;
+	bool generate_quadtree = false;
 };
 
 #endif // !__MODULE_LEVEL_H__

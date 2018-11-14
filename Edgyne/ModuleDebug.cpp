@@ -119,6 +119,9 @@ void ModuleDebug::Draw()
 	if(App->level->selected_game_object)
 		Draw_Guizmo(App->level->selected_game_object);
 
+	if (draw_quadtree && !App->level->generate_quadtree)
+		RecursiveDrawQuadtree(App->level->quad_tree->root_node);
+
 	if (draw_plane)
 		Draw_Plane();
 	if (draw_axis)

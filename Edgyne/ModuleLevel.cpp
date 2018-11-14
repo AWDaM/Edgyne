@@ -11,7 +11,6 @@
 
 #include "SDL\include\SDL_opengl.h"
 
-#include "ModuleLoader.h"
 
 
 
@@ -27,7 +26,7 @@ ModuleLevel::~ModuleLevel()
 
 bool ModuleLevel::Init(rapidjson::Value& node)
 {
-	AABB test({ -100,-100,-100 }, { 100, 100, 100 });
+	AABB test({ -100,-10,-100 }, { 100, 10, 100 });
 	quad_tree = new EdgyQuadTree();
 	quad_tree->Create(test);
 
@@ -71,6 +70,23 @@ update_status ModuleLevel::PreUpdate(float dt)
 			item++;
 
 	}
+
+	if (generate_quadtree)
+	{
+		std::list<GameObject*>::iterator item = game_objects.begin();
+
+		quad_tree->Clear();
+		while (item != game_objects.end())
+		{
+			if ((*item)->Static && (*item)->aligned_bounding_box.IsFinite())
+			{
+				quad_tree->Insert((*item));
+			}
+			item++;
+		}
+		generate_quadtree = false;
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -125,9 +141,13 @@ void ModuleLevel::Draw()
 	if(root)
 		root->RecursiveTransformChanged(root->global_transform_matrix);
 
-	std::list<GameObject*>::iterator item = game_objects.begin();
+	std::vector<GameObject*> frustum_game_objects;
 
-	while (item != game_objects.end())
+	quad_tree->CollectIntersections(frustum_game_objects, game_camera->frustum);
+
+	std::vector<GameObject*>::iterator item = frustum_game_objects.begin();
+
+	while (item != frustum_game_objects.end())
 	{
 		if ((*item)->active)
 		{
@@ -146,10 +166,7 @@ void ModuleLevel::Draw()
 				App->debug->Draw_AABB(selected_game_object->aligned_bounding_box);
 			}
 
-			if (App->debug->draw_boundingboxes)
-			{
-				App->debug->Draw_AABB((*item)->aligned_bounding_box);
-			}
+
 
 			if (App->debug->draw_normals)
 			{
@@ -157,11 +174,29 @@ void ModuleLevel::Draw()
 				if(mesh)
 					App->debug->Draw_Normals(mesh->vertex,mesh->normals,mesh->num_vertex);
 			}
-		if(game_camera)
-			App->debug->Draw_Camera(game_camera);
+
 
 		}
 		item++;
 	}
 
+	std::list<GameObject*>::iterator _item = game_objects.begin();
+
+	while (_item != game_objects.end())
+	{
+		if (App->debug->draw_boundingboxes)
+		{
+			App->debug->Draw_AABB((*_item)->aligned_bounding_box);
+		}
+
+		if (!(*_item)->Static)
+			(*_item)->Draw();
+
+		_item++;
+	}
+
+	if (game_camera)
+		App->debug->Draw_Camera(game_camera);
+
+	root->RecursiveResetAddedToQuadTree();
 }

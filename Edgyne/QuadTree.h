@@ -73,23 +73,26 @@ public:
 		return ret;
 	}
 
-	template<typename TYPE>
-	void CollectIntersections(std::vector<GameObject*>& buffer, const TYPE & primitive)
-	{
-		if (primitive.Intersects(aabb))
-		{
-			std::vector<GameObject*>::iterator item = children.begin();
 
-			while (item != children.end())
+	void CollectIntersections(std::vector<GameObject*>& buffer, const AABB primitive_aabb)
+	{
+		if (primitive_aabb.Intersects(boundingBox))
+		{
+			std::vector<GameObject*>::iterator item = myObjects.begin();
+
+			while (item != myObjects.end())
 			{
-				if (primitive.Intersects((*item)->aligned_bounding_box))
+				if (primitive_aabb.Intersects((*item)->aligned_bounding_box) && !(*item)->added_to_quadtree_buffer)
+				{
 					buffer.push_back(*item);
+					(*item)->added_to_quadtree_buffer = true;
+				}
 				item++;
 			}
 
 			for (int i = 0; i < 4; i++)
 				if (children[i] != nullptr)
-					children[i]->CollectIntersections(buffer, primitive);
+					children[i]->CollectIntersections(buffer, primitive_aabb);
 		}
 	}
 
@@ -119,6 +122,18 @@ public:
 		}
 		return ret;
 	}
+
+	void Clear()
+	{
+		if (isDivided)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				children[i]->Clear();
+			}
+		}
+		delete this;
+	}
 };
 class EdgyQuadTree
 {
@@ -130,7 +145,19 @@ public:
 	{
 		root_node = new quadTreeNode(limits, bucketSize);
 	};
-	void Clear();
+
+	void Clear()
+	{
+		if (root_node->isDivided)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				root_node->children[i]->Clear();
+			}
+		}
+		root_node->isDivided = false;
+	};
+
 	bool Insert(GameObject* obj)
 	{
 		return root_node->InsertPrimitive(obj);
@@ -140,20 +167,26 @@ public:
 	template<typename TYPE>
 	void CollectIntersections(std::vector<GameObject*>& buffer, const TYPE & primitive)
 	{
-		if (primitive.Intersects(root_node->aabb))
+		AABB primitive_aabb;
+		primitive_aabb.SetNegativeInfinity();
+		primitive_aabb.Enclose(primitive);
+		if (primitive.Intersects(root_node->boundingBox))
 		{
-			std::vector<GameObject*>::iterator item = root_node->children.begin();
+			std::vector<GameObject*>::iterator item = root_node->myObjects.begin();
 
-			while (item != root_node->children.end())
+			while (item != root_node->myObjects.end())
 			{
-				if (primitive.Intersects((*item)->aligned_bounding_box))
+				if (primitive.Intersects((*item)->aligned_bounding_box) && !(*item)->added_to_quadtree_buffer)
+				{
 					buffer.push_back(*item);
+					(*item)->added_to_quadtree_buffer = true;
+				}
 				item++;
 			}
 
 			for (int i = 0; i < 4; i++)
 				if (root_node->children[i] != nullptr)
-					root_node->children[i]->CollectIntersections(buffer, primitive);
+					root_node->children[i]->CollectIntersections(buffer, primitive_aabb);
 		}
 	}
 

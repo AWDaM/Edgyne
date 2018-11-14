@@ -42,6 +42,7 @@ void GUIInspector::Draw()
 			if (ImGui::Checkbox("Static", &App->level->selected_game_object->Static))
 			{
 				App->level->selected_game_object->RecursiveSetChildsStatic(App->level->selected_game_object->Static);
+				App->level->generate_quadtree = true;
 				//App->level->quad_tree->Clear
 			}
 			ImGui::Checkbox("Delete", &App->level->selected_game_object->to_remove);

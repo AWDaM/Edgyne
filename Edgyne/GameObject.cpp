@@ -129,12 +129,10 @@ void GameObject::OnHierarchy(int id)
 	std::list<GameObject*>::iterator item = childs.begin();
 	while (item != childs.end())
 	{
-
 		if (!(*item)->active)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Text, { 0.5f,0.5f,0.5f,0.5f });
 		}
-
 
 		id++;
 		ImGui::PushID(id);
@@ -143,6 +141,7 @@ void GameObject::OnHierarchy(int id)
 		{
 			//ImGui::PushStyleColor(ImGuiCol_Text, { 0.0f,1.0f,0.0f,1.0f });
 		}
+
 		if (ImGui::TreeNode((*item)->name.c_str()))
 		{
 			if ((*item) == App->level->selected_game_object)
@@ -271,7 +270,7 @@ void GameObject::RecursiveTransformChanged(const float4x4 & parent)
 {
 	if (transform_changed)
 	{
-		global_transform_matrix = parent * transform->LocalTransformationMatrix();
+		global_transform_matrix = parent * float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
 
 		std::vector<Component*>::iterator item = components.begin();
 
@@ -350,6 +349,19 @@ void GameObject::RecursiveDeleteGameObject()
 		}
 	}
 
+
+}
+
+void GameObject::RecursiveResetAddedToQuadTree()
+{
+	added_to_quadtree_buffer = false;
+	std::list<GameObject*>::iterator item = childs.begin();
+
+	while (item != childs.end())
+	{
+		(*item)->RecursiveResetAddedToQuadTree();
+		item++;
+	}
 
 }
 

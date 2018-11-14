@@ -65,6 +65,7 @@ public:
 	void RecursiveTransformChanged(const float4x4& parent);
 	void RemoveSelfFromParent();
 	void RecursiveDeleteGameObject();
+	void RecursiveResetAddedToQuadTree();
 	Component* GetComponent(ComponentType type);
 
 private:
@@ -87,6 +88,7 @@ public:
 	std::vector<uint> childrenUID;
 	bool to_remove = false;
 	std::list<GameObject*> childs;
+	bool added_to_quadtree_buffer = false;
 private:
 
 

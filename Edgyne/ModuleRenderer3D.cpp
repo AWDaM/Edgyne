@@ -194,20 +194,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	App->debug->Draw();
 
-	//std::list<mesh*>::iterator item = mesh_list.begin();
 
-	//while (item != mesh_list.end())
-	//{
-	//	if ((*item)->hasTriangleFaces)
-	//	{
-	//		(*item)->Draw();
-	//		if (App->debug->draw_normals)
-	//			(*item)->DrawNormals();
-	//		if (App->debug->draw_meshBoundingBox)
-	//			(*item)->DrawBoundingBox();
-	//	}
-	//	item++;
-	//}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
