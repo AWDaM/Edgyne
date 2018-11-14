@@ -117,19 +117,15 @@ bool ModuleLoader::Import(const std::string & file)
 	return true;
 }
 
-bool ModuleLoader::ImportTexture(const char* path)
+void ModuleLoader::LoadTextureFromLibrary(const char* path, Material* material)
 {
-	bool ret = true;
-
-
-	App->importer->SaveTexture((std::string)path);
-
-	float2 imgSize;
 	ILuint img = ilGenImage();
 	ilBindImage(img);
 
-	uint dropped_texture = 0;
-	if (ilLoadImage(path))
+	std::string fullPath = App->importer->materialLibraryPath;
+	fullPath += path;
+	fullPath += App->importer->materialExtension;
+	if (ilLoadImage(fullPath.c_str()))
 	{
 		ILinfo imgData;
 
@@ -141,14 +137,13 @@ bool ModuleLoader::ImportTexture(const char* path)
 		if (!ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE))
 		{
 			LOG("DevIL Error: %s", iluErrorString(ilGetError()));
-			ret = false;
 		}
 		else
 		{
-			imgSize.x = imgData.Width;
-			imgSize.y = imgData.Height;
-			glGenTextures(1, &dropped_texture);
-			glBindTexture(GL_TEXTURE_2D, dropped_texture);
+			material->img_size.x = imgData.Width;
+			material->img_size.y = imgData.Height;
+			glGenTextures(1, &material->id_texture);
+			glBindTexture(GL_TEXTURE_2D, material->id_texture);
 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -160,23 +155,9 @@ bool ModuleLoader::ImportTexture(const char* path)
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
-	else
-	{
-		ret = false;
-	}
+
 
 	ilDeleteImage(img);
-
-	std::list<mesh*>::iterator item = App->renderer3D->mesh_list.begin();
-
-	while (item != App->renderer3D->mesh_list.end())
-	{
-		(*item)->id_texture = dropped_texture;
-		(*item)->image_size = imgSize;
-		item++;
-	}
-
-	return ret;
 }
 
 void ModuleLoader::ReceivedFile(const char * path)
@@ -189,7 +170,7 @@ void ModuleLoader::ReceivedFile(const char * path)
 	}
 	else if (IMAGE(path_string))
 	{
-		ImportTexture(path);
+		//ImportTexture(path);
 	}
 }
 
@@ -580,20 +561,13 @@ void ModuleLoader::AddGameObjectsFromFile(GameObject* parent, rapidjson::Documen
 				{
 				case ComponentType::TRANSFORM:
 				{
-					Transform* t = (Transform*)go->AddComponent(ComponentType::TRANSFORM); 
-					t->LoadComponent(comp);
+					go->transform->LoadComponent(comp);
 					break;
 				}
 				case ComponentType::CAMERA:
 				{
 					Camera* c = (Camera*)go->AddComponent(ComponentType::CAMERA);
 					c->LoadComponent(comp);
-					break;
-				}
-				case ComponentType::MATERIAL:
-				{
-					Material* ma = (Material*)go->AddComponent(ComponentType::MATERIAL);
-					ma->LoadComponent(comp);
 					break;
 				}
 				case ComponentType::MESH:

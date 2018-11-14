@@ -22,7 +22,7 @@ public:
 	virtual void OnEditor()				{};
 	virtual rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator) { return rapidjson::Value(); }
 
-	virtual void LoadComponent(rapidjson::Value::ConstMemberIterator comp) {};
+	virtual void LoadComponent(rapidjson::Value::MemberIterator comp) {};
 private:
 public:
 	bool active = false;
