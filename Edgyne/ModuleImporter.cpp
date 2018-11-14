@@ -114,7 +114,7 @@ bool ModuleImporter::LoadMeshFromFile()
 	return true;
 }
 
-void ModuleImporter::CopyDataFromFile(std::string& path , Mesh* _mesh = nullptr)
+void ModuleImporter::CopyDataFromFile(std::string & path, Mesh * _mesh)
 {
 	if (path != "No File")
 	{
@@ -145,8 +145,8 @@ void ModuleImporter::CopyDataFromFile(std::string& path , Mesh* _mesh = nullptr)
 		path = path.erase(0, sizeof(meshLibraryPath) - 1);
 		GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
 
-		if(!_mesh)
-		 _mesh = (Mesh*)game_object->AddComponent(MESH);
+		if (!_mesh)
+			_mesh = (Mesh*)game_object->AddComponent(MESH);
 
 		_mesh->num_vertex = ranges[0];
 		_mesh->num_index = ranges[1];
@@ -193,6 +193,9 @@ void ModuleImporter::CopyDataFromFile(std::string& path , Mesh* _mesh = nullptr)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }
+
+//void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh = nullptr)
+
 
 std::string ModuleImporter::FindFileInFolder(std::string & fileName)
 {
