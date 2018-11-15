@@ -54,6 +54,11 @@ void GUIInspector::Draw()
 				(*item)->OnEditor();
 				item++;
 			}
+
+			if (ImGui::CollapsingHeader("Add Component"))
+			{
+				AddComponents();
+			}
 		}
 		
 		ImGui::End();
@@ -64,6 +69,23 @@ bool GUIInspector::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorT
 	Node.AddMember("active", active, allocator);
 
 	return true;
+}
+void GUIInspector::AddComponents()
+{
+	if (ImGui::Button("Transform"))
+	{
+		if (!App->level->selected_game_object->GetComponent(TRANSFORM))
+			App->level->selected_game_object->AddComponent(TRANSFORM);
+		else
+			LOG("The gameobject already has a TRANSFORM component");
+	}
+	if (ImGui::Button("Camera"))
+	{
+		if (!App->level->selected_game_object->GetComponent(CAMERA))
+			App->level->selected_game_object->AddComponent(CAMERA);
+		else
+			LOG("The gameobject already has a CAMERA component");
+	}
 }
 bool GUIInspector::Load(rapidjson::Value& Node)
 {

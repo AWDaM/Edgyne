@@ -2,6 +2,8 @@
 #include "Transform.h"
 #include "Application.h"
 #include "ModuleLevel.h"
+#include "ModuleDebug.h"
+#include "ModuleWindow.h"
 
 
 
@@ -31,9 +33,9 @@ bool Camera::ComponentStart()
 		Reference.Normalize();
 	}
 	near_plane_distance = 0.1;
-	far_plane_distance = 100;
+	far_plane_distance = 1000;
 	vertical_fov = 60;
-	aspect_ratio = 1.8;
+	aspect_ratio =App->window->window_w/App->window->window_h;
 
 	frustum.type = math::FrustumType::PerspectiveFrustum;
 	frustum.pos = Position;
@@ -53,6 +55,12 @@ bool Camera::ComponentUpdate()
 
 bool Camera::ComponentCleanUp()
 {
+	return true;
+}
+
+bool Camera::ComponentDraw()
+{
+	App->debug->Draw_Camera(this);
 	return true;
 }
 

@@ -232,11 +232,13 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	//ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	
-	glLoadMatrixf(App->camera->editor_camera->GetProjectionMatrix());
+	App->camera->editor_camera->aspect_ratio = App->window->window_w / App->window->window_h;
 
+	glLoadMatrixf(App->camera->editor_camera->GetProjectionMatrix());
+	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
 	App->camera->editor_camera->ChangeFrustum();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -138,46 +138,38 @@ void ModuleLevel::Draw()
 {
 	if(root)
 		root->RecursiveTransformChanged(root->global_transform_matrix);
+	//------------------General Draws----------------------//
+	if (selected_game_object)
+		App->debug->Draw_AABB(selected_game_object->aligned_bounding_box);
 
-	std::vector<GameObject*> frustum_game_objects;
-
-	quad_tree->CollectIntersections(frustum_game_objects, game_camera->frustum);
-
-	std::vector<GameObject*>::iterator item = frustum_game_objects.begin();
-
-	while (item != frustum_game_objects.end())
+	//-------------With Camera Culling---------------//
+	if (App->renderer3D->camera_culling)
 	{
-		if ((*item)->active)
+		std::vector<GameObject*> frustum_game_objects;
+
+		quad_tree->CollectIntersections(frustum_game_objects, game_camera->frustum);
+
+		std::vector<GameObject*>::iterator item = frustum_game_objects.begin();
+
+		while (item != frustum_game_objects.end())
 		{
-			if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box)&& game_camera->frustum.Intersects((*item)->bounding_sphere) && App->renderer3D->camera_culling)
+			if ((*item)->active && (*item)->Static)
 			{
-				(*item)->Draw();
+				if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box) && game_camera->frustum.Intersects((*item)->bounding_sphere))
+				{
+					(*item)->Draw();
+				}
+				/*	if (App->debug->draw_normals)
+					{
+						Mesh* mesh = (Mesh*)(*item)->GetComponent(MESH);
+						if(mesh)
+							App->debug->Draw_Normals(mesh->vertex,mesh->normals,mesh->num_vertex);
+					}*/
 			}
-	
-			else if (!App->renderer3D->camera_culling)
-			{
-				(*item)->Draw();
-			}
-
-			if (selected_game_object)
-			{
-				App->debug->Draw_AABB(selected_game_object->aligned_bounding_box);
-			}
-
-
-
-			if (App->debug->draw_normals)
-			{
-				Mesh* mesh = (Mesh*)(*item)->GetComponent(MESH);
-				if(mesh)
-					App->debug->Draw_Normals(mesh->vertex,mesh->normals,mesh->num_vertex);
-			}
-
-
+			item++;
 		}
-		item++;
 	}
-
+	//---------------------Without Camera Culling and Active game_obejcts------------//
 	std::list<GameObject*>::iterator _item = game_objects.begin();
 
 	while (_item != game_objects.end())
@@ -190,11 +182,11 @@ void ModuleLevel::Draw()
 		if (!(*_item)->Static)
 			(*_item)->Draw();
 
+		else if((*_item)->Static && !App->renderer3D->camera_culling)
+			(*_item)->Draw();
+
 		_item++;
 	}
-
-	if (game_camera)
-		App->debug->Draw_Camera(game_camera);
 
 	root->RecursiveResetAddedToQuadTree();
 }

@@ -14,6 +14,7 @@ public:
 	bool ComponentStart();
 	bool ComponentUpdate();
 	bool ComponentCleanUp();
+	bool ComponentDraw();
 
 	rapidjson::Value SaveToScene(rapidjson::Document::AllocatorType& allocator);
 	void LoadComponent(rapidjson::Value::ConstMemberIterator comp);

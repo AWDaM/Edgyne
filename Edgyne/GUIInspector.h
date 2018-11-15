@@ -22,6 +22,8 @@ public:
 	void Draw();
 	bool Load(rapidjson::Value& Node);
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
+
+	void AddComponents();
 private:
 public:
 	GameObject* highlighted_game_object = nullptr;
