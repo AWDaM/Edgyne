@@ -329,7 +329,7 @@ void ModuleDebug::Draw_Guizmo(GameObject* game_object)
 	glGetFloatv(GL_PROJECTION_MATRIX, (float*)projection_matrix.v);
 
 	ImGuiIO& io = ImGui::GetIO();
-	ImGuizmo::SetOrthographic(true);
+	//ImGuizmo::SetOrthographic(true);
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	
 	float4x4 localMat = game_object->transform->LocalTransformationMatrix();
