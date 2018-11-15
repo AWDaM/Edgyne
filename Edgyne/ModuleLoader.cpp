@@ -612,6 +612,12 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 
 	bookmark += bytes;
 
+	// Saving the 3 booleans that every mesh has
+	bytes = sizeof(optatives);
+	memcpy(bookmark, optatives, bytes);
+
+	bookmark += bytes;
+
 	// Saving the data of the vertices
 	bytes = sizeof(float)*mesh->num_vertex * 3;
 	memcpy(bookmark, mesh->vertex, bytes);

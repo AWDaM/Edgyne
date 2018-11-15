@@ -141,12 +141,13 @@ void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh)
 		memcpy(optatives, bookmark, bytes);
 		bookmark += bytes;
 
-
-		path = path.erase(0, sizeof(meshLibraryPath) - 1);
-		GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
-
 		if (!_mesh)
+		{
+			path = path.erase(0, sizeof(meshLibraryPath) - 1);
+			GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
+
 			_mesh = (Mesh*)game_object->AddComponent(MESH);
+		}
 
 		_mesh->num_vertex = ranges[0];
 		_mesh->num_index = ranges[1];

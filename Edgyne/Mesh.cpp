@@ -55,7 +55,12 @@ void Mesh::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 	has_normals = comp->value["Normals"].GetBool();
 	fileName = comp->value["Mesh File Name"].GetString();
 
-	App->importer->CopyDataFromFile(App->importer->FindFileInFolder(fileName), this);
+	std::string tmp = "Library\\Meshes\\";
+
+	tmp += fileName;
+	tmp += ".edgymesh";
+
+	App->importer->CopyDataFromFile(tmp, this);
 
 	material = new Material();
 
@@ -81,7 +86,7 @@ bool Mesh::ComponentUpdate()
 
 bool Mesh::ComponentDraw()
 {
-	if (has_triangle_faces)
+	if (has_triangle_faces && id_index > 0)
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 
