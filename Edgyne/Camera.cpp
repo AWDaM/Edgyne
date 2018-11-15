@@ -31,7 +31,7 @@ bool Camera::ComponentStart()
 		Reference.Normalize();
 	}
 	near_plane_distance = 0.1;
-	far_plane_distance = 1000;
+	far_plane_distance = 100;
 	vertical_fov = 60;
 	aspect_ratio = 1.8;
 
