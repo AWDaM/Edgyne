@@ -185,7 +185,10 @@ void ModuleLoader::LoadInfo(GameObject* game_object, aiMesh * currentMesh, aiNod
 	rotationEuler = rotation.GetEuler();
 
 	
-	game_object->transform->rotation.FromEulerXYZ(DEGTORAD*rotationEuler.x, DEGTORAD*rotationEuler.y, DEGTORAD*rotationEuler.z);
+	game_object->transform->rotation.FromEulerXYZ(rotationEuler.x, rotationEuler.y, rotationEuler.z);
+	game_object->transform->rotation_euler.x = rotationEuler.x * RADTODEG;
+	game_object->transform->rotation_euler.y = rotationEuler.y * RADTODEG;
+	game_object->transform->rotation_euler.z = rotationEuler.z * RADTODEG;
 	game_object->transform->position.x = position.x;
 	game_object->transform->position.y = position.y;
 	game_object->transform->position.z = position.z;
@@ -351,12 +354,14 @@ void ModuleLoader::LoadMeshesFromFile(Mesh* _mesh)
 void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file, GameObject* parent)
 {
 	GameObject* local_parent;
+
 	if (node->mNumMeshes > 0)
 	{
 		local_parent = parent->AddGameObject("Node GameObject");
 	}
 	else
 		local_parent = parent;
+
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
 		GameObject* game_object;

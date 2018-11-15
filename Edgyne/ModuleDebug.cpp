@@ -342,6 +342,7 @@ void ModuleDebug::Draw_Guizmo(GameObject* game_object)
 			game_object->transform->position = localMat.TranslatePart();
 		else if (operation_type == ImGuizmo::ROTATE)
 		{
+			game_object->transform->rotation = localMat.RotatePart().ToQuat();
 			game_object->transform->rotation_euler = localMat.RotatePart().ToEulerXYZ();
 			game_object->transform->rotation_euler.x *= RADTODEG;
 			game_object->transform->rotation_euler.y *= RADTODEG;
