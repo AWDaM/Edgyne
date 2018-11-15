@@ -176,7 +176,7 @@ public:
 
 			while (item != root_node->myObjects.end())
 			{
-				if (primitive.Intersects((*item)->aligned_bounding_box) && !(*item)->added_to_quadtree_buffer)
+				if (primitive_aabb.Intersects((*item)->aligned_bounding_box) && !(*item)->added_to_quadtree_buffer)
 				{
 					buffer.push_back(*item);
 					(*item)->added_to_quadtree_buffer = true;
