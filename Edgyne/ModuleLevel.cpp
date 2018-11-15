@@ -35,6 +35,7 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 	game_objects.push_back(root);
 	root->transform = (Transform*)root->AddComponent(TRANSFORM);
 
+	current_scene_name = "New Scene";
 	return true;
 }
 

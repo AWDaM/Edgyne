@@ -34,6 +34,7 @@ public:
 	Camera* game_camera = nullptr;
 	GameObject* selected_game_object = nullptr;
 	bool generate_quadtree = false;
+	std::string current_scene_name;
 };
 
 #endif // !__MODULE_LEVEL_H__

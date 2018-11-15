@@ -13,6 +13,7 @@ public:
 	void Draw();
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
 	bool Load(rapidjson::Value& Node);
+
 };
 
 #endif // !__GUI_HIERARCHY_H__

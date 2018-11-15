@@ -17,6 +17,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include <experimental/filesystem>
+
 #include "DevIL\include\il.h"
 #include "DevIL\include\ilu.h"
 #include "DevIL\include\ilut.h"
@@ -480,7 +482,10 @@ void ModuleLoader::SaveScene(std::string name)
 {
 	rapidjson::Document document;
 	document.SetObject();
-	FILE* fp = fopen(name.append(".json").c_str(), "wb");
+	std::string path = "Assets\\Scenes\\";
+	path.append(name);
+	path.append(".json");
+	FILE* fp = fopen(path.c_str(), "wb");
 	char writeBuffer[1000000];
 	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 
@@ -589,6 +594,23 @@ void ModuleLoader::AddGameObjectsFromFile(GameObject* parent, rapidjson::Documen
 		}
 	}
 }
+
+bool ModuleLoader::CheckIfNameExists(const std::string name)
+{
+
+	const std::experimental::filesystem::directory_iterator end{};
+
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Scenes" }; iter != end; ++iter)
+	{
+		std::string path = "Assets\\Scenes\\";
+		path.append(name);
+		path.append(".json");
+		if ((*iter).path() == path)
+			return true;
+	}
+	return false;
+}
+
 
 void ModuleLoader::SaveMesh(Mesh* mesh)
 {

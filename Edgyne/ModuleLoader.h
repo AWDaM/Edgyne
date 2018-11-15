@@ -37,6 +37,8 @@ public:
 	void SaveScene(std::string name);
 	void LoadScene(std::string name);
 	void AddGameObjectsFromFile(GameObject* parent, rapidjson::Document& document);
+
+	bool CheckIfNameExists(const std::string name);
 private:
 	void SaveMesh(Mesh* mesh);
 	std::string SaveMaterial(const std::string& path);
