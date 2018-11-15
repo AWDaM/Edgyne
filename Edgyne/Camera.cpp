@@ -163,8 +163,10 @@ float * Camera::GetViewMatrix()
 	return  (float*)matrix.v;
 }
 
+
 void Camera::TransformChanged()
 {
+
 	frustum.pos = game_object->transform->position;
 	Quat rotation = rotation.FromEulerXYZ(DEGTORAD*(game_object->transform->rotation_euler.x - game_object->transform->previous_rotation_euler.x), DEGTORAD*(game_object->transform->rotation_euler.y - game_object->transform->previous_rotation_euler.y), DEGTORAD*(game_object->transform->rotation_euler.z - game_object->transform->previous_rotation_euler.z));
 

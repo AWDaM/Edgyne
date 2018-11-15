@@ -375,12 +375,14 @@
     <ClInclude Include="ModuleImporter.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="GUIAssets.h" />
     <ClInclude Include="ImGuizmo\ImGuizmo.h">
       <Filter>Sources\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="QuadTree.h">
       <Filter>Sources\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIAssets.h">
+      <Filter>Sources\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -606,9 +608,11 @@
     <ClCompile Include="ModuleImporter.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="GUIAssets.cpp" />
     <ClCompile Include="ImGuizmo\ImGuizmo.cpp">
       <Filter>Sources\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIAssets.cpp">
+      <Filter>Sources\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
