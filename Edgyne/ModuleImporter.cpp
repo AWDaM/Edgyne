@@ -195,16 +195,18 @@ void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh)
 }
 
 
-std::string ModuleImporter::FindFileInFolder(std::string & fileName)
+std::string ModuleImporter::FindFileInFolder(std::string& fileName)
 {
-	const std::experimental::filesystem::directory_iterator end{};
+	std::string ret = "No File";
 
-	for (std::experimental::filesystem::directory_iterator iter{ meshLibraryPath }; iter != end; ++iter)
-	{
-		if (iter->path().string() == fileName)
-			return iter->path().string(); break;
-	}
-	return "No File";
+	char* file = new char();
+	strcat(file, meshLibraryPath);
+	strcat(file, fileName.append(".edgymesh").c_str());
+
+	if(std::experimental::filesystem::exists(file));
+		ret = file;
+
+	return ret;
 }
 
 const char* ModuleImporter::LoadDataFromFile(const char* file, uint& size)

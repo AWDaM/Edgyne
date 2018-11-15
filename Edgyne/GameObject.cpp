@@ -297,6 +297,7 @@ void GameObject::RemoveSelfFromParent()
 {
 	std::list<GameObject*>::iterator self_item = parent->childs.begin();
 
+
 	while (self_item != parent->childs.end())
 	{
 		if ((*self_item) == this)
@@ -306,6 +307,15 @@ void GameObject::RemoveSelfFromParent()
 		}
 		self_item++;
 	}
+	std::vector<uint> tmp;
+	for (std::vector<uint>::iterator it = parent->childrenUID.begin(); it != parent->childrenUID.end(); it++)
+	{
+		if ((*it) != UID)
+		{
+			tmp.push_back((*it));
+		}
+	}
+	parent->childrenUID = tmp;
 }
 
 void GameObject::RecursiveDeleteGameObject()
@@ -349,8 +359,19 @@ void GameObject::RecursiveDeleteGameObject()
 			_item++;
 		}
 	}
+	if (this != App->level->root)
+	{
+	std::vector<uint> tmp;
+	for (std::vector<uint>::iterator it = parent->childrenUID.begin(); it != parent->childrenUID.end(); it++)
+	{
+		if ((*it) != UID)
+		{
+			tmp.push_back((*it));
+		}
+	}
+	parent->childrenUID = tmp;
 
-
+	}
 }
 
 void GameObject::RecursiveResetAddedToQuadTree()

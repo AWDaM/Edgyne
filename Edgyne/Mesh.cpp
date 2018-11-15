@@ -55,7 +55,7 @@ void Mesh::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 	has_normals = comp->value["Normals"].GetBool();
 	fileName = comp->value["Mesh File Name"].GetString();
 
-	App->importer->CopyDataFromFile(App->importer->FindFileInFolder(fileName));
+	App->importer->CopyDataFromFile(App->importer->FindFileInFolder(fileName), this);
 
 	material = new Material();
 
