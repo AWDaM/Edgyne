@@ -1,4 +1,6 @@
 #include "Application.h"
+#include "ModuleWindow.h"
+#include "ModuleCamera3D.h"
 #include "ModuleLevel.h"
 #include "ModuleLoader.h"
 #include "ModuleInput.h"
@@ -103,15 +105,13 @@ update_status ModuleLevel::Update(float dt)
 		item++;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->camera->scene_clicked)
 	{
-		App->loader->SaveScene("edgyscene");
+		float distance;
+		math::float3 hitPoint;
+		selected_game_object = ScreenPointToRay(App->input->GetMouseX(), App->input->GetMouseY(), distance, hitPoint);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
-	{
-		App->loader->LoadScene("edgyscene");
-	}
-
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -119,6 +119,20 @@ GameObject * ModuleLevel::NewGameObject(std::string name, bool with_transform)
 {
 	GameObject* ret = root->AddGameObject(name, with_transform);
 
+	return ret;
+}
+
+std::vector<GameObject*> ModuleLevel::GetNonStaticObjects()
+{
+	std::vector<GameObject*> ret;
+	std::list<GameObject*>::iterator item = game_objects.begin();
+
+	while (item != game_objects.end())
+	{
+		if (!(*item)->Static)
+			ret.push_back((*item));
+		item++;
+	}
 	return ret;
 }
 
@@ -189,4 +203,61 @@ void ModuleLevel::Draw()
 	}
 
 	root->RecursiveResetAddedToQuadTree();
+}
+
+GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY, float& shortestDistance, math::float3& shortestHitPoint)
+{
+	GameObject* go = root;
+	shortestHitPoint = math::float3::inf;
+	shortestDistance = FLOAT_INF;
+
+	int winWidth = App->window->window_w;
+	int winHeight = App->window->window_h;
+	float normalized_x = -(1.0f - (float(posX) * 2.0f) / winWidth);
+	float normalized_y = 1.0f - (float(posY) * 2.0f) / winHeight;
+
+	math::LineSegment raycast = App->camera->editor_camera->frustum.UnProjectLineSegment(normalized_x, normalized_y);
+
+	// Static objects
+	std::vector<GameObject*> hits;
+	App->level->quad_tree->CollectIntersections(hits, raycast);
+
+	// Dynamic objects
+	std::vector<GameObject*> dynamicGameObjects = GetNonStaticObjects();
+
+	for (uint i = 0; i < dynamicGameObjects.size(); ++i)
+	{
+		if (dynamicGameObjects[i]->aligned_bounding_box.IsFinite() && raycast.Intersects(dynamicGameObjects[i]->aligned_bounding_box))
+			hits.push_back(dynamicGameObjects[i]);
+	}
+
+	for (int i = 0; i < hits.size(); ++i)
+	{
+		math::Triangle tri;
+		math::LineSegment localSpaceSegment(raycast);
+		localSpaceSegment.Transform(hits[i]->global_transform_matrix.Inverted());
+
+		const Mesh* mesh = (const Mesh*)hits[i]->GetComponent(MESH);
+
+		if(mesh)
+		for (int j = 0; j < mesh->num_index;)
+		{
+			tri.a = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
+			tri.b = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
+			tri.c = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
+
+			float distance;
+			math::float3 hitPoint;
+			if (localSpaceSegment.Intersects(tri, &distance, &hitPoint))
+			{
+				if (shortestDistance > distance)
+				{
+					shortestDistance = distance;
+					shortestHitPoint = hitPoint;
+					go = hits[i];
+				}
+			}
+		}
+	}
+	return go;
 }

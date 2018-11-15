@@ -23,9 +23,12 @@ public:
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	GameObject* NewGameObject(std::string name, bool with_transform = true);
+	std::vector<GameObject*> GetNonStaticObjects();
 	void DeleteLevel();
 	
 	void Draw();
+
+	GameObject* ScreenPointToRay(int posX, int posY, float& shortestDistance, math::float3& shortestHitPoint);
 private:
 public:
 	EdgyQuadTree* quad_tree;

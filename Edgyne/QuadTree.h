@@ -73,16 +73,16 @@ public:
 		return ret;
 	}
 
-
-	void CollectIntersections(std::vector<GameObject*>& buffer, const AABB primitive_aabb)
+	template<typename TYPE>
+	void CollectIntersections(std::vector<GameObject*>& buffer, const TYPE & primitive)
 	{
-		if (primitive_aabb.Intersects(boundingBox))
+		if (primitive.Intersects(boundingBox))
 		{
 			std::vector<GameObject*>::iterator item = myObjects.begin();
 
 			while (item != myObjects.end())
 			{
-				if (primitive_aabb.Intersects((*item)->aligned_bounding_box) && !(*item)->added_to_quadtree_buffer)
+				if (!(*item)->added_to_quadtree_buffer)
 				{
 					buffer.push_back(*item);
 					(*item)->added_to_quadtree_buffer = true;
@@ -92,7 +92,7 @@ public:
 
 			for (int i = 0; i < 4; i++)
 				if (children[i] != nullptr)
-					children[i]->CollectIntersections(buffer, primitive_aabb);
+					children[i]->CollectIntersections(buffer, primitive);
 		}
 	}
 
@@ -167,16 +167,14 @@ public:
 	template<typename TYPE>
 	void CollectIntersections(std::vector<GameObject*>& buffer, const TYPE & primitive)
 	{
-		AABB primitive_aabb;
-		primitive_aabb.SetNegativeInfinity();
-		primitive_aabb.Enclose(primitive);
+		
 		if (primitive.Intersects(root_node->boundingBox))
 		{
 			std::vector<GameObject*>::iterator item = root_node->myObjects.begin();
 
 			while (item != root_node->myObjects.end())
 			{
-				if (primitive_aabb.Intersects((*item)->aligned_bounding_box) && !(*item)->added_to_quadtree_buffer)
+				if (!(*item)->added_to_quadtree_buffer)
 				{
 					buffer.push_back(*item);
 					(*item)->added_to_quadtree_buffer = true;
@@ -186,7 +184,7 @@ public:
 
 			for (int i = 0; i < 4; i++)
 				if (root_node->children[i] != nullptr)
-					root_node->children[i]->CollectIntersections(buffer, primitive_aabb);
+					root_node->children[i]->CollectIntersections(buffer, primitive);
 		}
 	}
 
