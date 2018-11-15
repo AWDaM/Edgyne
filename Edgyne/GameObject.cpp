@@ -281,6 +281,7 @@ void GameObject::RecursiveTransformChanged(const float4x4 & parent)
 		}
 		SetLocalBoundingVolume();
 		transform_changed = false;
+		transform->previous_rotation_euler = transform->rotation_euler;
 	}
 	std::list<GameObject*>::iterator item = childs.begin();
 
