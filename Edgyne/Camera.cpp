@@ -35,7 +35,7 @@ bool Camera::ComponentStart()
 	near_plane_distance = 0.1;
 	far_plane_distance = 1000;
 	vertical_fov = 60;
-	aspect_ratio =App->window->window_w/App->window->window_h;
+	aspect_ratio = (float)App->window->window_w/App->window->window_h;
 
 	frustum.type = math::FrustumType::PerspectiveFrustum;
 	frustum.pos = Position;
