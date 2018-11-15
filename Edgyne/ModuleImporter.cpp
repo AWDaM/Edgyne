@@ -49,6 +49,12 @@ void ModuleImporter::LoadAllExtensionsAndPaths(rapidjson::Value & node)
 
 	materialLibraryPath = new char[node["Material Library Path"].GetStringLength()];
 	strcpy(materialLibraryPath, node["Material Library Path"].GetString());
+
+	sceneExtension = new char[node["Scene Extension"].GetStringLength()];
+	strcpy(sceneExtension, node["Scene Extension"].GetString());
+
+	modelExtension = new char[node["Model Extension"].GetStringLength()];
+	strcpy(modelExtension, node["Model Extension"].GetString());
 }
 
 

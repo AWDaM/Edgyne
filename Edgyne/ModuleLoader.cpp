@@ -17,6 +17,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include <experimental/filesystem>
+
 #include "DevIL\include\il.h"
 #include "DevIL\include\ilu.h"
 #include "DevIL\include\ilut.h"
@@ -87,12 +89,19 @@ bool ModuleLoader::Import(const std::string & file)
 	
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		std::string fileName = file;
+		fileName = fileName.erase(0, fileName.find_last_of("\\") + 1);
+		fileName = fileName.substr(0, fileName.find("."));
+
 		LOG("-------Loading new mesh--------");
 		aiNode* rootNode = scene->mRootNode;
-		GameObject* rootGameObject = App->level->NewGameObject(rootNode->mName.C_Str());
+		GameObject* rootGameObject = App->level->NewGameObject(fileName);
 		LoadAllNodesMeshes(rootNode, scene, file,rootGameObject);
-
-		rootGameObject->RecursiveTransformChanged(App->level->root->global_transform_matrix);
+		std::list<GameObject*> list;
+		RecursiveGenerateListFromTree(list, rootGameObject);
+		SaveObject(fileName, false, list);
+		rootGameObject->to_remove = true;
+		//rootGameObject->RecursiveTransformChanged(App->level->root->global_transform_matrix);
 
 		/*std::list<GameObject*>::iterator item = rootGameObject->childs.begin();
 		while (item != rootGameObject->childs.end())
@@ -115,6 +124,19 @@ bool ModuleLoader::Import(const std::string & file)
 		LOG("Error loading object from path: %s", file);
 
 	return true;
+}
+
+void ModuleLoader::RecursiveGenerateListFromTree(std::list<GameObject*>& buffer, GameObject * root_game_object)
+{
+	buffer.push_back(root_game_object);
+	std::list<GameObject*>::iterator item = root_game_object->childs.begin();
+
+	while (item != root_game_object->childs.end())
+	{
+		RecursiveGenerateListFromTree(buffer, (*item));
+		item++;
+	}
+	
 }
 
 void ModuleLoader::LoadTextureFromLibrary(const char* path, Material* material)
@@ -476,18 +498,26 @@ bool ModuleLoader::CheckTexturePaths(std::string path, std::string texPath, std:
 	return ret;
 }
 
-void ModuleLoader::SaveScene(std::string name)
+void ModuleLoader::SaveObject(std::string name, bool is_scene, std::list<GameObject*> to_save)
 {
 	rapidjson::Document document;
 	document.SetObject();
-	FILE* fp = fopen(name.append(".json").c_str(), "wb");
+	std::string path = "Assets\\Scenes\\";
+	path.append(name);
+
+	if (is_scene)
+		path.append(App->importer->sceneExtension);
+	else
+		path.append(App->importer->modelExtension);
+
+	FILE* fp = fopen(path.c_str(), "wb");
 	char writeBuffer[1000000];
 	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 
 	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
 	rapidjson::Value scene(rapidjson::kObjectType);
 
-	for (std::list<GameObject*>::iterator iterator = App->level->game_objects.begin(); iterator != App->level->game_objects.end(); iterator++)
+	for (std::list<GameObject*>::iterator iterator = to_save.begin(); iterator != to_save.end(); iterator++)
 	{
 
 		rapidjson::Value obj(rapidjson::kObjectType);
@@ -522,11 +552,17 @@ void ModuleLoader::SaveScene(std::string name)
 	fclose(fp);
 }
 
-void ModuleLoader::LoadScene(std::string name)
+void ModuleLoader::LoadObject(std::string name, bool is_scene)
 {
 	rapidjson::Document document;
+	FILE* file;
+	if (!is_scene)
+	{
+		std::string path = "Assets\\Scenes\\";
+		path.append(name);
+		file = fopen(path.append(App->importer->modelExtension).c_str(), "rb");
+	}
 
-	FILE* file = fopen(name.append(".json").c_str(), "rb");
 	if (file)
 	{
 		char readBuffer[65536];
@@ -536,6 +572,7 @@ void ModuleLoader::LoadScene(std::string name)
 		document.ParseStream(inputStream);
 
 		AddGameObjectsFromFile(App->level->root, document);
+		App->level->root->RecursiveTransformChanged(App->level->root->global_transform_matrix);
 	}
 }
 
@@ -548,6 +585,7 @@ void ModuleLoader::AddGameObjectsFromFile(GameObject* parent, rapidjson::Documen
 		if (itr->value["Parent UID"].GetUint() != 0 && itr->value["Parent UID"].GetUint() == parent->UID)
 		{
 			GameObject* go = parent->AddGameObject(itr->value["Object Name"].GetString());
+			go->transform_changed = true;
 			go->active = itr->value["Active"].GetBool();
 			go->Static = itr->value["Static"].GetBool();
 			go->parentUID = itr->value["Parent UID"].GetUint();
@@ -589,6 +627,23 @@ void ModuleLoader::AddGameObjectsFromFile(GameObject* parent, rapidjson::Documen
 		}
 	}
 }
+
+bool ModuleLoader::CheckIfNameExists(const std::string name)
+{
+
+	const std::experimental::filesystem::directory_iterator end{};
+
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Scenes" }; iter != end; ++iter)
+	{
+		std::string path = "Assets\\Scenes\\";
+		path.append(name);
+		path.append(".json");
+		if ((*iter).path() == path)
+			return true;
+	}
+	return false;
+}
+
 
 void ModuleLoader::SaveMesh(Mesh* mesh)
 {

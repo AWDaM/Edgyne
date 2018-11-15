@@ -37,6 +37,7 @@ bool ModuleLevel::Init(rapidjson::Value& node)
 	game_objects.push_back(root);
 	root->transform = (Transform*)root->AddComponent(TRANSFORM);
 
+	current_scene_name = "New Scene";
 	return true;
 }
 
@@ -104,14 +105,13 @@ update_status ModuleLevel::Update(float dt)
 		}
 		item++;
 	}
-
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->camera->scene_clicked)
 	{
 		float distance;
 		math::float3 hitPoint;
 		selected_game_object = ScreenPointToRay(App->input->GetMouseX(), App->input->GetMouseY(), distance, hitPoint);
 	}
-	
+
 	return UPDATE_CONTINUE;
 }
 

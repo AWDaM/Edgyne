@@ -1,0 +1,260 @@
+{
+  "Scene"
+    : {
+    "Game Object": {
+      "UID": 3725306555,
+      "Parent UID": 1,
+      "Active": true,
+      "Static": true,
+      "Object Name": "BakerHouse",
+      "Has Children": true,
+      "Components": {
+        "Transform": {
+          "UID": 3185476389,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 782932854,
+      "Parent UID": 3725306555,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Node GameObject",
+      "Has Children": true,
+      "Components": {
+        "Transform": {
+          "UID": 21979725,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 1784729741,
+      "Parent UID": 782932854,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Chimney",
+      "Has Children": false,
+      "Components": {
+        "Transform": {
+          "UID": 1935862908,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.00000762939453
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.0,
+            "z": 100.0
+          }
+        },
+        "Mesh": {
+          "UID": 3181563043,
+          "Type": 2,
+          "Mesh File Name": "Chimney",
+          "Texture Coordinates": true,
+          "Normals": false,
+          "Triangle Faces": true,
+          "Material": {
+            "UID": 3954257946,
+            "Type": 3,
+            "Texture Name": "Baker_house",
+            "Color": {
+              "r": 0.47040000557899477,
+              "g": 0.47040000557899477,
+              "b": 0.47040000557899477
+            }
+          }
+        },
+        "Material": {
+          "UID": 3954257946,
+          "Type": 3,
+          "Texture Name": "Baker_house",
+          "Color": {
+            "r": 0.47040000557899477,
+            "g": 0.47040000557899477,
+            "b": 0.47040000557899477
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 541774062,
+      "Parent UID": 3725306555,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Node GameObject",
+      "Has Children": true,
+      "Components": {
+        "Transform": {
+          "UID": 4169083819,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 1348910411,
+      "Parent UID": 541774062,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Baker_house",
+      "Has Children": false,
+      "Components": {
+        "Transform": {
+          "UID": 3385496111,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.00000762939453
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.0,
+            "z": 100.0
+          }
+        },
+        "Mesh": {
+          "UID": 3092475163,
+          "Type": 2,
+          "Mesh File Name": "Baker_house",
+          "Texture Coordinates": true,
+          "Normals": false,
+          "Triangle Faces": true,
+          "Material": {
+            "UID": 648928561,
+            "Type": 3,
+            "Texture Name": "Baker_house",
+            "Color": {
+              "r": 0.47040000557899477,
+              "g": 0.47040000557899477,
+              "b": 0.47040000557899477
+            }
+          }
+        },
+        "Material": {
+          "UID": 648928561,
+          "Type": 3,
+          "Texture Name": "Baker_house",
+          "Color": {
+            "r": 0.47040000557899477,
+            "g": 0.47040000557899477,
+            "b": 0.47040000557899477
+          }
+        }
+      }
+    }
+  }}
