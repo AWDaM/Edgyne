@@ -22,7 +22,7 @@ void GUIHierarchy::Draw()
 
 	if (ImGui::Button("Save Scene"))
 	{
-		App->loader->SaveScene(App->level->current_scene_name.c_str());
+		App->loader->SaveObject(App->level->current_scene_name.c_str(),true,App->level->game_objects);
 	}
 
 	if(ImGui::CollapsingHeader("Save Scene As"))
@@ -33,7 +33,7 @@ void GUIHierarchy::Draw()
 		{
 			if (!App->loader->CheckIfNameExists(name))
 			{
-				App->loader->SaveScene(name);
+				App->loader->SaveObject(name, true, App->level->game_objects);
 				App->level->current_scene_name = name;
 			}
 			else
@@ -48,7 +48,7 @@ void GUIHierarchy::Draw()
 	{
 		if (ImGui::Button("Overwrite Scene"))
 		{
-			App->loader->SaveScene(name);
+			App->loader->SaveObject(name, true, App->level->game_objects);
 		}
 		if (ImGui::Button("Cancel"))
 		{
@@ -64,7 +64,7 @@ void GUIHierarchy::Draw()
 		{
 			if (ImGui::Button("Yes"))
 			{
-				App->loader->SaveScene(App->level->current_scene_name.c_str());
+				App->loader->SaveObject(App->level->current_scene_name.c_str(), true, App->level->game_objects);
 				App->level->root->to_remove = true;
 				ImGui::CloseCurrentPopup();
 			}

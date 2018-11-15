@@ -30,12 +30,13 @@ public:
 
 	bool Import(const std::string& file);
 
+	void RecursiveGenerateListFromTree(std::list<GameObject*>& buffer, GameObject* root_game_object);
 	void LoadTextureFromLibrary(const char* path, Material* material);
 
 	void ReceivedFile(const char* path);
 
-	void SaveScene(std::string name);
-	void LoadScene(std::string name);
+	void SaveObject(std::string name, bool is_scene, std::list<GameObject*> to_save);
+	void LoadObject(std::string name, bool is_scene);
 	void AddGameObjectsFromFile(GameObject* parent, rapidjson::Document& document);
 
 	bool CheckIfNameExists(const std::string name);

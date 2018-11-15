@@ -1,4 +1,7 @@
 #include "GUIAssets.h"
+#include "Application.h"
+#include "ModuleImporter.h"
+#include "ModuleLoader.h"
 #include <experimental/filesystem>
 
 
@@ -35,7 +38,20 @@ void GUIAssets::Draw()
 		}
 		else if (std::experimental::filesystem::is_regular_file(*iter))
 		{
-			ImGui::Button(iter->path().string().c_str());
+			if (ImGui::Button(iter->path().string().c_str()))
+			{
+				std::string fileName = iter->path().string();
+				fileName = fileName.erase(0, fileName.find_last_of("\\") + 1);
+				fileName = fileName.substr(0, fileName.find("."));
+
+				std::string extension = iter->path().string();
+				extension = extension.erase(0, extension.find("."));
+				if (extension == App->importer->modelExtension)
+				{
+					App->loader->LoadObject(fileName, false);
+				}
+
+			}
 		}
 	}
 

@@ -104,15 +104,6 @@ update_status ModuleLevel::Update(float dt)
 		item++;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
-	{
-		App->loader->SaveScene("edgyscene");
-	}
-	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
-	{
-		App->loader->LoadScene("edgyscene");
-	}
-
 	return UPDATE_CONTINUE;
 }
 

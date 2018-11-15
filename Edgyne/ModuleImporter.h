@@ -35,6 +35,8 @@ public:
 	char* meshLibraryPath = nullptr;
 	char* materialExtension = nullptr;
 	char* materialLibraryPath = nullptr;
+	char* sceneExtension = nullptr;
+	char* modelExtension = nullptr;
 };
 
 #endif // !__MODULE_FILE_SYSTEM__

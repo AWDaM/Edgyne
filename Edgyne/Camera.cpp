@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "Application.h"
 #include "ModuleLevel.h"
+#include "ModuleCamera3D.h"
 #include "ModuleDebug.h"
 #include "ModuleWindow.h"
 
@@ -60,7 +61,8 @@ bool Camera::ComponentCleanUp()
 
 bool Camera::ComponentDraw()
 {
-	App->debug->Draw_Camera(this);
+	if(App->camera->editor_camera != this)
+		App->debug->Draw_Camera(this);
 	return true;
 }
 

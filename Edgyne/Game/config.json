@@ -21,7 +21,9 @@
     "Mesh Extension": ".edgymesh",
     "Material Extension": ".dds",
     "Mesh Library Path": "Library\\Meshes\\",
-    "Material Library Path": "Library\\Materials\\"
+    "Material Library Path": "Library\\Materials\\",
+    "Scene Extension": ".edgyscene",
+    "Model Extension":  ".edgymodel"
   },
   "ImGui": {
   },
