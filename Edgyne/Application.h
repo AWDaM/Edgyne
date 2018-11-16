@@ -100,6 +100,7 @@ public:
 	int GetFramerate() const;
 	void SetFramerate(int _framerate);
 	void ChangeFPSlog(int _fps, float _ms);
+	bool GAME_RUNNING = false;
 };
 
 extern Application* App;
