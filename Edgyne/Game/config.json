@@ -33,6 +33,8 @@
   },
   "Loader": {
   },
+  "TimeManager": {
+  },
   "Render3D": {
     "VSync": true
   }

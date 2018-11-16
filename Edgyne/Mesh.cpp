@@ -90,15 +90,17 @@ bool Mesh::ComponentDraw()
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 
-		if (material->id_texture)
+		if (material)
 		{
-			glBindTexture(GL_TEXTURE_2D, material->id_texture);
+			if (material->id_texture)
+			{
+				glBindTexture(GL_TEXTURE_2D, material->id_texture);
+			}
+			//--------
+
+			else
+				glColor3f(material->color.x, material->color.y, material->color.z);
 		}
-		//--------
-
-		else
-			glColor3f(material->color.x, material->color.y, material->color.z);
-
 			//---------
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 		glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
@@ -112,14 +114,16 @@ bool Mesh::ComponentDraw()
 
 		//Disable All The Data
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		if (material->id_texture)
+		if (material)
 		{
-			glBindTexture(GL_TEXTURE_2D, 0);
+			if (material->id_texture)
+			{
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
+
+			else
+				glColor3f(1, 1, 1);
 		}
-
-		else
-			glColor3f(1, 1, 1);
-
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 

@@ -29,6 +29,7 @@ class ModuleLevel;
 class ModuleDebug;
 class ModuleLoader;
 class ModuleImporter;
+class ModuleTimeManager;
 
 class Application
 {
@@ -42,6 +43,7 @@ public:
 	ModuleDebug* debug;
 	ModuleLoader* loader;
 	ModuleImporter* importer;
+	ModuleTimeManager* time_manager;
 
 	std::list<Module*> list_modules;
 
