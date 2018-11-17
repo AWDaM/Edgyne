@@ -1,5 +1,6 @@
 #include "GUIScene.h"
 #include "Application.h"
+#include "ModuleLevel.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "ModuleImgui.h"
@@ -20,11 +21,11 @@ GUIScene::~GUIScene()
 
 void GUIScene::Draw()
 {
-
-	ImGui::Begin("Scene", &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoNav);
-
-
-	ImGui::SetCursorPos({0, 0});
+	std::string title = App->level->current_scene_name.c_str();
+	title.append("###");
+	ImGui::Begin(title.c_str(), &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse| ImGuiWindowFlags_NoNav);
+	
+	ImGui::SetCursorPos({ 0, 0 });
 	App->imGui->sceneX = ImGui::GetCursorPosX() + ImGui::GetWindowPos().x;
 	App->imGui->sceneY = ImGui::GetCursorPosY() + ImGui::GetWindowPos().y;
 	App->imGui->sceneW = ImGui::GetWindowSize().x;
@@ -44,7 +45,6 @@ void GUIScene::Draw()
 	ImGui::Image((ImTextureID)App->renderer3D->framebuffer_texture, { (float)App->window->window_w,(float)App->window->window_h }, { 0,1 }, { 1,0 });
 	ImGui::EndChild();
 	ImGui::End();
-
 	
 }
 

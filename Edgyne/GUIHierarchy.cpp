@@ -16,9 +16,8 @@ GUIHierarchy::~GUIHierarchy()
 
 void GUIHierarchy::Draw()
 {
-	std::string title = App->level->current_scene_name.c_str();
-	title.append("###");
-	ImGui::Begin(title.c_str(), &active);
+
+	ImGui::Begin("Hierarchy", &active);
 
 	if (ImGui::Button("Save Scene"))
 	{
