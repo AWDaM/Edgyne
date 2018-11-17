@@ -2,8 +2,8 @@
 #define __MODULE_TIME_MANAGER_H__
 
 #include "Module.h"
+#include "PerfTimer.h"
 
-class PerfTimer;
 
 class ModuleTimeManager :
 	public Module
@@ -21,8 +21,12 @@ public:
 	void Load(rapidjson::Document& doc);
 
 public:
-	PerfTimer* real_clock;
-	PerfTimer* game_clock;
+	PerfTimer real_clock;
+	PerfTimer game_clock;
+	uint frame_count = 0;
+	float time_scale = 1.0f;
+	float game_clock_seconds = 0;
+
 };
 
 

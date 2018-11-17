@@ -383,3 +383,8 @@ void Application::LoadData()
 	}
 	toLoad = false;
 }
+
+float Application::GetDeltaTime()
+{
+	return dt;
+}

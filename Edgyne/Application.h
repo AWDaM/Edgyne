@@ -31,6 +31,14 @@ class ModuleLoader;
 class ModuleImporter;
 class ModuleTimeManager;
 
+enum GameState
+{
+	NO_STATE,
+	RUNNING,
+	PAUSED,
+	STOPPED
+};
+
 class Application
 {
 public:
@@ -83,6 +91,8 @@ public:
 	void SaveData();
 	void LoadData();
 
+	float GetDeltaTime();
+
 private:
 
 	void AddModule(Module* mod);
@@ -100,7 +110,7 @@ public:
 	int GetFramerate() const;
 	void SetFramerate(int _framerate);
 	void ChangeFPSlog(int _fps, float _ms);
-	bool GAME_RUNNING = false;
+	GameState game_state = STOPPED;
 };
 
 extern Application* App;
