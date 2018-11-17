@@ -32,6 +32,26 @@ GameObject::GameObject(GameObject* parent, std::string _name) : active(true), pa
 
 GameObject::~GameObject()
 {
+	parent = nullptr;
+	transform = nullptr;
+
+	std::vector<Component*>::iterator it_cp;
+	it_cp = components.begin();
+	while (it_cp != components.end())
+	{
+		RELEASE((*it_cp));
+		it_cp++;
+	}
+	components.clear();
+
+	std::list<GameObject*>::iterator it_c;
+	it_c = childs.begin();
+	while (it_c != childs.end())
+	{
+		RELEASE((*it_c));
+		it_c++;
+	}
+	childs.clear();
 }
 
 bool GameObject::Update()
@@ -39,12 +59,6 @@ bool GameObject::Update()
 	UpdateComponents();
 	
 
-	return true;
-}
-
-bool GameObject::CleanUp()
-{
-	CleanUpComopnents();
 	return true;
 }
 

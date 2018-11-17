@@ -61,7 +61,7 @@ bool Camera::ComponentCleanUp()
 
 bool Camera::ComponentDraw()
 {
-	if(App->camera->editor_camera != this)
+	if(App->camera->editor_camera == this)
 		App->debug->Draw_Camera(this);
 	return true;
 }

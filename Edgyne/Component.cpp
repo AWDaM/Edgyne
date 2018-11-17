@@ -14,4 +14,5 @@ Component::Component(GameObject* game_object, ComponentType type) : game_object(
 
 Component::~Component()
 {
+	game_object = nullptr;
 }

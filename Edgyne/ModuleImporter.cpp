@@ -33,7 +33,17 @@ bool ModuleImporter::Init(rapidjson::Value& node)
 
 	return true;
 }
+bool ModuleImporter::CleanUp()
+{
+	RELEASE(meshExtension);
+	RELEASE(meshLibraryPath);
+	RELEASE(materialExtension);
+	RELEASE(materialLibraryPath);
+	RELEASE(sceneExtension);
+	RELEASE(modelExtension);
 
+	return true;
+}
 void ModuleImporter::LoadAllExtensionsAndPaths(rapidjson::Value & node)
 {
 	//Extensions

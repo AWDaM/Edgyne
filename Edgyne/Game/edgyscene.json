@@ -1,1 +1,378 @@
-{"Scene":{"Game Object":{"UID":1,"Parent UID":0,"Active":true,"Static":true,"Object Name":"root","Has Children":true,"Components":{"Transform":{"UID":4233196342,"Type":1,"Position":{"x":0.0,"y":0.0,"z":0.0},"Rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Previous Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Scale":{"x":1.0,"y":1.0,"z":1.0}},"Camera":{"UID":484438458,"Type":4,"Near Plane":0.10000000149011612,"Far Plane":1000.0,"Aspect Ratio":1.7411764860153199,"Horizontal FoV":-431602080.0,"Vertical FoV":60.0,"Position":{"x":-10.0,"y":5.0,"z":7.0},"Reference":{"x":0.0,"y":0.0,"z":-1.0}}}},"Game Object":{"UID":2678628591,"Parent UID":1,"Active":true,"Static":true,"Object Name":"Camera","Has Children":false,"Components":{"Transform":{"UID":3166463720,"Type":1,"Position":{"x":0.0,"y":0.0,"z":0.0},"Rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Previous Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Scale":{"x":1.0,"y":1.0,"z":1.0}},"Camera":{"UID":3458318957,"Type":4,"Near Plane":0.10000000149011612,"Far Plane":1000.0,"Aspect Ratio":1.7411764860153199,"Horizontal FoV":-431602080.0,"Vertical FoV":60.0,"Position":{"x":0.0,"y":0.0,"z":0.0},"Reference":{"x":1.0,"y":0.0,"z":0.0}}}},"Game Object":{"UID":4115653681,"Parent UID":1,"Active":true,"Static":true,"Object Name":"RootNode","Has Children":true,"Components":{"Transform":{"UID":2676754627,"Type":1,"Position":{"x":0.0,"y":0.0,"z":0.0},"Rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Previous Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Scale":{"x":1.0,"y":1.0,"z":1.0}}}},"Game Object":{"UID":717099254,"Parent UID":4115653681,"Active":true,"Static":true,"Object Name":"Node GameObject","Has Children":true,"Components":{"Transform":{"UID":3873088364,"Type":1,"Position":{"x":0.0,"y":0.0,"z":0.0},"Rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Previous Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Scale":{"x":1.0,"y":1.0,"z":1.0}}}},"Game Object":{"UID":742501665,"Parent UID":717099254,"Active":true,"Static":true,"Object Name":"Chimney","Has Children":false,"Components":{"Transform":{"UID":3537963401,"Type":1,"Position":{"x":0.0,"y":0.0,"z":0.0},"Rotation":{"x":0.0,"y":0.0,"z":-0.7071068286895752,"w":0.7071067094802856},"Rotation Euler":{"x":0.0,"y":0.0,"z":-90.00000762939453},"Previous Rotation Euler":{"x":0.0,"y":0.0,"z":-90.00000762939453},"Scale":{"x":100.0,"y":100.0,"z":100.0}},"Mesh":{"UID":2573047313,"Type":2,"Mesh File Name":"Chimney","Texture Coordinates":true,"Normals":false,"Triangle Faces":true,"Material":{"UID":732977816,"Type":3,"Texture Name":"Baker_house","Color":{"r":0.47040000557899477,"g":0.47040000557899477,"b":0.47040000557899477}}},"Material":{"UID":732977816,"Type":3,"Texture Name":"Baker_house","Color":{"r":0.47040000557899477,"g":0.47040000557899477,"b":0.47040000557899477}}}},"Game Object":{"UID":3904674080,"Parent UID":4115653681,"Active":true,"Static":true,"Object Name":"Node GameObject","Has Children":true,"Components":{"Transform":{"UID":701472706,"Type":1,"Position":{"x":0.0,"y":0.0,"z":0.0},"Rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Previous Rotation Euler":{"x":0.0,"y":0.0,"z":0.0},"Scale":{"x":1.0,"y":1.0,"z":1.0}}}},"Game Object":{"UID":598035105,"Parent UID":3904674080,"Active":true,"Static":true,"Object Name":"Baker_house","Has Children":false,"Components":{"Transform":{"UID":1174500825,"Type":1,"Position":{"x":0.0,"y":0.0,"z":0.0},"Rotation":{"x":0.0,"y":0.0,"z":-0.7071068286895752,"w":0.7071067094802856},"Rotation Euler":{"x":0.0,"y":0.0,"z":-90.00000762939453},"Previous Rotation Euler":{"x":0.0,"y":0.0,"z":-90.00000762939453},"Scale":{"x":100.0,"y":100.0,"z":100.0}},"Mesh":{"UID":2970689745,"Type":2,"Mesh File Name":"Baker_house","Texture Coordinates":true,"Normals":false,"Triangle Faces":true,"Material":{"UID":3778443463,"Type":3,"Texture Name":"Baker_house","Color":{"r":0.47040000557899477,"g":0.47040000557899477,"b":0.47040000557899477}}},"Material":{"UID":3778443463,"Type":3,"Texture Name":"Baker_house","Color":{"r":0.47040000557899477,"g":0.47040000557899477,"b":0.47040000557899477}}}}}}
+{
+  "Scene": 
+  {
+    "Game Object": {
+      "UID": 1,
+      "Parent UID": 0,
+      "Active": true,
+      "Static": true,
+      "Object Name": "root",
+      "Has Children": true,
+      "Components": {
+        "Transform": {
+          "UID": 4233196342,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        },
+        "Camera": {
+          "UID": 484438458,
+          "Type": 4,
+          "Near Plane": 0.10000000149011612,
+          "Far Plane": 1000.0,
+          "Aspect Ratio": 1.7411764860153199,
+          "Horizontal FoV": -431602080.0,
+          "Vertical FoV": 60.0,
+          "Position": {
+            "x": -10.0,
+            "y": 5.0,
+            "z": 7.0
+          },
+          "Reference": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 2678628591,
+      "Parent UID": 1,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Camera",
+      "Has Children": false,
+      "Components": {
+        "Transform": {
+          "UID": 3166463720,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        },
+        "Camera": {
+          "UID": 3458318957,
+          "Type": 4,
+          "Near Plane": 0.10000000149011612,
+          "Far Plane": 1000.0,
+          "Aspect Ratio": 1.7411764860153199,
+          "Horizontal FoV": -431602080.0,
+          "Vertical FoV": 60.0,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Reference": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 4115653681,
+      "Parent UID": 1,
+      "Active": true,
+      "Static": true,
+      "Object Name": "RootNode",
+      "Has Children": true,
+      "Components": {
+        "Transform": {
+          "UID": 2676754627,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 717099254,
+      "Parent UID": 4115653681,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Node GameObject",
+      "Has Children": true,
+      "Components": {
+        "Transform": {
+          "UID": 3873088364,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 742501665,
+      "Parent UID": 717099254,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Chimney",
+      "Has Children": false,
+      "Components": {
+        "Transform": {
+          "UID": 3537963401,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -0.7071068286895752,
+            "w": 0.7071067094802856
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.00000762939453
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.00000762939453
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.0,
+            "z": 100.0
+          }
+        },
+        "Mesh": {
+          "UID": 2573047313,
+          "Type": 2,
+          "Mesh File Name": "Chimney",
+          "Texture Coordinates": true,
+          "Normals": false,
+          "Triangle Faces": true,
+          "Material": {
+            "UID": 732977816,
+            "Type": 3,
+            "Texture Name": "Baker_house",
+            "Color": {
+              "r": 0.47040000557899477,
+              "g": 0.47040000557899477,
+              "b": 0.47040000557899477
+            }
+          }
+        },
+        "Material": {
+          "UID": 732977816,
+          "Type": 3,
+          "Texture Name": "Baker_house",
+          "Color": {
+            "r": 0.47040000557899477,
+            "g": 0.47040000557899477,
+            "b": 0.47040000557899477
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 3904674080,
+      "Parent UID": 4115653681,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Node GameObject",
+      "Has Children": true,
+      "Components": {
+        "Transform": {
+          "UID": 701472706,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        }
+      }
+    },
+    "Game Object": {
+      "UID": 598035105,
+      "Parent UID": 3904674080,
+      "Active": true,
+      "Static": true,
+      "Object Name": "Baker_house",
+      "Has Children": false,
+      "Components": {
+        "Transform": {
+          "UID": 1174500825,
+          "Type": 1,
+          "Position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "Rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -0.7071068286895752,
+            "w": 0.7071067094802856
+          },
+          "Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.00000762939453
+          },
+          "Previous Rotation Euler": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -90.00000762939453
+          },
+          "Scale": {
+            "x": 100.0,
+            "y": 100.0,
+            "z": 100.0
+          }
+        },
+        "Mesh": {
+          "UID": 2970689745,
+          "Type": 2,
+          "Mesh File Name": "Baker_house",
+          "Texture Coordinates": true,
+          "Normals": false,
+          "Triangle Faces": true,
+          "Material": {
+            "UID": 3778443463,
+            "Type": 3,
+            "Texture Name": "Baker_house",
+            "Color": {
+              "r": 0.47040000557899477,
+              "g": 0.47040000557899477,
+              "b": 0.47040000557899477
+            }
+          }
+        },
+        "Material": {
+          "UID": 3778443463,
+          "Type": 3,
+          "Texture Name": "Baker_house",
+          "Color": {
+            "r": 0.47040000557899477,
+            "g": 0.47040000557899477,
+            "b": 0.47040000557899477
+          }
+        }
+      }
+    }
+  }}

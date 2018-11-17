@@ -31,6 +31,15 @@ class ModuleLoader;
 class ModuleImporter;
 class ModuleTimeManager;
 
+enum GameState
+{
+	NO_STATE,
+	RUNNING,
+	PAUSED,
+	STOPPED,
+	ONE_FRAME
+};
+
 class Application
 {
 public:
@@ -60,6 +69,7 @@ private:
 	uint32				last_sec_frame_count = 0;
 	uint32				prev_last_sec_frame_count = 0;
 	float	dt;
+	float game_dt;
 
 	std::vector<float> fps;
 	std::vector<float> ms;
@@ -83,6 +93,9 @@ public:
 	void SaveData();
 	void LoadData();
 
+	float GetDeltaTime();
+	uint64 GetFrameCount();
+
 private:
 
 	void AddModule(Module* mod);
@@ -100,7 +113,7 @@ public:
 	int GetFramerate() const;
 	void SetFramerate(int _framerate);
 	void ChangeFPSlog(int _fps, float _ms);
-	bool GAME_RUNNING = false;
+	GameState game_state = STOPPED;
 };
 
 extern Application* App;

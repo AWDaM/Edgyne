@@ -22,41 +22,6 @@ enum glRenderOptions
 	SCISSOR_TEST
 };
 
-struct mesh
-{
-	char* name;
-
-	uint id_index = 0;
-	uint num_index = 0;
-	uint* index = nullptr;
-
-	uint id_vertex = 0;
-	uint num_vertex = 0;
-	float* vertex = nullptr;
-
-	uint id_normals = 0;
-	float* normals = nullptr;
-
-	uint id_texture = 0;
-	float* texCoords = nullptr;
-	float2 image_size = { 0,0 };
-
-	AABB bounding_box;
-	vec color = { 0,0,0 };
-
-	vec position;
-	vec rotation;
-	vec scale;
-	uint num_faces;
-
-	bool hasTextCoords = false;
-	bool hasTriangleFaces = true;
-
-	bool Draw();
-	void DrawNormals();
-	void DrawBoundingBox();
-};
-
 class ModuleRenderer3D : public Module
 {
 public:
@@ -81,8 +46,7 @@ public:
 	void DrawMainCameraFrustum();
 
 	void glSwitch(bool var, glRenderOptions option);
-	void DeleteMesh();
-
+	
 public:
 
 	uint framebuffer = 0;
@@ -107,8 +71,6 @@ public:
 	uint  DroppedTexture;
 
 	AABB globalBoundingBox;
-
-	std::list<mesh*> mesh_list;
 };
 
 #endif // !__MODULE_RENDERER_3D_H__

@@ -3,10 +3,12 @@
 #include "ModuleCamera3D.h"
 #include "ModuleLevel.h"
 #include "ModuleLoader.h"
+#include "ModuleImGui.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "Transform.h"
 #include "ModuleDebug.h"
 #include "QuadTree.h"
 #include "Mesh.h"
@@ -51,7 +53,23 @@ bool ModuleLevel::Start()
 		return true;
 }
 
+bool ModuleLevel::CleanUp()
+{
+	std::list<GameObject*>::iterator item = game_objects.begin();
 
+	while (item != game_objects.end())
+	{
+		(*item)->CleanUp();
+		item++;
+	}
+
+
+	RELEASE(selected_game_object);
+	RELEASE(root);
+	RELEASE(game_camera);
+
+	return true;
+}
 update_status ModuleLevel::PreUpdate(float dt)
 {
 	std::list<GameObject*>::iterator item = game_objects.begin();
@@ -95,6 +113,24 @@ update_status ModuleLevel::PreUpdate(float dt)
 
 update_status ModuleLevel::Update(float dt)
 {
+	if (debugRay)
+	{
+		glBegin(GL_LINES);
+		glLineWidth(3.0f);
+
+		glVertex3f(ray.a.x,ray.a.y,ray.a.z);
+		glVertex3f(ray.b.x,ray.b.y,ray.b.z);
+		glEnd();
+		glLineWidth(1.0f);
+
+		glBegin(GL_TRIANGLES);
+		for (std::vector<math::float3>::iterator it = triangles.begin(); it != triangles.end(); it++)
+		{
+			glVertex3f((*it).x, (*it).y, (*it).z);
+		}
+		glEnd();
+	}
+
 	std::list<GameObject*>::iterator item = game_objects.begin();
 
 	while (item != game_objects.end())
@@ -105,11 +141,14 @@ update_status ModuleLevel::Update(float dt)
 		}
 		item++;
 	}
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && App->camera->scene_clicked)
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
 	{
+		debugRay = true;
 		float distance;
 		math::float3 hitPoint;
 		selected_game_object = ScreenPointToRay(App->input->GetMouseX(), App->input->GetMouseY(), distance, hitPoint);
+		game_camera = App->camera->editor_camera;
+
 	}
 
 	return UPDATE_CONTINUE;
@@ -211,30 +250,39 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY, float& shortestDis
 	shortestHitPoint = math::float3::inf;
 	shortestDistance = FLOAT_INF;
 
-	int winWidth = App->window->window_w;
-	int winHeight = App->window->window_h;
-	float normalized_x = -(1.0f - (float(posX) * 2.0f) / winWidth);
-	float normalized_y = 1.0f - (float(posY) * 2.0f) / winHeight;
+	//float sceneX = App->imGui->GetScenePos().x;
+	//float sceneY = App->imGui->GetScenePos().y;
 
-	math::LineSegment raycast = App->camera->editor_camera->frustum.UnProjectLineSegment(normalized_x, normalized_y);
+	//float normalized_x = 1.0f - (float(posX - sceneX) * 2.0f) / (App->window->window_w);
+	//float normalized_y = 1.0f - (float(posY - sceneY) * 2.0f) / (App->window->window_h);
+
+	float mouseX = (float)App->input->GetMouseX() - App->imGui->sceneX;
+	LOG("%f", mouseX);
+	float mouseY = (float)App->input->GetMouseY() - App->imGui->sceneY;
+	LOG("%f", mouseY);
+
+	mouseX = (mouseX / (App->imGui->sceneW / 2)) - 1;
+	mouseY = (mouseY / (App->imGui->sceneH / 2)) - 1;
+	ray = App->camera->editor_camera->frustum.UnProjectLineSegment(mouseX, -mouseY);
+
 
 	// Static objects
 	std::vector<GameObject*> hits;
-	App->level->quad_tree->CollectIntersections(hits, raycast);
+	App->level->quad_tree->CollectIntersections(hits, ray);
 
 	// Dynamic objects
 	std::vector<GameObject*> dynamicGameObjects = GetNonStaticObjects();
 
 	for (uint i = 0; i < dynamicGameObjects.size(); ++i)
 	{
-		if (dynamicGameObjects[i]->aligned_bounding_box.IsFinite() && raycast.Intersects(dynamicGameObjects[i]->aligned_bounding_box))
+		if (dynamicGameObjects[i]->aligned_bounding_box.IsFinite() && ray.Intersects(dynamicGameObjects[i]->aligned_bounding_box))
 			hits.push_back(dynamicGameObjects[i]);
 	}
 
 	for (int i = 0; i < hits.size(); ++i)
 	{
 		math::Triangle tri;
-		math::LineSegment localSpaceSegment(raycast);
+		math::LineSegment localSpaceSegment(ray);
 		localSpaceSegment.Transform(hits[i]->global_transform_matrix.Inverted());
 
 		const Mesh* mesh = (const Mesh*)hits[i]->GetComponent(MESH);
@@ -242,6 +290,10 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY, float& shortestDis
 		if(mesh)
 		for (int j = 0; j < mesh->num_index;)
 		{
+			triangles.push_back({ mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2] });
+			triangles.push_back({ mesh->vertex[mesh->index[j+1] * 3], mesh->vertex[mesh->index[j + 1] * 3 + 1], mesh->vertex[mesh->index[j + 1] * 3 + 2] });
+			triangles.push_back({ mesh->vertex[mesh->index[j + 2] * 3], mesh->vertex[mesh->index[j + 2] * 3 + 1], mesh->vertex[mesh->index[j + 2] * 3 + 2] });
+
 			tri.a = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
 			tri.b = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
 			tri.c = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
@@ -252,6 +304,9 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY, float& shortestDis
 			{
 				if (shortestDistance > distance)
 				{
+					triangles.push_back({ tri.a.x, tri.a.y, tri.a.z });
+					triangles.push_back({ tri.b.x, tri.b.y, tri.b.z });
+					triangles.push_back({ tri.c.x, tri.c.y, tri.c.z });
 					shortestDistance = distance;
 					shortestHitPoint = hitPoint;
 					go = hits[i];

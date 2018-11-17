@@ -92,3 +92,9 @@ bool GUIInspector::Load(rapidjson::Value& Node)
 	active = Node["active"].GetBool();
 	return true;
 }
+bool GUIInspector::CleanUp()
+{
+	RELEASE(highlighted_game_object);
+
+	return true;
+}
