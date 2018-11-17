@@ -51,6 +51,10 @@ void ModuleCamera3D::Save(rapidjson::Document & doc, rapidjson::FileWriteStream 
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
+	if (App->game_state == RUNNING)
+	{
+		return UPDATE_CONTINUE;
+	}
 	if (App->imGui->scene->IsMouseHovering())
 	{
 		vec newPos(0.f, 0.f, 0.f);

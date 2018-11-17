@@ -36,7 +36,8 @@ enum GameState
 	NO_STATE,
 	RUNNING,
 	PAUSED,
-	STOPPED
+	STOPPED,
+	ONE_FRAME
 };
 
 class Application
@@ -68,6 +69,7 @@ private:
 	uint32				last_sec_frame_count = 0;
 	uint32				prev_last_sec_frame_count = 0;
 	float	dt;
+	float game_dt;
 
 	std::vector<float> fps;
 	std::vector<float> ms;
@@ -92,6 +94,7 @@ public:
 	void LoadData();
 
 	float GetDeltaTime();
+	uint64 GetFrameCount();
 
 private:
 

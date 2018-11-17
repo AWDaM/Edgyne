@@ -27,6 +27,7 @@ public:
 	float time_scale = 1.0f;
 	float game_clock_seconds = 0;
 
+
 };
 
 

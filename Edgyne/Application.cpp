@@ -110,7 +110,15 @@ void Application::PrepareUpdate()
 	last_sec_frame_count++;
 
 	dt = frame_time.ReadSec();
-
+	game_dt = dt;
+	if (game_state == RUNNING)
+	{
+		game_dt *= time_manager->time_scale;
+	}
+	else if (game_state == PAUSED)
+	{
+		game_dt *= 0;
+	}
 	frame_time.Start();
 	ptimer.Start();
 }
@@ -187,7 +195,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == true)
 	{
-		ret = (*item)->PreUpdate(dt);
+		ret = (*item)->PreUpdate(game_dt);
 		item++;
 	}
 
@@ -195,7 +203,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == true)
 	{
-		ret = (*item)->Update(dt);
+		ret = (*item)->Update(game_dt);
 		item++;
 	}
 
@@ -203,7 +211,7 @@ update_status Application::Update()
 
 	while (item != list_modules.end() && ret == true)
 	{
-		ret = (*item)->PostUpdate(dt);
+		ret = (*item)->PostUpdate(game_dt);
 		item++;
 	}
 
@@ -387,4 +395,9 @@ void Application::LoadData()
 float Application::GetDeltaTime()
 {
 	return dt;
+}
+
+uint64 Application::GetFrameCount()
+{
+	return frame_count;
 }
