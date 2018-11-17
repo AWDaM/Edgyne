@@ -170,12 +170,11 @@ std::vector<GameObject*> ModuleLevel::GetNonStaticObjects()
 
 void ModuleLevel::DeleteLevel()
 {
-	std::list<GameObject*>::reverse_iterator item = game_objects.rbegin();
+	std::list<GameObject*>::iterator item = root->childs.begin();
 
-	while (item != game_objects.rend())
+	while (item != root->childs.end())
 	{
-		(*item)->CleanUp();
-		game_objects.pop_back();
+		RELEASE((*item));
 	}
 	root->childrenUID.clear();
 }

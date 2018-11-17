@@ -31,11 +31,6 @@ void GUIConsole::Draw()
 	
 }
 
-bool GUIConsole::CleanUp()
-{
-	//App->canLog = false;
-	return true;
-}
 
 bool GUIConsole::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
 {

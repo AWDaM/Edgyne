@@ -69,7 +69,7 @@ bool ModuleImGui::CleanUp()
 {
 
 	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
-		(*it)->CleanUp();
+		RELEASE((*it));
 
 	console					= nullptr;
 	about					= nullptr;
