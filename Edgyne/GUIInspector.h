@@ -20,7 +20,6 @@ public:
 	~GUIInspector();
 
 	void Draw();
-	bool CleanUp();
 	bool Load(rapidjson::Value& Node);
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
 

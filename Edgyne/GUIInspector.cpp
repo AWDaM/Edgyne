@@ -18,7 +18,7 @@ GUIInspector::GUIInspector(bool active = false) : GUIElements("inspector",active
 
 GUIInspector::~GUIInspector()
 {
-	
+	highlighted_game_object = nullptr;
 }
 
 void GUIInspector::Draw()
@@ -90,11 +90,5 @@ void GUIInspector::AddComponents()
 bool GUIInspector::Load(rapidjson::Value& Node)
 {
 	active = Node["active"].GetBool();
-	return true;
-}
-bool GUIInspector::CleanUp()
-{
-	RELEASE(highlighted_game_object);
-
 	return true;
 }

@@ -55,18 +55,11 @@ bool ModuleLevel::Start()
 
 bool ModuleLevel::CleanUp()
 {
-	std::list<GameObject*>::iterator item = game_objects.begin();
+	selected_game_object = nullptr;
+	game_camera = nullptr;
 
-	while (item != game_objects.end())
-	{
-		(*item)->CleanUp();
-		item++;
-	}
-
-
-	RELEASE(selected_game_object);
 	RELEASE(root);
-	RELEASE(game_camera);
+	RELEASE(quad_tree);
 
 	return true;
 }

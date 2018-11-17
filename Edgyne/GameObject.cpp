@@ -35,21 +35,21 @@ GameObject::~GameObject()
 	parent = nullptr;
 	transform = nullptr;
 
-	std::vector<Component*>::iterator it_cp;
-	it_cp = components.begin();
-	while (it_cp != components.end())
+	std::vector<Component*>::iterator it;
+	it = components.begin();
+	while (it != components.end())
 	{
-		RELEASE((*it_cp));
-		it_cp++;
+		RELEASE((*it));
+		it++;
 	}
 	components.clear();
 
-	std::list<GameObject*>::iterator it_c;
-	it_c = childs.begin();
-	while (it_c != childs.end())
+	std::list<GameObject*>::iterator item;
+	item = childs.begin();
+	while (item != childs.end())
 	{
-		RELEASE((*it_c));
-		it_c++;
+		RELEASE((*item));
+		item++;
 	}
 	childs.clear();
 }

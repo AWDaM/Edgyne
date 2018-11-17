@@ -15,6 +15,13 @@ public:
 		for (int i = 0; i < 4; i++)
 			children[i] = nullptr;
 	};
+	~quadTreeNode()
+	{
+		go = nullptr;
+		myObjects.clear();
+		for (int i = 0; i < 4; i++)
+		RELEASE(children[i]);
+	}
 public:
 	GameObject * go = nullptr;
 	AABB boundingBox;
@@ -139,7 +146,7 @@ class EdgyQuadTree
 {
 public:
 	EdgyQuadTree(uint bucketSize = 1) : bucketSize(bucketSize) {};
-	~EdgyQuadTree() {};
+	~EdgyQuadTree() { RELEASE(root_node) };
 
 	void Create(AABB limits)
 	{

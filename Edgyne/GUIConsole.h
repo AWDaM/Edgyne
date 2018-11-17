@@ -11,10 +11,9 @@ class GUIConsole : public GUIElements
 public:
 
 	GUIConsole(std::string log, bool active);
-	virtual ~GUIConsole();
+	~GUIConsole();
 
-	void Draw() override;
-	bool CleanUp() override;
+	void Draw();
 
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
 	bool Load(rapidjson::Value& Node);

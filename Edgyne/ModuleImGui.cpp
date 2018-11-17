@@ -71,14 +71,14 @@ bool ModuleImGui::CleanUp()
 	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
 		(*it)->CleanUp();
 
-	RELEASE(console);
-	RELEASE(about);
-	RELEASE(configuration);
-	RELEASE(random_number_test);
-	RELEASE(inspector);
-	RELEASE(scene);
-	RELEASE(hierarchy);
-	RELEASE(assets);
+	console					= nullptr;
+	about					= nullptr;
+	configuration			= nullptr;
+	random_number_test		= nullptr;
+	inspector				= nullptr;
+	scene					= nullptr;
+	hierarchy				= nullptr;
+	assets					= nullptr;
 
 	return true;
 }
