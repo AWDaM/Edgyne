@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleImporter.h"
 #include "ModuleCamera3D.h"
+#include "ModuleResourceManager.h"
 #include "ModuleLevel.h"
 #include "GameObject.h"
 #include "Mesh.h"
@@ -225,11 +226,11 @@ void ModuleLoader::LoadInfo(GameObject* game_object, aiMesh * currentMesh, aiNod
 
 void ModuleLoader::LoadVerices(Mesh* new_mesh, aiMesh* currentMesh)
 {
-	new_mesh->num_vertex = currentMesh->mNumVertices;
-	new_mesh->vertex = new float[new_mesh->num_vertex * 3];
-	memcpy(new_mesh->vertex, currentMesh->mVertices, sizeof(float) * new_mesh->num_vertex * 3);
+	new_mesh->resource_mesh->num_vertex = currentMesh->mNumVertices;
+	new_mesh->resource_mesh->vertex = new float[new_mesh->resource_mesh->num_vertex * 3];
+	memcpy(new_mesh->resource_mesh->vertex, currentMesh->mVertices, sizeof(float) * new_mesh->resource_mesh->num_vertex * 3);
 
-	LOG("New mesh with %d vertices", new_mesh->num_vertex);
+	LOG("New mesh with %d vertices", new_mesh->resource_mesh->num_vertex);
 }
 
 void ModuleLoader::LoadColor(Material* new_material, aiMaterial* mat)
@@ -246,13 +247,13 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 	bool ret = true;
 	if (currentMesh->HasTextureCoords(0))
 	{
-		new_mesh->has_texture_coordinates = true;
-		new_mesh->texCoords = new float[new_mesh->num_vertex * 2];
+		new_mesh->resource_mesh->has_texture_coordinates = true;
+		new_mesh->resource_mesh->texCoords = new float[new_mesh->resource_mesh->num_vertex * 2];
 
-		for (int k = 0; k < new_mesh->num_vertex * 2; k += 2)
+		for (int k = 0; k < new_mesh->resource_mesh->num_vertex * 2; k += 2)
 		{
-			new_mesh->texCoords[k] = currentMesh->mTextureCoords[0][k/2].x;
-			new_mesh->texCoords[k+1] = currentMesh->mTextureCoords[0][k/2].y;
+			new_mesh->resource_mesh->texCoords[k] = currentMesh->mTextureCoords[0][k/2].x;
+			new_mesh->resource_mesh->texCoords[k+1] = currentMesh->mTextureCoords[0][k/2].y;
 		}
 
 		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
@@ -317,40 +318,40 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 	else
 	{
 		LOG("Item doesn't have texture coordinates");
-		new_mesh->has_texture_coordinates = false;
+		new_mesh->resource_mesh->has_texture_coordinates = false;
 	}
 	return ret;
 }
 
 void ModuleLoader::LoadNormals(Mesh* new_mesh, aiMesh* currentMesh)
 {
-	new_mesh->normals = new float[new_mesh->num_vertex * 3];
-	memcpy(new_mesh->normals, currentMesh->mNormals, sizeof(float)*new_mesh->num_vertex * 3);
+	new_mesh->resource_mesh->normals = new float[new_mesh->resource_mesh->num_vertex * 3];
+	memcpy(new_mesh->resource_mesh->normals, currentMesh->mNormals, sizeof(float)*new_mesh->resource_mesh->num_vertex * 3);
 	LOG("Normals loaded correctly");
 }
 
 void ModuleLoader::LoadIndices(Mesh* new_mesh, aiMesh* currentMesh)
 {
-	new_mesh->num_index = currentMesh->mNumFaces * 3; // assume each face is a triangle
-	new_mesh->index = new uint[new_mesh->num_index]; 
+	new_mesh->resource_mesh->num_index = currentMesh->mNumFaces * 3; // assume each face is a triangle
+	new_mesh->resource_mesh->index = new uint[new_mesh->resource_mesh->num_index];
 
 	for (uint j = 0; j < currentMesh->mNumFaces; ++j)
 	{
 		if (currentMesh->mFaces[j].mNumIndices != 3)
 		{
 			LOG("---WARNING--- Geometry face with != 3 indices, Won't be drawn on screen");
-			new_mesh->has_triangle_faces = false;
+			new_mesh->resource_mesh->has_triangle_faces = false;
 			break;
 
 		}
 		else
-			memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
+			memcpy(&new_mesh->resource_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 	}
 	LOG("New mesh with %d indices", new_mesh->num_index);
 
-	glGenBuffers(1, (GLuint*)&(new_mesh->id_index));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);
+	glGenBuffers(1, (GLuint*)&(new_mesh->resource_mesh->id_index));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->resource_mesh->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->resource_mesh->num_index, &new_mesh->resource_mesh->index[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
@@ -647,16 +648,16 @@ bool ModuleLoader::CheckIfNameExists(const std::string name)
 
 void ModuleLoader::SaveMesh(Mesh* mesh)
 {
-	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
-	bool optatives[3] = { mesh->has_texture_coordinates, mesh->has_triangle_faces, mesh->has_normals };
+	uint ranges[2] = { mesh->resource_mesh->num_vertex, mesh->resource_mesh->num_index };
+	bool optatives[3] = { mesh->resource_mesh->has_texture_coordinates, mesh->resource_mesh->has_triangle_faces, mesh->resource_mesh->has_normals };
 	uint fileSize;
 
-	fileSize = sizeof(ranges) + sizeof(optatives) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index;
+	fileSize = sizeof(ranges) + sizeof(optatives) + sizeof(float)*mesh->resource_mesh->num_vertex * 3 + sizeof(uint)*mesh->resource_mesh->num_index;
 
-	if (mesh->has_texture_coordinates)
-		fileSize += sizeof(float)*mesh->num_vertex * 2;
-	if(mesh->has_normals)
-		fileSize += sizeof(float)*mesh->num_vertex * 3;
+	if (mesh->resource_mesh->has_texture_coordinates)
+		fileSize += sizeof(float)*mesh->resource_mesh->num_vertex * 2;
+	if(mesh->resource_mesh->has_normals)
+		fileSize += sizeof(float)*mesh->resource_mesh->num_vertex * 3;
 
 	char* data = new char[fileSize];
 	char* bookmark = data;
@@ -674,30 +675,30 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 	bookmark += bytes;
 
 	// Saving the data of the vertices
-	bytes = sizeof(float)*mesh->num_vertex * 3;
-	memcpy(bookmark, mesh->vertex, bytes);
+	bytes = sizeof(float)*mesh->resource_mesh->num_vertex * 3;
+	memcpy(bookmark, mesh->resource_mesh->vertex, bytes);
 
 	bookmark += bytes;
 
 	// Saving the data of the indices
-	bytes = sizeof(uint)*mesh->num_index;
-	memcpy(bookmark, mesh->index, bytes);
+	bytes = sizeof(uint)*mesh->resource_mesh->num_index;
+	memcpy(bookmark, mesh->resource_mesh->index, bytes);
 
 	bookmark += bytes;
 
-	if (mesh->has_texture_coordinates)
+	if (mesh->resource_mesh->has_texture_coordinates)
 	{
 		// Saving the data of the texture coordinates
-		bytes = sizeof(float)*mesh->num_vertex * 2;
-		memcpy(bookmark, mesh->texCoords, bytes);
+		bytes = sizeof(float)*mesh->resource_mesh->num_vertex * 2;
+		memcpy(bookmark, mesh->resource_mesh->texCoords, bytes);
 
 		bookmark += bytes;
 	}
-	if (mesh->has_normals)
+	if (mesh->resource_mesh->has_normals)
 	{
 		// Saving the data of the normals
-		bytes = sizeof(float)*mesh->num_vertex * 3;
-		memcpy(bookmark, mesh->normals, bytes);
+		bytes = sizeof(float)*mesh->resource_mesh->num_vertex * 3;
+		memcpy(bookmark, mesh->resource_mesh->normals, bytes);
 	}
 
 	std::string str = App->importer->meshLibraryPath;
@@ -705,9 +706,9 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 	str.append(App->importer->meshExtension);
 
 	App->importer->WriteDataOnFile(data, fileSize, str.c_str());
-	mesh->fileName = str;
-	mesh->fileName = mesh->fileName.erase(0, mesh->fileName.find_last_of("\\") + 1);
-	mesh->fileName = mesh->fileName.substr(0, mesh->fileName.find("."));
+	mesh->resource_mesh->fileName = str;
+	mesh->resource_mesh->fileName = mesh->resource_mesh->fileName.erase(0, mesh->resource_mesh->fileName.find_last_of("\\") + 1);
+	mesh->resource_mesh->fileName = mesh->resource_mesh->fileName.substr(0, mesh->resource_mesh->fileName.find("."));
 }
 
 std::string ModuleLoader::SaveMaterial(const std::string& path)

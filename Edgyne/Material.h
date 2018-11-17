@@ -21,8 +21,6 @@ public:
 
 
 	bool ComponentDraw();
-	void MaterialBind();
-	void MaterialUnbind();
 	void OnEditor();
 
 private:

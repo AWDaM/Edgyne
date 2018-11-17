@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "Application.h"
 #include "ModuleImporter.h"
+#include "ModuleResourceManager.h"
 #include "Material.h"
 #include "Transform.h"
 #include "GL/glew.h"
@@ -33,10 +34,10 @@ rapidjson::Value Mesh::SaveToScene(rapidjson::Document::AllocatorType& allocator
 
 	myData.AddMember("UID", UID, allocator);
 	myData.AddMember("Type", component_type, allocator);
-	myData.AddMember("Mesh File Name", (rapidjson::Value::StringRefType)fileName.c_str(), allocator);
-	myData.AddMember("Texture Coordinates", has_texture_coordinates, allocator);
-	myData.AddMember("Normals", has_normals, allocator);
-	myData.AddMember("Triangle Faces", has_triangle_faces, allocator);
+	myData.AddMember("Mesh File Name", (rapidjson::Value::StringRefType)resource_mesh->fileName.c_str(), allocator);
+	myData.AddMember("Texture Coordinates", resource_mesh->has_texture_coordinates, allocator);
+	myData.AddMember("Normals", resource_mesh->has_normals, allocator);
+	myData.AddMember("Triangle Faces", resource_mesh->has_triangle_faces, allocator);
 
 	rapidjson::Value mat(rapidjson::kObjectType);
 
@@ -50,14 +51,14 @@ rapidjson::Value Mesh::SaveToScene(rapidjson::Document::AllocatorType& allocator
 void Mesh::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 {
 	UID = comp->value["UID"].GetUint();
-	has_texture_coordinates = comp->value["Texture Coordinates"].GetBool();
-	has_triangle_faces = comp->value["Triangle Faces"].GetBool();
-	has_normals = comp->value["Normals"].GetBool();
-	fileName = comp->value["Mesh File Name"].GetString();
+	resource_mesh->has_texture_coordinates = comp->value["Texture Coordinates"].GetBool();
+	resource_mesh->has_triangle_faces = comp->value["Triangle Faces"].GetBool();
+	resource_mesh->has_normals = comp->value["Normals"].GetBool();
+	resource_mesh->fileName = comp->value["Mesh File Name"].GetString();
 
 	std::string tmp = "Library\\Meshes\\";
 
-	tmp += fileName;
+	tmp += resource_mesh->fileName;
 	tmp += ".edgymesh";
 
 	App->importer->CopyDataFromFile(tmp, this);
@@ -72,9 +73,9 @@ void Mesh::OnEditor()
 {
 	if (ImGui::TreeNode("Mesh"))
 	{
-		ImGui::Text("Num Faces: %i", num_index/3);
-		ImGui::Text("Num Vertices: %i", num_vertex);
-		ImGui::Text("Num Indexes: %i", num_index);
+		ImGui::Text("Num Faces: %i", resource_mesh->num_index/3);
+		ImGui::Text("Num Vertices: %i", resource_mesh->num_vertex);
+		ImGui::Text("Num Indexes: %i", resource_mesh->num_index);
 		ImGui::TreePop();
 	}
 }
@@ -86,7 +87,7 @@ bool Mesh::ComponentUpdate()
 
 bool Mesh::ComponentDraw()
 {
-	if (has_triangle_faces && id_index > 0)
+	if (resource_mesh->has_triangle_faces && resource_mesh->id_index > 0)
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -102,15 +103,15 @@ bool Mesh::ComponentDraw()
 				glColor3f(material->color.x, material->color.y, material->color.z);
 		}
 			//---------
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-		glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
+		glVertexPointer(3, GL_FLOAT, 0, &resource_mesh->vertex[0]);
 
-		if (has_texture_coordinates)
-			glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
+		if (resource_mesh->has_texture_coordinates)
+			glTexCoordPointer(2, GL_FLOAT, 0, &resource_mesh->texCoords[0]);
 
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		//Draw The Mesh
-		glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, resource_mesh->num_index, GL_UNSIGNED_INT, NULL);
 
 		//Disable All The Data
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -133,17 +134,13 @@ bool Mesh::ComponentDraw()
 
 void Mesh::SetBoundingVolume()
 {
-	game_object->aligned_bounding_box.Enclose((float3*)vertex, num_vertex);
+	game_object->aligned_bounding_box.Enclose((float3*)resource_mesh->vertex, resource_mesh->num_vertex);
 	//for (int i = 0; i < num_vertex * 3; i + 3)
 	//{
 	//	game_object->bounding_box.Enclose()
 	//}
-	game_object->bounding_sphere.Enclose((float3*)vertex, num_vertex);
+	game_object->bounding_sphere.Enclose((float3*)resource_mesh->vertex, resource_mesh->num_vertex);
 }
 
-void Mesh::TransformChanged()
-{
-
-}
 
 

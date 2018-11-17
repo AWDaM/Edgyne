@@ -5,6 +5,7 @@
 #include "ModuleLoader.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleResourceManager.h"
 #include "GameObject.h"
 #include "Camera.h"
 #include "ModuleDebug.h"
@@ -240,11 +241,11 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY, float& shortestDis
 		const Mesh* mesh = (const Mesh*)hits[i]->GetComponent(MESH);
 
 		if(mesh)
-		for (int j = 0; j < mesh->num_index;)
+		for (int j = 0; j < mesh->resource_mesh->num_index;)
 		{
-			tri.a = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
-			tri.b = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
-			tri.c = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
+			tri.a = math::float3(mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3], mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3 + 1], mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3 + 2]);  j++;
+			tri.b = math::float3(mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3], mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3 + 1], mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3 + 2]);  j++;
+			tri.c = math::float3(mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3], mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3 + 1], mesh->resource_mesh->vertex[mesh->resource_mesh->index[j] * 3 + 2]);  j++;
 
 			float distance;
 			math::float3 hitPoint;

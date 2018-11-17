@@ -387,6 +387,7 @@
     <ClInclude Include="ModuleTimeManager.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleResourceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -620,6 +621,7 @@
     <ClCompile Include="ModuleTimeManager.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">

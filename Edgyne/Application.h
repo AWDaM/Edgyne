@@ -30,6 +30,7 @@ class ModuleDebug;
 class ModuleLoader;
 class ModuleImporter;
 class ModuleTimeManager;
+class ModuleResourceManager;
 
 enum GameState
 {
@@ -53,6 +54,7 @@ public:
 	ModuleLoader* loader;
 	ModuleImporter* importer;
 	ModuleTimeManager* time_manager;
+	ModuleResourceManager* resource_manager;
 
 	std::list<Module*> list_modules;
 
