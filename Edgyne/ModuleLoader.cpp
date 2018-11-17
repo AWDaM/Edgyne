@@ -347,7 +347,7 @@ void ModuleLoader::LoadIndices(Mesh* new_mesh, aiMesh* currentMesh)
 		else
 			memcpy(&new_mesh->resource_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 	}
-	LOG("New mesh with %d indices", new_mesh->num_index);
+	LOG("New mesh with %d indices", new_mesh->resource_mesh->num_index);
 
 	glGenBuffers(1, (GLuint*)&(new_mesh->resource_mesh->id_index));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->resource_mesh->id_index);
