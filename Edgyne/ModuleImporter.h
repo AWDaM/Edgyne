@@ -5,6 +5,7 @@
 #include "Globals.h"
 
 class Mesh;
+class ResourceMesh;
 
 class ModuleImporter : public Module
 {
@@ -20,7 +21,7 @@ public:
 	void SaveTexture(std::string& path);
 
 	bool LoadMeshFromFile();
-	void CopyDataFromFile(std::string& path, Mesh* _mesh = nullptr);
+	void CopyDataFromFile(std::string& path, ResourceMesh* _mesh = nullptr);
 	std::string FindFileInFolder(std::string& fileName);
 
 	const char* LoadDataFromFile(const char* file, uint& size); 

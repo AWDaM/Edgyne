@@ -416,3 +416,14 @@ Component * GameObject::GetComponent(ComponentType type)
 
 	return ret;
 }
+
+void GameObject::LinkMeshWithMaterial()
+{
+	Mesh* mesh = (Mesh*)GetComponent(MESH);
+	if (mesh)
+	{
+		Material* material = (Material*)GetComponent(MATERIAL);
+		if (material)
+			mesh->material = material;
+	}
+}

@@ -6,6 +6,9 @@
 #include "ModuleImGui.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleResourceManager.h"
+#include "Resource.h"
+#include "ResourceMesh.h"
 #include "GameObject.h"
 #include "Camera.h"
 #include "Transform.h"
@@ -277,7 +280,8 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY, float& shortestDis
 		math::LineSegment localSpaceSegment(ray);
 		localSpaceSegment.Transform(hits[i]->global_transform_matrix.Inverted());
 
-		const Mesh* mesh = (const Mesh*)hits[i]->GetComponent(MESH);
+		Mesh* component_mesh = (Mesh*)hits[i]->GetComponent(MESH);
+		ResourceMesh* mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(component_mesh->resource_mesh);
 
 		if(mesh)
 		for (int j = 0; j < mesh->num_index;)

@@ -1,9 +1,12 @@
 #include "ModuleImporter.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleLevel.h"
+#include "ModuleResourceManager.h"
 #include "Application.h"
 #include "Mesh.h"
 #include "GameObject.h"
+#include "Resource.h"
+#include "ResourceMesh.h"
 #include <experimental/filesystem>
 
 #include "GL/glew.h"
@@ -130,7 +133,7 @@ bool ModuleImporter::LoadMeshFromFile()
 	return true;
 }
 
-void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh)
+void ModuleImporter::CopyDataFromFile(std::string& path, ResourceMesh* _mesh)
 {
 	if (path != "No File")
 	{
@@ -157,13 +160,13 @@ void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh)
 		memcpy(optatives, bookmark, bytes);
 		bookmark += bytes;
 
-		if (!_mesh)
-		{
-			path = path.erase(0, sizeof(meshLibraryPath) - 1);
-			GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
+		//if (!_mesh)
+		//{
+		//	path = path.erase(0, sizeof(meshLibraryPath) - 1);
+		//	GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
 
-			_mesh = (Mesh*)game_object->AddComponent(MESH);
-		}
+		//	_mesh = (Mesh*)game_object->AddComponent(MESH);
+		//}
 
 		_mesh->num_vertex = ranges[0];
 		_mesh->num_index = ranges[1];
@@ -200,7 +203,7 @@ void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh)
 			_mesh->normals = new float[_mesh->num_vertex * 3];
 			memcpy(_mesh->normals, bookmark, bytes);
 		}
-		_mesh->SetBoundingVolume();
+		//_mesh->SetBoundingVolume();
 		fclose(file);
 
 

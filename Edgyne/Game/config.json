@@ -35,6 +35,8 @@
   },
   "TimeManager": {
   },
+  "ResourceManager": {
+  },
   "Render3D": {
     "VSync": true
   }

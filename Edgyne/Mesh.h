@@ -7,6 +7,7 @@
 #include "Globals.h"
 
 class Material;
+class MeshResource;
 
 class Mesh : public Component
 {
@@ -22,27 +23,11 @@ public:
 	bool ComponentUpdate();
 	bool ComponentDraw();
 	void SetBoundingVolume();
-	void TransformChanged();
 
-	void CopyDataFromFile(std::string& path);
 private:
 public:
-	uint id_index = 0;
-	uint num_index = 0;
-	uint* index = nullptr;
-
-	uint num_vertex = 0;
-	float* vertex = nullptr;
-
-	float* normals = nullptr;
-
-	uint id_texture = 0;
-	float* texCoords = nullptr;
-	bool has_texture_coordinates = false;
-	bool has_normals = false;
-	bool has_triangle_faces = true;
-
-	std::string fileName;
+	std::string resource_mesh;
+	std::string material_name;
 
 	Material* material = nullptr;
 
