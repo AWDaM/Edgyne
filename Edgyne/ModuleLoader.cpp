@@ -608,6 +608,12 @@ void ModuleLoader::LoadObject(std::string name, bool is_scene)
 	FILE* file;
 	if (!is_scene)
 	{
+		std::string path = "Assets\\Models\\";
+		path.append(name);
+		file = fopen(path.append(App->importer->modelExtension).c_str(), "rb");
+	}
+	else
+	{
 		std::string path = "Assets\\Scenes\\";
 		path.append(name);
 		file = fopen(path.append(App->importer->modelExtension).c_str(), "rb");

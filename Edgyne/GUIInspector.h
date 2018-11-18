@@ -20,6 +20,8 @@ public:
 	~GUIInspector();
 
 	void Draw();
+
+	void AddMesh();
 	bool Load(rapidjson::Value& Node);
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
 

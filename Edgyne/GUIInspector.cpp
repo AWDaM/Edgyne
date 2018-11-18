@@ -86,10 +86,16 @@ void GUIInspector::AddComponents()
 		else
 			LOG("The gameobject already has a CAMERA component");
 	}
-	if (ImGui::Button)
+	if (ImGui::CollapsingHeader("Mesh"))
 	{
+		if (!App->level->selected_game_object->GetComponent(MESH))
+		{ }
 
 	}
+}
+void GUIInspector::AddMesh()
+{
+
 }
 bool GUIInspector::Load(rapidjson::Value& Node)
 {
