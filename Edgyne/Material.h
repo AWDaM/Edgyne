@@ -6,6 +6,7 @@
 
 class GameObject;
 class Mesh;
+class ResourceMaterial;
 
 class Material :
 	public Component
@@ -25,10 +26,7 @@ public:
 
 private:
 public:
-	vec color;
-	float2 img_size;
-	uint id_texture = 0;
-	std::string fileName;
+	uint resource_uid = 0;
 private:
 
 };

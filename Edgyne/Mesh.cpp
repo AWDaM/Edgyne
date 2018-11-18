@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleImporter.h"
 #include "ModuleResourceManager.h"
+#include "Resource.h"
+#include "ResourceMaterial.h"
 #include "Material.h"
 #include "Transform.h"
 #include "GL/glew.h"
@@ -51,6 +53,7 @@ rapidjson::Value Mesh::SaveToScene(rapidjson::Document::AllocatorType& allocator
 void Mesh::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 {
 	UID = comp->value["UID"].GetUint();
+	resource_mesh->resource_uid = UID;
 	resource_mesh->has_texture_coordinates = comp->value["Texture Coordinates"].GetBool();
 	resource_mesh->has_triangle_faces = comp->value["Triangle Faces"].GetBool();
 	resource_mesh->has_normals = comp->value["Normals"].GetBool();
@@ -91,6 +94,7 @@ bool Mesh::ComponentDraw()
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 
+		ResourceMaterial* material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->material->resource_uid);
 		if (material)
 		{
 			if (material->id_texture)

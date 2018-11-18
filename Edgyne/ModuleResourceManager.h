@@ -4,21 +4,10 @@
 #include "Module.h"
 #include "Globals.h"
 #include "MathGeoLib\MathGeoLib.h"
-
+#include <map>
 class Material;
 class Mesh;
-
-struct MaterialResource
-{
-	std::string material_name;
-
-	vec color = { 0,0,0 };
-	float2 img_size = { 0,0 };
-	uint id_texture = 0;
-	std::string fileName;
-
-	void GenerateMaterial(Material* buffer);
-};
+class Resource;
 
 struct MeshResource
 {
@@ -39,7 +28,7 @@ struct MeshResource
 
 	std::string fileName;
 
-	void GenerateMesh(Mesh* buffer);
+	uint resource_uid = 0;
 };
 class ModuleResourceManager :
 	public Module
@@ -47,6 +36,12 @@ class ModuleResourceManager :
 public:
 	ModuleResourceManager(Application* app, bool start_enabled = true);
 	~ModuleResourceManager();
+	
+	Resource* GetResourceFromUID(uint uid);
+
+	Resource* CreateResource(ResourceType type, uint uid, rapidjson::Value::ConstMemberIterator comp);
+
+	std::map<uint, Resource*> resources;
 };
 
 #endif

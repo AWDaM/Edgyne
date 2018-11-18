@@ -14,6 +14,7 @@ void AssimpLoggerLoad(const char* message, char* user);
 class GameObject;
 class Mesh;
 class Material;
+class ResourceMaterial;
 
 class ModuleLoader : public Module
 {
@@ -31,7 +32,7 @@ public:
 	bool Import(const std::string& file);
 
 	void RecursiveGenerateListFromTree(std::list<GameObject*>& buffer, GameObject* root_game_object);
-	void LoadTextureFromLibrary(const char* path, Material* material);
+	void LoadTextureFromLibrary(const char* path, ResourceMaterial* material);
 
 	void ReceivedFile(const char* path);
 

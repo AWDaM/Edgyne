@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Transform.h"
 #include "Material.h"
+#include "ResourceMaterial.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
 #include "Assimp\include\postprocess.h"
@@ -140,7 +141,7 @@ void ModuleLoader::RecursiveGenerateListFromTree(std::list<GameObject*>& buffer,
 	
 }
 
-void ModuleLoader::LoadTextureFromLibrary(const char* path, Material* material)
+void ModuleLoader::LoadTextureFromLibrary(const char* path, ResourceMaterial* material)
 {
 	ILuint img = ilGenImage();
 	ilBindImage(img);
@@ -397,8 +398,8 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		
 		
 		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
-		Mesh* mesh = (Mesh*)game_object->AddComponent(MESH);
-		Material* material = (Material*)game_object->AddComponent(MATERIAL);
+		Mesh* mesh = (Mesh*)game_object->AddComponent(ComponentType::MESH);
+		Material* material = (Material*)game_object->AddComponent(ComponentType::MATERIAL);
 		mesh->material = material;
 
 
