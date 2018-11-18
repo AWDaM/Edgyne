@@ -123,7 +123,7 @@ bool Mesh::ComponentDraw()
 			//--------
 
 			else
-				glColor3f(material->color.x, material->color.y, material->color.z);
+				glColor3f(resource_mesh->color.x, resource_mesh->color.y, resource_mesh->color.z);
 		}
 			//---------
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
