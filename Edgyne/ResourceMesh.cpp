@@ -10,9 +10,9 @@ ResourceMesh::ResourceMesh(std::string& file) : Resource(ResourceType::RESOURCE_
 	LoadResource(file);
 }
 
-ResourceMesh::ResourceMesh(rapidjson::Value::ConstMemberIterator comp) : Resource(ResourceType::RESOURCE_MESH)
+ResourceMesh::ResourceMesh() : Resource(ResourceType::RESOURCE_MESH)
 {
-	//LoadComponent(comp);
+
 }
 
 

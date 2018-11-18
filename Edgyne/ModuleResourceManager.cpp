@@ -26,16 +26,16 @@ Resource * ModuleResourceManager::GetResourceFromUID(const std::string& uid)
 	return ret;
 }
 
-Resource* ModuleResourceManager::CreateResource(Resource::ResourceType type, rapidjson::Value::ConstMemberIterator comp)
+Resource* ModuleResourceManager::CreateResource(Resource::ResourceType type)
 {
 	Resource* ret = nullptr;
 	switch (type)
 	{
 	case Resource::ResourceType::RES_MATERIAL:
-		 ret = new ResourceMaterial(comp);
+		 ret = new ResourceMaterial();
 		break;
 	case Resource::ResourceType::RESOURCE_MESH:
-		ret = new ResourceMesh(comp);
+		ret = new ResourceMesh();
 		break;
 	}
 	resources.emplace(ret->file, ret);

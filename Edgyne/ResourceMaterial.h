@@ -9,7 +9,7 @@ class ResourceMaterial :
 {
 public:
 	ResourceMaterial(std::string& file);
-	ResourceMaterial(rapidjson::Value::ConstMemberIterator comp);
+	ResourceMaterial();
 	~ResourceMaterial();
 
 	void ResourceMaterial::LoadMaterial(std::string& file);

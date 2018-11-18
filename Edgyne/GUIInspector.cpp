@@ -86,6 +86,10 @@ void GUIInspector::AddComponents()
 		else
 			LOG("The gameobject already has a CAMERA component");
 	}
+	if (ImGui::Button)
+	{
+
+	}
 }
 bool GUIInspector::Load(rapidjson::Value& Node)
 {

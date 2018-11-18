@@ -21,7 +21,7 @@ public:
 	
 	Resource* GetResourceFromUID(const std::string & name);
 
-	Resource* CreateResource(Resource::ResourceType type, rapidjson::Value::ConstMemberIterator comp);
+	Resource* CreateResource(Resource::ResourceType type);
 
 	Resource* CreateNewResource(Resource::ResourceType type, std::string& file);
 

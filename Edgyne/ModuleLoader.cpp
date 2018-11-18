@@ -406,8 +406,9 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 
 		if (!mesh)
 		{
-			mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(Resource::ResourceType::RESOURCE_MESH,str);
+			mesh = (ResourceMesh*)App->resource_manager->CreateResource(Resource::ResourceType::RESOURCE_MESH);
 
+			mesh->file = str;
 			component_mesh->resource_mesh = mesh->file;
 
 			aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
@@ -433,7 +434,8 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 			if (!resource_material)
 			{
 	
-				resource_material = (ResourceMaterial*)App->resource_manager->CreateNewResource(Resource::ResourceType::RES_MATERIAL, currMaterialPath);
+				resource_material = (ResourceMaterial*)App->resource_manager->CreateResource(Resource::ResourceType::RES_MATERIAL);
+				resource_material->file = currMaterialPath;
 				component_material->resource_uid = resource_material->file;
 				component_mesh->material_name = resource_material->file;
 				LOG("Loading Color from the %i mesh", i + 1);
@@ -764,7 +766,6 @@ void ModuleLoader::SaveMesh(ResourceMesh* mesh)
 
 	std::string str = App->importer->meshLibraryPath;
 	str.append(mesh->file);
-	str.append(App->importer->meshExtension);
 
 	App->importer->WriteDataOnFile(data, fileSize, str.c_str());
 	mesh->file = str;
