@@ -29,7 +29,7 @@ public:
 	
 	void Draw();
 
-	GameObject* ScreenPointToRay(int posX, int posY);
+	GameObject* MousePicking(int posX, int posY);
 private:
 public:
 	EdgyQuadTree* quad_tree;

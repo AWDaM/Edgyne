@@ -119,9 +119,9 @@ update_status ModuleLevel::Update(float dt)
 		}
 		item++;
 	}
-	if (App->camera->scene_clicked && !App->debug->usingGuizmo)
+	if (App->camera->scene_clicked && !App->debug->usingGuizmo && App->input->GetKey(SDL_SCANCODE_LALT) != KEY_REPEAT)
 	{
-		selected_game_object = ScreenPointToRay(App->input->GetMouseX(), App->input->GetMouseY());
+		selected_game_object = MousePicking(App->input->GetMouseX(), App->input->GetMouseY());
 	}
 
 	return UPDATE_CONTINUE;
@@ -216,15 +216,15 @@ void ModuleLevel::Draw()
 	root->RecursiveResetAddedToQuadTree();
 }
 
-GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY)
+GameObject* ModuleLevel::MousePicking(int posX, int posY)
 {
 	GameObject* go = nullptr;
 
 	float shortestDistance = FLOAT_INF;
 
 
-	float mouseX = (float)App->input->GetMouseX() - App->imGui->GetScenePos().x;
-	float mouseY = (float)App->input->GetMouseY() - App->imGui->GetScenePos().y;
+	float mouseX = (float)posX - App->imGui->GetScenePos().x;
+	float mouseY = (float)posY - App->imGui->GetScenePos().y;
 
 	mouseX = (mouseX / (App->imGui->GetSceneSize().x / 2)) - 1;
 	mouseY = (mouseY / (App->imGui->GetSceneSize().y / 2)) - 1;
