@@ -2,12 +2,20 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleLevel.h"
+#include "ModuleImporter.h"
+#include "ModuleResourceManager.h"
+#include "Resource.h"
+#include "ResourceMesh.h"
+#include "ResourceMaterial.h"
+#include "Mesh.h"
 #include "GameObject.h"
 #include "Component.h"
 #include "QuadTree.h"
 
 
 #include <list>
+#include <experimental/filesystem>
+
 
 GUIInspector::GUIInspector(bool active = false) : GUIElements("inspector",active)
 {
@@ -89,13 +97,38 @@ void GUIInspector::AddComponents()
 	if (ImGui::CollapsingHeader("Mesh"))
 	{
 		if (!App->level->selected_game_object->GetComponent(MESH))
-		{ }
+		{
+			AddMesh();
+		}
 
 	}
 }
 void GUIInspector::AddMesh()
 {
+	const std::experimental::filesystem::directory_iterator end{};
 
+	for (std::experimental::filesystem::directory_iterator iter{"Library\\Meshes\\" }; iter != end; ++iter)
+	{
+		std::string extension = iter->path().string();
+		extension = extension.erase(0, extension.find("."));
+
+		std::string fileName = iter->path().string();
+		fileName = fileName.erase(0, fileName.find_last_of("\\") + 1);
+
+		if (App->importer->meshExtension == extension)
+		{
+			if (ImGui::Button(fileName.c_str()))
+			{
+				Mesh* mesh = (Mesh*)App->level->selected_game_object->AddComponent(MESH);
+				ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(fileName);
+				if (!resource_mesh)
+				{
+					resource_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(Resource::RESOURCE_MESH, fileName);
+				}
+				mesh->resource_mesh = resource_mesh->file;
+			}
+		}
+	}
 }
 bool GUIInspector::Load(rapidjson::Value& Node)
 {

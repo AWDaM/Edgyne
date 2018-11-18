@@ -112,18 +112,21 @@ bool Mesh::ComponentDraw()
 	if (resource_mesh->has_triangle_faces && resource_mesh->id_index > 0)
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
-
-		ResourceMaterial* material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->material->resource_uid);
-		if (material)
+		ResourceMaterial* material = nullptr;
+		if (this->material)
 		{
-			if (material->id_texture)
+			material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->material->resource_uid);
+			if (material)
 			{
-				glBindTexture(GL_TEXTURE_2D, material->id_texture);
-			}
-			//--------
+				if (material->id_texture)
+				{
+					glBindTexture(GL_TEXTURE_2D, material->id_texture);
+				}
+				//--------
 
-			else
-				glColor3f(material->color.x, material->color.y, material->color.z);
+				else
+					glColor3f(material->color.x, material->color.y, material->color.z);
+			}
 		}
 			//---------
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
@@ -138,15 +141,18 @@ bool Mesh::ComponentDraw()
 
 		//Disable All The Data
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		if (material)
+		if (this->material)
 		{
-			if (material->id_texture)
+			if (material)
 			{
-				glBindTexture(GL_TEXTURE_2D, 0);
-			}
+				if (material->id_texture)
+				{
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
 
-			else
-				glColor3f(1, 1, 1);
+				else
+					glColor3f(1, 1, 1);
+			}
 		}
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
