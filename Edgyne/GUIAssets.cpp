@@ -54,6 +54,10 @@ void GUIAssets::Draw()
 				{
 					App->loader->LoadObject(fileName, false);
 				}
+				else if (extension == App->importer->sceneExtension)
+				{
+					App->loader->LoadObject(fileName, true);
+				}
 
 			}
 		}

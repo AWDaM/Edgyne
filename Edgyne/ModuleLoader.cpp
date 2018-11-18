@@ -208,7 +208,7 @@ void ModuleLoader::LoadInfo(GameObject* game_object, aiMesh * currentMesh, aiNod
 	rotationEuler = rotation.GetEuler();
 
 	
-	game_object->transform->rotation.FromEulerXYZ(rotationEuler.x, rotationEuler.y, rotationEuler.z);
+	game_object->transform->rotation = game_object->transform->rotation.FromEulerXYZ(rotationEuler.x, rotationEuler.y, rotationEuler.z);
 	game_object->transform->rotation_euler.x = rotationEuler.x * RADTODEG;
 	game_object->transform->rotation_euler.y = rotationEuler.y * RADTODEG;
 	game_object->transform->rotation_euler.z = rotationEuler.z * RADTODEG;
@@ -616,7 +616,7 @@ void ModuleLoader::LoadObject(std::string name, bool is_scene)
 	{
 		std::string path = "Assets\\Scenes\\";
 		path.append(name);
-		file = fopen(path.append(App->importer->modelExtension).c_str(), "rb");
+		file = fopen(path.append(App->importer->sceneExtension).c_str(), "rb");
 	}
 
 	if (file)
@@ -628,6 +628,7 @@ void ModuleLoader::LoadObject(std::string name, bool is_scene)
 		document.ParseStream(inputStream);
 
 		AddGameObjectsFromFile(App->level->root, document);
+		App->level->root->RecursiveSetChildsTransformChanged(true);
 		App->level->root->RecursiveTransformChanged(App->level->root->global_transform_matrix);
 		App->level->generate_quadtree = true;
 
