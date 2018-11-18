@@ -107,12 +107,7 @@ bool ModuleLoader::Import(std::string & file)
 		rootGameObject->to_remove = true;
 		//rootGameObject->RecursiveTransformChanged(App->level->root->global_transform_matrix);
 
-		/*std::list<GameObject*>::iterator item = rootGameObject->childs.begin();
-		while (item != rootGameObject->childs.end())
-		{
-			(*item)->SetLocalBoundingVolume();
-			item++;
-		}*/
+	
 
 		
 		 
@@ -721,7 +716,7 @@ bool ModuleLoader::CheckIfNameExists(const std::string name)
 	{
 		std::string path = "Assets\\Scenes\\";
 		path.append(name);
-		path.append(".json");
+		path.append(".edgyscene");
 		if ((*iter).path() == path)
 			return true;
 	}
