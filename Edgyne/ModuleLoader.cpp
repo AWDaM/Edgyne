@@ -209,9 +209,18 @@ void ModuleLoader::LoadInfo(GameObject* game_object, aiNode* node)
 
 	
 	game_object->transform->rotation = game_object->transform->rotation.FromEulerXYZ(rotationEuler.x, rotationEuler.y, rotationEuler.z);
+
+	if (!game_object->transform->rotation.IsFinite())
+		game_object->transform->rotation = Quat::identity;
+
 	game_object->transform->rotation_euler.x = rotationEuler.x * RADTODEG;
 	game_object->transform->rotation_euler.y = rotationEuler.y * RADTODEG;
 	game_object->transform->rotation_euler.z = rotationEuler.z * RADTODEG;
+
+	if (!game_object->transform->rotation_euler.IsFinite())
+		game_object->transform->rotation_euler = float3::zero;
+	if (!game_object->transform->previous_rotation_euler.IsFinite())
+		game_object->transform->previous_rotation_euler = float3::zero;
 
 	game_object->transform->position.x = position.x;
 	game_object->transform->position.y = position.y;
@@ -382,7 +391,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 
 	if (node->mNumMeshes > 0)
 	{
-		local_parent = parent->AddGameObject("Node GameObject");
+		local_parent = parent->AddGameObject("Node Gameobject");
 	}
 	else if (!node->mTransformation.IsIdentity())
 	{
@@ -567,45 +576,48 @@ void ModuleLoader::SaveObject(std::string name, bool is_scene, std::list<GameObj
 		path.append(App->importer->modelExtension);
 
 	FILE* fp = fopen(path.c_str(), "wb");
-	char writeBuffer[1000000];
-	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
-
-	rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
-	rapidjson::Value scene(rapidjson::kObjectType);
-
-	for (std::list<GameObject*>::iterator iterator = to_save.begin(); iterator != to_save.end(); iterator++)
+	if (fp)
 	{
+		char writeBuffer[65536];
+		rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 
-		rapidjson::Value obj(rapidjson::kObjectType);
-		obj.AddMember("UID", (*iterator)->UID, allocator);
-		obj.AddMember("Parent UID", (*iterator)->parentUID, allocator);
-		obj.AddMember("Active", (*iterator)->active, allocator);
-		obj.AddMember("Static", (*iterator)->Static, allocator);
+		rapidjson::Document::AllocatorType& allocator = document.GetAllocator();
+		rapidjson::Value scene(rapidjson::kObjectType);
 
-		/*rapidjson::Value children(rapidjson::kObjectType);
-		for (std::vector<uint>::iterator item = (*iterator)->childrenUID.begin(); item != (*iterator)->childrenUID.end(); item++)
-			children.AddMember("UID", (*item), allocator);*/
+		for (std::list<GameObject*>::iterator iterator = to_save.begin(); iterator != to_save.end(); iterator++)
+		{
 
-		obj.AddMember("Object Name", (rapidjson::Value::StringRefType)(*iterator)->name.c_str(), allocator);
+			rapidjson::Value obj(rapidjson::kObjectType);
+			obj.AddMember("UID", (*iterator)->UID, allocator);
+			obj.AddMember("Parent UID", (*iterator)->parentUID, allocator);
+			obj.AddMember("Active", (*iterator)->active, allocator);
+			obj.AddMember("Static", (*iterator)->Static, allocator);
 
-		if((*iterator)->childrenUID.size() > 0)
-			obj.AddMember("Has Children", true, allocator);
-		else
-			obj.AddMember("Has Children", false, allocator);
+			/*rapidjson::Value children(rapidjson::kObjectType);
+			for (std::vector<uint>::iterator item = (*iterator)->childrenUID.begin(); item != (*iterator)->childrenUID.end(); item++)
+				children.AddMember("UID", (*item), allocator);*/
 
-		rapidjson::Value component(rapidjson::kObjectType);
-		(*iterator)->SaveToScene(component, allocator);
-		obj.AddMember("Components", component, allocator);
+			obj.AddMember("Object Name", (rapidjson::Value::StringRefType)(*iterator)->name.c_str(), allocator);
 
-		scene.AddMember("Game Object", obj, allocator);
+			if ((*iterator)->childrenUID.size() > 0)
+				obj.AddMember("Has Children", true, allocator);
+			else
+				obj.AddMember("Has Children", false, allocator);
+
+			rapidjson::Value component(rapidjson::kObjectType);
+			(*iterator)->SaveToScene(component, allocator);
+			obj.AddMember("Components", component, allocator);
+
+			scene.AddMember("Game Object", obj, allocator);
+		}
+		document.AddMember("Scene", scene, allocator);
+		//for(rapidjson::Value::ConstMemberIterator itr = document.MemberBegin(); itr != document.MemberEnd(); ++itr) {   //iterate through object   
+		//	const  rapidjson::Value& objName = document[itr->name.GetString()];
+		rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
+		document.Accept(writer);
+
+		fclose(fp);
 	}
-	document.AddMember("Scene", scene, allocator);
-	//for(rapidjson::Value::ConstMemberIterator itr = document.MemberBegin(); itr != document.MemberEnd(); ++itr) {   //iterate through object   
-	//	const  rapidjson::Value& objName = document[itr->name.GetString()];
-	rapidjson::Writer<rapidjson::FileWriteStream> writer(os);
-	document.Accept(writer);
-
-	fclose(fp);
 }
 
 void ModuleLoader::LoadObject(std::string name, bool is_scene)
@@ -627,7 +639,7 @@ void ModuleLoader::LoadObject(std::string name, bool is_scene)
 
 	if (file)
 	{
-		char readBuffer[100000];
+		char readBuffer[65536];
 
 		rapidjson::FileReadStream inputStream(file, readBuffer, sizeof(readBuffer));
 
