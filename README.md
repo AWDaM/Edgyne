@@ -15,11 +15,10 @@ Unzip the file and double click Edyne.exe. You have test models in the Assets fo
 ### Camera Controls
 
 - While Right clicking: WASD fps-like movement
-- Mouse wheel should zoom in and out
-- Alt+Left click orbits the object
-- Pressing F resets and centers the camera on the object
+- Mouse wheel zooms in and out
+- Alt+Left click orbits the scene
+- Pressing R/F raises or decreases the height respectively
 - Holding SHIFT duplicates movement speed
-- Pressing H hides the UI
 
 ### Engine Funcionality
 
@@ -39,7 +38,7 @@ https://github.com/AWDaM/Edgyne
 
 ### Invididual tasks
 
-The engine has been created by us both, and the tasks below show the focuses of each member, even though the tasks are not exclusive of each member
+The engine has been created by us both, and the tasks below show the focuses of each member, even though the tasks are not done individually
 
 Jaume Surís:
 
