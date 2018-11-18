@@ -541,7 +541,16 @@ void ModuleLoader::SaveObject(std::string name, bool is_scene, std::list<GameObj
 {
 	rapidjson::Document document;
 	document.SetObject();
-	std::string path = "Assets\\Scenes\\";
+	
+	std::string path;
+
+	if (is_scene)
+	{
+		path = "Assets\\Scenes\\";
+	}
+	else
+		path = "Assets\\Models\\";
+
 	path.append(name);
 
 	if (is_scene)

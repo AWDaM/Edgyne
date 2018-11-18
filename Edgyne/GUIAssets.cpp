@@ -27,6 +27,7 @@ void GUIAssets::Draw()
 	}
 	const std::experimental::filesystem::directory_iterator end{};
 
+	std::string button_name;
 	for (std::experimental::filesystem::directory_iterator iter{ currentPath.c_str() }; iter != end; ++iter)
 	{
 		if (std::experimental::filesystem::is_directory(*iter))
@@ -38,7 +39,10 @@ void GUIAssets::Draw()
 		}
 		else if (std::experimental::filesystem::is_regular_file(*iter))
 		{
-			if (ImGui::Button(iter->path().string().c_str()))
+			button_name = iter->path().string();
+			button_name = button_name.erase(0, button_name.find_last_of("\\") + 1);
+
+			if (ImGui::Button(button_name.c_str()))
 			{
 				std::string fileName = iter->path().string();
 				fileName = fileName.erase(0, fileName.find_last_of("\\") + 1);

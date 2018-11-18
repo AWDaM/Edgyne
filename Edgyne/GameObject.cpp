@@ -35,23 +35,7 @@ GameObject::~GameObject()
 	parent = nullptr;
 	transform = nullptr;
 
-	std::vector<Component*>::iterator it;
-	it = components.begin();
-	while (it != components.end())
-	{
-		RELEASE((*it));
-		it++;
-	}
-	components.clear();
-
-	std::list<GameObject*>::iterator item;
-	item = childs.begin();
-	while (item != childs.end())
-	{
-		RELEASE((*item));
-		item++;
-	}
-	childs.clear();
+	
 }
 
 bool GameObject::Update()
@@ -341,7 +325,7 @@ void GameObject::RecursiveDeleteGameObject()
 		while (item != components.end())
 		{
 			(*item)->ComponentCleanUp();
-			RELEASE((*item));
+			//RELEASE((*item));
 			item = components.erase(item);
 		}
 	}
