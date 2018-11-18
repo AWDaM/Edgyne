@@ -29,7 +29,7 @@ public:
 	
 	void Draw();
 
-	GameObject* ScreenPointToRay(int posX, int posY, float& shortestDistance, math::float3& shortestHitPoint);
+	GameObject* ScreenPointToRay(int posX, int posY);
 private:
 public:
 	EdgyQuadTree* quad_tree;

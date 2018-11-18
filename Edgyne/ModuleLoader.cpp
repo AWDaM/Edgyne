@@ -233,13 +233,13 @@ void ModuleLoader::LoadVerices(ResourceMesh* new_mesh, aiMesh* currentMesh)
 	LOG("New mesh with %d vertices", new_mesh->num_vertex);
 }
 
-void ModuleLoader::LoadColor(ResourceMaterial* new_material, aiMaterial* mat)
+void ModuleLoader::LoadColor(ResourceMesh* new_mesh, aiMaterial* mat)
 {
 	aiColor3D color(1.f, 1.f, 1.f);
 	mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-	new_material->color.x = color.r;
-	new_material->color.y = color.g;
-	new_material->color.z = color.b;
+	new_mesh->color.x = color.r;
+	new_mesh->color.y = color.g;
+	new_mesh->color.z = color.b;
 }
 
 bool ModuleLoader::LoadTextures(ResourceMesh* new_mesh, ResourceMaterial* _material, aiMesh* currentMesh, const aiScene* scene, const std::string& file)
@@ -437,7 +437,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 				component_material->resource_uid = resource_material->file;
 				component_mesh->material_name = resource_material->file;
 				LOG("Loading Color from the %i mesh", i + 1);
-				LoadColor(resource_material, scene->mMaterials[currentMesh->mMaterialIndex]);
+				LoadColor(mesh, scene->mMaterials[currentMesh->mMaterialIndex]);
 
 				LOG("Loading Textures from the %i mesh", i + 1);
 				if (currentMesh->HasTextureCoords(0))
@@ -695,9 +695,10 @@ void ModuleLoader::SaveMesh(ResourceMesh* mesh)
 {
 	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
 	bool optatives[3] = { mesh->has_texture_coordinates, mesh->has_triangle_faces, mesh->has_normals };
+	float color[3] = { mesh->color.x, mesh->color.y, mesh->color.z };
 	uint fileSize;
 
-	fileSize = sizeof(ranges) + sizeof(optatives) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index;
+	fileSize = sizeof(ranges) + sizeof(optatives) + sizeof(color) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index;
 
 	if (mesh->has_texture_coordinates)
 		fileSize += sizeof(float)*mesh->num_vertex * 2;
@@ -716,6 +717,12 @@ void ModuleLoader::SaveMesh(ResourceMesh* mesh)
 	// Saving the 3 booleans that every mesh has
 	bytes = sizeof(optatives);
 	memcpy(bookmark, optatives, bytes);
+
+	bookmark += bytes;
+
+	// Saving the 3 components of the material color
+	bytes = sizeof(color);
+	memcpy(bookmark, color, bytes);
 
 	bookmark += bytes;
 

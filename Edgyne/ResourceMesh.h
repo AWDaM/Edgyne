@@ -25,6 +25,7 @@ public:
 	bool has_texture_coordinates = false;
 	bool has_normals = false;
 	bool has_triangle_faces = true;
+	vec color;
 
 	std::string material_name;
 };

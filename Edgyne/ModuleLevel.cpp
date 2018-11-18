@@ -140,9 +140,8 @@ update_status ModuleLevel::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
 	{
 		debugRay = true;
-		float distance;
-		math::float3 hitPoint;
-		selected_game_object = ScreenPointToRay(App->input->GetMouseX(), App->input->GetMouseY(), distance, hitPoint);
+
+		selected_game_object = ScreenPointToRay(App->input->GetMouseX(), App->input->GetMouseY());
 		game_camera = App->camera->editor_camera;
 
 	}
@@ -239,25 +238,18 @@ void ModuleLevel::Draw()
 	root->RecursiveResetAddedToQuadTree();
 }
 
-GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY, float& shortestDistance, math::float3& shortestHitPoint)
+GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY)
 {
 	GameObject* go = root;
-	shortestHitPoint = math::float3::inf;
-	shortestDistance = FLOAT_INF;
 
-	//float sceneX = App->imGui->GetScenePos().x;
-	//float sceneY = App->imGui->GetScenePos().y;
+	float shortestDistance = FLOAT_INF;
 
-	//float normalized_x = 1.0f - (float(posX - sceneX) * 2.0f) / (App->window->window_w);
-	//float normalized_y = 1.0f - (float(posY - sceneY) * 2.0f) / (App->window->window_h);
 
-	float mouseX = (float)App->input->GetMouseX() - App->imGui->sceneX;
-	LOG("%f", mouseX);
-	float mouseY = (float)App->input->GetMouseY() - App->imGui->sceneY;
-	LOG("%f", mouseY);
+	float mouseX = (float)App->input->GetMouseX() - App->imGui->GetScenePos().x;
+	float mouseY = (float)App->input->GetMouseY() - App->imGui->GetScenePos().y;
 
-	mouseX = (mouseX / (App->imGui->sceneW / 2)) - 1;
-	mouseY = (mouseY / (App->imGui->sceneH / 2)) - 1;
+	mouseX = (mouseX / (App->imGui->GetSceneSize().x / 2)) - 1;
+	mouseY = (mouseY / (App->imGui->GetSceneSize().y / 2)) - 1;
 	ray = App->camera->editor_camera->frustum.UnProjectLineSegment(mouseX, -mouseY);
 
 
@@ -276,35 +268,26 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY, float& shortestDis
 
 	for (int i = 0; i < hits.size(); ++i)
 	{
-		math::Triangle tri;
-		math::LineSegment localSpaceSegment(ray);
-		localSpaceSegment.Transform(hits[i]->global_transform_matrix.Inverted());
+		float3 first, second, third;
+		math::LineSegment localSegment(ray);
+		localSegment.Transform(hits[i]->global_transform_matrix.Inverted());
 
 		Mesh* component_mesh = (Mesh*)hits[i]->GetComponent(MESH);
 		ResourceMesh* mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(component_mesh->resource_mesh);
 
-		if(mesh)
+		if(mesh && mesh->has_triangle_faces)
 		for (int j = 0; j < mesh->num_index;)
 		{
-			triangles.push_back({ mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2] });
-			triangles.push_back({ mesh->vertex[mesh->index[j+1] * 3], mesh->vertex[mesh->index[j + 1] * 3 + 1], mesh->vertex[mesh->index[j + 1] * 3 + 2] });
-			triangles.push_back({ mesh->vertex[mesh->index[j + 2] * 3], mesh->vertex[mesh->index[j + 2] * 3 + 1], mesh->vertex[mesh->index[j + 2] * 3 + 2] });
-
-			tri.a = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
-			tri.b = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
-			tri.c = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
+			first = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
+			second = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
+			third = math::float3(mesh->vertex[mesh->index[j] * 3], mesh->vertex[mesh->index[j] * 3 + 1], mesh->vertex[mesh->index[j] * 3 + 2]);  j++;
 
 			float distance;
-			math::float3 hitPoint;
-			if (localSpaceSegment.Intersects(tri, &distance, &hitPoint))
+			if (localSegment.Intersects({ first, second, third }, &distance))
 			{
 				if (shortestDistance > distance)
 				{
-					triangles.push_back({ tri.a.x, tri.a.y, tri.a.z });
-					triangles.push_back({ tri.b.x, tri.b.y, tri.b.z });
-					triangles.push_back({ tri.c.x, tri.c.y, tri.c.z });
 					shortestDistance = distance;
-					shortestHitPoint = hitPoint;
 					go = hits[i];
 				}
 			}

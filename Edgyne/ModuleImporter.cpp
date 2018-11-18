@@ -151,6 +151,7 @@ void ModuleImporter::CopyDataFromFile(std::string& path, ResourceMesh* _mesh)
 
 		uint ranges[2];
 		bool optatives[3];
+		float color[3];
 		uint bytes = sizeof(ranges);
 
 		memcpy(ranges, bookmark, bytes);
@@ -160,19 +161,16 @@ void ModuleImporter::CopyDataFromFile(std::string& path, ResourceMesh* _mesh)
 		memcpy(optatives, bookmark, bytes);
 		bookmark += bytes;
 
-		//if (!_mesh)
-		//{
-		//	path = path.erase(0, sizeof(meshLibraryPath) - 1);
-		//	GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
-
-		//	_mesh = (Mesh*)game_object->AddComponent(MESH);
-		//}
+		bytes = sizeof(color);
+		memcpy(color, bookmark, bytes);
+		bookmark += bytes;
 
 		_mesh->num_vertex = ranges[0];
 		_mesh->num_index = ranges[1];
 		_mesh->has_texture_coordinates = optatives[0];
 		_mesh->has_triangle_faces = optatives[1];
 		_mesh->has_normals = optatives[2];
+		_mesh->color = { color[0], color[1] , color[2] };
 
 		bytes = sizeof(float)*_mesh->num_vertex * 3;
 

@@ -48,7 +48,7 @@ private:
 	
 	void LoadInfo(GameObject* game_object, aiMesh* currentMesh,aiNode* node);
 	void LoadVerices(ResourceMesh* new_mesh, aiMesh* currentMesh);
-	void LoadColor(ResourceMaterial* new_mesh, aiMaterial* mat);
+	void LoadColor(ResourceMesh* new_mesh, aiMaterial* mat);
 	bool LoadTextures(ResourceMesh* new_mesh, ResourceMaterial* material, aiMesh* currentMesh, const aiScene* scene, const std::string& file);
 	void LoadNormals(ResourceMesh* new_mesh, aiMesh* currentMesh);
 	void LoadIndices(ResourceMesh* new_mesh, aiMesh* currentMesh);
