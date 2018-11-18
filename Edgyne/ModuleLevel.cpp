@@ -109,24 +109,6 @@ update_status ModuleLevel::PreUpdate(float dt)
 
 update_status ModuleLevel::Update(float dt)
 {
-	if (debugRay)
-	{
-		glBegin(GL_LINES);
-		glLineWidth(3.0f);
-
-		glVertex3f(ray.a.x,ray.a.y,ray.a.z);
-		glVertex3f(ray.b.x,ray.b.y,ray.b.z);
-		glEnd();
-		glLineWidth(1.0f);
-
-		glBegin(GL_TRIANGLES);
-		for (std::vector<math::float3>::iterator it = triangles.begin(); it != triangles.end(); it++)
-		{
-			glVertex3f((*it).x, (*it).y, (*it).z);
-		}
-		glEnd();
-	}
-
 	std::list<GameObject*>::iterator item = game_objects.begin();
 
 	while (item != game_objects.end())
@@ -137,13 +119,9 @@ update_status ModuleLevel::Update(float dt)
 		}
 		item++;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+	if (App->camera->scene_clicked && !App->debug->usingGuizmo)
 	{
-		debugRay = true;
-
 		selected_game_object = ScreenPointToRay(App->input->GetMouseX(), App->input->GetMouseY());
-		game_camera = App->camera->editor_camera;
-
 	}
 
 	return UPDATE_CONTINUE;
@@ -163,7 +141,7 @@ std::vector<GameObject*> ModuleLevel::GetNonStaticObjects()
 
 	while (item != game_objects.end())
 	{
-		if (!(*item)->Static)
+		if (!(*item)->Static) {}
 			ret.push_back((*item));
 		item++;
 	}
@@ -240,7 +218,7 @@ void ModuleLevel::Draw()
 
 GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY)
 {
-	GameObject* go = root;
+	GameObject* go = nullptr;
 
 	float shortestDistance = FLOAT_INF;
 
@@ -256,7 +234,7 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY)
 	// Static objects
 	std::vector<GameObject*> hits;
 	App->level->quad_tree->CollectIntersections(hits, ray);
-
+	LOG("%i", hits.size());
 	// Dynamic objects
 	std::vector<GameObject*> dynamicGameObjects = GetNonStaticObjects();
 
@@ -265,7 +243,26 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY)
 		if (dynamicGameObjects[i]->aligned_bounding_box.IsFinite() && ray.Intersects(dynamicGameObjects[i]->aligned_bounding_box))
 			hits.push_back(dynamicGameObjects[i]);
 	}
+	float distance;
 
+	for (int i = 0; i < hits.size(); ++i)
+	{
+
+		math::Plane face[6];
+		hits[i]->aligned_bounding_box.GetFacePlanes(face);
+		for (int j = 0; j < 6; j++)
+		{
+			if (ray.Intersects(face[j], &distance))
+			{
+				if (shortestDistance > distance)
+				{
+					shortestDistance = distance;
+					go = hits[i];
+				}
+			}
+		}
+	}
+	/*
 	for (int i = 0; i < hits.size(); ++i)
 	{
 		float3 first, second, third;
@@ -292,6 +289,6 @@ GameObject* ModuleLevel::ScreenPointToRay(int posX, int posY)
 				}
 			}
 		}
-	}
+	}*/
 	return go;
 }

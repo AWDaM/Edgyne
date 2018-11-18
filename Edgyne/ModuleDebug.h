@@ -86,7 +86,7 @@ public:
 	GLubyte checkImage[100][100][4];
 	uint ImageName = 0;
 	bool toDrawSphere = true;
-
+	bool usingGuizmo = false;
 };
 
 #endif // !__MODULE_DEBUG_H__
