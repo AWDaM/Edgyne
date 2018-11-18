@@ -26,7 +26,7 @@ public:
 
 private:
 public:
-	uint resource_uid = 0;
+	std::string resource_uid;
 private:
 
 };

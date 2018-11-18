@@ -1,8 +1,8 @@
 {
-  "Scene"
-    : {
+  "Scene": 
+  {
     "Game Object": {
-      "UID": 3725306555,
+      "UID": 1082475874,
       "Parent UID": 1,
       "Active": true,
       "Static": true,
@@ -10,7 +10,7 @@
       "Has Children": true,
       "Components": {
         "Transform": {
-          "UID": 3185476389,
+          "UID": 4219213663,
           "Type": 1,
           "Position": {
             "x": 0.0,
@@ -42,15 +42,15 @@
       }
     },
     "Game Object": {
-      "UID": 782932854,
-      "Parent UID": 3725306555,
+      "UID": 2336850121,
+      "Parent UID": 1082475874,
       "Active": true,
       "Static": true,
       "Object Name": "Node GameObject",
       "Has Children": true,
       "Components": {
         "Transform": {
-          "UID": 21979725,
+          "UID": 997270576,
           "Type": 1,
           "Position": {
             "x": 0.0,
@@ -82,15 +82,15 @@
       }
     },
     "Game Object": {
-      "UID": 1784729741,
-      "Parent UID": 782932854,
+      "UID": 1333448681,
+      "Parent UID": 2336850121,
       "Active": true,
       "Static": true,
       "Object Name": "Chimney",
       "Has Children": false,
       "Components": {
         "Transform": {
-          "UID": 1935862908,
+          "UID": 379413018,
           "Type": 1,
           "Position": {
             "x": 0.0,
@@ -120,45 +120,33 @@
           }
         },
         "Mesh": {
-          "UID": 3181563043,
+          "UID": 596061741,
           "Type": 2,
-          "Mesh File Name": "Chimney",
-          "Texture Coordinates": true,
-          "Normals": false,
-          "Triangle Faces": true,
+          "Resource UID": "Chimney.edgymesh",
+          "Material Name": "Baker_house.dds",
           "Material": {
-            "UID": 3954257946,
+            "UID": 2702594644,
             "Type": 3,
-            "Texture Name": "Baker_house",
-            "Color": {
-              "r": 0.47040000557899477,
-              "g": 0.47040000557899477,
-              "b": 0.47040000557899477
-            }
+            "Resource UID": "Baker_house.dds"
           }
         },
         "Material": {
-          "UID": 3954257946,
+          "UID": 2702594644,
           "Type": 3,
-          "Texture Name": "Baker_house",
-          "Color": {
-            "r": 0.47040000557899477,
-            "g": 0.47040000557899477,
-            "b": 0.47040000557899477
-          }
+          "Resource UID": "Baker_house.dds"
         }
       }
     },
     "Game Object": {
-      "UID": 541774062,
-      "Parent UID": 3725306555,
+      "UID": 2296016182,
+      "Parent UID": 1082475874,
       "Active": true,
       "Static": true,
       "Object Name": "Node GameObject",
       "Has Children": true,
       "Components": {
         "Transform": {
-          "UID": 4169083819,
+          "UID": 2412323102,
           "Type": 1,
           "Position": {
             "x": 0.0,
@@ -190,15 +178,15 @@
       }
     },
     "Game Object": {
-      "UID": 1348910411,
-      "Parent UID": 541774062,
+      "UID": 941194742,
+      "Parent UID": 2296016182,
       "Active": true,
       "Static": true,
       "Object Name": "Baker_house",
       "Has Children": false,
       "Components": {
         "Transform": {
-          "UID": 3385496111,
+          "UID": 2082851956,
           "Type": 1,
           "Position": {
             "x": 0.0,
@@ -228,32 +216,20 @@
           }
         },
         "Mesh": {
-          "UID": 3092475163,
+          "UID": 2279175931,
           "Type": 2,
-          "Mesh File Name": "Baker_house",
-          "Texture Coordinates": true,
-          "Normals": false,
-          "Triangle Faces": true,
+          "Resource UID": "Baker_house.edgymesh",
+          "Material Name": "Baker_house.dds",
           "Material": {
-            "UID": 648928561,
+            "UID": 719204189,
             "Type": 3,
-            "Texture Name": "Baker_house",
-            "Color": {
-              "r": 0.47040000557899477,
-              "g": 0.47040000557899477,
-              "b": 0.47040000557899477
-            }
+            "Resource UID": "Baker_house.dds"
           }
         },
         "Material": {
-          "UID": 648928561,
+          "UID": 719204189,
           "Type": 3,
-          "Texture Name": "Baker_house",
-          "Color": {
-            "r": 0.47040000557899477,
-            "g": 0.47040000557899477,
-            "b": 0.47040000557899477
-          }
+          "Resource UID": "Baker_house.dds"
         }
       }
     }

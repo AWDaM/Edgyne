@@ -26,7 +26,8 @@ public:
 
 private:
 public:
-	MeshResource * resource_mesh = nullptr;
+	std::string resource_mesh;
+	std::string material_name;
 
 	Material* material = nullptr;
 

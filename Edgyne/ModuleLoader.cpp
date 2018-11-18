@@ -4,6 +4,8 @@
 #include "ModuleImporter.h"
 #include "ModuleCamera3D.h"
 #include "ModuleResourceManager.h"
+#include "ResourceMesh.h"
+#include "Resource.h"
 #include "ModuleLevel.h"
 #include "GameObject.h"
 #include "Mesh.h"
@@ -85,7 +87,7 @@ bool ModuleLoader::CleanUp()
 	return true;
 }
 
-bool ModuleLoader::Import(const std::string & file)
+bool ModuleLoader::Import(std::string & file)
 {
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	
@@ -112,11 +114,7 @@ bool ModuleLoader::Import(const std::string & file)
 			item++;
 		}*/
 
-		LOG("Centering Camera around the model");
-
-		vec half_diagonal  = App->renderer3D->globalBoundingBox.CenterPoint();
-		vec center_point = App->renderer3D->globalBoundingBox.CenterPoint();
-		half_diagonal += App->renderer3D->globalBoundingBox.HalfDiagonal();
+		
 		 
 		//App->camera->CameraAdaptation({ half_diagonal.x,half_diagonal.y,half_diagonal.z }, { center_point.x,center_point.y,center_point.z });
 		aiReleaseImport(scene);
@@ -148,7 +146,7 @@ void ModuleLoader::LoadTextureFromLibrary(const char* path, ResourceMaterial* ma
 
 	std::string fullPath = App->importer->materialLibraryPath;
 	fullPath += path;
-	fullPath += App->importer->materialExtension;
+
 	if (ilLoadImage(fullPath.c_str()))
 	{
 		ILinfo imgData;
@@ -186,11 +184,12 @@ void ModuleLoader::LoadTextureFromLibrary(const char* path, ResourceMaterial* ma
 
 void ModuleLoader::ReceivedFile(const char * path)
 {
+	std::string _path = path;
 	std::string path_string = path;
 	path_string.erase(0,path_string.find_last_of(".")+1);
 	if (MODEL(path_string))
 	{
-		Import(path);
+		Import(_path);
 	}
 	else if (IMAGE(path_string))
 	{
@@ -225,16 +224,16 @@ void ModuleLoader::LoadInfo(GameObject* game_object, aiMesh * currentMesh, aiNod
 
 }
 
-void ModuleLoader::LoadVerices(Mesh* new_mesh, aiMesh* currentMesh)
+void ModuleLoader::LoadVerices(ResourceMesh* new_mesh, aiMesh* currentMesh)
 {
-	new_mesh->resource_mesh->num_vertex = currentMesh->mNumVertices;
-	new_mesh->resource_mesh->vertex = new float[new_mesh->resource_mesh->num_vertex * 3];
-	memcpy(new_mesh->resource_mesh->vertex, currentMesh->mVertices, sizeof(float) * new_mesh->resource_mesh->num_vertex * 3);
+	new_mesh->num_vertex = currentMesh->mNumVertices;
+	new_mesh->vertex = new float[new_mesh->num_vertex * 3];
+	memcpy(new_mesh->vertex, currentMesh->mVertices, sizeof(float) * new_mesh->num_vertex * 3);
 
-	LOG("New mesh with %d vertices", new_mesh->resource_mesh->num_vertex);
+	LOG("New mesh with %d vertices", new_mesh->num_vertex);
 }
 
-void ModuleLoader::LoadColor(Material* new_material, aiMaterial* mat)
+void ModuleLoader::LoadColor(ResourceMaterial* new_material, aiMaterial* mat)
 {
 	aiColor3D color(1.f, 1.f, 1.f);
 	mat->Get(AI_MATKEY_COLOR_DIFFUSE, color);
@@ -243,18 +242,18 @@ void ModuleLoader::LoadColor(Material* new_material, aiMaterial* mat)
 	new_material->color.z = color.b;
 }
 
-bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* currentMesh, const aiScene* scene, const std::string& file)
+bool ModuleLoader::LoadTextures(ResourceMesh* new_mesh, ResourceMaterial* _material, aiMesh* currentMesh, const aiScene* scene, const std::string& file)
 {
 	bool ret = true;
 	if (currentMesh->HasTextureCoords(0))
 	{
-		new_mesh->resource_mesh->has_texture_coordinates = true;
-		new_mesh->resource_mesh->texCoords = new float[new_mesh->resource_mesh->num_vertex * 2];
+		new_mesh->has_texture_coordinates = true;
+		new_mesh->texCoords = new float[new_mesh->num_vertex * 2];
 
-		for (int k = 0; k < new_mesh->resource_mesh->num_vertex * 2; k += 2)
+		for (int k = 0; k < new_mesh->num_vertex * 2; k += 2)
 		{
-			new_mesh->resource_mesh->texCoords[k] = currentMesh->mTextureCoords[0][k/2].x;
-			new_mesh->resource_mesh->texCoords[k+1] = currentMesh->mTextureCoords[0][k/2].y;
+			new_mesh->texCoords[k] = currentMesh->mTextureCoords[0][k/2].x;
+			new_mesh->texCoords[k+1] = currentMesh->mTextureCoords[0][k/2].y;
 		}
 
 		aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
@@ -271,7 +270,8 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 			ilBindImage(imgName);
 			if (CheckTexturePaths(file, texPath.C_Str(), texFullPath))
 			{
-				_material->fileName = SaveMaterial(texFullPath);
+				_material->file = SaveMaterial(texFullPath);
+				_material->file.append(".dds");
 				ILinfo imgData;
 				iluGetImageInfo(&imgData);
 				if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
@@ -319,51 +319,51 @@ bool ModuleLoader::LoadTextures(Mesh* new_mesh, Material* _material, aiMesh* cur
 	else
 	{
 		LOG("Item doesn't have texture coordinates");
-		new_mesh->resource_mesh->has_texture_coordinates = false;
+		new_mesh->has_texture_coordinates = false;
 	}
 	return ret;
 }
 
-void ModuleLoader::LoadNormals(Mesh* new_mesh, aiMesh* currentMesh)
+void ModuleLoader::LoadNormals(ResourceMesh* new_mesh, aiMesh* currentMesh)
 {
-	new_mesh->resource_mesh->normals = new float[new_mesh->resource_mesh->num_vertex * 3];
-	memcpy(new_mesh->resource_mesh->normals, currentMesh->mNormals, sizeof(float)*new_mesh->resource_mesh->num_vertex * 3);
+	new_mesh->normals = new float[new_mesh->num_vertex * 3];
+	memcpy(new_mesh->normals, currentMesh->mNormals, sizeof(float)*new_mesh->num_vertex * 3);
 	LOG("Normals loaded correctly");
 }
 
-void ModuleLoader::LoadIndices(Mesh* new_mesh, aiMesh* currentMesh)
+void ModuleLoader::LoadIndices(ResourceMesh* new_mesh, aiMesh* currentMesh)
 {
-	new_mesh->resource_mesh->num_index = currentMesh->mNumFaces * 3; // assume each face is a triangle
-	new_mesh->resource_mesh->index = new uint[new_mesh->resource_mesh->num_index];
+	new_mesh->num_index = currentMesh->mNumFaces * 3; // assume each face is a triangle
+	new_mesh->index = new uint[new_mesh->num_index];
 
 	for (uint j = 0; j < currentMesh->mNumFaces; ++j)
 	{
 		if (currentMesh->mFaces[j].mNumIndices != 3)
 		{
 			LOG("---WARNING--- Geometry face with != 3 indices, Won't be drawn on screen");
-			new_mesh->resource_mesh->has_triangle_faces = false;
+			new_mesh->has_triangle_faces = false;
 			break;
 
 		}
 		else
-			memcpy(&new_mesh->resource_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
+			memcpy(&new_mesh->index[j * 3], currentMesh->mFaces[j].mIndices, 3 * sizeof(uint));
 	}
-	LOG("New mesh with %d indices", new_mesh->resource_mesh->num_index);
+	LOG("New mesh with %d indices", new_mesh->num_index);
 
-	glGenBuffers(1, (GLuint*)&(new_mesh->resource_mesh->id_index));
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->resource_mesh->id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->resource_mesh->num_index, &new_mesh->resource_mesh->index[0], GL_STATIC_DRAW);
+	glGenBuffers(1, (GLuint*)&(new_mesh->id_index));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, new_mesh->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * new_mesh->num_index, &new_mesh->index[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void ModuleLoader::LoadBoundingBox(Mesh * new_mesh, aiMesh * currentMesh)
+void ModuleLoader::LoadBoundingBox(ResourceMesh * new_mesh, aiMesh * currentMesh)
 {
-	new_mesh->SetBoundingVolume();
-	//AABB bounding_box;
-	//bounding_box.SetNegativeInfinity();
-	//bounding_box.Enclose((float3*)new_mesh->vertex, currentMesh->mNumVertices);
-	//
-	//new_mesh->bounding_box = bounding_box;
+	//new_mesh->SetBoundingVolume();
+	////AABB bounding_box;
+	////bounding_box.SetNegativeInfinity();
+	////bounding_box.Enclose((float3*)new_mesh->vertex, currentMesh->mNumVertices);
+	////
+	////new_mesh->bounding_box = bounding_box;
 }
 
 void ModuleLoader::LoadMeshesFromFile(Mesh* _mesh)
@@ -375,7 +375,7 @@ void ModuleLoader::LoadMeshesFromFile(Mesh* _mesh)
 
 }
 
-void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file, GameObject* parent)
+void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::string& file, GameObject* parent)
 {
 	GameObject* local_parent;
 
@@ -398,37 +398,74 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const 
 		
 		
 		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
-		Mesh* mesh = (Mesh*)game_object->AddComponent(ComponentType::MESH);
-		Material* material = (Material*)game_object->AddComponent(ComponentType::MATERIAL);
-		mesh->material = material;
+		Mesh* component_mesh = (Mesh*)game_object->AddComponent(ComponentType::MESH);
+		std::string str = game_object->name;
+		str.append(App->importer->meshExtension);
+		ResourceMesh* mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(str);
+	
+
+		if (!mesh)
+		{
+			mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(Resource::ResourceType::RESOURCE_MESH,str);
+
+			component_mesh->resource_mesh = mesh->file;
+
+			aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
+			aiString texPath;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
+			std::string currMaterialPath = texPath.C_Str();
+			currMaterialPath.erase(0, currMaterialPath.find_last_of("\\") + 1);
+			currMaterialPath = currMaterialPath.substr(0, currMaterialPath.find("."));
+			currMaterialPath.append(".dds");
+
+			Material* component_material = (Material*)game_object->AddComponent(ComponentType::MATERIAL);
+			component_mesh->material = component_material;
+			mesh->material_name = currMaterialPath;
 
 
-		LOG("Loading Info for the %i mesh", i + 1);
+			LOG("Loading Info for the %i mesh", i + 1);
 			LoadInfo(game_object, currentMesh, node);
 
-		LOG("Loading Vertices from the %i mesh", i + 1);
+			LOG("Loading Vertices from the %i mesh", i + 1);
 			LoadVerices(mesh, currentMesh);
-		
-		LOG("Loading Color from the %i mesh", i + 1);
-			LoadColor(material, scene->mMaterials[currentMesh->mMaterialIndex]);
 
-		LOG("Loading Normals from the %i mesh", i + 1);
-		if (currentMesh->HasNormals())
-			LoadNormals(mesh, currentMesh);
+			ResourceMaterial* resource_material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(currMaterialPath);
+			if (!resource_material)
+			{
+	
+				resource_material = (ResourceMaterial*)App->resource_manager->CreateNewResource(Resource::ResourceType::RES_MATERIAL, currMaterialPath);
+				component_material->resource_uid = resource_material->file;
+				component_mesh->material_name = resource_material->file;
+				LOG("Loading Color from the %i mesh", i + 1);
+				LoadColor(resource_material, scene->mMaterials[currentMesh->mMaterialIndex]);
 
-		LOG("Loading Textures from the %i mesh", i + 1);
-		if (currentMesh->HasTextureCoords(0))
-			LoadTextures(mesh,material, currentMesh, scene, file);
+				LOG("Loading Textures from the %i mesh", i + 1);
+				if (currentMesh->HasTextureCoords(0))
+					LoadTextures(mesh, resource_material, currentMesh, scene, file);
+			}
+			else
+			{
+				component_material->resource_uid = resource_material->file;
+				component_mesh->material_name = resource_material->file;
+			}
 
-		LOG("Loading Indices from the %i mesh", i + 1);
-		if (currentMesh->HasFaces())
-			LoadIndices(mesh, currentMesh);
+			LOG("Loading Normals from the %i mesh", i + 1);
+			if (currentMesh->HasNormals())
+				LoadNormals(mesh, currentMesh);
 
-		LOG("Generating BoundingBox for the %i mesh", i + 1);
+
+
+			LOG("Loading Indices from the %i mesh", i + 1);
+			if (currentMesh->HasFaces())
+				LoadIndices(mesh, currentMesh);
+
+			LOG("Generating BoundingBox for the %i mesh", i + 1);
 			LoadBoundingBox(mesh, currentMesh);
 
-		SaveMesh(mesh);
-
+			SaveMesh(mesh);
+		}
+		else
+			component_mesh->resource_mesh = mesh->file;
 	}
 	
 	if (node->mNumChildren > 0)
@@ -621,11 +658,18 @@ void ModuleLoader::AddGameObjectsFromFile(GameObject* parent, rapidjson::Documen
 					me->LoadComponent(comp);
 					break;
 				}
-				default:
+				case ComponentType::MATERIAL:
+				{
+					Material* ma = (Material*)go->AddComponent(ComponentType::MATERIAL);
+					ma->LoadComponent(comp);
 					break;
 				}
-			}
+				default:
+					break;
 
+				}
+				go->LinkMeshWithMaterial();
+			}
 		}
 	}
 }
@@ -647,18 +691,18 @@ bool ModuleLoader::CheckIfNameExists(const std::string name)
 }
 
 
-void ModuleLoader::SaveMesh(Mesh* mesh)
+void ModuleLoader::SaveMesh(ResourceMesh* mesh)
 {
-	uint ranges[2] = { mesh->resource_mesh->num_vertex, mesh->resource_mesh->num_index };
-	bool optatives[3] = { mesh->resource_mesh->has_texture_coordinates, mesh->resource_mesh->has_triangle_faces, mesh->resource_mesh->has_normals };
+	uint ranges[2] = { mesh->num_vertex, mesh->num_index };
+	bool optatives[3] = { mesh->has_texture_coordinates, mesh->has_triangle_faces, mesh->has_normals };
 	uint fileSize;
 
-	fileSize = sizeof(ranges) + sizeof(optatives) + sizeof(float)*mesh->resource_mesh->num_vertex * 3 + sizeof(uint)*mesh->resource_mesh->num_index;
+	fileSize = sizeof(ranges) + sizeof(optatives) + sizeof(float)*mesh->num_vertex * 3 + sizeof(uint)*mesh->num_index;
 
-	if (mesh->resource_mesh->has_texture_coordinates)
-		fileSize += sizeof(float)*mesh->resource_mesh->num_vertex * 2;
-	if(mesh->resource_mesh->has_normals)
-		fileSize += sizeof(float)*mesh->resource_mesh->num_vertex * 3;
+	if (mesh->has_texture_coordinates)
+		fileSize += sizeof(float)*mesh->num_vertex * 2;
+	if(mesh->has_normals)
+		fileSize += sizeof(float)*mesh->num_vertex * 3;
 
 	char* data = new char[fileSize];
 	char* bookmark = data;
@@ -676,40 +720,39 @@ void ModuleLoader::SaveMesh(Mesh* mesh)
 	bookmark += bytes;
 
 	// Saving the data of the vertices
-	bytes = sizeof(float)*mesh->resource_mesh->num_vertex * 3;
-	memcpy(bookmark, mesh->resource_mesh->vertex, bytes);
+	bytes = sizeof(float)*mesh->num_vertex * 3;
+	memcpy(bookmark, mesh->vertex, bytes);
 
 	bookmark += bytes;
 
 	// Saving the data of the indices
-	bytes = sizeof(uint)*mesh->resource_mesh->num_index;
-	memcpy(bookmark, mesh->resource_mesh->index, bytes);
+	bytes = sizeof(uint)*mesh->num_index;
+	memcpy(bookmark, mesh->index, bytes);
 
 	bookmark += bytes;
 
-	if (mesh->resource_mesh->has_texture_coordinates)
+	if (mesh->has_texture_coordinates)
 	{
 		// Saving the data of the texture coordinates
-		bytes = sizeof(float)*mesh->resource_mesh->num_vertex * 2;
-		memcpy(bookmark, mesh->resource_mesh->texCoords, bytes);
+		bytes = sizeof(float)*mesh->num_vertex * 2;
+		memcpy(bookmark, mesh->texCoords, bytes);
 
 		bookmark += bytes;
 	}
-	if (mesh->resource_mesh->has_normals)
+	if (mesh->has_normals)
 	{
 		// Saving the data of the normals
-		bytes = sizeof(float)*mesh->resource_mesh->num_vertex * 3;
-		memcpy(bookmark, mesh->resource_mesh->normals, bytes);
+		bytes = sizeof(float)*mesh->num_vertex * 3;
+		memcpy(bookmark, mesh->normals, bytes);
 	}
 
 	std::string str = App->importer->meshLibraryPath;
-	str.append(mesh->game_object->name);
+	str.append(mesh->file);
 	str.append(App->importer->meshExtension);
 
 	App->importer->WriteDataOnFile(data, fileSize, str.c_str());
-	mesh->resource_mesh->fileName = str;
-	mesh->resource_mesh->fileName = mesh->resource_mesh->fileName.erase(0, mesh->resource_mesh->fileName.find_last_of("\\") + 1);
-	mesh->resource_mesh->fileName = mesh->resource_mesh->fileName.substr(0, mesh->resource_mesh->fileName.find("."));
+	mesh->file = str;
+	mesh->file = mesh->file.erase(0, mesh->file.find_last_of("\\") + 1);
 }
 
 std::string ModuleLoader::SaveMaterial(const std::string& path)

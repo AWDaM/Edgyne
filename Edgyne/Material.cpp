@@ -32,7 +32,7 @@ rapidjson::Value Material::SaveToScene(rapidjson::Document::AllocatorType& alloc
 
 	myData.AddMember("UID", UID, allocator);
 	myData.AddMember("Type", component_type, allocator);
-	myData.AddMember("Resource UID", resource_uid, allocator);
+	myData.AddMember("Resource UID", (rapidjson::Value::StringRefType)resource_uid.c_str(), allocator);
 
 	return myData;
 }
@@ -40,10 +40,10 @@ rapidjson::Value Material::SaveToScene(rapidjson::Document::AllocatorType& alloc
 void Material::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 {
 	UID = comp->value["UID"].GetUint();
-	resource_uid = comp->value["Resource UID"].GetUint();
+	resource_uid = comp->value["Resource UID"].GetString();
 	if (!App->resource_manager->GetResourceFromUID(resource_uid))
 	{
-		App->resource_manager->CreateResource(MATERIAL, resource_uid);
+		App->resource_manager->CreateNewResource(Resource::ResourceType::RES_MATERIAL, resource_uid);
 	}
 }
 
@@ -51,10 +51,10 @@ void Material::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 void Material::LoadAsMeshComponent(rapidjson::Value::ConstMemberIterator comp)
 {
 	UID = comp->value["Material"]["UID"].GetUint();
-	resource_uid = comp->value["Material"]["Resource UID"].GetUint();
+	resource_uid = comp->value["Material"]["Resource UID"].GetString();
 	if (!App->resource_manager->GetResourceFromUID(resource_uid))
 	{
-		App->resource_manager->CreateResource(MATERIAL, resource_uid);
+		App->resource_manager->CreateNewResource(Resource::ResourceType::RES_MATERIAL, resource_uid);
 	}
 }
 

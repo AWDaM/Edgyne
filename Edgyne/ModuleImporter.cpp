@@ -5,6 +5,8 @@
 #include "Application.h"
 #include "Mesh.h"
 #include "GameObject.h"
+#include "Resource.h"
+#include "ResourceMesh.h"
 #include <experimental/filesystem>
 
 #include "GL/glew.h"
@@ -121,7 +123,7 @@ bool ModuleImporter::LoadMeshFromFile()
 	return true;
 }
 
-void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh)
+void ModuleImporter::CopyDataFromFile(std::string& path, ResourceMesh* _mesh)
 {
 	if (path != "No File")
 	{
@@ -148,56 +150,56 @@ void ModuleImporter::CopyDataFromFile(std::string& path, Mesh* _mesh)
 		memcpy(optatives, bookmark, bytes);
 		bookmark += bytes;
 
-		if (!_mesh)
-		{
-			path = path.erase(0, sizeof(meshLibraryPath) - 1);
-			GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
+		//if (!_mesh)
+		//{
+		//	path = path.erase(0, sizeof(meshLibraryPath) - 1);
+		//	GameObject* game_object = App->level->NewGameObject((char*)path.erase(path.find_last_of("."), sizeof(meshExtension)).data());
 
-			_mesh = (Mesh*)game_object->AddComponent(MESH);
-		}
+		//	_mesh = (Mesh*)game_object->AddComponent(MESH);
+		//}
 
-		_mesh->resource_mesh->num_vertex = ranges[0];
-		_mesh->resource_mesh->num_index = ranges[1];
-		_mesh->resource_mesh->has_texture_coordinates = optatives[0];
-		_mesh->resource_mesh->has_triangle_faces = optatives[1];
-		_mesh->resource_mesh->has_normals = optatives[2];
+		_mesh->num_vertex = ranges[0];
+		_mesh->num_index = ranges[1];
+		_mesh->has_texture_coordinates = optatives[0];
+		_mesh->has_triangle_faces = optatives[1];
+		_mesh->has_normals = optatives[2];
 
-		bytes = sizeof(float)*_mesh->resource_mesh->num_vertex * 3;
+		bytes = sizeof(float)*_mesh->num_vertex * 3;
 
-		_mesh->resource_mesh->vertex = new float[_mesh->resource_mesh->num_vertex * 3];
-		memcpy(_mesh->resource_mesh->vertex, bookmark, bytes);
-
-		bookmark += bytes;
-		bytes = sizeof(uint)*_mesh->resource_mesh->num_index;
-
-		_mesh->resource_mesh->index = new uint[_mesh->resource_mesh->num_index];
-		memcpy(_mesh->resource_mesh->index, bookmark, bytes);
+		_mesh->vertex = new float[_mesh->num_vertex * 3];
+		memcpy(_mesh->vertex, bookmark, bytes);
 
 		bookmark += bytes;
+		bytes = sizeof(uint)*_mesh->num_index;
 
-		if (_mesh->resource_mesh->has_texture_coordinates)
+		_mesh->index = new uint[_mesh->num_index];
+		memcpy(_mesh->index, bookmark, bytes);
+
+		bookmark += bytes;
+
+		if (_mesh->has_texture_coordinates)
 		{
-			bytes = sizeof(float)*_mesh->resource_mesh->num_vertex * 2;
+			bytes = sizeof(float)*_mesh->num_vertex * 2;
 
-			_mesh->resource_mesh->texCoords = new float[_mesh->resource_mesh->num_vertex * 2];
-			memcpy(_mesh->resource_mesh->texCoords, bookmark, bytes);
+			_mesh->texCoords = new float[_mesh->num_vertex * 2];
+			memcpy(_mesh->texCoords, bookmark, bytes);
 
 			bookmark += bytes;
 		}
-		if (_mesh->resource_mesh->has_normals)
+		if (_mesh->has_normals)
 		{
-			bytes = sizeof(float)*_mesh->resource_mesh->num_vertex * 3;
+			bytes = sizeof(float)*_mesh->num_vertex * 3;
 
-			_mesh->resource_mesh->normals = new float[_mesh->resource_mesh->num_vertex * 3];
-			memcpy(_mesh->resource_mesh->normals, bookmark, bytes);
+			_mesh->normals = new float[_mesh->num_vertex * 3];
+			memcpy(_mesh->normals, bookmark, bytes);
 		}
-		_mesh->SetBoundingVolume();
+		//_mesh->SetBoundingVolume();
 		fclose(file);
 
 
-		glGenBuffers(1, (GLuint*)&(_mesh->resource_mesh->id_index));
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->resource_mesh->id_index);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * _mesh->resource_mesh->num_index, &_mesh->resource_mesh->index[0], GL_STATIC_DRAW);
+		glGenBuffers(1, (GLuint*)&(_mesh->id_index));
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->id_index);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * _mesh->num_index, &_mesh->index[0], GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }

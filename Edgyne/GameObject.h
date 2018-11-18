@@ -68,6 +68,8 @@ public:
 	void RecursiveResetAddedToQuadTree();
 	Component* GetComponent(ComponentType type);
 
+	void LinkMeshWithMaterial();
+
 private:
 public:
 	std::string name;

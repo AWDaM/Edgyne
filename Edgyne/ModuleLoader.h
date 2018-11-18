@@ -15,6 +15,7 @@ class GameObject;
 class Mesh;
 class Material;
 class ResourceMaterial;
+class ResourceMesh;
 
 class ModuleLoader : public Module
 {
@@ -29,7 +30,7 @@ public:
 	void Save(rapidjson::Document & doc, rapidjson::FileWriteStream& os);
 	void Load(rapidjson::Document& doc);
 
-	bool Import(const std::string& file);
+	bool Import(std::string& file);
 
 	void RecursiveGenerateListFromTree(std::list<GameObject*>& buffer, GameObject* root_game_object);
 	void LoadTextureFromLibrary(const char* path, ResourceMaterial* material);
@@ -42,20 +43,20 @@ public:
 
 	bool CheckIfNameExists(const std::string name);
 private:
-	void SaveMesh(Mesh* mesh);
+	void SaveMesh(ResourceMesh* mesh);
 	std::string SaveMaterial(const std::string& path);
 	
 	void LoadInfo(GameObject* game_object, aiMesh* currentMesh,aiNode* node);
-	void LoadVerices(Mesh* new_mesh, aiMesh* currentMesh);
-	void LoadColor(Material* new_mesh, aiMaterial* mat);
-	bool LoadTextures(Mesh* new_mesh,Material* material, aiMesh* currentMesh, const aiScene* scene, const std::string& file);
-	void LoadNormals(Mesh* new_mesh, aiMesh* currentMesh);
-	void LoadIndices(Mesh* new_mesh, aiMesh* currentMesh);
-	void LoadBoundingBox(Mesh* new_mesh, aiMesh* currentMesh);
+	void LoadVerices(ResourceMesh* new_mesh, aiMesh* currentMesh);
+	void LoadColor(ResourceMaterial* new_mesh, aiMaterial* mat);
+	bool LoadTextures(ResourceMesh* new_mesh, ResourceMaterial* material, aiMesh* currentMesh, const aiScene* scene, const std::string& file);
+	void LoadNormals(ResourceMesh* new_mesh, aiMesh* currentMesh);
+	void LoadIndices(ResourceMesh* new_mesh, aiMesh* currentMesh);
+	void LoadBoundingBox(ResourceMesh* new_mesh, aiMesh* currentMesh);
 
 	void LoadMeshesFromFile(Mesh* _mesh);
 
-	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, const std::string& file, GameObject* parent);
+	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::string& file, GameObject* parent);
 	bool CheckTexturePaths(std::string file, std::string texPath, std::string& texActualPath);
 
 public:

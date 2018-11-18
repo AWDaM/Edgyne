@@ -8,15 +8,15 @@ class ResourceMaterial :
 	public Resource
 {
 public:
-	ResourceMaterial(uint uid, rapidjson::Value::ConstMemberIterator comp);
+	ResourceMaterial(std::string& file);
+	ResourceMaterial(rapidjson::Value::ConstMemberIterator comp);
 	~ResourceMaterial();
 
-	void ResourceMaterial::LoadComponent(rapidjson::Value::ConstMemberIterator comp);
+	void ResourceMaterial::LoadComponent(std::string& file);
 
 	vec color;
 	float2 img_size;
 	uint id_texture = 0;
-	std::string fileName;
 };
 
 #endif
