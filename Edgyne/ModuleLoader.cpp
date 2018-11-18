@@ -197,7 +197,7 @@ void ModuleLoader::ReceivedFile(const char * path)
 	}
 }
 
-void ModuleLoader::LoadInfo(GameObject* game_object, aiMesh * currentMesh, aiNode* node)
+void ModuleLoader::LoadInfo(GameObject* game_object, aiNode* node)
 {
 
 	aiQuaternion rotation;
@@ -212,6 +212,7 @@ void ModuleLoader::LoadInfo(GameObject* game_object, aiMesh * currentMesh, aiNod
 	game_object->transform->rotation_euler.x = rotationEuler.x * RADTODEG;
 	game_object->transform->rotation_euler.y = rotationEuler.y * RADTODEG;
 	game_object->transform->rotation_euler.z = rotationEuler.z * RADTODEG;
+
 	game_object->transform->position.x = position.x;
 	game_object->transform->position.y = position.y;
 	game_object->transform->position.z = position.z;
@@ -383,6 +384,11 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 	{
 		local_parent = parent->AddGameObject("Node GameObject");
 	}
+	else if (!node->mTransformation.IsIdentity())
+	{
+		local_parent = parent->AddGameObject("Transformation Node");
+		LoadInfo(local_parent, node);
+	}
 	else
 		local_parent = parent;
 
@@ -425,7 +431,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 
 
 			LOG("Loading Info for the %i mesh", i + 1);
-			LoadInfo(game_object, currentMesh, node);
+			LoadInfo(game_object, node);
 
 			LOG("Loading Vertices from the %i mesh", i + 1);
 			LoadVerices(mesh, currentMesh);
@@ -621,7 +627,7 @@ void ModuleLoader::LoadObject(std::string name, bool is_scene)
 
 	if (file)
 	{
-		char readBuffer[65536];
+		char readBuffer[100000];
 
 		rapidjson::FileReadStream inputStream(file, readBuffer, sizeof(readBuffer));
 
@@ -629,7 +635,7 @@ void ModuleLoader::LoadObject(std::string name, bool is_scene)
 
 		AddGameObjectsFromFile(App->level->root, document);
 		App->level->root->RecursiveSetChildsTransformChanged(true);
-		App->level->root->RecursiveTransformChanged(App->level->root->global_transform_matrix);
+
 		App->level->generate_quadtree = true;
 
 	}
@@ -814,12 +820,17 @@ std::string ModuleLoader::SaveMaterial(const std::string& path)
 
 
 				FILE* file = fopen(currMaterialPath.c_str(), "wb");
-				fwrite(data, sizeof(char), ilSize, file);
-				fclose(file);
-				App->importer->WriteDataOnFile(data, ilSize, currMaterialPath.c_str());
-				ddsTexPath = currMaterialPath;
-				ddsTexPath = ddsTexPath.erase(0, ddsTexPath.find_last_of("\\") + 1);
-				ddsTexPath = ddsTexPath.substr(0, ddsTexPath.find("."));
+				if (file)
+				{
+					fwrite(data, sizeof(char), ilSize, file);
+					fclose(file);
+					App->importer->WriteDataOnFile(data, ilSize, currMaterialPath.c_str());
+					ddsTexPath = currMaterialPath;
+					ddsTexPath = ddsTexPath.erase(0, ddsTexPath.find_last_of("\\") + 1);
+					ddsTexPath = ddsTexPath.substr(0, ddsTexPath.find("."));
+				}
+				else
+					LOG("the file isnt");
 			}
 		}
 	}

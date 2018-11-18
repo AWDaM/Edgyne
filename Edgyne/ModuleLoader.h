@@ -46,7 +46,7 @@ private:
 	void SaveMesh(ResourceMesh* mesh);
 	std::string SaveMaterial(const std::string& path);
 	
-	void LoadInfo(GameObject* game_object, aiMesh* currentMesh,aiNode* node);
+	void LoadInfo(GameObject* game_object,aiNode* node);
 	void LoadVerices(ResourceMesh* new_mesh, aiMesh* currentMesh);
 	void LoadColor(ResourceMesh* new_mesh, aiMaterial* mat);
 	bool LoadTextures(ResourceMesh* new_mesh, ResourceMaterial* material, aiMesh* currentMesh, const aiScene* scene, const std::string& file);

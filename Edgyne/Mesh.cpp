@@ -164,12 +164,15 @@ void Mesh::SetBoundingVolume()
 {
 	ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(this->resource_mesh);
 
-	game_object->aligned_bounding_box.Enclose((float3*)resource_mesh->vertex, resource_mesh->num_vertex);
-	//for (int i = 0; i < num_vertex * 3; i + 3)
-	//{
-	//	game_object->bounding_box.Enclose()
-	//}
-	game_object->bounding_sphere.Enclose((float3*)resource_mesh->vertex, resource_mesh->num_vertex);
+	if (resource_mesh)
+	{
+		game_object->aligned_bounding_box.Enclose((float3*)resource_mesh->vertex, resource_mesh->num_vertex);
+		//for (int i = 0; i < num_vertex * 3; i + 3)
+		//{
+		//	game_object->bounding_box.Enclose()
+		//}
+		game_object->bounding_sphere.Enclose((float3*)resource_mesh->vertex, resource_mesh->num_vertex);
+	}
 }
 
 
