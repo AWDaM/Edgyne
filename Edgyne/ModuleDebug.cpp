@@ -337,6 +337,7 @@ void ModuleDebug::Draw_Guizmo(GameObject* game_object)
 	localMat.Transpose();
 	if (ImGuizmo::IsUsing())
 	{
+		usingGuizmo = true;
 		if(operation_type == ImGuizmo::TRANSLATE)
 			game_object->transform->position = localMat.TranslatePart();
 		else if (operation_type == ImGuizmo::ROTATE)
@@ -352,6 +353,7 @@ void ModuleDebug::Draw_Guizmo(GameObject* game_object)
 
 		game_object->RecursiveSetChildsTransformChanged(true);
 	}
+	else usingGuizmo = false;
 	/*game_object->transform_changed = true;*/
 }
 

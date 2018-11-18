@@ -40,8 +40,6 @@ public:
 	bool generate_quadtree = false;
 	std::string current_scene_name;
 	math::LineSegment ray;
-	bool debugRay = false;
-	std::vector<math::float3> triangles;
 };
 
 #endif // !__MODULE_LEVEL_H__

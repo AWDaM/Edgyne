@@ -629,6 +629,8 @@ void ModuleLoader::LoadObject(std::string name, bool is_scene)
 
 		AddGameObjectsFromFile(App->level->root, document);
 		App->level->root->RecursiveTransformChanged(App->level->root->global_transform_matrix);
+		App->level->generate_quadtree = true;
+
 	}
 }
 

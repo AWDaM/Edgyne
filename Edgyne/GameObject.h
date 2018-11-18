@@ -72,7 +72,7 @@ public:
 private:
 public:
 	std::string name;
-	bool Static = true;
+	bool Static = false;
 	bool active = false;
 	GameObject* parent = nullptr;
 
