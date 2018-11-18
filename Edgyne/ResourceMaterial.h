@@ -12,7 +12,7 @@ public:
 	ResourceMaterial(rapidjson::Value::ConstMemberIterator comp);
 	~ResourceMaterial();
 
-	void ResourceMaterial::LoadComponent(std::string& file);
+	void ResourceMaterial::LoadMaterial(std::string& file);
 
 	vec color;
 	float2 img_size;

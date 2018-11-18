@@ -5,7 +5,7 @@
 
 ResourceMaterial::ResourceMaterial(std::string& file) : Resource(ResourceType::RES_MATERIAL,file)
 {
-	LoadComponent(file);
+	LoadMaterial(file);
 }
 
 ResourceMaterial::ResourceMaterial(rapidjson::Value::ConstMemberIterator comp) : Resource(ResourceType::RES_MATERIAL)
@@ -18,7 +18,7 @@ ResourceMaterial::~ResourceMaterial()
 {
 }
 
-void ResourceMaterial::LoadComponent(std::string& path)
+void ResourceMaterial::LoadMaterial(std::string& path)
 {
 	file = path;
 
