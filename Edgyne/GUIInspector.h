@@ -22,6 +22,7 @@ public:
 	void Draw();
 
 	void AddMesh();
+	void AddMaterial();
 	bool Load(rapidjson::Value& Node);
 	bool Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator);
 

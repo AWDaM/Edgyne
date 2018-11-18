@@ -123,9 +123,8 @@ bool Mesh::ComponentDraw()
 					glBindTexture(GL_TEXTURE_2D, material->id_texture);
 				}
 				//--------
-
 				else
-					glColor3f(material->color.x, material->color.y, material->color.z);
+					glColor3f(resource_mesh->color.x, resource_mesh->color.y, resource_mesh->color.z);
 			}
 		}
 			//---------

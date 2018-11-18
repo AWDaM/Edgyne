@@ -8,6 +8,7 @@
 #include "ResourceMesh.h"
 #include "ResourceMaterial.h"
 #include "Mesh.h"
+#include "Material.h"
 #include "GameObject.h"
 #include "Component.h"
 #include "QuadTree.h"
@@ -99,8 +100,16 @@ void GUIInspector::AddComponents()
 		if (!App->level->selected_game_object->GetComponent(MESH))
 		{
 			AddMesh();
+			App->level->selected_game_object->LinkMeshWithMaterial();
 		}
-
+	}
+	if (ImGui::CollapsingHeader("Texture"))
+	{
+		if (!App->level->selected_game_object->GetComponent(MATERIAL))
+		{
+			AddMaterial();
+			App->level->selected_game_object->LinkMeshWithMaterial();
+		}
 	}
 }
 void GUIInspector::AddMesh()
@@ -126,6 +135,33 @@ void GUIInspector::AddMesh()
 					resource_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(Resource::RESOURCE_MESH, fileName);
 				}
 				mesh->resource_mesh = resource_mesh->file;
+			}
+		}
+	}
+}
+void GUIInspector::AddMaterial()
+{
+	const std::experimental::filesystem::directory_iterator end{};
+
+	for (std::experimental::filesystem::directory_iterator iter{ "Library\\Materials\\" }; iter != end; ++iter)
+	{
+		std::string extension = iter->path().string();
+		extension = extension.erase(0, extension.find("."));
+
+		std::string fileName = iter->path().string();
+		fileName = fileName.erase(0, fileName.find_last_of("\\") + 1);
+
+		if (App->importer->materialExtension == extension)
+		{
+			if (ImGui::Button(fileName.c_str()))
+			{
+				Material* material = (Material*)App->level->selected_game_object->AddComponent(MATERIAL);
+				ResourceMaterial* resource_material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(fileName);
+				if (!resource_material)
+				{
+					resource_material = (ResourceMaterial*)App->resource_manager->CreateNewResource(Resource::RES_MATERIAL, fileName);
+				}
+				material->resource_uid = resource_material->file;
 			}
 		}
 	}
