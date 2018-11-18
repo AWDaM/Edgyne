@@ -28,6 +28,7 @@ Unzip the file and double click Edyne.exe. You have test models in the Assets fo
 - Saving the Scene: By clicking in SaveScene, you save the currently open scene without changing the name. If you write a name in save scene as and press enter, the engine will check if the name already exists, and if not, will save the scene as a new one.
 
 ### Repository
+
 - If you want to download new releases or just check the source code, you can go to our repository:
 https://github.com/AWDaM/Edgyne
 
@@ -35,3 +36,24 @@ https://github.com/AWDaM/Edgyne
 
 - The camera culling works using both AABBs and Spheres for more precision.
 - Meshes and textures can be added individually to game objects.
+
+### Invididual tasks
+
+The engine has been created by us both, and the tasks below show the focuses of each member, even though the tasks are not exclusive of each member
+
+Jaume Surís:
+
+- Mesh Binary Format
+- Exporting and Importing
+- QuadTree
+- Serialization of the Scene
+- Mouse Picking
+
+Lorién Portella:
+
+- Engine Structure (GameObjects and Components)
+- Global Transformations
+- Editor Camera
+- Camera Culling
+- Time Manager
+- Resource Manager
