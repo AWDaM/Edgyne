@@ -109,24 +109,6 @@ update_status ModuleLevel::PreUpdate(float dt)
 
 update_status ModuleLevel::Update(float dt)
 {
-	if (debugRay)
-	{
-		glBegin(GL_LINES);
-		glLineWidth(3.0f);
-
-		glVertex3f(ray.a.x,ray.a.y,ray.a.z);
-		glVertex3f(ray.b.x,ray.b.y,ray.b.z);
-		glEnd();
-		glLineWidth(1.0f);
-
-		glBegin(GL_TRIANGLES);
-		for (std::vector<math::float3>::iterator it = triangles.begin(); it != triangles.end(); it++)
-		{
-			glVertex3f((*it).x, (*it).y, (*it).z);
-		}
-		glEnd();
-	}
-
 	std::list<GameObject*>::iterator item = game_objects.begin();
 
 	while (item != game_objects.end())
@@ -159,7 +141,7 @@ std::vector<GameObject*> ModuleLevel::GetNonStaticObjects()
 
 	while (item != game_objects.end())
 	{
-		if (!(*item)->Static)
+		if (!(*item)->Static) {}
 			ret.push_back((*item));
 		item++;
 	}
