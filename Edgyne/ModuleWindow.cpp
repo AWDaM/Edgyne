@@ -1,6 +1,9 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
+#include "Camera.h"
 
 ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(start_enabled)
 {
@@ -183,9 +186,19 @@ void ModuleWindow::Configuration()
 		SDL_GetWindowMaximumSize(window, &max_w, &max_h);
 
 		if (ImGui::SliderInt("Width", &window_w, min_w, max_w))
+		{
 			SDL_SetWindowSize(window, window_w, window_h);
-		if(ImGui::SliderInt("Height", &window_h,min_h,max_h))
+			App->renderer3D->OnResize(window_w, window_h);
+		}
+		if (ImGui::SliderInt("Height", &window_h, min_h, max_h))
+		{
 			SDL_SetWindowSize(window, window_w, window_h);
+			App->renderer3D->OnResize(window_w, window_h);
+		}
+		if (ImGui::SliderFloat("FOV", &App->camera->editor_camera->vertical_fov, 30.0f, 90.0f))
+		{
+			App->renderer3D->OnResize(window_w, window_h);
+		}
 		if (ImGui::SliderFloat("Brightness", &brightness, 0.0f, 1.0f));
 			SDL_SetWindowBrightness(window, brightness);
 
