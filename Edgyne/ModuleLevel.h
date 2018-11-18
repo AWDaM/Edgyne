@@ -19,6 +19,7 @@ public:
 	~ModuleLevel();
 	bool Init(rapidjson::Value& node);
 	bool Start();
+	bool CleanUp();
 
 	update_status PreUpdate(float dt);
 	update_status Update(float dt);
@@ -38,6 +39,9 @@ public:
 	GameObject* selected_game_object = nullptr;
 	bool generate_quadtree = false;
 	std::string current_scene_name;
+	math::LineSegment ray;
+	bool debugRay = false;
+	std::vector<math::float3> triangles;
 };
 
 #endif // !__MODULE_LEVEL_H__

@@ -18,7 +18,7 @@ GUIInspector::GUIInspector(bool active = false) : GUIElements("inspector",active
 
 GUIInspector::~GUIInspector()
 {
-	
+	highlighted_game_object = nullptr;
 }
 
 void GUIInspector::Draw()

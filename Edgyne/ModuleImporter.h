@@ -14,6 +14,7 @@ public:
 	~ModuleImporter();
 
 	bool Init(rapidjson::Value& node);
+	bool CleanUp();
 	void LoadAllExtensionsAndPaths(rapidjson::Value& node);
 
 	bool SaveToFile(Mesh* mesh);

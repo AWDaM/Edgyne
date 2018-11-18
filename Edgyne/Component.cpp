@@ -14,4 +14,15 @@ Component::Component(GameObject* game_object, ComponentType type) : game_object(
 
 Component::~Component()
 {
+	std::vector<Component*>::iterator it = game_object->components.begin();
+	while (it != game_object->components.end())
+	{
+		if ((*it) == this)
+		{
+			game_object->components.erase(it);
+			break;
+		}
+		it++;
+	}
+	game_object = nullptr;
 }

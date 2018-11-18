@@ -69,11 +69,18 @@ bool ModuleImGui::CleanUp()
 {
 
 	for (std::vector<GUIElements*>::iterator it = GUIElement.begin(); it != GUIElement.end(); ++it)
-	{
-		GUIElements* element = (*it);
+		RELEASE((*it));
 
-	}
-	return false;
+	console					= nullptr;
+	about					= nullptr;
+	configuration			= nullptr;
+	random_number_test		= nullptr;
+	inspector				= nullptr;
+	scene					= nullptr;
+	hierarchy				= nullptr;
+	assets					= nullptr;
+
+	return true;
 }
 
 void ModuleImGui::Save(rapidjson::Document & doc, rapidjson::FileWriteStream & os)
@@ -262,6 +269,15 @@ ModuleImGui::~ModuleImGui()
 		SDL_DestroyWindow(App->window->window);
 		SDL_Quit();
 	
+}
+
+ImVec2 ModuleImGui::GetScenePos()
+{
+	return scene->position;
+}
+ImVec2 ModuleImGui::GetSceneSize()
+{
+	return scene->size;
 }
 
 

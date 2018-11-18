@@ -11,7 +11,7 @@ class Component
 public:
 	Component();
 	Component(GameObject* game_object, ComponentType type);
-	~Component();
+	virtual ~Component();
 
 	virtual bool ComponentStart()		{ return true; };
 	virtual bool ComponentUpdate()		{ return true; };

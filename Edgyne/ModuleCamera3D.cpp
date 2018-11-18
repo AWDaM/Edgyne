@@ -40,7 +40,7 @@ bool ModuleCamera3D::Start()
 bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
-
+	editor_camera = nullptr;
 	return true;
 }
 
