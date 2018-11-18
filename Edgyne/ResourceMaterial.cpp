@@ -8,9 +8,9 @@ ResourceMaterial::ResourceMaterial(std::string& file) : Resource(ResourceType::R
 	LoadMaterial(file);
 }
 
-ResourceMaterial::ResourceMaterial(rapidjson::Value::ConstMemberIterator comp) : Resource(ResourceType::RES_MATERIAL)
+ResourceMaterial::ResourceMaterial() : Resource(ResourceType::RES_MATERIAL)
 {
-	//LoadComponent(comp);
+
 }
 
 

@@ -5,7 +5,7 @@ class ResourceMesh :
 {
 public:
 	ResourceMesh(std::string& file);
-	ResourceMesh(rapidjson::Value::ConstMemberIterator comp);
+	ResourceMesh();
 	~ResourceMesh();
 
 	void LoadResource(std::string& file);
