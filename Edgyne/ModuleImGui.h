@@ -45,6 +45,9 @@ public:
 	 
 	void ToggleEditor();
 
+	ImVec2 GetScenePos();
+	ImVec2 GetSceneSize();
+
 private:
 
 public:
@@ -64,7 +67,11 @@ public:
 
 	bool show_demo_window = false;
 
-	
+
+	float sceneX;
+	float sceneY;
+	float sceneW;
+	float sceneH;
 	bool perma_true = true;
 	bool perma_true_2 = true;
 	bool to_close = false;

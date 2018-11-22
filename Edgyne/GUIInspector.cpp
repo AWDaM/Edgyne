@@ -64,6 +64,12 @@ void GUIInspector::Draw()
 		ImGui::End();
 }
 
+bool GUIInspector::CleanUp()
+{
+	RELEASE(highlighted_game_object);
+	return true;
+}
+
 bool GUIInspector::Save(rapidjson::Value & Node, rapidjson::Document::AllocatorType& allocator)
 {
 	Node.AddMember("active", active, allocator);

@@ -246,6 +246,16 @@ void ModuleImGui::ToggleEditor()
 	EditorOff = !EditorOff;
 }
 
+ImVec2 ModuleImGui::GetScenePos()
+{
+	return scene->position;
+}
+
+ImVec2 ModuleImGui::GetSceneSize()
+{
+	return scene->size;
+}
+
 void ModuleImGui::AddLog(const char* Log)
 {
 	console->AddLog(Log);

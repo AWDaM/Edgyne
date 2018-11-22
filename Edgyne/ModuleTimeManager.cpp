@@ -62,8 +62,8 @@ update_status ModuleTimeManager::Update(float dt)
 
 		if (App->game_state == PAUSED)
 		{
-			game_clock.PauseTimer();
-			real_clock.PauseTimer();
+			game_clock.Start();
+			real_clock.Start();
 		}
 		App->game_state = RUNNING;
 	}
