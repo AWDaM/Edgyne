@@ -15,6 +15,14 @@ public:
 		for (int i = 0; i < 4; i++)
 			children[i] = nullptr;
 	};
+
+	~quadTreeNode()
+	{
+		go = nullptr;
+		myObjects.clear();
+	
+	}
+
 public:
 	GameObject * go = nullptr;
 	AABB boundingBox;
@@ -79,17 +87,18 @@ public:
 		if (primitive.Intersects(boundingBox))
 		{
 			std::vector<GameObject*>::iterator item = myObjects.begin();
-
-			while (item != myObjects.end())
+			if (myObjects.size() > 0)
 			{
-				if (!(*item)->added_to_quadtree_buffer)
+				while (item != myObjects.end())
 				{
-					buffer.push_back(*item);
-					(*item)->added_to_quadtree_buffer = true;
+					if (!(*item)->added_to_quadtree_buffer)
+					{
+						buffer.push_back(*item);
+						(*item)->added_to_quadtree_buffer = true;
+					}
+					item++;
 				}
-				item++;
 			}
-
 			for (int i = 0; i < 4; i++)
 				if (children[i] != nullptr)
 					children[i]->CollectIntersections(buffer, primitive);
@@ -116,6 +125,9 @@ public:
 			}
 			else
 			{
+				for (std::vector<GameObject*>::iterator item = myObjects.begin(); item != myObjects.end(); item++)
+					if ((*item) == obj)
+						return true;
 				myObjects.push_back(obj);
 				ret = true;
 			}
@@ -168,24 +180,7 @@ public:
 	void CollectIntersections(std::vector<GameObject*>& buffer, const TYPE & primitive)
 	{
 		
-		if (primitive.Intersects(root_node->boundingBox))
-		{
-			std::vector<GameObject*>::iterator item = root_node->myObjects.begin();
-
-			while (item != root_node->myObjects.end())
-			{
-				if (!(*item)->added_to_quadtree_buffer)
-				{
-					buffer.push_back(*item);
-					(*item)->added_to_quadtree_buffer = true;
-				}
-				item++;
-			}
-
-			for (int i = 0; i < 4; i++)
-				if (root_node->children[i] != nullptr)
-					root_node->children[i]->CollectIntersections(buffer, primitive);
-		}
+		root_node->CollectIntersections(buffer, primitive);
 	}
 
 
