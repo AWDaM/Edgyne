@@ -40,10 +40,11 @@ rapidjson::Value Mesh::SaveToScene(rapidjson::Document::AllocatorType& allocator
 
 	rapidjson::Value mat(rapidjson::kObjectType);
 
-	mat = material->SaveToScene(allocator);
-
-	myData.AddMember("Material", mat, allocator);
-
+	if (material)
+	{
+		mat = material->SaveToScene(allocator);
+		myData.AddMember("Material", mat, allocator);
+	}
 	return myData;
 }
 
