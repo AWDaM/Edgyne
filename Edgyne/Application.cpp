@@ -10,6 +10,7 @@
 #include "ModuleImporter.h"
 #include "ModuleTimeManager.h"
 #include "ModuleResourceManager.h"
+#include "ModuleShaders.h"
 
 #include "p2Defs.h"
 
@@ -31,6 +32,7 @@ Application::Application()
 	importer = new ModuleImporter(this);
 	time_manager = new ModuleTimeManager(this);
 	resource_manager = new ModuleResourceManager(this);
+	shaders = new ModuleShaders(this);
 
 	framerate = 1000 / 60;
 	
@@ -54,6 +56,7 @@ Application::Application()
 	AddModule(camera);
 	AddModule(time_manager);
 	AddModule(resource_manager);
+	AddModule(shaders);
 	// Scenes
 
 	// Renderer last!

@@ -62,7 +62,7 @@ void GUIAssets::Draw()
 			}
 		}
 	}
-
+	
 	ImGui::End();
 
 }

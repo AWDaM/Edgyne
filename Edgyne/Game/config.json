@@ -37,6 +37,9 @@
   },
   "ResourceManager": {
   },
+  "Shaders": {
+
+  },
   "Render3D": {
     "VSync": true
   }
