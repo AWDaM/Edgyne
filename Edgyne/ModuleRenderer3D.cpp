@@ -34,19 +34,7 @@ bool ModuleRenderer3D::Init(rapidjson::Value& node)
 	bool ret = true;
 	
 	//Create context
-	context = SDL_GL_CreateContext(App->window->window);
-	if(context == NULL)
-	{
-		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
-		ret = false;
-	}
-
-	GLenum err = glewInit();
-	if (err != GLEW_OK)
-	{
-		LOG("Glew library not initialized properly %s\n", glewGetErrorString(err));
-		ret = false;
-	}
+	
 	
 	if(ret == true)
 	{

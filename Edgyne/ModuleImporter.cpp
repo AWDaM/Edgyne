@@ -205,6 +205,12 @@ void ModuleImporter::CopyDataFromFile(std::string& path, ResourceMesh* _mesh)
 			//_mesh->SetBoundingVolume();
 			fclose(file);
 
+			//glGenVertexArrays(1, &_mesh->VAO);
+			//glGenBuffers(1, &_mesh->VBO);
+
+			//glBindVertexArray(_mesh->VAO);
+			//glBindBuffer(GL_ARRAY_BUFFER, _mesh->VBO);
+			//glBufferData
 
 			glGenBuffers(1, (GLuint*)&(_mesh->id_index));
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->id_index);

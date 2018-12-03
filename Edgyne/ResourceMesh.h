@@ -16,6 +16,7 @@ public:
 	uint* index = nullptr;
 
 	uint num_vertex = 0;
+	uint id_vertex = 0;
 	float* vertex = nullptr;
 
 	float* normals = nullptr;
@@ -26,6 +27,10 @@ public:
 	bool has_normals = false;
 	bool has_triangle_faces = true;
 	vec color;
+
+	uint VBO;
+	uint VAO;
+	uint IBO;
 
 	std::string material_name;
 };

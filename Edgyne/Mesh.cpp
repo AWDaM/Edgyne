@@ -2,11 +2,14 @@
 #include "Application.h"
 #include "ModuleImporter.h"
 #include "ModuleResourceManager.h"
+#include "ModuleShaders.h"
+#include "ModuleCamera3D.h"
 #include "Resource.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
 #include "Material.h"
 #include "Transform.h"
+#include "Camera.h"
 #include "GL/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -105,42 +108,117 @@ bool Mesh::ComponentUpdate()
 	return true;
 }
 
+//bool Mesh::ComponentDraw()
+//{
+//	ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(this->resource_mesh);
+//
+//	if (resource_mesh->has_triangle_faces && resource_mesh->id_index > 0)
+//	{
+//		glEnableClientState(GL_VERTEX_ARRAY);
+//		ResourceMaterial* material = nullptr;
+//		if (this->material)
+//		{
+//			material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->material->resource_uid);
+//			if (material)
+//			{
+//				if (material->id_texture)
+//				{
+//					glBindTexture(GL_TEXTURE_2D, material->id_texture);
+//				}
+//				//--------
+//				else
+//					glColor3f(resource_mesh->color.x, resource_mesh->color.y, resource_mesh->color.z);
+//			}
+//		}
+//			//---------
+//		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
+//		glVertexPointer(3, GL_FLOAT, 0, &resource_mesh->vertex[0]);
+//
+//		if (resource_mesh->has_texture_coordinates)
+//			glTexCoordPointer(2, GL_FLOAT, 0, &resource_mesh->texCoords[0]);
+//
+//		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//		//Draw The Mesh
+//		glDrawElements(GL_TRIANGLES, resource_mesh->num_index, GL_UNSIGNED_INT, NULL);
+//
+//		//Disable All The Data
+//		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//		if (this->material)
+//		{
+//			if (material)
+//			{
+//				if (material->id_texture)
+//				{
+//					glBindTexture(GL_TEXTURE_2D, 0);
+//				}
+//
+//				else
+//					glColor3f(1, 1, 1);
+//			}
+//		}
+//		glDisableClientState(GL_VERTEX_ARRAY);
+//		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//
+//	}
+//	return true;
+//}
+
 bool Mesh::ComponentDraw()
 {
 	ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(this->resource_mesh);
 
 	if (resource_mesh->has_triangle_faces && resource_mesh->id_index > 0)
 	{
-		glEnableClientState(GL_VERTEX_ARRAY);
-		ResourceMaterial* material = nullptr;
-		if (this->material)
-		{
-			material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->material->resource_uid);
-			if (material)
-			{
-				if (material->id_texture)
-				{
-					glBindTexture(GL_TEXTURE_2D, material->id_texture);
-				}
-				//--------
-				else
-					glColor3f(resource_mesh->color.x, resource_mesh->color.y, resource_mesh->color.z);
-			}
-		}
-			//---------
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->id_index);
-		glVertexPointer(3, GL_FLOAT, 0, &resource_mesh->vertex[0]);
+		//glEnableClientState(GL_VERTEX_ARRAY);
+		glUseProgram(App->shaders->default_shader_program);
 
-		if (resource_mesh->has_texture_coordinates)
-			glTexCoordPointer(2, GL_FLOAT, 0, &resource_mesh->texCoords[0]);
+		GLint model_loc = glGetUniformLocation(App->shaders->default_shader_program, "model_matrix");
+		glUniformMatrix4fv(model_loc, 1, GL_FALSE, *(game_object->global_transform_matrix.Transposed()).v);
+		GLint proj_loc = glGetUniformLocation(App->shaders->default_shader_program, "projection");
+		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, App->camera->editor_camera->GetProjectionMatrix());
+		GLint view_loc = glGetUniformLocation(App->shaders->default_shader_program, "view");
+		glUniformMatrix4fv(view_loc, 1, GL_FALSE, App->camera->editor_camera->GetViewMatrix());
 
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		//Draw The Mesh
+
+
+
+	/*	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(1);
+
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(2);*/
+
+		//ResourceMaterial* material = nullptr;
+		//if (this->material)
+		//{
+		//	material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->material->resource_uid);
+		//	if (material)
+		//	{
+		//		if (material->id_texture)
+		//		{
+		//			glBindTexture(GL_TEXTURE_2D, material->id_texture);
+		//		}
+		//		//--------
+		//		else
+		//			glColor3f(resource_mesh->color.x, resource_mesh->color.y, resource_mesh->color.z);
+		//	}
+		//}
+		//---------
+
+		//glVertexPointer(3, GL_FLOAT, 0, &resource_mesh->vertex[0]);
+
+		//if (resource_mesh->has_texture_coordinates)
+		//	glTexCoordPointer(2, GL_FLOAT, 0, &resource_mesh->texCoords[0]);
+
+		//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		////Draw The Mesh
+		glBindVertexArray(resource_mesh->VAO);
 		glDrawElements(GL_TRIANGLES, resource_mesh->num_index, GL_UNSIGNED_INT, NULL);
 
 		//Disable All The Data
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		if (this->material)
+		glBindVertexArray(0);
+	/*	if (this->material)
 		{
 			if (material)
 			{
@@ -152,9 +230,9 @@ bool Mesh::ComponentDraw()
 				else
 					glColor3f(1, 1, 1);
 			}
-		}
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		}*/
+		//glDisableClientState(GL_VERTEX_ARRAY);
+		//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	}
 	return true;

@@ -235,6 +235,10 @@ void ModuleLoader::LoadVerices(ResourceMesh* new_mesh, aiMesh* currentMesh)
 	new_mesh->vertex = new float[new_mesh->num_vertex * 3];
 	memcpy(new_mesh->vertex, currentMesh->mVertices, sizeof(float) * new_mesh->num_vertex * 3);
 
+	glGenBuffers(1, (GLuint*)&(new_mesh->id_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, new_mesh->id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * new_mesh->num_vertex*3, &new_mesh->vertex[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	LOG("New mesh with %d vertices", new_mesh->num_vertex);
 }
 
