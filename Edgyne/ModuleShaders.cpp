@@ -37,7 +37,7 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 	}
 	//------------------------------------------------------------------
 
-	/*vertex_shader = "#version 330 core\n"
+	vertex_shader = "#version 330 core\n"
 		"layout(location = 0) in vec3 position;\n"
 		"layout(location = 1) in vec3 color;\n"
 		"layout(location = 2) in vec2 texCoord;\n"
@@ -51,33 +51,33 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		"	gl_Position = projection * view * model_matrix * vec4(position, 1.0f);\n"
 		"	ourColor = color;\n"
 		"	TexCoord = texCoord;\n"
-		"}\n";*/
-		vertex_shader = "#version 330 core\n"
-		"layout(location = 0) in vec3 position;\n"
-		"uniform mat4 model_matrix;\n"
-		"uniform mat4 view;\n"
-		"uniform mat4 projection;\n"
+		"}\n";
+		//vertex_shader = "#version 330 core\n"
+		//"layout(location = 0) in vec3 position;\n"
+		//"uniform mat4 model_matrix;\n"
+		//"uniform mat4 view;\n"
+		//"uniform mat4 projection;\n"
+		//"void main()\n"
+		//"{\n"
+		//"	gl_Position = projection * view * model_matrix * vec4(position, 1.0f);\n"
+		//"}\n";
+
+	pixel_shader = "#version 330 core\n"
+		"in vec3 ourColor;\n"
+		"in vec2 TexCoord;\n"
+		"out vec4 color;\n"
+		"uniform sampler2D ourTexture;\n"
 		"void main()\n"
 		"{\n"
-		"	gl_Position = projection * view * model_matrix * vec4(position, 1.0f);\n"
+		"	color = vec4(1.0f,ourColor);\n"
 		"}\n";
 
 	//pixel_shader = "#version 330 core\n"
-	//	"in vec3 ourColor;\n"
-	//	"in vec2 TexCoord;\n"
-	//	"out vec4 color;\n"
-	//	"uniform sampler2D ourTexture;\n"
+	//	"out vec4 FragColor;\n"
 	//	"void main()\n"
 	//	"{\n"
-	//	"	color = texture(ourTexture, TexCoord);\n"
-	//	"}\n";
-
-	pixel_shader = "#version 330 core\n"
-		"out vec4 FragColor;\n"
-		"void main()\n"
-		"{\n"
-		"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-		"}\n\0";
+	//	"   FragColor = vec4(1.0f, 0.7f, 0.7f, 1.0f);\n"
+	//	"}\n\0";
 
 	default_vertex_shader = CompileShader(vertex_shader, true);
 	default_pixel_shader = CompileShader(pixel_shader, false);
@@ -110,6 +110,8 @@ uint ModuleShaders::CompileShader(char * shader, bool is_vertex_shader)
 		glGetShaderInfoLog(shader_index, 512, NULL, infoLog);
 		LOG("Shader compilation error: %s", infoLog);
 	}
+	else
+		LOG("Shader compilation success");
 	//glDeleteShader(shader_index);
 	return shader_index;
 }
@@ -131,6 +133,8 @@ uint ModuleShaders::CreateShaderProgram(std::vector<uint> shaders)
 		glGetProgramInfoLog(ret, 512, NULL, infoLog);
 		LOG("Shader link error: %s", infoLog);
 	}
+	else
+		LOG("Shader link success");
 
 	return ret;
 }

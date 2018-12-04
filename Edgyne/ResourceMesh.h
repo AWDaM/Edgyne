@@ -1,5 +1,22 @@
 #pragma once
 #include "Resource.h"
+#include "MathGeoLib/MathGeoLib.h"
+
+class Vertex
+{
+public:
+	Vertex()
+	{}
+	void Assign(vec position, float2 tex_coords, float3 color) 
+	{
+		this->position = position;
+		this->tex_coords = tex_coords;
+		this->color = color;
+	}
+	vec position = { 0,0,0 };
+	float2 tex_coords = { 0,0 };
+	float3 color = { 0,0,0 };
+};
 class ResourceMesh :
 	public Resource
 {
@@ -18,6 +35,10 @@ public:
 	uint num_vertex = 0;
 	uint id_vertex = 0;
 	float* vertex = nullptr;
+
+	uint true_vertex_index = 0;
+	Vertex* true_vertex = nullptr;
+	
 
 	float* normals = nullptr;
 

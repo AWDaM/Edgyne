@@ -213,11 +213,12 @@ bool Mesh::ComponentDraw()
 		//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		////Draw The Mesh
 		glBindVertexArray(resource_mesh->VAO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->IBO);
 		glDrawElements(GL_TRIANGLES, resource_mesh->num_index, GL_UNSIGNED_INT, NULL);
-
 		//Disable All The Data
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
+		glUseProgram(0);
 	/*	if (this->material)
 		{
 			if (material)
