@@ -39,15 +39,14 @@ void ResourceMesh::LoadResource(std::string& path)
 	int counter = 0;
 	int tex_counter = 0;
 	true_vertex = new Vertex[num_vertex];
-	color = { 1.0f,0.5f,0.5f };
+	float4 _color = { 1.0f,0.5f,0.5f, 1.0f };
 	for (int i = 0; i < num_vertex * 3; i += 3)
 	{
-		//LOG("%i",counter);
-		true_vertex[counter].Assign({ vertex[i],vertex[i + 1],vertex[i + 2] }, { texCoords[tex_counter],texCoords[tex_counter + 1] }, color);
+		true_vertex[counter].Assign({ vertex[i],vertex[i + 1],vertex[i + 2] }, _color, { texCoords[tex_counter],texCoords[tex_counter + 1] });
 		counter++;
 		tex_counter += 2;
 	}
-
+	glBindTexture(GL_TEXTURE_2D, id_texture);
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &IBO);
@@ -55,21 +54,22 @@ void ResourceMesh::LoadResource(std::string& path)
 	glBindVertexArray(VAO);
 	LOG("%i", sizeof(true_vertex));
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, (sizeof(Vertex::position) + sizeof(Vertex::tex_coords) +sizeof(Vertex::color))*num_vertex, &true_vertex[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, (sizeof(Vertex::position) + sizeof(Vertex::tex_coords) + sizeof(Vertex::color))*num_vertex, &true_vertex[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) *num_index, &index[0], GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9*sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float),(GLvoid*)(3*sizeof(float)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9*sizeof(float),(GLvoid*)(3*sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (GLvoid*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9*sizeof(float), (GLvoid*)(7*sizeof(float)));
 	glEnableVertexAttribArray(2);
 	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 

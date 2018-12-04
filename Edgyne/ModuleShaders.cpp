@@ -39,9 +39,9 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 
 	vertex_shader = "#version 330 core\n"
 		"layout(location = 0) in vec3 position;\n"
-		"layout(location = 1) in vec3 color;\n"
+		"layout(location = 1) in vec4 color;\n"
 		"layout(location = 2) in vec2 texCoord;\n"
-		"out vec3 ourColor;\n"
+		"out vec4 ourColor;\n"
 		"out vec2 TexCoord;\n"
 		"uniform mat4 model_matrix;\n"
 		"uniform mat4 view;\n"
@@ -63,7 +63,7 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		//"}\n";
 
 	pixel_shader = "#version 330 core\n"
-		"in vec3 ourColor;\n"
+		"in vec4 ourColor;\n"
 		"in vec2 TexCoord;\n"
 		"out vec4 color;\n"
 		"uniform sampler2D ourTexture;\n"

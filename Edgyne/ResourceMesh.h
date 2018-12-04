@@ -7,15 +7,15 @@ class Vertex
 public:
 	Vertex()
 	{}
-	void Assign(vec position, float2 tex_coords, float3 color) 
+	void Assign(vec position, float4 color, float2 tex_coords)
 	{
 		this->position = position;
-		this->tex_coords = tex_coords;
 		this->color = color;
+		this->tex_coords = tex_coords;
 	}
 	vec position = { 0,0,0 };
+	float4 color = { 0,0,0,0 };
 	float2 tex_coords = { 0,0 };
-	float3 color = { 0,0,0 };
 };
 class ResourceMesh :
 	public Resource
