@@ -69,7 +69,7 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		"uniform sampler2D ourTexture;\n"
 		"void main()\n"
 		"{\n"
-		"	color = vec4(1.0f,ourColor);\n"
+		"	color = texture(ourTexture, TexCoord);\n"
 		"}\n";
 
 	//pixel_shader = "#version 330 core\n"
