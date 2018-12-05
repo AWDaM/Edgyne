@@ -212,6 +212,17 @@ bool Mesh::ComponentDraw()
 
 		//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		////Draw The Mesh
+		ResourceMaterial* res_material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->material->resource_uid);
+		if (res_material)
+		{
+			if (res_material->id_texture)
+			{
+				glBindTexture(GL_TEXTURE_2D, res_material->id_texture);
+			}
+			//--------
+			else
+				glColor3f(resource_mesh->color.x, resource_mesh->color.y, resource_mesh->color.z);
+		}
 		glBindVertexArray(resource_mesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->IBO);
 		glDrawElements(GL_TRIANGLES, resource_mesh->num_index, GL_UNSIGNED_INT, NULL);
@@ -219,6 +230,7 @@ bool Mesh::ComponentDraw()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
 		glUseProgram(0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	/*	if (this->material)
 		{
 			if (material)
