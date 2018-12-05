@@ -335,6 +335,7 @@ bool ModuleLoader::LoadTextures(ResourceMesh* new_mesh, ResourceMaterial* _mater
 
 void ModuleLoader::LoadNormals(ResourceMesh* new_mesh, aiMesh* currentMesh)
 {
+	new_mesh->has_normals = true;
 	new_mesh->normals = new float[new_mesh->num_vertex * 3];
 	memcpy(new_mesh->normals, currentMesh->mNormals, sizeof(float)*new_mesh->num_vertex * 3);
 	LOG("Normals loaded correctly");
