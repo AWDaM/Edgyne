@@ -61,6 +61,9 @@
     <Filter Include="Sources\Resources">
       <UniqueIdentifier>{405d9cc6-f05b-421c-a769-7376a6fe12c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\ImGuiTextEditor">
+      <UniqueIdentifier>{66aa9df0-fee5-478d-8876-0fbafcf4d1df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -403,6 +406,10 @@
       <Filter>Sources\Resources</Filter>
     </ClInclude>
     <ClInclude Include="ModuleShaders.h" />
+    <ClInclude Include="GUIShaderEditor.h" />
+    <ClInclude Include="ImGuiTextEditor\TextEditor.h">
+      <Filter>Sources\ImGuiTextEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -649,6 +656,10 @@
       <Filter>Sources\Resources</Filter>
     </ClCompile>
     <ClCompile Include="ModuleShaders.cpp" />
+    <ClCompile Include="GUIShaderEditor.cpp" />
+    <ClCompile Include="ImGuiTextEditor\TextEditor.cpp">
+      <Filter>Sources\ImGuiTextEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">

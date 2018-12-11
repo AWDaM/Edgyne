@@ -51,7 +51,7 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		"uniform mat4 projection;\n"
 		"void main()\n"
 		"{\n"
-		"	gl_Position = projection * view * model_matrix * vec4(position+(normal*0.1), 1.0f);\n"
+		"	gl_Position = projection * view * model_matrix * vec4(position, 1.0f);\n"
 		"	ourColor = color;\n"
 		"	TexCoord = texCoord;\n"
 		"	ret_normal = normal;\n"	
@@ -75,7 +75,8 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		"uniform sampler2D ourTexture;\n"
 		"void main()\n"
 		"{\n"
-		"	color = texture(ourTexture, TexCoord);\n"
+		"	texture_color = texture(ourTexture, TexCoord);\n"
+		" color = vec4(vec3((texture_color.r+texture_color.g+texture_color.b)/3.0),1.0);\n"
 		//"	color = vec4(ret_normal,1.0);\n"
 		"}\n";
 

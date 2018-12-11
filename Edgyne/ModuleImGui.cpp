@@ -14,6 +14,7 @@
 #include "GUIScene.h"
 #include "GUIHierarchy.h"
 #include "GUIAssets.h"
+#include "GUIShaderEditor.h"
 #include <stdio.h>
 
 
@@ -50,6 +51,7 @@ bool ModuleImGui::Init(rapidjson::Value& node)
 	GUIElement.push_back(scene = new GUIScene(true));
 	GUIElement.push_back(hierarchy = new GUIHierarchy(true));
 	GUIElement.push_back(assets = new GUIAssets(true));
+	GUIElement.push_back(shader_editor = new GUIShaderEditor(true));
 
 	App->canLog = true;
 
@@ -117,8 +119,8 @@ void ModuleImGui::Load(rapidjson::Document& doc)
 update_status ModuleImGui::PreUpdate(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
-
-
+	if (!EditorOff)
+	{
 		ImGui_ImplOpenGL2_NewFrame();
 		ImGui_ImplSDL2_NewFrame(App->window->window);
 		ImGui::NewFrame();
@@ -143,7 +145,7 @@ update_status ModuleImGui::PreUpdate(float dt)
 
 		ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);
-
+	}
 	return status;
 }
 
@@ -151,8 +153,8 @@ update_status ModuleImGui::Update(float dt)
 {
 	update_status status = UPDATE_CONTINUE;
 
-	if (App->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
-		ToggleEditor();
+	//if (App->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN))
+	//	ToggleEditor();
 
 	return status;
 }
@@ -180,11 +182,11 @@ void ModuleImGui::Draw()
 			}
 		}
 		ImGui::End();
-	}
+
 		ImGui::Render();
 
 		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-	
+	}
 }
 
 
