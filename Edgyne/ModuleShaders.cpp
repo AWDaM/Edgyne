@@ -87,59 +87,75 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 	//	"   FragColor = vec4(1.0f, 0.7f, 0.7f, 1.0f);\n"
 	//	"}\n\0";
 
-	default_vertex_shader = CompileShader(vertex_shader, true);
-	default_pixel_shader = CompileShader(pixel_shader, false);
+	CreateDefaultProgram();
+	return ret;
+}
+
+bool ModuleShaders::CreateDefaultProgram()
+{
+	uint tmp_vertex_index = 0;
+	uint tmp_fragment_index = 0;
+	uint tmp_program_index = 0;
+	if (CompileShader(vertex_shader, true, &tmp_vertex_index))
+		default_vertex_shader = tmp_vertex_index;
+	if (CompileShader(pixel_shader, false, &tmp_fragment_index))
+		default_pixel_shader = tmp_fragment_index;
+
 
 	std::vector<uint> shader_list;
 	shader_list.push_back(default_vertex_shader);
 	shader_list.push_back(default_pixel_shader);
 
-	default_shader_program = CreateShaderProgram(shader_list);
+	if (CreateShaderProgram(shader_list, &tmp_program_index))
+		default_shader_program = tmp_program_index;
 
-	return ret;
+	return true;
 }
 
-uint ModuleShaders::CompileShader(char * shader, bool is_vertex_shader)
+bool ModuleShaders::CompileShader(char * shader, bool is_vertex_shader, uint* shader_index)
 {
-	GLuint shader_index;
+	bool ret = true;
 	if (is_vertex_shader)
-		shader_index = glCreateShader(GL_VERTEX_SHADER);
+		*shader_index = glCreateShader(GL_VERTEX_SHADER);
 	else
-		shader_index = glCreateShader(GL_FRAGMENT_SHADER);
+		*shader_index = glCreateShader(GL_FRAGMENT_SHADER);
 
 
-	glShaderSource(shader_index, 1, &shader, NULL);
-	glCompileShader(shader_index);
+	glShaderSource(*shader_index, 1, &shader, NULL);
+	glCompileShader(*shader_index);
 	GLint success;
 	GLchar infoLog[512];
-	glGetShaderiv(shader_index, GL_COMPILE_STATUS, &success);
+	glGetShaderiv(*shader_index, GL_COMPILE_STATUS, &success);
 	if (success == 0)
 	{
-		glGetShaderInfoLog(shader_index, 512, NULL, infoLog);
+		glGetShaderInfoLog(*shader_index, 512, NULL, infoLog);
 		LOG("Shader compilation error: %s", infoLog);
+		ret = false;
 	}
 	else
 		LOG("Shader compilation success");
 	//glDeleteShader(shader_index);
-	return shader_index;
+	return ret;
 }
 
-uint ModuleShaders::CreateShaderProgram(std::vector<uint> shaders)
+bool ModuleShaders::CreateShaderProgram(std::vector<uint> shaders, uint* program_index)
 {
-	GLuint ret = 0;
-	ret = glCreateProgram();
+	bool ret = true;
+
+	*program_index = glCreateProgram();
 	for (std::vector<uint>::iterator item = shaders.begin(); item != shaders.end(); item++)
 	{
-		glAttachShader(ret, (*item));
+		glAttachShader(*program_index, (*item));
 	}
-	glLinkProgram(ret);
+	glLinkProgram(*program_index);
 	GLint success;
 	GLchar infoLog[512];
-	glGetProgramiv(ret, GL_LINK_STATUS, &success);
+	glGetProgramiv(*program_index, GL_LINK_STATUS, &success);
 	if (!success)
 	{
-		glGetProgramInfoLog(ret, 512, NULL, infoLog);
+		glGetProgramInfoLog(*program_index, 512, NULL, infoLog);
 		LOG("Shader link error: %s", infoLog);
+		ret = false;
 	}
 	else
 		LOG("Shader link success");

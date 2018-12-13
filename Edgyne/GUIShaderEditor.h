@@ -11,10 +11,11 @@ public:
 	GUIShaderEditor(bool active);
 	~GUIShaderEditor();
 
+	void SetShaderToEdit(bool fragment);
 	void Draw();
 public:
 	TextEditor* text_editor;
-
+	bool editing_fragment = true;
 };
 
 #endif

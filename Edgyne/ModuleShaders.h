@@ -12,8 +12,9 @@ public:
 
 	bool Init(rapidjson::Value& node);
 
-	uint CompileShader(char* shader, bool is_vertex_shader);
-	uint CreateShaderProgram(std::vector<uint> shaders);
+	bool CreateDefaultProgram();
+	bool CompileShader(char* shader, bool is_vertex_shader, uint* shader_index);
+	bool CreateShaderProgram(std::vector<uint> shaders, uint* program_index);
 
 public:
 	char* vertex_shader;

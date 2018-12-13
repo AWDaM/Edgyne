@@ -1,4 +1,6 @@
 #include "GUIShaderEditor.h"
+#include "Application.h"
+#include "ModuleShaders.h"
 #include "ImGuiTextEditor/TextEditor.h"
 
 
@@ -15,6 +17,20 @@ GUIShaderEditor::~GUIShaderEditor()
 {
 }
 
+void GUIShaderEditor::SetShaderToEdit(bool fragment)
+{
+	if (fragment)
+	{
+		text_editor->SetText(App->shaders->vertex_shader);
+		editing_fragment = true;
+	}
+	else
+	{
+		text_editor->SetText(App->shaders->pixel_shader);
+		editing_fragment = false;
+	}
+}
+
 void GUIShaderEditor::Draw()
 {
 	auto cpos = text_editor->GetCursorPosition();
@@ -24,10 +40,23 @@ void GUIShaderEditor::Draw()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Save"))
+			if (ImGui::MenuItem("Compile"))
 			{
-				auto textToSave = text_editor->GetText();
-				/// save text....
+				if (editing_fragment)
+				{					 
+					strcpy(App->shaders->vertex_shader, text_editor->GetText().c_str());
+				}
+				else
+					strcpy(App->shaders->pixel_shader, text_editor->GetText().c_str());
+				App->shaders->CreateDefaultProgram();
+			}
+			if (ImGui::MenuItem("Fragment"))
+			{
+				SetShaderToEdit(true);
+			}
+			if (ImGui::MenuItem("Pixel"))
+			{
+				SetShaderToEdit(false);
 			}
 			if (ImGui::MenuItem("Quit", "Alt-F4"))
 			{ }
