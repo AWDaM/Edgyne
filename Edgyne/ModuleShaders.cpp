@@ -71,7 +71,7 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		"in vec2 TexCoord;\n"
 		"out vec4 color;\n"
 		"out vec4 texture_color;\n"
-		"in vec3 ret_normal\n;"
+		"in vec3 ret_normal;\n"
 		"uniform sampler2D ourTexture;\n"
 		"void main()\n"
 		"{\n"

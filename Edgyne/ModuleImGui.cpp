@@ -81,7 +81,7 @@ bool ModuleImGui::CleanUp()
 	scene					= nullptr;
 	hierarchy				= nullptr;
 	assets					= nullptr;
-
+	shader_editor			= nullptr;
 	return true;
 }
 

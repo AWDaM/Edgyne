@@ -43,11 +43,21 @@ void GUIShaderEditor::Draw()
 			if (ImGui::MenuItem("Compile"))
 			{
 				if (editing_fragment)
-				{					 
-					strcpy(App->shaders->vertex_shader, text_editor->GetText().c_str());
+				{		
+					std::string tmp = text_editor->GetText();
+					App->shaders->vertex_shader = new char[tmp.length()];
+					memcpy(App->shaders->vertex_shader, tmp.c_str(), tmp.length());
+					strcat(App->shaders->vertex_shader, "\0");
+
 				}
 				else
-					strcpy(App->shaders->pixel_shader, text_editor->GetText().c_str());
+				{
+					std::string tmp = text_editor->GetText();
+					App->shaders->pixel_shader = new char[tmp.length()];
+					memcpy(App->shaders->pixel_shader, tmp.c_str(), tmp.length());
+					strcat(App->shaders->pixel_shader, "\0");
+
+				}
 				App->shaders->CreateDefaultProgram();
 			}
 			if (ImGui::MenuItem("Fragment"))

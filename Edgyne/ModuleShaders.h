@@ -18,7 +18,7 @@ public:
 
 public:
 	char* vertex_shader;
-	char*pixel_shader;
+	char* pixel_shader;
 	uint default_vertex_shader = 0;
 	uint default_pixel_shader = 0;
 	uint default_shader_program = 0;
