@@ -46,16 +46,16 @@ void GUIShaderEditor::Draw()
 				{		
 					std::string tmp = text_editor->GetText();
 					App->shaders->vertex_shader = new char[tmp.length()];
-					memcpy(App->shaders->vertex_shader, tmp.c_str(), tmp.length());
-					strcat(App->shaders->vertex_shader, "\0");
+					strcpy(App->shaders->vertex_shader, tmp.c_str());
+					//strcat(App->shaders->vertex_shader, "\0");
 
 				}
 				else
 				{
 					std::string tmp = text_editor->GetText();
 					App->shaders->pixel_shader = new char[tmp.length()];
-					memcpy(App->shaders->pixel_shader, tmp.c_str(), tmp.length());
-					strcat(App->shaders->pixel_shader, "\0");
+					strcpy(App->shaders->pixel_shader, tmp.c_str());
+					//strcat(App->shaders->pixel_shader, "\0");
 
 				}
 				App->shaders->CreateDefaultProgram();
