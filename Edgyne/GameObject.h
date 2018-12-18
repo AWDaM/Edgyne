@@ -3,10 +3,8 @@
 
 #include "Globals.h"
 
-#include "rapidjson/document.h"// rapidjson's DOM-style API
-#include "rapidjson/prettywriter.h" // for stringify JSON
-#include "rapidjson/filewritestream.h"
-#include "rapidjson\allocators.h"
+#include "JSONManager.h"
+
 #include "MathGeoLib/MathGeoLib.h"
 
 #include <vector>

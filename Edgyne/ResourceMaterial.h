@@ -8,8 +8,7 @@ class ResourceMaterial :
 	public Resource
 {
 public:
-	ResourceMaterial(std::string& file);
-	ResourceMaterial();
+	ResourceMaterial(uint UID, std::string& file);
 	~ResourceMaterial();
 
 	void ResourceMaterial::LoadMaterial(std::string& file);

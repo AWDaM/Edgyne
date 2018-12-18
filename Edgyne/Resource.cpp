@@ -1,9 +1,9 @@
 #include "Resource.h"
 
-Resource::Resource(ResourceType type) : type(type)
+Resource::Resource(uint UID, ResourceType type) : uid(UID), type(type)
 {}
 
-Resource::Resource(ResourceType type, const std::string & file) : type(type),file(file)
+Resource::Resource(uint UID, ResourceType type, const std::string & file) : uid(UID), type(type),file(file)
 {
 }
 

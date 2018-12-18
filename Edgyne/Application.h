@@ -11,9 +11,7 @@
 #include "ImGui/imgui_impl_sdl.h"
 #include "ImGui/imgui_impl_opengl2.h"
 #include "MathGeoLib\MathGeoLib.h"
-#include "rapidjson/rapidjson.h"
-#include "rapidjson/prettywriter.h"
-#include "rapidjson/filewritestream.h"
+
 #include "pcg_variants.h"
 #include <list>
 #include <vector>
@@ -33,6 +31,8 @@ class ModuleTimeManager;
 class ModuleResourceManager;
 class ModuleShaders;
 
+class JSONManager;
+
 enum GameState
 {
 	NO_STATE,
@@ -45,18 +45,21 @@ enum GameState
 class Application
 {
 public:
-	ModuleWindow * window;
-	ModuleInput* input;
-	ModuleRenderer3D* renderer3D;
-	ModuleCamera3D* camera;
-	ModuleImGui* imGui;
-	ModuleLevel* level;
-	ModuleDebug* debug;
-	ModuleLoader* loader;
-	ModuleImporter* importer;
-	ModuleTimeManager* time_manager;
-	ModuleResourceManager* resource_manager;
-	ModuleShaders* shaders;
+	ModuleWindow * window = nullptr;
+	ModuleInput* input = nullptr;
+	ModuleRenderer3D* renderer3D = nullptr;
+	ModuleCamera3D* camera = nullptr;
+	ModuleImGui* imGui = nullptr;
+	ModuleLevel* level = nullptr;
+	ModuleDebug* debug = nullptr;
+	ModuleLoader* loader = nullptr;
+	ModuleImporter* importer = nullptr;
+	ModuleTimeManager* time_manager = nullptr;
+	ModuleResourceManager* resource_manager = nullptr;
+	ModuleShaders* shaders = nullptr;
+
+	JSONManager* JSON_manager = nullptr;
+
 
 	std::list<Module*> list_modules;
 

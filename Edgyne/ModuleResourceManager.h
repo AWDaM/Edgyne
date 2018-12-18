@@ -19,13 +19,20 @@ public:
 	ModuleResourceManager(Application* app, bool start_enabled = true);
 	~ModuleResourceManager();
 	
-	Resource* GetResourceFromUID(const std::string & name);
+	uint ImportFile(const char* file, Resource::ResourceType type);
+	JSON_File* getMeta(const char* path) const;
+	JSON_File* createMeta(const char* path, Resource::ResourceType type) const;
+	int getMetaLastChange(const char* path) const;
+
+	bool wasFileChanged(const char* file) const;
+
+	Resource* GetResourceFromUID(uint& UID);
 
 	Resource* CreateResource(Resource::ResourceType type);
 
 	Resource* CreateNewResource(Resource::ResourceType type, std::string& file);
 
-	std::map<std::string, Resource*> resources;
+	std::map<uint, Resource*> resources;
 };
 
 #endif

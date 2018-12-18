@@ -405,10 +405,17 @@
     <ClInclude Include="ResourceMesh.h">
       <Filter>Sources\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleShaders.h" />
-    <ClInclude Include="GUIShaderEditor.h" />
     <ClInclude Include="ImGuiTextEditor\TextEditor.h">
       <Filter>Sources\ImGuiTextEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIShaderEditor.h">
+      <Filter>Sources\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleShaders.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONManager.h">
+      <Filter>Sources\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -655,10 +662,17 @@
     <ClCompile Include="ResourceMesh.cpp">
       <Filter>Sources\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleShaders.cpp" />
-    <ClCompile Include="GUIShaderEditor.cpp" />
     <ClCompile Include="ImGuiTextEditor\TextEditor.cpp">
       <Filter>Sources\ImGuiTextEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="GUIShaderEditor.cpp">
+      <Filter>Sources\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleShaders.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONManager.cpp">
+      <Filter>Sources\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
