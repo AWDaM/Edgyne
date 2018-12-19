@@ -101,7 +101,6 @@ bool ModuleShaders::CreateDefaultProgram()
 	if (CompileShader(pixel_shader, false, &tmp_fragment_index))
 		default_pixel_shader = tmp_fragment_index;
 
-
 	std::vector<uint> shader_list;
 	shader_list.push_back(default_vertex_shader);
 	shader_list.push_back(default_pixel_shader);
@@ -138,7 +137,7 @@ bool ModuleShaders::CompileShader(char * shader, bool is_vertex_shader, uint* sh
 	return ret;
 }
 
-bool ModuleShaders::CreateShaderProgram(std::vector<uint> shaders, uint* program_index)
+bool ModuleShaders::CreateShaderProgram(std::vector<uint>& shaders, uint* program_index)
 {
 	bool ret = true;
 

@@ -14,7 +14,7 @@ public:
 
 	bool CreateDefaultProgram();
 	bool CompileShader(char* shader, bool is_vertex_shader, uint* shader_index);
-	bool CreateShaderProgram(std::vector<uint> shaders, uint* program_index);
+	bool CreateShaderProgram(std::vector<uint>& shaders, uint* program_index);
 
 public:
 	char* vertex_shader;
