@@ -41,9 +41,9 @@ void Material::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 {
 	UID = comp->value["UID"].GetUint();
 	resource_uid = comp->value["Resource UID"].GetString();
-	if (!App->resource_manager->GetResourceFromUID(resource_uid))
+	if (!App->resource_manager->GetResourceFromUID(UID))
 	{
-		App->resource_manager->CreateNewResource(Resource::ResourceType::RES_MATERIAL, resource_uid);
+		App->resource_manager->CreateNewResource(UID, Resource::ResourceType::RES_MATERIAL, resource_uid);
 	}
 }
 
@@ -52,7 +52,7 @@ void Material::LoadAsMeshComponent(rapidjson::Value::ConstMemberIterator comp)
 {
 	UID = comp->value["Material"]["UID"].GetUint();
 	resource_uid = comp->value["Material"]["Resource UID"].GetString();
-	if (!App->resource_manager->GetResourceFromUID(resource_uid))
+	if (!App->resource_manager->GetResourceFromUID(UID))
 	{
 		App->resource_manager->CreateNewResource(Resource::ResourceType::RES_MATERIAL, resource_uid);
 	}

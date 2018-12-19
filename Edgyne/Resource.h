@@ -24,7 +24,7 @@ public:
 
 
 	Resource(ResourceType type);
-	Resource(ResourceType type, const std::string& file);
+	Resource(uint& uid, ResourceType type, const std::string& file);
 	virtual ~Resource();
 
 	bool LoadResource();
@@ -32,8 +32,8 @@ public:
 	virtual bool LoadResourceToMemory();
 
 public:
-	std::string file;
-
+	std::string file = "";
+	uint uid = 0;
 	ResourceType type = UNKNOWN;
 	uint amount_loaded = 0;
 };

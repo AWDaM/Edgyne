@@ -20,7 +20,6 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-
 #include <experimental/filesystem>
 
 #include "DevIL\include\il.h"
@@ -87,8 +86,9 @@ bool ModuleLoader::CleanUp()
 	return true;
 }
 
-bool ModuleLoader::Import(std::string & file)
+bool ModuleLoader::Import(const std::string & _file)
 {
+	std::string file = _file;
 	const aiScene* scene = aiImportFile(file.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	
 	if (scene != nullptr && scene->HasMeshes())
@@ -181,10 +181,30 @@ void ModuleLoader::ReceivedFile(const char * path)
 {
 	std::string _path = path;
 	std::string path_string = path;
-	path_string.erase(0,path_string.find_last_of(".")+1);
+	path_string.erase(0, path_string.find_last_of(".") + 1);
+
+	FILE* file = fopen(path, "rb");
+	std::string assetFile = path;
+	assetFile.erase(0, assetFile.find_last_of("\\") + 1);
+	std::string fullAssetFile = "Assets\\";
+	fullAssetFile.append(assetFile);
+	char* buffer = nullptr;
+	int size = 0;
+	if (file != NULL)
+	{
+		fseek(file, 0, SEEK_END);
+		size = ftell(file);
+		rewind(file);
+		buffer = new char[size];
+		fread(buffer, sizeof(char), size, file);
+		fclose(file);
+		file = fopen(fullAssetFile.c_str(), "wb");
+		fwrite(buffer, sizeof(char), size, file);
+	}
+
 	if (MODEL(path_string))
 	{
-		Import(_path);
+		Import(assetFile.c_str());
 	}
 	else if (IMAGE(path_string))
 	{
@@ -414,16 +434,15 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 		
 		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
 		Mesh* component_mesh = (Mesh*)game_object->AddComponent(ComponentType::MESH);
-		std::string str = game_object->name;
-		str.append(App->importer->meshExtension);
-		ResourceMesh* mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(str);
+		uint uid = game_object->UID;
+		ResourceMesh* mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(uid);
 	
 
 		if (!mesh)
 		{
 			mesh = (ResourceMesh*)App->resource_manager->CreateResource(Resource::ResourceType::RESOURCE_MESH);
 
-			mesh->file = str;
+			//mesh->file = str;
 			component_mesh->resource_mesh = mesh->file;
 
 			aiMaterial* material = scene->mMaterials[currentMesh->mMaterialIndex];
@@ -445,7 +464,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 			LOG("Loading Vertices from the %i mesh", i + 1);
 			LoadVerices(mesh, currentMesh);
 
-			ResourceMaterial* resource_material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(currMaterialPath);
+			ResourceMaterial* resource_material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(0);
 			if (!resource_material)
 			{
 	

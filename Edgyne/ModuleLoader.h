@@ -30,7 +30,7 @@ public:
 	void Save(rapidjson::Document & doc, rapidjson::FileWriteStream& os);
 	void Load(rapidjson::Document& doc);
 
-	bool Import(std::string& file);
+	bool Import(const std::string& file);
 
 	void RecursiveGenerateListFromTree(std::list<GameObject*>& buffer, GameObject* root_game_object);
 	void LoadTextureFromLibrary(const char* path, ResourceMaterial* material);
