@@ -3,7 +3,7 @@
 #include "ModuleLoader.h"
 
 
-ResourceMaterial::ResourceMaterial(uint UID, ResourceType type) : Resource(UID, type)
+ResourceMaterial::ResourceMaterial(uint UID, std::string& file) : Resource(UID, ResourceType::RES_MATERIAL,file)
 {
 	LoadMaterial(file);
 }

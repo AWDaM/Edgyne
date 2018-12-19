@@ -24,30 +24,18 @@ public:
 
 
 	Resource(uint UID, ResourceType type);
+	Resource(uint UID, ResourceType type, const std::string& file);
+	virtual ~Resource();
 
-	ResourceType GetType()const;
-	uint GetUID()const;
-	const char* GetName() const;
-	const char* GetFile()const;
-	const char* GetExportedFile()const;
-	bool IsLoaded()const;
-	//You should call this function
-	bool LoadtoMemory();
-	//You should call this function
-	bool UnloadMemory();
-	uint GetTimesLoaded() const;
+	bool LoadResource();
 
-	virtual bool LoadInMemory() { return false; }
-	virtual bool UnloadFromMemory() { return false; }
+	virtual bool LoadResourceToMemory();
 
 public:
-	std::string name = "";
-	uint UID = 0;
-	uint loaded = 0;
-	std::string file = "";
-	std::string exported_file = "";
+	std::string file;
+	uint uid = 0;
 	ResourceType type = UNKNOWN;
-
+	uint amount_loaded = 0;
 };
 
 #endif // !__RESOURCE_H__
