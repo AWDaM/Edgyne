@@ -129,7 +129,7 @@ void GUIInspector::AddMesh()
 			if (ImGui::Button(fileName.c_str()))
 			{
 				Mesh* mesh = (Mesh*)App->level->selected_game_object->AddComponent(MESH);
-				ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(fileName);
+				ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID();
 				if (!resource_mesh)
 				{
 					resource_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(Resource::RESOURCE_MESH, fileName);

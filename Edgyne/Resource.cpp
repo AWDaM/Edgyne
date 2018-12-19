@@ -1,31 +1,71 @@
 #include "Resource.h"
 
-Resource::Resource(uint UID, ResourceType type) : uid(UID), type(type)
+Resource::Resource(uint UID, ResourceType type) : UID(UID), type(type)
 {}
-
-Resource::Resource(uint UID, ResourceType type, const std::string & file) : uid(UID), type(type),file(file)
-{
-}
 
 Resource::~Resource()
 {
 }
 
-bool Resource::LoadResource()
+Resource::ResourceType Resource::GetType() const
 {
-	bool ret = true;
-	if (amount_loaded == 0)
+	return type;
+}
+
+uint Resource::GetUID() const
+{
+	return UID;
+}
+
+const char * Resource::GetName() const
+{
+	return name.c_str();
+}
+
+const char * Resource::GetFile() const
+{
+	return file.c_str();
+}
+
+const char * Resource::GetExportedFile() const
+{
+	return exported_file.c_str();
+}
+
+bool Resource::IsLoaded() const
+{
+	return (loaded > 0);
+}
+
+bool Resource::LoadtoMemory()
+{
+	bool ret = false;
+
+	if (loaded == 0)
 	{
-		ret = LoadResourceToMemory();
-		amount_loaded++;
+		LOG("Resource loaded");
+		ret = LoadInMemory();
 	}
-	else
-		amount_loaded++;
+
+	loaded++;
 
 	return ret;
 }
 
-bool Resource::LoadResourceToMemory()
+bool Resource::UnloadMemory()
 {
-	return true;
+	if (loaded > 0)
+		loaded--;
+	if (loaded == 0)
+	{
+		LOG("Resource Unloaded");
+		UnloadFromMemory();
+	}
+
+	return false;
+}
+
+uint Resource::GetTimesLoaded() const
+{
+	return loaded;
 }
