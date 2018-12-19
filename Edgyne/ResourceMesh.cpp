@@ -11,9 +11,14 @@
 #include <stddef.h> 
 
 
-ResourceMesh::ResourceMesh(uint UID, std::string& file) : Resource(UID, ResourceType::RESOURCE_MESH,file)
+ResourceMesh::ResourceMesh(std::string& file) : Resource(ResourceType::RESOURCE_MESH,file)
 {
 	LoadResource(file);
+}
+
+ResourceMesh::ResourceMesh() : Resource(ResourceType::RESOURCE_MESH)
+{
+
 }
 
 

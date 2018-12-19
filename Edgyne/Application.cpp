@@ -16,14 +16,11 @@
 
 #include <time.h>
 
-#include "JSONManager.h"
-
+#include "rapidjson/filereadstream.h"
 
 Application::Application() 
 {
 	PERF_START(ptimer);
-	JSON_manager = new JSONManager();
-
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	renderer3D = new ModuleRenderer3D(this);

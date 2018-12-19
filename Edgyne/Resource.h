@@ -23,8 +23,8 @@ public:
 	};
 
 
-	Resource(uint UID, ResourceType type);
-	Resource(uint UID, ResourceType type, const std::string& file);
+	Resource(ResourceType type);
+	Resource(ResourceType type, const std::string& file);
 	virtual ~Resource();
 
 	bool LoadResource();
@@ -33,7 +33,7 @@ public:
 
 public:
 	std::string file;
-	uint uid = 0;
+
 	ResourceType type = UNKNOWN;
 	uint amount_loaded = 0;
 };
