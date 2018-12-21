@@ -3,7 +3,7 @@
 Resource::Resource(ResourceType type) : type(type)
 {}
 
-Resource::Resource(uint& uid, ResourceType type, const std::string & file) : uid(uid),type(type),file(file)
+Resource::Resource(ResourceType type, const std::string & file) : type(type),file(file)
 {
 }
 

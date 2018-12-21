@@ -19,13 +19,13 @@ public:
 	ModuleResourceManager(Application* app, bool start_enabled = true);
 	~ModuleResourceManager();
 	
-	Resource* GetResourceFromUID(const uint& uid);
+	Resource* GetResourceFromUID(const std::string & name);
 
 	Resource* CreateResource(Resource::ResourceType type);
 
-	Resource* CreateNewResource(uint& uid, Resource::ResourceType type, std::string& file);
+	Resource* CreateNewResource(Resource::ResourceType type, std::string& file);
 
-	std::map<uint, Resource*> resources;
+	std::map<std::string, Resource*> resources;
 };
 
 #endif

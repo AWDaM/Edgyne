@@ -21,7 +21,7 @@ class ResourceMesh :
 	public Resource
 {
 public:
-	ResourceMesh(uint& uid, std::string& file);
+	ResourceMesh(std::string& file);
 	ResourceMesh();
 	~ResourceMesh();
 

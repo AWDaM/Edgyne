@@ -11,7 +11,7 @@
 #include <stddef.h> 
 
 
-ResourceMesh::ResourceMesh(uint& uid, std::string& file) : Resource(uid, ResourceType::RESOURCE_MESH, file)
+ResourceMesh::ResourceMesh(std::string& file) : Resource(ResourceType::RESOURCE_MESH,file)
 {
 	LoadResource(file);
 }
@@ -27,12 +27,12 @@ ResourceMesh::~ResourceMesh()
 {
 }
 
-void ResourceMesh::LoadResource(std::string& _file)
+void ResourceMesh::LoadResource(std::string& path)
 {
-	file = _file;
+	file = path;
 	std::string tmp = "Library\\Meshes\\";
 
-	tmp += _file;
+	tmp += file;
 	
 	App->importer->CopyDataFromFile(tmp, this);
 

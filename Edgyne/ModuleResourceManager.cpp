@@ -16,10 +16,10 @@ ModuleResourceManager::~ModuleResourceManager()
 {
 }
 
-Resource * ModuleResourceManager::GetResourceFromUID(const uint& uid) 
+Resource * ModuleResourceManager::GetResourceFromUID(const std::string& uid) 
 {
 	Resource* ret = nullptr;
-	std::map<uint, Resource*>::iterator item = resources.find(uid);
+	std::map<std::string, Resource*>::iterator item = resources.find(uid);
 	if (item != resources.end())
 		return item->second;
 
@@ -29,8 +29,6 @@ Resource * ModuleResourceManager::GetResourceFromUID(const uint& uid)
 Resource* ModuleResourceManager::CreateResource(Resource::ResourceType type)
 {
 	Resource* ret = nullptr;
-	uint uid = pcg32_random_r(&App->rng);
-
 	switch (type)
 	{
 	case Resource::ResourceType::RES_MATERIAL:
@@ -40,25 +38,23 @@ Resource* ModuleResourceManager::CreateResource(Resource::ResourceType type)
 		ret = new ResourceMesh();
 		break;
 	}
-	resources.emplace(uid, ret);
+	resources.emplace(ret->file, ret);
 	return ret;
 }
 
-Resource* ModuleResourceManager::CreateNewResource(uint& uid, Resource::ResourceType type, std::string & file)
+Resource * ModuleResourceManager::CreateNewResource(Resource::ResourceType type,std::string & file)
 {
 	Resource* ret = nullptr;
-	uint uid = pcg32_random_r(&App->rng);
-
 	switch (type)
 	{
 	case Resource::RES_MATERIAL:
-		ret = new ResourceMaterial(uid, file);
+		ret = new ResourceMaterial(file);
 		break;
 	case Resource::RESOURCE_MESH:
-		ret = new ResourceMesh(uid, file);
+		ret = new ResourceMesh(file);
 		break;
 	}
-	resources.emplace(uid, ret);
+	resources.emplace(ret->file, ret);
 		return ret;
 }
 
