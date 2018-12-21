@@ -75,25 +75,24 @@ void Mesh::LoadComponent(rapidjson::Value::ConstMemberIterator comp)
 
 	//material->LoadAsMeshComponent(comp);
 	UID = comp->value["UID"].GetUint();
-	resource_mesh = comp->value["Resource UID"].GetString();
 
-	if (!App->resource_manager->GetResourceFromUID(resource_mesh))
+	if (!App->resource_manager->GetResourceFromUID(UID))
 	{
-		App->resource_manager->CreateNewResource(Resource::RESOURCE_MESH, resource_mesh);
+		App->resource_manager->CreateResource(UID, Resource::RESOURCE_MESH);
 	}
 
-	material_name = comp->value["Material Name"].GetString();
+	material_uid = comp->value["Material UID"].GetUint();
 
-	if (!App->resource_manager->GetResourceFromUID(material_name))
+	if (!App->resource_manager->GetResourceFromUID(material_uid))
 	{
-		App->resource_manager->CreateNewResource(Resource::RES_MATERIAL, material_name);
+		App->resource_manager->CreateResource(material_uid, Resource::RES_MATERIAL);
 	}
 
 }
 
 void Mesh::OnEditor()
 {
-	ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(this->resource_mesh);
+	ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(this->UID);
 	if (ImGui::TreeNode("Mesh"))
 	{
 		ImGui::Text("Num Faces: %i", resource_mesh->num_index/3);
@@ -165,7 +164,7 @@ bool Mesh::ComponentUpdate()
 
 bool Mesh::ComponentDraw()
 {
-	ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(this->resource_mesh);
+	ResourceMesh* resource_mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(this->UID);
 
 	if (resource_mesh->has_triangle_faces && resource_mesh->id_index > 0)
 	{

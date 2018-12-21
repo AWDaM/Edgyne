@@ -26,6 +26,8 @@ public:
 	Resource* CreateNewResource(uint& uid, Resource::ResourceType type, std::string& file);
 
 	std::map<uint, Resource*> resources;
+
+	uint GetUIDFromMeta(std::string& path);
 };
 
 #endif

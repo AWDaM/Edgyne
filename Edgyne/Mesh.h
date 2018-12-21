@@ -27,7 +27,7 @@ public:
 private:
 public:
 	std::string resource_mesh;
-	std::string material_name;
+	uint material_uid;
 
 	Material* material = nullptr;
 

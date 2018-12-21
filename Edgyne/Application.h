@@ -20,6 +20,8 @@
 #include <string>
 #include <queue>
 
+class JSONManager;
+
 class ModuleWindow;
 class ModuleInput;
 class ModuleRenderer3D;
@@ -45,6 +47,8 @@ enum GameState
 class Application
 {
 public:
+	JSONManager * JSON_manager = nullptr;
+
 	ModuleWindow * window;
 	ModuleInput* input;
 	ModuleRenderer3D* renderer3D;

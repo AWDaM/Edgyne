@@ -30,6 +30,7 @@ public:
 	bool LoadResource();
 
 	virtual bool LoadResourceToMemory();
+	virtual uint AssignResource(uint uid);
 
 public:
 	std::string file = "";
