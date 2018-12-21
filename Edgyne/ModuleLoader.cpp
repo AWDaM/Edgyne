@@ -434,8 +434,8 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 		
 		aiMesh* currentMesh = scene->mMeshes[node->mMeshes[i]];
 		Mesh* component_mesh = (Mesh*)game_object->AddComponent(ComponentType::MESH);
-		component_mesh->UID = App->resource_manager->GetUIDFromMeta(file);
-		ResourceMesh* mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(component_mesh->UID);
+		uint uid = game_object->UID;
+		ResourceMesh* mesh = (ResourceMesh*)App->resource_manager->GetResourceFromUID(uid);
 	
 
 		if (!mesh)

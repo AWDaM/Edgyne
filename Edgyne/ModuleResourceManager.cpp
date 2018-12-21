@@ -62,25 +62,6 @@ Resource* ModuleResourceManager::CreateNewResource(uint& uid, Resource::Resource
 		return ret;
 }
 
-uint ModuleResourceManager::GetUIDFromMeta(std::string & path)
-{
-	uint ret = 0;
-	std::string metaFile = path.substr(0, path.find("."));
-	metaFile.append(".meta");
-	JSON_File* file = App->JSON_manager->openReadFile(metaFile.c_str());
-	if (file != nullptr)
-	{
-		JSON_Value* meta = file->getValue("meta");
-		if (meta != nullptr)
-		{
-			ret = meta->getUint("UID");
-		}
-	}
-	App->JSON_manager->closeFile(file);
-
-	return ret;
-}
-
 
 //Resource* ModuleResourceManager::CreateNewResource(Resource::ResourceType type, const std::string& file)
 //{

@@ -156,10 +156,10 @@ void GUIInspector::AddMaterial()
 			if (ImGui::Button(fileName.c_str()))
 			{
 				Material* material = (Material*)App->level->selected_game_object->AddComponent(MATERIAL);
-				ResourceMaterial* resource_material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(0);
+				ResourceMaterial* resource_material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(fileName);
 				if (!resource_material)
 				{
-					resource_material = (ResourceMaterial*)App->resource_manager->CreateNewResource(, Resource::RES_MATERIAL, fileName);
+					resource_material = (ResourceMaterial*)App->resource_manager->CreateNewResource(Resource::RES_MATERIAL, fileName);
 				}
 				material->resource_uid = resource_material->file;
 			}

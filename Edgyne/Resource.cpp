@@ -15,10 +15,12 @@ bool Resource::LoadResource()
 {
 	bool ret = true;
 	if (amount_loaded == 0)
+	{
 		ret = LoadResourceToMemory();
-
-
-	amount_loaded++;
+		amount_loaded++;
+	}
+	else
+		amount_loaded++;
 
 	return ret;
 }

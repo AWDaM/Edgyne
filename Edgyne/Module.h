@@ -2,8 +2,9 @@
 #define __MODULE_H__
 
 
-#include "JSONManager.h"
-
+#include "rapidjson/document.h"// rapidjson's DOM-style API
+#include "rapidjson/prettywriter.h" // for stringify JSON
+#include "rapidjson/filewritestream.h"
 
 #include<string>
 #include <list>
