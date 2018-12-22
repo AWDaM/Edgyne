@@ -410,6 +410,9 @@
     <ClInclude Include="ImGuiTextEditor\TextEditor.h">
       <Filter>Sources\ImGuiTextEditor</Filter>
     </ClInclude>
+    <ClInclude Include="JSONManager.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -659,6 +662,9 @@
     <ClCompile Include="GUIShaderEditor.cpp" />
     <ClCompile Include="ImGuiTextEditor\TextEditor.cpp">
       <Filter>Sources\ImGuiTextEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONManager.cpp">
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

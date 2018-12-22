@@ -19,6 +19,7 @@
 #include <vector>
 #include <string>
 #include <queue>
+class JSONManager;
 
 class ModuleWindow;
 class ModuleInput;
@@ -45,18 +46,20 @@ enum GameState
 class Application
 {
 public:
-	ModuleWindow * window;
-	ModuleInput* input;
-	ModuleRenderer3D* renderer3D;
-	ModuleCamera3D* camera;
-	ModuleImGui* imGui;
-	ModuleLevel* level;
-	ModuleDebug* debug;
-	ModuleLoader* loader;
-	ModuleImporter* importer;
-	ModuleTimeManager* time_manager;
-	ModuleResourceManager* resource_manager;
-	ModuleShaders* shaders;
+	JSONManager * JSON_manager = nullptr;
+
+	ModuleWindow * window = nullptr;
+	ModuleInput* input = nullptr;
+	ModuleRenderer3D* renderer3D = nullptr;
+	ModuleCamera3D* camera = nullptr;
+	ModuleImGui* imGui = nullptr;
+	ModuleLevel* level = nullptr;
+	ModuleDebug* debug = nullptr;
+	ModuleLoader* loader = nullptr;
+	ModuleImporter* importer = nullptr;
+	ModuleTimeManager* time_manager = nullptr;
+	ModuleResourceManager* resource_manager = nullptr;
+	ModuleShaders* shaders = nullptr;
 
 	std::list<Module*> list_modules;
 

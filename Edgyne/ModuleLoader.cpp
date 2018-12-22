@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleImporter.h"
 #include "ModuleCamera3D.h"
+#include "ModuleShaders.h"
 #include "ModuleResourceManager.h"
 #include "ResourceMesh.h"
 #include "Resource.h"
@@ -28,6 +29,7 @@
 #include "DevIL\include\ilut.h"
 
 #include "rapidjson/filereadstream.h"
+#include "JSONManager.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -181,14 +183,38 @@ void ModuleLoader::ReceivedFile(const char * path)
 {
 	std::string _path = path;
 	std::string path_string = path;
-	path_string.erase(0,path_string.find_last_of(".")+1);
+	path_string.erase(0, path_string.find_last_of(".") + 1);
+
+	FILE* file = fopen(path, "rb");
+	std::string assetFile = path;
+	assetFile.erase(0, assetFile.find_last_of("\\") + 1);
+	std::string fullAssetFile = "Assets\\";
+	fullAssetFile.append(assetFile);
+	char* buffer = nullptr;
+	int size = 0;
+	if (file != NULL)
+	{
+		fseek(file, 0, SEEK_END);
+		size = ftell(file);
+		rewind(file);
+		buffer = new char[size];
+		fread(buffer, sizeof(char), size, file);
+		fclose(file);
+		file = fopen(fullAssetFile.c_str(), "wb");
+		fwrite(buffer, sizeof(char), size, file);
+	}
+
 	if (MODEL(path_string))
 	{
-		Import(_path);
+		Import(assetFile);
 	}
 	else if (IMAGE(path_string))
 	{
 		//ImportTexture(path);
+	}
+	else if (SHADER(path_string))
+	{
+		ImportShader(assetFile);
 	}
 }
 
@@ -383,6 +409,39 @@ void ModuleLoader::LoadMeshesFromFile(Mesh* _mesh)
 
 
 
+}
+
+bool ModuleLoader::ImportShader(std::string& file)
+{
+	char* shader;
+	uint tmp_index = 0;
+	std::string metafile = file;
+	metafile = metafile.substr(0, file.find(".")) + ".meta";
+	shader = new char[file.length()];
+	strcpy(shader,file.c_str());
+
+	//check if the shader can be compiled
+	if (App->shaders->CompileShader(shader, true, &tmp_index))
+	{
+		JSON_File* meta = App->JSON_manager->openWriteFile(metafile.c_str());
+		JSON_Value* value = meta->createValue();
+		value->addUint("uid", 14);
+		value->addUint("lastChange", 14);
+		value->addBool("isVertex", true);
+		meta->addValue("", value);
+		meta->closeFile();
+	}
+	else if (App->shaders->CompileShader(shader, false, &tmp_index))
+	{
+		JSON_File* meta = App->JSON_manager->openWriteFile(metafile.c_str());
+		JSON_Value* value = meta->createValue();
+		value->addUint("uid", 14);
+		value->addUint("lastChange", 14);
+		value->addBool("isVertex", false);
+		meta->addValue("", value);
+		meta->closeFile();
+	}
+	return true;
 }
 
 void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::string& file, GameObject* parent)

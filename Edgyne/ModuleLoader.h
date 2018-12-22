@@ -56,6 +56,9 @@ private:
 
 	void LoadMeshesFromFile(Mesh* _mesh);
 
+	bool ImportShader(std::string& file);
+
+
 	void LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::string& file, GameObject* parent);
 	bool CheckTexturePaths(std::string file, std::string texPath, std::string& texActualPath);
 

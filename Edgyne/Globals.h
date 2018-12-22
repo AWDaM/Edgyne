@@ -36,6 +36,7 @@ enum update_status
 //File formats
 #define IMAGE(path)  path == "dds" || path == "DDS" || path == "png" || path == "PNG"
 #define MODEL(path) path == "fbx" || path == "FBX"
+#define SHADER(path) path == "txt" || path == "TXT"
 
 //Stuff
 #define CAMERA_OFFSET 0.4
