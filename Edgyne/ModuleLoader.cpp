@@ -185,12 +185,6 @@ void ModuleLoader::ReceivedFile(const char * path)
 	std::string path_string = path;
 	path_string.erase(0, path_string.find_last_of(".") + 1);
 
-	FILE* file = fopen(path, "rb");
-	std::string assetFile = path;
-	assetFile.erase(0, assetFile.find_last_of("\\") + 1);
-	std::string fullAssetFile = "Assets\\";
-	fullAssetFile.append(assetFile);
-
 	/*if (!std::experimental::filesystem::exists(fullAssetFile))
 		std::experimental::filesystem::copy(path, fullAssetFile.c_str());*/
 

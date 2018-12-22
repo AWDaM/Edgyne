@@ -1,5 +1,6 @@
 #include "JSONManager.h"
 #include "Globals.h"
+#include "p2Defs.h"
 
 JSONManager::JSONManager()
 {

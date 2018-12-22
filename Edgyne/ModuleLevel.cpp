@@ -9,6 +9,7 @@
 #include "ModuleResourceManager.h"
 #include "Resource.h"
 #include "ResourceMesh.h"
+#include "Mesh.h"
 #include "GameObject.h"
 #include "Camera.h"
 #include "Transform.h"
@@ -17,6 +18,7 @@
 #include "Mesh.h"
 
 #include "SDL\include\SDL_opengl.h"
+
 
 
 
@@ -168,31 +170,16 @@ void ModuleLevel::Draw()
 		App->debug->Draw_AABB(selected_game_object->aligned_bounding_box);
 
 	//-------------With Camera Culling---------------//
+	std::map<float, Mesh*> map;
+
 	if (App->renderer3D->camera_culling)
 	{
 		std::vector<GameObject*> frustum_game_objects;
 
 		quad_tree->CollectIntersections(frustum_game_objects, game_camera->frustum);
 
-		std::vector<GameObject*>::iterator item = frustum_game_objects.begin();
+		GenerateDistanceToCamMap(map,frustum_game_objects, game_camera->frustum);
 
-		while (item != frustum_game_objects.end())
-		{
-			if ((*item)->active && (*item)->Static)
-			{
-				if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box) && game_camera->frustum.Intersects((*item)->bounding_sphere))
-				{
-					(*item)->Draw();
-				}
-				/*	if (App->debug->draw_normals)
-					{
-						Mesh* mesh = (Mesh*)(*item)->GetComponent(MESH);
-						if(mesh)
-							App->debug->Draw_Normals(mesh->vertex,mesh->normals,mesh->num_vertex);
-					}*/
-			}
-			item++;
-		}
 	}
 	//---------------------Without Camera Culling and Active game_obejcts------------//
 	std::list<GameObject*>::iterator _item = game_objects.begin();
@@ -204,17 +191,71 @@ void ModuleLevel::Draw()
 			App->debug->Draw_AABB((*_item)->aligned_bounding_box);
 		}
 
-		if (!(*_item)->Static)
+		if ((*_item)->GetComponent(CAMERA))
+		{
 			(*_item)->Draw();
+		}
 
-		else if((*_item)->Static && !App->renderer3D->camera_culling)
-			(*_item)->Draw();
+		if (!(*_item)->Static)
+		{
+			Mesh* mesh = (Mesh*)(*_item)->GetComponent(MESH);
+			if (mesh)
+			{
+				map.emplace( game_camera->frustum.Distance((*_item)->transform->position), mesh);
+			}
+		}
+		
+		else if ((*_item)->Static && !App->renderer3D->camera_culling)
+		{
+			Mesh* mesh = (Mesh*)(*_item)->GetComponent(MESH);
+			if (mesh)
+			{
+				map.emplace(game_camera->frustum.Distance((*_item)->transform->position), mesh);
+			}
+		}
 
 		_item++;
 	}
 
+	//Here we draw the meshes. first for for opaque,second for transparency
+	for (std::map<float, Mesh*>::iterator it = map.begin(); it != map.end(); ++it)
+	{
+		if((*it).second->IsOpaque())
+			(*it).second->ComponentDraw();
+	}
+
+	for (std::map<float, Mesh*>::iterator it = map.begin(); it != map.end(); ++it)
+	{
+		if (!(*it).second->IsOpaque())
+			(*it).second->ComponentDraw();
+	}
+
 	root->RecursiveResetAddedToQuadTree();
 }
+
+void ModuleLevel::GenerateDistanceToCamMap(std::map<float, Mesh*>& buffer, std::vector<GameObject*> objects_to_draw, math::Frustum camera)
+{
+
+	std::vector<GameObject*>::iterator item = objects_to_draw.begin();
+
+	while (item != objects_to_draw.end())
+	{
+		if ((*item)->active && (*item)->Static)
+		{
+			if (game_camera->frustum.ContainsAABBCustom((*item)->aligned_bounding_box) && game_camera->frustum.Intersects((*item)->bounding_sphere))
+			{
+				Mesh* mesh = (Mesh*)(*item)->GetComponent(MESH);
+				if (mesh)
+				{
+					buffer.emplace(camera.Distance((*item)->transform->position), mesh);
+					item++;
+				}
+			}
+		}
+	}
+}
+
+
 
 GameObject* ModuleLevel::MousePicking(int posX, int posY)
 {

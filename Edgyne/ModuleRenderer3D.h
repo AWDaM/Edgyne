@@ -19,7 +19,8 @@ enum glRenderOptions
 	COLOR_MATERIAL,
 	TEXTURE_2D,
 	LINE_SMOOTH,
-	SCISSOR_TEST
+	SCISSOR_TEST,
+	BLEND
 };
 
 class ModuleRenderer3D : public Module
@@ -67,6 +68,7 @@ public:
 	bool line_smooth = false;
 	bool scissor_test = false;
 	bool camera_culling = false;
+	bool blend = true;
 
 	uint  DroppedTexture;
 

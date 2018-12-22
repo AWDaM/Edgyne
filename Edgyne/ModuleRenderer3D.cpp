@@ -104,6 +104,8 @@ bool ModuleRenderer3D::Init(rapidjson::Value& node)
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		LOG("Vendor: %s", glGetString(GL_VENDOR));
 		LOG("Renderer: %s", glGetString(GL_RENDERER));
@@ -251,6 +253,8 @@ void ModuleRenderer3D::Configuration()
 			glSwitch(color_material, COLOR_MATERIAL);
 		if (ImGui::Checkbox("Texture 2D", &texture_2d))
 			glSwitch(texture_2d, TEXTURE_2D);
+		if (ImGui::Checkbox("Blend", &blend))
+			glSwitch(blend, BLEND);
 		if (ImGui::Checkbox("Line Smooth", &line_smooth))
 			glSwitch(line_smooth, LINE_SMOOTH);
 		if (ImGui::Checkbox("Scissor Test", &scissor_test))
@@ -371,7 +375,14 @@ void ModuleRenderer3D::glSwitch(bool var, glRenderOptions option)
 				glDisable(GL_SCISSOR_TEST);
 		}
 			break;
-
+		case 8:
+		{
+			if (var)
+				glEnable(GL_BLEND);
+			else
+				glDisable(GL_BLEND);
+		}
+		break;
 	}
 
 }
