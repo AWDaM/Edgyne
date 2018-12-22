@@ -190,23 +190,13 @@ void ModuleLoader::ReceivedFile(const char * path)
 	assetFile.erase(0, assetFile.find_last_of("\\") + 1);
 	std::string fullAssetFile = "Assets\\";
 	fullAssetFile.append(assetFile);
-	char* buffer = nullptr;
-	int size = 0;
-	if (file != NULL)
-	{
-		fseek(file, 0, SEEK_END);
-		size = ftell(file);
-		rewind(file);
-		buffer = new char[size];
-		fread(buffer, sizeof(char), size, file);
-		fclose(file);
-		file = fopen(fullAssetFile.c_str(), "wb");
-		fwrite(buffer, sizeof(char), size, file);
-	}
+	
+	if (!std::experimental::filesystem::exists(fullAssetFile))
+		std::experimental::filesystem::copy(path, fullAssetFile.c_str());
 
 	if (MODEL(path_string))
 	{
-		Import(assetFile);
+		Import(fullAssetFile);
 	}
 	else if (IMAGE(path_string))
 	{
@@ -214,7 +204,7 @@ void ModuleLoader::ReceivedFile(const char * path)
 	}
 	else if (SHADER(path_string))
 	{
-		ImportShader(assetFile);
+		ImportShader(fullAssetFile);
 	}
 }
 

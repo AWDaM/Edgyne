@@ -6,10 +6,12 @@
 
 
 #include <vector>
+#include <map>
 
 class GameObject;
 class Camera;
 class EdgyQuadTree;
+class Mesh;
 
 class ModuleLevel :
 	public Module
@@ -28,6 +30,8 @@ public:
 	void DeleteLevel();
 	
 	void Draw();
+
+	void GenerateDistanceToCamMap(std::map<float, Mesh*>& buffer, std::vector<GameObject*> objects_to_draw,math::Frustum camera);
 
 	GameObject* MousePicking(int posX, int posY);
 private:

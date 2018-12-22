@@ -79,7 +79,7 @@ void Material::OnEditor()
 				ImGui::Image((void *)(intptr_t)material->id_texture, ImVec2(256, 256));
 			}
 
-			ImGui::InputFloat3("Color", material->color.ptr(), 100);
+			ImGui::InputFloat4("Color", material->color.ptr(), 100);
 			ImGui::TreePop();
 		}
 	}

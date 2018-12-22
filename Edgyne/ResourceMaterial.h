@@ -14,7 +14,7 @@ public:
 
 	void ResourceMaterial::LoadMaterial(std::string& file);
 
-	vec color;
+	float4 color;
 	float2 img_size;
 	uint id_texture = 0;
 };

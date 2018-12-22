@@ -1,9 +1,10 @@
 #include "JSONManager.h"
 #include "Globals.h"
+#include "p2Defs.h"
 
 #ifdef _DEBUG
 //#define TEST_MEMORY_MANAGER
-#include "mmgr/mmgr.h"
+//#include "mmgr/mmgr.h"
 #endif
 
 JSONManager::JSONManager()

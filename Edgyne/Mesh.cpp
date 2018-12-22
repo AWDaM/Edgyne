@@ -4,6 +4,7 @@
 #include "ModuleResourceManager.h"
 #include "ModuleShaders.h"
 #include "ModuleCamera3D.h"
+#include "ModuleTimeManager.h"
 #include "Resource.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
@@ -178,7 +179,8 @@ bool Mesh::ComponentDraw()
 		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, App->camera->editor_camera->GetProjectionMatrix());
 		GLint view_loc = glGetUniformLocation(App->shaders->default_shader_program, "view");
 		glUniformMatrix4fv(view_loc, 1, GL_FALSE, App->camera->editor_camera->GetViewMatrix());
-
+		GLint time_loc = glGetUniformLocation(App->shaders->default_shader_program, "time");
+		glUniform1f(time_loc, App->time_manager->game_clock_seconds);
 
 
 
@@ -221,7 +223,7 @@ bool Mesh::ComponentDraw()
 			}
 			//--------
 			else
-				glColor3f(resource_mesh->color.x, resource_mesh->color.y, resource_mesh->color.z);
+				glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		glBindVertexArray(resource_mesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->IBO);
@@ -264,6 +266,20 @@ void Mesh::SetBoundingVolume()
 		//}
 		game_object->bounding_sphere.Enclose((float3*)resource_mesh->vertex, resource_mesh->num_vertex);
 	}
+}
+
+bool Mesh::IsOpaque()
+{
+	bool ret = true;
+	ResourceMaterial* material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(material_name);
+	if (material)
+	{
+		if (material->color.w < 1)
+		{
+			ret = false;
+		}
+	}
+	return ret;
 }
 
 

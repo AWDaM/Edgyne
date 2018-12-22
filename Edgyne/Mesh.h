@@ -23,7 +23,7 @@ public:
 	bool ComponentUpdate();
 	bool ComponentDraw();
 	void SetBoundingVolume();
-
+	bool IsOpaque();
 private:
 public:
 	std::string resource_mesh;
