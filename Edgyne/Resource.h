@@ -19,7 +19,8 @@ public:
 	{
 		UNKNOWN,
 		RES_MATERIAL,
-		RESOURCE_MESH
+		RESOURCE_MESH,
+		RES_SHADER
 	};
 
 

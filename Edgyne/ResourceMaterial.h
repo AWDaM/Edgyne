@@ -12,7 +12,7 @@ public:
 	ResourceMaterial();
 	~ResourceMaterial();
 
-	void ResourceMaterial::LoadMaterial(std::string& file);
+	void LoadMaterial(std::string& file);
 
 	float4 color;
 	float2 img_size;

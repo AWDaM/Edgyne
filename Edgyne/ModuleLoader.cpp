@@ -412,7 +412,7 @@ bool ModuleLoader::ImportShader(std::string& file)
 		value->addUint("uid", 14);
 		value->addUint("lastChange", 14);
 		value->addBool("isVertex", true);
-		meta->addValue("", value);
+		meta->addValue("meta", value);
 		meta->closeFile();
 	}
 	else if (App->shaders->CompileShader(shader, false, &tmp_index))
@@ -422,7 +422,7 @@ bool ModuleLoader::ImportShader(std::string& file)
 		value->addUint("uid", 14);
 		value->addUint("lastChange", 14);
 		value->addBool("isVertex", false);
-		meta->addValue("", value);
+		meta->addValue("meta", value);
 		meta->closeFile();
 	}
 	return true;

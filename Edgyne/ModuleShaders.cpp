@@ -7,7 +7,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-
+#include <experimental\filesystem>
 ModuleShaders::ModuleShaders(Application* app, bool start_enabled) : Module(start_enabled)
 {
 	name = "Shaders";
@@ -119,9 +119,11 @@ bool ModuleShaders::CreateDefaultProgram()
 	shader_list.push_back(default_vertex_shader);
 	shader_list.push_back(default_pixel_shader);
 
+	void* buffer;
 	if (CreateShaderProgram(shader_list, &tmp_program_index))
+	{
 		default_shader_program = tmp_program_index;
-
+	}
 	return true;
 }
 
@@ -173,5 +175,34 @@ bool ModuleShaders::CreateShaderProgram(std::vector<uint>& shaders, uint* progra
 	else
 		LOG("Shader link success");
 
+	return ret;
+}
+
+bool ModuleShaders::FindShaderObjectFromUID(uint uid)
+{
+	bool ret = false;
+	const std::experimental::filesystem::directory_iterator end{};
+
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\" }; iter != end; ++iter)
+	{
+		if (std::experimental::filesystem::is_regular_file(*iter))
+		{
+			//std::string extension = (*iter).path().extension().string();
+			if ((*iter).path().extension().string() == "meta")
+			{
+				JSON_File* meta = App->JSON_manager->openReadFile((*iter).path().string().c_str());
+				JSON_Value* muid = meta->getValue("meta");
+				if (uid == muid->getUint("uid"))
+				{
+					std::string shaderFile = (*iter).path().string();
+					shaderFile = shaderFile.substr(0, shaderFile.find_last_of("."));
+
+					ret = true;
+					break;
+				}
+				meta->closeFile();
+			}
+		}
+	}
 	return ret;
 }
