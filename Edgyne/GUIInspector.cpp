@@ -151,7 +151,7 @@ void GUIInspector::AddMaterial()
 		std::string fileName = iter->path().string();
 		fileName = fileName.erase(0, fileName.find_last_of("\\") + 1);
 
-		if (App->importer->materialExtension == extension)
+		if (".edgymaterial" == extension)
 		{
 			if (ImGui::Button(fileName.c_str()))
 			{

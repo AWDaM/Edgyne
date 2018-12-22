@@ -190,23 +190,13 @@ void ModuleLoader::ReceivedFile(const char * path)
 	assetFile.erase(0, assetFile.find_last_of("\\") + 1);
 	std::string fullAssetFile = "Assets\\";
 	fullAssetFile.append(assetFile);
-	char* buffer = nullptr;
-	int size = 0;
-	if (file != NULL)
-	{
-		fseek(file, 0, SEEK_END);
-		size = ftell(file);
-		rewind(file);
-		buffer = new char[size];
-		fread(buffer, sizeof(char), size, file);
-		fclose(file);
-		file = fopen(fullAssetFile.c_str(), "wb");
-		fwrite(buffer, sizeof(char), size, file);
-	}
+
+	/*if (!std::experimental::filesystem::exists(fullAssetFile))
+		std::experimental::filesystem::copy(path, fullAssetFile.c_str());*/
 
 	if (MODEL(path_string))
 	{
-		Import(assetFile);
+		Import(_path);
 	}
 	else if (IMAGE(path_string))
 	{
@@ -214,7 +204,7 @@ void ModuleLoader::ReceivedFile(const char * path)
 	}
 	else if (SHADER(path_string))
 	{
-		ImportShader(assetFile);
+		ImportShader(_path);
 	}
 }
 
@@ -305,8 +295,8 @@ bool ModuleLoader::LoadTextures(ResourceMesh* new_mesh, ResourceMaterial* _mater
 			ilBindImage(imgName);
 			if (CheckTexturePaths(file, texPath.C_Str(), texFullPath))
 			{
-				_material->file = SaveMaterial(texFullPath);
-				_material->file.append(".dds");
+				_material->diffuse = SaveMaterial(texFullPath);
+				_material->diffuse.append(".dds");
 				ILinfo imgData;
 				iluGetImageInfo(&imgData);
 				if (imgData.Origin == IL_ORIGIN_UPPER_LEFT)
@@ -491,7 +481,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 			std::string currMaterialPath = texPath.C_Str();
 			currMaterialPath.erase(0, currMaterialPath.find_last_of("\\") + 1);
 			currMaterialPath = currMaterialPath.substr(0, currMaterialPath.find("."));
-			currMaterialPath.append(".dds");
+			currMaterialPath.append(".edgymaterial");
 
 			Material* component_material = (Material*)game_object->AddComponent(ComponentType::MATERIAL);
 			component_mesh->material = component_material;
@@ -508,16 +498,28 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 			if (!resource_material)
 			{
 	
-				resource_material = (ResourceMaterial*)App->resource_manager->CreateResource(Resource::ResourceType::RES_MATERIAL);
+				resource_material = (ResourceMaterial*)App->resource_manager->CreateNewResource(Resource::ResourceType::RES_MATERIAL, currMaterialPath);
 				resource_material->file = currMaterialPath;
 				component_material->resource_uid = resource_material->file;
 				component_mesh->material_name = resource_material->file;
+				std::string tmp = resource_material->file;
+				tmp = tmp.substr(0, tmp.find_last_of("."));
+				resource_material->diffuse = tmp + ".dds";
+
 				LOG("Loading Color from the %i mesh", i + 1);
 				LoadColor(mesh, scene->mMaterials[currentMesh->mMaterialIndex]);
 
 				LOG("Loading Textures from the %i mesh", i + 1);
 				if (currentMesh->HasTextureCoords(0))
 					LoadTextures(mesh, resource_material, currentMesh, scene, file);
+
+				JSON_File* mat = App->JSON_manager->openWriteFile(("Library\\Materials\\" + resource_material->file).c_str());
+				JSON_Value* diff = mat->createValue();
+				diff->addString("diffuse", resource_material->diffuse.c_str());
+				diff->addString("shader program", "");
+				mat->addValue("Material", diff);
+				mat->Write();
+				mat->closeFile();
 			}
 			else
 			{

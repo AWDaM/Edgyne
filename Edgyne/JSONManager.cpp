@@ -1,11 +1,6 @@
 #include "JSONManager.h"
 #include "Globals.h"
 
-#ifdef _DEBUG
-//#define TEST_MEMORY_MANAGER
-#include "mmgr/mmgr.h"
-#endif
-
 JSONManager::JSONManager()
 {
 }

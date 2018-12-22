@@ -23,6 +23,14 @@ void _log(const char file[], int line, const char* format, ...);
 
 #define FPS_LOG_SIZE 100
 
+#define RELEASE( x ) \
+    {                        \
+    if( x != NULL )        \
+	    {                      \
+      delete x;            \
+	  x = NULL;              \
+	    }                      \
+    }
 
 typedef unsigned int uint;
 

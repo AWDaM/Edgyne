@@ -17,6 +17,8 @@ public:
 	vec color;
 	float2 img_size;
 	uint id_texture = 0;
+	std::string diffuse;
+	std::string shaderProgram;
 };
 
 #endif
