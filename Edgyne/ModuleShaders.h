@@ -24,10 +24,12 @@ public:
 	void CreateNewProgram(const char* fileName);
 	char* GetShaderDataFromFile(const char* fileName, bool& isVertex);
 
+	void RecompilePrograms(uint new_shader_uuid);
+	uint GetShaderUidFromName(std::string& name);
 
 public:
-	std::string defaultVertexFile = "Assets\\DefaultVertexShader.edgyvertex";
-	std::string defaultPixelFile = "Assets\\DefaultPixelShader.edgypixel";
+	std::string defaultVertexFile = "Assets\\Shaders\\DefaultVertexShader.edgyvertex";
+	std::string defaultPixelFile = "Assets\\Shaders\\DefaultPixelShader.edgypixel";
 	uint defaultVertexUID = 0;
 	uint defaultPixelUID = 0;
 	char* vertex_shader;

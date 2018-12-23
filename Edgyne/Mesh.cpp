@@ -8,6 +8,7 @@
 #include "Resource.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
+#include "ResourceShaderProgram.h"
 #include "Material.h"
 #include "Transform.h"
 #include "Camera.h"
@@ -171,16 +172,7 @@ bool Mesh::ComponentDraw()
 	if (resource_mesh->has_triangle_faces && resource_mesh->id_index > 0)
 	{
 		//glEnableClientState(GL_VERTEX_ARRAY);
-		glUseProgram(App->shaders->default_shader_program);
 
-		GLint model_loc = glGetUniformLocation(App->shaders->default_shader_program, "model_matrix");
-		glUniformMatrix4fv(model_loc, 1, GL_FALSE, *(game_object->global_transform_matrix.Transposed()).v);
-		GLint proj_loc = glGetUniformLocation(App->shaders->default_shader_program, "projection");
-		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, App->camera->editor_camera->GetProjectionMatrix());
-		GLint view_loc = glGetUniformLocation(App->shaders->default_shader_program, "view");
-		glUniformMatrix4fv(view_loc, 1, GL_FALSE, App->camera->editor_camera->GetViewMatrix());
-		GLint time_loc = glGetUniformLocation(App->shaders->default_shader_program, "time");
-		glUniform1f(time_loc, App->time_manager->game_clock_seconds);
 
 
 
@@ -214,6 +206,10 @@ bool Mesh::ComponentDraw()
 
 		//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		////Draw The Mesh
+
+
+	
+
 		ResourceMaterial* res_material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->material->resource_uid);
 		if (res_material)
 		{
@@ -224,7 +220,27 @@ bool Mesh::ComponentDraw()
 			//--------
 			else
 				glBindTexture(GL_TEXTURE_2D, 0);
+			ResourceShaderProgram* shader_program = (ResourceShaderProgram*)App->resource_manager->GetResourceFromUID(res_material->shaderProgram);
+			if (shader_program)
+			{
+				glUseProgram(shader_program->program);
+			}
+			else
+				glUseProgram(App->shaders->default_shader_program);
 		}
+		else
+			glUseProgram(App->shaders->default_shader_program);
+
+		GLint model_loc = glGetUniformLocation(App->shaders->default_shader_program, "model_matrix");
+		glUniformMatrix4fv(model_loc, 1, GL_FALSE, *(game_object->global_transform_matrix.Transposed()).v);
+		GLint proj_loc = glGetUniformLocation(App->shaders->default_shader_program, "projection");
+		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, App->camera->editor_camera->GetProjectionMatrix());
+		GLint view_loc = glGetUniformLocation(App->shaders->default_shader_program, "view");
+		glUniformMatrix4fv(view_loc, 1, GL_FALSE, App->camera->editor_camera->GetViewMatrix());
+		GLint time_loc = glGetUniformLocation(App->shaders->default_shader_program, "time");
+		glUniform1f(time_loc, App->time_manager->game_clock_seconds);
+
+
 		glBindVertexArray(resource_mesh->VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource_mesh->IBO);
 		glDrawElements(GL_TRIANGLES, resource_mesh->num_index, GL_UNSIGNED_INT, NULL);

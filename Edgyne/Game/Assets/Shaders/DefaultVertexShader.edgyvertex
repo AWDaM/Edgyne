@@ -1,0 +1,27 @@
+#version 330 core
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec4 color;
+layout(location = 2) in vec2 texCoord;
+layout(location = 3) in vec3 normal;
+out vec4 ourColor;
+out vec2 TexCoord;
+out vec3 end_pos;
+out vec3 ret_normal;
+out float amp;
+out float max_amp;
+uniform mat4 model_matrix;
+uniform mat4 view;
+uniform mat4 projection;
+uniform float time;
+void main()
+{
+float freq = 10;
+max_amp = 1;
+end_pos = position;
+amp =  max_amp*sin(freq*time+(end_pos.z));
+end_pos.y += amp;
+	gl_Position = projection * view * model_matrix * vec4(end_pos, 1.0f);
+	ourColor = color;
+	TexCoord = texCoord;
+	ret_normal = normal;
+}

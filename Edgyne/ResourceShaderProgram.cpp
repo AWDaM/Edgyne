@@ -5,6 +5,10 @@
 
 
 
+ResourceShaderProgram::ResourceShaderProgram() : Resource(RES_SHADER)
+{
+}
+
 ResourceShaderProgram::ResourceShaderProgram(std::string& file) : Resource(RES_SHADER, file)
 {
 
@@ -46,7 +50,6 @@ void ResourceShaderProgram::AddNewObjectToProgram(uint uuid)
 		for (std::vector<uint>::iterator item = shaderObjects.begin(); item != shaderObjects.end(); item++)
 		{
 			val->addUint("uid", (*item));
-
 		}
 		hmm->addValue("", val);
 		hmm->Write();
@@ -54,4 +57,16 @@ void ResourceShaderProgram::AddNewObjectToProgram(uint uuid)
 
 		CompileShaderProgram();
 	}
+}
+
+bool ResourceShaderProgram::ContainsShader(uint uuid)
+{
+	for (std::vector<uint>::iterator item = shaderObjects.begin(); item != shaderObjects.end(); item++)
+	{
+		if ((*item) == uuid)
+		{
+			return true;
+		}
+	}
+	return false;
 }

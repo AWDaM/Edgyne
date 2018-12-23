@@ -1,6 +1,9 @@
 #include "GUIShaderEditor.h"
 #include "Application.h"
 #include "ModuleShaders.h"
+#include "ModuleResourceManager.h"
+#include "Resource.h"
+#include "ResourceShaderProgram.h"
 #include "ImGuiTextEditor/TextEditor.h"
 
 #include <stdio.h>
@@ -22,11 +25,13 @@ void GUIShaderEditor::SetShaderToEdit(bool fragment, char* shader, const std::st
 {
 	if (fragment)
 	{
+		shader_name = name;
 		text_editor->SetText(shader);
 		editing_fragment = true;
 	}
 	else
 	{
+		shader_name = name;
 		text_editor->SetText(shader);
 		editing_fragment = false;
 	}
@@ -56,6 +61,12 @@ void GUIShaderEditor::Draw()
 				if (App->shaders->CompileShader(buffer, !editing_fragment, &index))
 				{
 					App->shaders->SaveShader(shader_name, buffer, editing_fragment);
+					ResourceShaderProgram* _shader_program = (ResourceShaderProgram*)App->resource_manager->GetResourceFromUID(shader_program);
+					if (!_shader_program->ContainsShader(App->shaders->GetShaderUidFromName(shader_name)))
+					{
+						_shader_program->AddNewObjectToProgram(App->shaders->GetShaderUidFromName(shader_name));
+					}
+					App->shaders->RecompilePrograms(App->shaders->GetShaderUidFromName(shader_name));
 				}
 				delete buffer;
 			}

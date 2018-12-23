@@ -1,0 +1,15 @@
+#version 330 core
+in vec4 ourColor;
+in vec2 TexCoord;
+in vec3 end_pos;
+in float max_amp;
+in float amp;
+out vec4 color;
+out vec4 texture_color;
+in vec3 ret_normal;
+uniform sampler2D ourTexture;
+void main()
+{
+	texture_color = texture(ourTexture, TexCoord);
+ color = vec4(amp/max_amp,amp/max_amp,1,0.5);
+}

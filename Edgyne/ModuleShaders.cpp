@@ -155,8 +155,8 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 	//	"{\n"
 	//	"   FragColor = vec4(1.0f, 0.7f, 0.7f, 1.0f);\n"
 	//	"}\n\0";
-
-	CreateDefaultProgram();
+	CreateNewProgram("Default Program");
+	//CreateDefaultProgram();
 	return ret;
 }
 
@@ -179,6 +179,8 @@ bool ModuleShaders::CreateDefaultProgram()
 	{
 		default_shader_program = tmp_program_index;
 	}
+
+
 	return true;
 }
 
@@ -238,7 +240,7 @@ char* ModuleShaders::FindShaderObjectFromUID(uint uid, bool& isVertex)
 	char* ret = "";
 	const std::experimental::filesystem::directory_iterator end{};
 
-	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\" }; iter != end; ++iter)
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders\\" }; iter != end; ++iter)
 	{
 		if (std::experimental::filesystem::is_regular_file(*iter))
 		{
@@ -280,9 +282,56 @@ char* ModuleShaders::GetShaderDataFromFile(const char* fileName, bool& isVertex)
 	return ret;
 }
 
+void ModuleShaders::RecompilePrograms(uint new_shader_uuid)
+{
+	for (std::map<std::string, Resource*>::iterator it = App->resource_manager->resources.begin(); it != App->resource_manager->resources.end(); ++it)
+	{
+		if ((*it).second->type == Resource::RES_SHADER)
+		{
+			ResourceShaderProgram* tmp = (ResourceShaderProgram*)(*it).second;
+			if (tmp->ContainsShader(new_shader_uuid))
+			{
+				tmp->CompileShaderProgram();
+			}
+		}
+	}
+}
+
+uint ModuleShaders::GetShaderUidFromName(std::string & name)
+{
+	uint ret = 0;
+	
+	std::string _name = name;
+
+	if (_name.find_last_of(".edgypixel") != std::string::npos || _name.find_last_of(".edgyvertex") != std::string::npos)
+	{
+		_name = _name.substr(0, _name.find_last_of("."));
+	}
+	const std::experimental::filesystem::directory_iterator end{};
+
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders" }; iter != end; ++iter)
+	{
+		if (iter->path().string().find(".meta") != std::string::npos)
+		{
+			std::string extension = iter->path().string();
+			extension = extension.erase(0, extension.find_last_of("\\") + 1);
+
+			extension = extension.substr(0, extension.find_first_of("."));
+
+			if (extension == name)
+			{
+				JSON_File* meta = App->JSON_manager->openReadFile((*iter).path().string().c_str());
+				JSON_Value* muid = meta->getValue("meta");
+				return muid->getUint("uid");
+			}
+		}
+	}
+	return ret;
+}
+
 char* ModuleShaders::CreateNewShaderObject(const char* shaderName, bool fragment)
 {
-	std::string path = "Assets\\";
+	std::string path = "Assets\\Shaders\\";
 	path += shaderName;
 	if (fragment)
 	{
@@ -314,7 +363,7 @@ char* ModuleShaders::CreateNewShaderObject(const char* shaderName, bool fragment
 
 bool ModuleShaders::SaveShader(std::string & name, char * content, bool fragment)
 {
-	std::string path = "Assets\\";
+	std::string path = "Assets\\Shaders\\";
 	path += name;
 	if (fragment)
 	{

@@ -4,6 +4,7 @@
 #include "Mesh.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
+#include "ResourceShaderProgram.h"
 
 
 ModuleResourceManager::ModuleResourceManager(Application* app, bool start_enabled) : Module(start_enabled)
@@ -37,6 +38,9 @@ Resource* ModuleResourceManager::CreateResource(Resource::ResourceType type)
 	case Resource::ResourceType::RESOURCE_MESH:
 		ret = new ResourceMesh();
 		break;
+	case Resource::RES_SHADER:
+		ret = new ResourceShaderProgram();
+		break;
 	}
 	resources.emplace(ret->file, ret);
 	return ret;
@@ -52,6 +56,9 @@ Resource * ModuleResourceManager::CreateNewResource(Resource::ResourceType type,
 		break;
 	case Resource::RESOURCE_MESH:
 		ret = new ResourceMesh(file);
+		break;
+	case Resource::RES_SHADER:
+		ret = new ResourceShaderProgram(file);
 		break;
 	}
 	resources.emplace(ret->file, ret);
