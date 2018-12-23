@@ -105,7 +105,10 @@ void Material::OnEditor()
 			}
 			if (ImGui::CollapsingHeader("Edit Program"))
 			{
-				ImGui::Button("AddExistingShader");
+				if (ImGui::Button("AddExistingShader"))
+				{
+
+				}
 				if (ImGui::Button("AddNewShader"))
 				{
 					ImGui::OpenPopup("Shader Name");
