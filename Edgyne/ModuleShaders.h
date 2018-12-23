@@ -29,6 +29,7 @@ public:
 
 	void RecompilePrograms(uint new_shader_uuid);
 	uint GetShaderUidFromName(std::string& name);
+	std::string GetShaderNameFromUid(const uint uid);
 
 public:
 	std::string defaultVertexFile = "Assets\\Shaders\\DefaultVertexShader.edgyvertex";

@@ -5,6 +5,7 @@
 #include "ModuleResourceManager.h"
 #include "ResourceMaterial.h"
 #include "Resource.h"
+#include "ResourceShaderProgram.h"
 #include "ModuleShaders.h"
 #include "GUIShaderEditor.h"
 #include "ModuleImGui.h"
@@ -13,6 +14,7 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include<experimental/filesystem>
 
 
 
@@ -62,13 +64,6 @@ void Material::LoadAsMeshComponent(rapidjson::Value::ConstMemberIterator comp)
 }
 
 
-bool Material::ComponentDraw()
-{
-	return true;
-
-}
-
-
 void Material::OnEditor()
 {
 	ResourceMaterial* material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(resource_uid);
@@ -105,9 +100,13 @@ void Material::OnEditor()
 			}
 			if (ImGui::CollapsingHeader("Edit Program"))
 			{
-				if (ImGui::Button("AddExistingShader"))
+				if (ImGui::CollapsingHeader("Current Shader Objects"))
 				{
-
+					PrintCurrentShaders();
+				}
+				if (ImGui::CollapsingHeader("AddExistingShader"))
+				{
+					PrintAvalibleShaders();
 				}
 				if (ImGui::Button("AddNewShader"))
 				{
@@ -137,6 +136,49 @@ void Material::OnEditor()
 			}
 
 			ImGui::TreePop();
+		}
+	}
+}
+
+void Material::PrintAvalibleShaders()
+{
+	const std::experimental::filesystem::directory_iterator end{};
+
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders" }; iter != end; ++iter)
+	{
+		if (iter->path().string().find(".meta") == std::string::npos)
+		{
+			std::string _name = iter->path().string();
+			_name = _name.erase(0, _name.find_last_of("\\") + 1);
+
+			if (ImGui::Button(_name.c_str()))
+			{
+				ResourceMaterial* material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->resource_uid);
+				if (material)
+				{
+					ResourceShaderProgram* program = (ResourceShaderProgram*)App->resource_manager->GetResourceFromUID(material->shaderProgram);
+					if (program)
+					{
+						program->AddNewObjectToProgram(App->shaders->GetShaderUidFromName(_name));
+					}
+				}
+			}
+		}
+	}
+}
+
+void Material::PrintCurrentShaders()
+{
+	ResourceMaterial* material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->resource_uid);
+	if (material)
+	{
+		ResourceShaderProgram* program = (ResourceShaderProgram*)App->resource_manager->GetResourceFromUID(material->shaderProgram);
+		if (program)
+		{
+			for (int i = 0; i < program->shaderObjects.size(); ++i)
+			{
+				App->shaders->GetShaderNameFromUid(program->shaderObjects[i]);
+			}
 		}
 	}
 }

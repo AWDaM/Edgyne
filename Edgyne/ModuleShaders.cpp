@@ -307,6 +307,33 @@ uint ModuleShaders::GetShaderUidFromName(std::string & name)
 	return ret;
 }
 
+std::string ModuleShaders::GetShaderNameFromUid(const uint uid)
+{
+	std::string ret = "";
+
+
+	const std::experimental::filesystem::directory_iterator end{};
+
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders" }; iter != end; ++iter)
+	{
+		if (iter->path().string().find(".meta") != std::string::npos)
+		{
+				JSON_File* meta = App->JSON_manager->openReadFile((*iter).path().string().c_str());
+				JSON_Value* muid = meta->getValue("meta");
+				if (muid->getUint("uid") == uid)
+				{
+					std::string _name = iter->path().string();
+					_name = _name.erase(0, _name.find_last_of("\\") + 1);
+
+					_name = _name.substr(0, _name.find_first_of("."));
+					return _name;
+				}
+			}
+		}
+	
+return ret;
+}
+
 char* ModuleShaders::CreateNewShaderObject(const char* shaderName, bool fragment)
 {
 	std::string path = "Assets\\Shaders\\";
