@@ -22,6 +22,7 @@ public:
 
 	void OnEditor();
 	void PrintAvalibleShaders();
+	void PrintCurrentShaders();
 
 private:
 public:

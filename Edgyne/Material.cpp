@@ -100,6 +100,10 @@ void Material::OnEditor()
 			}
 			if (ImGui::CollapsingHeader("Edit Program"))
 			{
+				if (ImGui::CollapsingHeader("Current Shader Objects"))
+				{
+					PrintCurrentShaders();
+				}
 				if (ImGui::CollapsingHeader("AddExistingShader"))
 				{
 					PrintAvalibleShaders();
@@ -158,6 +162,22 @@ void Material::PrintAvalibleShaders()
 						program->AddNewObjectToProgram(App->shaders->GetShaderUidFromName(_name));
 					}
 				}
+			}
+		}
+	}
+}
+
+void Material::PrintCurrentShaders()
+{
+	ResourceMaterial* material = (ResourceMaterial*)App->resource_manager->GetResourceFromUID(this->resource_uid);
+	if (material)
+	{
+		ResourceShaderProgram* program = (ResourceShaderProgram*)App->resource_manager->GetResourceFromUID(material->shaderProgram);
+		if (program)
+		{
+			for (int i = 0; i < program->shaderObjects.size(); ++i)
+			{
+				App->shaders->GetShaderNameFromUid(program->shaderObjects[i]);
 			}
 		}
 	}
