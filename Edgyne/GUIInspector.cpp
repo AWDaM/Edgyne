@@ -3,10 +3,12 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleLevel.h"
 #include "ModuleImporter.h"
+#include "ModuleShaders.h"
 #include "ModuleResourceManager.h"
 #include "Resource.h"
 #include "ResourceMesh.h"
 #include "ResourceMaterial.h"
+#include "ResourceShaderProgram.h"
 #include "Mesh.h"
 #include "Material.h"
 #include "GameObject.h"
@@ -162,6 +164,7 @@ void GUIInspector::AddMaterial()
 					resource_material = (ResourceMaterial*)App->resource_manager->CreateNewResource(Resource::RES_MATERIAL, fileName);
 				}
 				material->resource_uid = resource_material->file;
+				material->shader_uid = "DefaultProgram.edgyprogram";
 			}
 		}
 	}

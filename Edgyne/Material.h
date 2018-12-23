@@ -27,6 +27,7 @@ public:
 private:
 public:
 	std::string resource_uid;
+	std::string shader_uid;
 private:
 
 };
