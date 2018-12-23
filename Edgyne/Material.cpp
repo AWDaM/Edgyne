@@ -143,12 +143,14 @@ void Material::OnEditor()
 			if (ImGui::BeginPopupModal("Program Name"))
 			{
 				static char name[25];
-				ImGui::InputText("New Program", name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
-				std::string file = name;
-				file += ".edgyprogram";
-				ResourceShaderProgram* rsp = App->shaders->CreateNewProgram(file.c_str());
-				material->shaderProgram = rsp->file;
-				shader_uid = rsp->file;
+				if (ImGui::InputText("New Program", name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+				{
+					std::string file = name;
+					file += ".edgyprogram";
+					ResourceShaderProgram* rsp = App->shaders->CreateNewProgram(file.c_str());
+					material->shaderProgram = rsp->file;
+					shader_uid = rsp->file;
+				}
 				ImGui::EndPopup();
 			}
 			ImGui::TreePop();
