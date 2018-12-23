@@ -150,8 +150,11 @@ void Material::OnEditor()
 					ResourceShaderProgram* rsp = App->shaders->CreateNewProgram(file.c_str());
 					material->shaderProgram = rsp->file;
 					shader_uid = rsp->file;
+					ImGui::CloseCurrentPopup();
+
 				}
 				ImGui::EndPopup();
+
 			}
 			ImGui::TreePop();
 		}
