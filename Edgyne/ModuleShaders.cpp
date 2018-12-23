@@ -342,6 +342,7 @@ std::string ModuleShaders::GetShaderNameFromUid(const uint uid)
 						return _name;
 					}
 				}
+				meta->closeFile();
 			}
 		}
 	
