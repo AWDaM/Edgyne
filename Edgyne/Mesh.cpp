@@ -226,18 +226,18 @@ bool Mesh::ComponentDraw()
 				glUseProgram(shader_program->program);
 			}
 			else
-				glUseProgram(App->shaders->default_shader_program);
+				glUseProgram(App->shaders->defaultProgram->program);
 		}
 		else
-			glUseProgram(App->shaders->default_shader_program);
+			glUseProgram(App->shaders->defaultProgram->program);
 
-		GLint model_loc = glGetUniformLocation(App->shaders->default_shader_program, "model_matrix");
+		GLint model_loc = glGetUniformLocation(App->shaders->defaultProgram->program, "model_matrix");
 		glUniformMatrix4fv(model_loc, 1, GL_FALSE, *(game_object->global_transform_matrix.Transposed()).v);
-		GLint proj_loc = glGetUniformLocation(App->shaders->default_shader_program, "projection");
+		GLint proj_loc = glGetUniformLocation(App->shaders->defaultProgram->program, "projection");
 		glUniformMatrix4fv(proj_loc, 1, GL_FALSE, App->camera->editor_camera->GetProjectionMatrix());
-		GLint view_loc = glGetUniformLocation(App->shaders->default_shader_program, "view");
+		GLint view_loc = glGetUniformLocation(App->shaders->defaultProgram->program, "view");
 		glUniformMatrix4fv(view_loc, 1, GL_FALSE, App->camera->editor_camera->GetViewMatrix());
-		GLint time_loc = glGetUniformLocation(App->shaders->default_shader_program, "time");
+		GLint time_loc = glGetUniformLocation(App->shaders->defaultProgram->program, "time");
 		glUniform1f(time_loc, App->time_manager->game_clock_seconds);
 
 
