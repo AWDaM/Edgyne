@@ -1,5 +1,7 @@
 #include "ModuleShaders.h"
 #include "Application.h"
+#include "ModuleResourceManager.h"
+#include "ResourceShaderProgram.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleWindow.h"
 #include "GL/glew.h"
@@ -36,36 +38,63 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		ret = false;
 	}
 	//------------------------------------------------------------------
+	FILE* vfile = fopen(defaultVertexFile.c_str(), "rb");
+	if (ftell(vfile) < 2)
+	{
+		fseek(vfile, 0, SEEK_END);
+		vertex_shader = "#version 330 core\n"
+			"layout(location = 0) in vec3 position;\n"
+			"layout(location = 1) in vec4 color;\n"
+			"layout(location = 2) in vec2 texCoord;\n"
+			"layout(location = 3) in vec3 normal;\n"
+			"out vec4 ourColor;\n"
+			"out vec2 TexCoord;\n"
+			"out vec3 end_pos;\n"
+			"out vec3 ret_normal;\n"
+			"out float amp;\n"
+			"out float max_amp;\n"
 
-	vertex_shader = "#version 330 core\n"
-		"layout(location = 0) in vec3 position;\n"
-		"layout(location = 1) in vec4 color;\n"
-		"layout(location = 2) in vec2 texCoord;\n"
-		"layout(location = 3) in vec3 normal;\n"
-		"out vec4 ourColor;\n"
-		"out vec2 TexCoord;\n"
-		"out vec3 end_pos;\n"
-		"out vec3 ret_normal;\n"
-		"out float amp;\n"
-		"out float max_amp;\n"
+			"uniform mat4 model_matrix;\n"
+			"uniform mat4 view;\n"
+			"uniform mat4 projection;\n"
+			"uniform float time;\n"
+			"void main()\n"
+			"{\n"
+			"float freq = 10;\n"
+			"max_amp = 1;\n"
+			"end_pos = position;\n"
+			"amp =  max_amp*sin(freq*time+(end_pos.z));\n"
+			"end_pos.y += amp;\n"
+			//"end_pos.y += sin(end_pos.x);\n"
+			"	gl_Position = projection * view * model_matrix * vec4(end_pos, 1.0f);\n"
+			"	ourColor = color;\n"
+			"	TexCoord = texCoord;\n"
+			"	ret_normal = normal;\n"
+			"}\n";
+		fwrite(vertex_shader, 1, strlen(vertex_shader), vfile);
 
-		"uniform mat4 model_matrix;\n"
-		"uniform mat4 view;\n"
-		"uniform mat4 projection;\n"
-		"uniform float time;\n"
-		"void main()\n"
-		"{\n"
-		"float freq = 10;\n"
-		"max_amp = 1;\n"
-		"end_pos = position;\n"
-		"amp =  max_amp*sin(freq*time+(end_pos.z));\n"
-		"end_pos.y += amp;\n"
-		//"end_pos.y += sin(end_pos.x);\n"
-		"	gl_Position = projection * view * model_matrix * vec4(end_pos, 1.0f);\n"
-		"	ourColor = color;\n"
-		"	TexCoord = texCoord;\n"
-		"	ret_normal = normal;\n"
-		"}\n";
+		std::string metaPath = defaultVertexFile;
+		metaPath = metaPath.append(".meta");
+		JSON_File* meta = App->JSON_manager->openWriteFile(metaPath.c_str());
+
+		JSON_Value* muid = meta->createValue();
+		defaultVertexUID = pcg32_random_r(&App->rng);
+		muid->addUint("uid", defaultVertexUID);
+		meta->addValue("meta", muid);
+
+		meta->Write();
+		meta->closeFile();
+	}
+	else
+	{
+		std::string metaPath = defaultVertexFile;
+		metaPath = metaPath.append(".meta");
+		JSON_File* meta = App->JSON_manager->openReadFile(metaPath.c_str());
+		JSON_Value* muid = meta->getValue("meta");
+		defaultVertexUID = muid->getBool("uid");
+		meta->closeFile();
+	}
+	fclose(vfile);
 		//vertex_shader = "#version 330 core\n"
 		//"layout(location = 0) in vec3 position;\n"
 		//"uniform mat4 model_matrix;\n"
@@ -75,25 +104,51 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		//"{\n"
 		//"	gl_Position = projection * view * model_matrix * vec4(position, 1.0f);\n"
 		//"}\n";
+	FILE* pfile = fopen(defaultPixelFile.c_str(), "rb");
+	if (ftell(pfile) < 2)
+	{
+		fseek(pfile, 0, SEEK_END);
+		pixel_shader = "#version 330 core\n"
+			"in vec4 ourColor;\n"
+			"in vec2 TexCoord;\n"
+			"in vec3 end_pos;\n"
+			"in float max_amp;\n"
+			"in float amp;\n"
+			"out vec4 color;\n"
+			"out vec4 texture_color;\n"
+			"in vec3 ret_normal;\n"
+			"uniform sampler2D ourTexture;\n"
+			"void main()\n"
+			"{\n"
+			"	texture_color = texture(ourTexture, TexCoord);\n"
+			//	" color = vec4(vec3((texture_color.r+texture_color.g+texture_color.b)/3.0),1.0);\n"
+			" color = vec4(amp/max_amp,amp/max_amp,1,0.5);\n"
+			//"	color = vec4(ret_normal,1.0);\n"
+			"}\n";
+		fwrite(pixel_shader, 1, strlen(pixel_shader), pfile);
 
-	pixel_shader = "#version 330 core\n"
-		"in vec4 ourColor;\n"
-		"in vec2 TexCoord;\n"
-		"in vec3 end_pos;\n"
-		"in float max_amp;\n"
-		"in float amp;\n"
-		"out vec4 color;\n"
-		"out vec4 texture_color;\n"
-		"in vec3 ret_normal;\n"
-		"uniform sampler2D ourTexture;\n"
-		"void main()\n"
-		"{\n"
-		"	texture_color = texture(ourTexture, TexCoord);\n"
-		//	" color = vec4(vec3((texture_color.r+texture_color.g+texture_color.b)/3.0),1.0);\n"
-		" color = vec4(amp/max_amp,amp/max_amp,1,0.5);\n"
-		//"	color = vec4(ret_normal,1.0);\n"
-		"}\n";
+		std::string metaPath = defaultPixelFile;
+		metaPath = metaPath.append(".meta");
+		JSON_File* meta = App->JSON_manager->openWriteFile(metaPath.c_str());
 
+		JSON_Value* muid = meta->createValue();
+		defaultPixelUID = pcg32_random_r(&App->rng);
+		muid->addUint("uid", defaultPixelUID);
+		meta->addValue("meta", muid);
+
+		meta->Write();
+		meta->closeFile();
+	}
+	else
+	{
+		std::string metaPath = defaultPixelFile;
+		metaPath = metaPath.append(".meta");
+		JSON_File* meta = App->JSON_manager->openReadFile(metaPath.c_str());
+		JSON_Value* muid = meta->getValue("meta");
+		defaultPixelUID = muid->getBool("uid");
+		meta->closeFile();
+	}
+	fclose(pfile);
 	//pixel_shader = "#version 330 core\n"
 	//	"out vec4 FragColor;\n"
 	//	"void main()\n"
@@ -178,9 +233,9 @@ bool ModuleShaders::CreateShaderProgram(std::vector<uint>& shaders, uint* progra
 	return ret;
 }
 
-bool ModuleShaders::FindShaderObjectFromUID(uint uid)
+char* ModuleShaders::FindShaderObjectFromUID(uint uid, bool& isVertex)
 {
-	bool ret = false;
+	char* ret = "";
 	const std::experimental::filesystem::directory_iterator end{};
 
 	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\" }; iter != end; ++iter)
@@ -196,14 +251,32 @@ bool ModuleShaders::FindShaderObjectFromUID(uint uid)
 				{
 					std::string shaderFile = (*iter).path().string();
 					shaderFile = shaderFile.substr(0, shaderFile.find_last_of("."));
-
-					ret = true;
-					break;
+					strcpy(ret, GetShaderDataFromFile(shaderFile.c_str(), isVertex));			
 				}
 				meta->closeFile();
 			}
 		}
 	}
+	return ret;
+}
+
+char* ModuleShaders::GetShaderDataFromFile(const char* fileName, bool& isVertex)
+{
+	char* ret;
+
+	FILE* file = fopen(fileName, "rb");
+	int size = ftell(file);
+
+	fseek(file, 0, SEEK_END);
+	if (size > 0)
+	{
+		ret = new char[size];
+		fread(ret, 1, size, file);
+	}
+	std::string fn = fileName;
+	fn = fn.erase(0, fn.find_last_of("."));
+	if (fn == ".edgyvertex")
+		isVertex = true;
 	return ret;
 }
 
@@ -219,4 +292,36 @@ void ModuleShaders::CreateNewShaderObject(const char* shaderName, const char* bu
 
 	fwrite(data, sizeof(char), strlen(data), file);
 	fclose(file);
+
+	std::string metaPath = path;
+	metaPath = metaPath.append(".meta");
+	JSON_File* meta = App->JSON_manager->openWriteFile(metaPath.c_str());
+
+	JSON_Value* muid = meta->createValue();
+	muid->addUint("uid", pcg32_random_r(&App->rng));
+	meta->addValue("meta", muid);
+
+	meta->Write();
+	meta->closeFile();
 }
+
+void ModuleShaders::CreateNewProgram(const char * fileName)
+{
+	std::string fn = fileName;
+	ResourceShaderProgram* rsp = (ResourceShaderProgram*)App->resource_manager->CreateNewResource(Resource::RES_SHADER, fn);
+	rsp->shaderObjects.push_back(defaultVertexUID);
+	rsp->shaderObjects.push_back(defaultPixelUID);
+	std::vector<uint> indexList;
+	for (std::vector<uint>::iterator it = rsp->shaderObjects.begin(); it != rsp->shaderObjects.end(); it++)
+	{
+		bool isVertex = false;
+		char* data = FindShaderObjectFromUID(*it, isVertex);
+		uint index = 0;
+		if(CompileShader(data, isVertex, &index))
+			indexList.push_back(index);
+	}
+	CreateShaderProgram(indexList, &rsp->program);
+}
+
+
+
