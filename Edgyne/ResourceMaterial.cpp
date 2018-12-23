@@ -23,7 +23,7 @@ void ResourceMaterial::LoadMaterial(std::string& path)
 {
 	file = path;
 
-	shaderProgram = "Library\\ShaderPrograms\\DefaultProgram.edgyprogram";
+	shaderProgram = "DefaultProgram.edgyprogram";
 	//color.Set(comp->value["Color"]["r"].GetFloat(), comp->value["Color"]["g"].GetFloat(), comp->value["Color"]["b"].GetFloat());
 
 	App->loader->LoadTextureFromLibrary(file.c_str(), this);
