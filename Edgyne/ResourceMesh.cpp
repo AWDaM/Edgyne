@@ -67,7 +67,6 @@ void ResourceMesh::LoadResource(std::string& path)
 	glGenBuffers(1, &IBO);
 	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO);
-	LOG("%i", sizeof(true_vertex));
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, (sizeof(Vertex::position) + sizeof(Vertex::tex_coords) + sizeof(Vertex::color) + sizeof(Vertex::normal))*num_vertex, &true_vertex[0], GL_STATIC_DRAW);
 

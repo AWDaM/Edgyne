@@ -45,8 +45,9 @@ void GUIShaderEditor::Draw()
 			{
 				uint index = 0;
 				int size = strlen(text_editor->GetText().c_str());
+				++size;
 				char* buffer = new char[size];
-				strcat(buffer, text_editor->GetText().c_str());
+				strcpy(buffer, text_editor->GetText().c_str());
 				if (App->shaders->CompileShader(buffer, !editing_fragment, &index))
 				{
 					App->shaders->SaveShader(shader_name, buffer, editing_fragment);
