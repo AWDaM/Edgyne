@@ -16,6 +16,7 @@ public:
 	bool CompileShader(char* shader, bool is_vertex_shader, uint* shader_index);
 	bool CreateShaderProgram(std::vector<uint>& shaders, uint* program_index);
 	bool FindShaderObjectFromUID(uint uid);
+	void CreateNewShaderObject(const char* shaderName, const char* bufferData);
 
 public:
 	char* vertex_shader;

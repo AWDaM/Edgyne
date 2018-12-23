@@ -206,3 +206,17 @@ bool ModuleShaders::FindShaderObjectFromUID(uint uid)
 	}
 	return ret;
 }
+
+void ModuleShaders::CreateNewShaderObject(const char* shaderName, const char* bufferData)
+{
+	std::string path = "Assets\\";
+	path += shaderName;
+
+	FILE* file = fopen(path.c_str(), "wb");
+
+	char* data = "#version 330 core\n";
+	strcat(data, bufferData);
+
+	fwrite(data, sizeof(char), strlen(data), file);
+	fclose(file);
+}
