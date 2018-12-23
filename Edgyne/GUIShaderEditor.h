@@ -12,11 +12,13 @@ public:
 	~GUIShaderEditor();
 
 	void SetShaderToEdit(bool fragment, char* shader, const std::string& name);
+	void SetProgramToEdit(const std::string& program = NULL);
 	void Draw();
 public:
 	TextEditor* text_editor;
 	bool editing_fragment = true;
 	std::string shader_name;
+	std::string shader_program;
 };
 
 #endif

@@ -32,6 +32,11 @@ void GUIShaderEditor::SetShaderToEdit(bool fragment, char* shader, const std::st
 	}
 }
 
+void GUIShaderEditor::SetProgramToEdit(const std::string & program)
+{
+	shader_program = program;
+}
+
 void GUIShaderEditor::Draw()
 {
 	auto cpos = text_editor->GetCursorPosition();

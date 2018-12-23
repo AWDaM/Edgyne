@@ -124,11 +124,13 @@ void Material::OnEditor()
 				if (ImGui::Button("As vertex shader"))
 				{
 					App->imGui->shader_editor->SetShaderToEdit(false, App->shaders->CreateNewShaderObject(name, false),name);
+					App->imGui->shader_editor->SetProgramToEdit(material->shaderProgram);
 					ImGui::CloseCurrentPopup();
 				}
 				if (ImGui::Button("As fragment shader"))
 				{
 					App->imGui->shader_editor->SetShaderToEdit(true, App->shaders->CreateNewShaderObject(name, true), name);
+					App->imGui->shader_editor->SetProgramToEdit(material->shaderProgram);
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();
