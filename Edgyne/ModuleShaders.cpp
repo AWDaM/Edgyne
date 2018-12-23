@@ -254,6 +254,11 @@ char* ModuleShaders::GetShaderDataFromFile(const char* fileName, bool& isVertex)
 		ret = new char[size];
 		fread(ret, 1, size, file);
 	}
+	std::string tmp = ret;
+	tmp = tmp.substr(0, tmp.find_last_of("}")+ 1);
+	ret = new char[tmp.size()];
+	strcpy(ret, tmp.c_str());
+
 	std::string fn = fileName;
 	fn = fn.erase(0, fn.find_last_of("."));
 	if (fn == ".edgyvertex")
