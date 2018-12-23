@@ -497,6 +497,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 				resource_material = (ResourceMaterial*)App->resource_manager->CreateNewResource(Resource::ResourceType::RES_MATERIAL, currMaterialPath);
 				resource_material->file = currMaterialPath;
 				component_material->resource_uid = resource_material->file;
+				component_material->shader_uid = resource_material->shaderProgram;
 				component_mesh->material_name = resource_material->file;
 				std::string tmp = resource_material->file;
 				tmp = tmp.substr(0, tmp.find_last_of("."));
@@ -520,6 +521,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 			else
 			{
 				component_material->resource_uid = resource_material->file;
+				component_material->shader_uid = resource_material->shaderProgram;
 				component_mesh->material_name = resource_material->file;
 			}
 
