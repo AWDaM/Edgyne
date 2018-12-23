@@ -38,7 +38,7 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		ret = false;
 	}
 	//------------------------------------------------------------------
-	FILE* vfile = fopen(defaultVertexFile.c_str(), "rb");
+	FILE* vfile = fopen(defaultVertexFile.c_str(), "wb");
 	if (ftell(vfile) < 2)
 	{
 		fseek(vfile, 0, SEEK_END);
@@ -104,7 +104,7 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		//"{\n"
 		//"	gl_Position = projection * view * model_matrix * vec4(position, 1.0f);\n"
 		//"}\n";
-	FILE* pfile = fopen(defaultPixelFile.c_str(), "rb");
+	FILE* pfile = fopen(defaultPixelFile.c_str(), "wb");
 	if (ftell(pfile) < 2)
 	{
 		fseek(pfile, 0, SEEK_END);
