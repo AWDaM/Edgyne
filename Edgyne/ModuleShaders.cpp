@@ -331,7 +331,6 @@ std::string ModuleShaders::GetShaderNameFromUid(const uint uid)
 					std::string _name = iter->path().string();
 					_name = _name.erase(0, _name.find_last_of("\\") + 1);
 
-					_name = _name.substr(0, _name.find_first_of("."));
 					return _name;
 				}
 			}

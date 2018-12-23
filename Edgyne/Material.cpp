@@ -177,7 +177,24 @@ void Material::PrintCurrentShaders()
 		{
 			for (int i = 0; i < program->shaderObjects.size(); ++i)
 			{
-				App->shaders->GetShaderNameFromUid(program->shaderObjects[i]);
+				std::string shader = App->shaders->GetShaderNameFromUid(program->shaderObjects[i]);
+				if (ImGui::Button(shader.c_str()))
+				{
+					if (shader.find(".edgyvertex"))
+					{
+						bool tmp = false;
+						std::string  _shader = "Assets\\Shaders\\" + shader;
+						App->imGui->shader_editor->SetShaderToEdit(false, App->shaders->GetShaderDataFromFile(_shader.c_str(),tmp),shader);
+						App->imGui->shader_editor->SetProgramToEdit(material->shaderProgram);
+					}
+					else
+					{
+						bool tmp = false;
+						std::string  _shader = "Assets\\Shaders\\" + shader;
+						App->imGui->shader_editor->SetShaderToEdit(true, App->shaders->GetShaderDataFromFile(_shader.c_str(), tmp), shader);
+						App->imGui->shader_editor->SetProgramToEdit(material->shaderProgram);
+					}
+				}
 			}
 		}
 	}
