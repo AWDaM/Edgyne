@@ -219,7 +219,7 @@ bool Mesh::ComponentDraw()
 			}
 			//--------
 			else
-				glBindTexture(GL_TEXTURE_2D, 0);
+				glColor3f(res_material->color.x, res_material->color.y, res_material->color.z);
 			ResourceShaderProgram* shader_program = (ResourceShaderProgram*)App->resource_manager->GetResourceFromUID(res_material->shaderProgram);
 			if (shader_program)
 			{

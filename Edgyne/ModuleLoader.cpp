@@ -143,6 +143,8 @@ void ModuleLoader::LoadTextureFromLibrary(const char* path, ResourceMaterial* ma
 
 	std::string fullPath = App->importer->materialLibraryPath;
 	fullPath += path;
+	fullPath = fullPath.substr(0, fullPath.find_last_of("."));
+	fullPath += ".dds";
 
 	if (ilLoadImage(fullPath.c_str()))
 	{

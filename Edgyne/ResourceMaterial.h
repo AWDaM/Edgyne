@@ -14,7 +14,7 @@ public:
 
 	void LoadMaterial(std::string& file);
 
-	float4 color;
+	float4 color = { 1.0f,1.0f,1.0f,1.0f };
 	float2 img_size;
 	uint id_texture = 0;
 	std::string diffuse;
