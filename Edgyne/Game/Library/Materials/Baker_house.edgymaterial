@@ -1,6 +1,6 @@
 {
     "Material": {
         "diffuse": "Baker_house.dds",
-        "shader program": ""
+        "shader program": "Library\\ShaderPrograms\\DefaultProgram.edgyprogram"
     }
 }

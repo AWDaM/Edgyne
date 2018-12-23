@@ -512,7 +512,7 @@ void ModuleLoader::LoadAllNodesMeshes(aiNode* node, const aiScene* scene, std::s
 				JSON_File* mat = App->JSON_manager->openWriteFile(("Library\\Materials\\" + resource_material->file).c_str());
 				JSON_Value* diff = mat->createValue();
 				diff->addString("diffuse", resource_material->diffuse.c_str());
-				diff->addString("shader program", "");
+				diff->addString("shader program", resource_material->shaderProgram.c_str());
 				mat->addValue("Material", diff);
 				mat->Write();
 				mat->closeFile();
