@@ -297,9 +297,10 @@ uint ModuleShaders::GetShaderUidFromName(std::string & name)
 	{
 		_name = _name.substr(0, _name.find_last_of("."));
 	}
+	_name = _name.erase(0, _name.find_last_of("\\") + 1);
 	const std::experimental::filesystem::directory_iterator end{};
 
-	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders" }; iter != end; ++iter)
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders\\" }; iter != end; ++iter)
 	{
 		if (iter->path().string().find(".meta") != std::string::npos)
 		{
@@ -308,7 +309,7 @@ uint ModuleShaders::GetShaderUidFromName(std::string & name)
 
 			extension = extension.substr(0, extension.find_first_of("."));
 
-			if (extension == name)
+			if (extension == _name)
 			{
 				JSON_File* meta = App->JSON_manager->openReadFile((*iter).path().string().c_str());
 				JSON_Value* muid = meta->getValue("meta");
@@ -326,7 +327,7 @@ std::string ModuleShaders::GetShaderNameFromUid(const uint uid)
 
 	const std::experimental::filesystem::directory_iterator end{};
 
-	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders" }; iter != end; ++iter)
+	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders\\" }; iter != end; ++iter)
 	{
 		if (iter->path().string().find(".meta") != std::string::npos)
 		{
@@ -334,12 +335,15 @@ std::string ModuleShaders::GetShaderNameFromUid(const uint uid)
 				if (meta)
 				{
 					JSON_Value* muid = meta->getValue("meta");
-					if (muid->getUint("uid") == uid)
+					if (muid)
 					{
-						std::string _name = iter->path().string();
-						_name = _name.erase(0, _name.find_last_of("\\") + 1);
-
-						return _name;
+						if (muid->getUint("uid") == uid)
+						{
+							std::string _name = iter->path().string();
+							_name = _name.erase(0, _name.find_last_of("\\") + 1);
+							meta->closeFile();
+							return _name;
+						}
 					}
 				}
 				meta->closeFile();
@@ -385,13 +389,15 @@ bool ModuleShaders::SaveShader(std::string & name, char * content, bool fragment
 {
 	std::string path = "Assets\\Shaders\\";
 	path += name;
-	if (fragment)
+	if (name.find(".edgypixel") == std::string::npos && name.find(".edgyvertex") == std::string::npos)
 	{
-		path += ".edgypixel";
+		if (fragment)
+		{
+			path += ".edgypixel";
+		}
+		else
+			path += ".edgyvertex";
 	}
-	else
-		path += ".edgyvertex";
-
 	FILE* file = fopen(path.c_str(), "wb");
 	if (file != NULL)
 	{
