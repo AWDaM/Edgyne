@@ -331,13 +331,16 @@ std::string ModuleShaders::GetShaderNameFromUid(const uint uid)
 		if (iter->path().string().find(".meta") != std::string::npos)
 		{
 				JSON_File* meta = App->JSON_manager->openReadFile((*iter).path().string().c_str());
-				JSON_Value* muid = meta->getValue("meta");
-				if (muid->getUint("uid") == uid)
+				if (meta)
 				{
-					std::string _name = iter->path().string();
-					_name = _name.erase(0, _name.find_last_of("\\") + 1);
+					JSON_Value* muid = meta->getValue("meta");
+					if (muid->getUint("uid") == uid)
+					{
+						std::string _name = iter->path().string();
+						_name = _name.erase(0, _name.find_last_of("\\") + 1);
 
-					return _name;
+						return _name;
+					}
 				}
 			}
 		}

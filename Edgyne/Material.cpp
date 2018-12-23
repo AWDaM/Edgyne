@@ -187,6 +187,7 @@ void Material::PrintCurrentShaders()
 					{
 						bool tmp = false;
 						std::string  _shader = "Assets\\Shaders\\" + shader;
+						_shader = _shader.substr(0,_shader.find_last_of("."));
 						App->imGui->shader_editor->SetShaderToEdit(false, App->shaders->GetShaderDataFromFile(_shader.c_str(),tmp),shader);
 						App->imGui->shader_editor->SetProgramToEdit(material->shaderProgram);
 					}
