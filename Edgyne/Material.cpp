@@ -5,6 +5,9 @@
 #include "ModuleResourceManager.h"
 #include "ResourceMaterial.h"
 #include "Resource.h"
+#include "ModuleShaders.h"
+#include "GUIShaderEditor.h"
+#include "ModuleImGui.h"
 
 #include "GL/glew.h"
 #include "SDL\include\SDL_opengl.h"
@@ -107,15 +110,23 @@ void Material::OnEditor()
 				{
 					ImGui::OpenPopup("Shader Name");
 				}
-				ImGui::EndMenu();
+				
 			}
 
 			if (ImGui::BeginPopupModal("Shader Name"))
 			{
 				static char name[25];
-				if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+				ImGui::InputText("New Shader", name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll);
+												
+				if (ImGui::Button("As vertex shader"))
 				{
-				
+					App->imGui->shader_editor->SetShaderToEdit(false, App->shaders->CreateNewShaderObject(name, false),name);
+					ImGui::CloseCurrentPopup();
+				}
+				if (ImGui::Button("As fragment shader"))
+				{
+					App->imGui->shader_editor->SetShaderToEdit(true, App->shaders->CreateNewShaderObject(name, true), name);
+					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();
 			}

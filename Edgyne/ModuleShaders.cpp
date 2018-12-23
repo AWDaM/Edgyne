@@ -207,16 +207,42 @@ bool ModuleShaders::FindShaderObjectFromUID(uint uid)
 	return ret;
 }
 
-void ModuleShaders::CreateNewShaderObject(const char* shaderName, const char* bufferData)
+char* ModuleShaders::CreateNewShaderObject(const char* shaderName, bool fragment)
 {
 	std::string path = "Assets\\";
 	path += shaderName;
+	if (fragment)
+	{
+		path += ".edgypixel";
+	}
+	else
+		path += ".edgyvertex";
 
 	FILE* file = fopen(path.c_str(), "wb");
 
 	char* data = "#version 330 core\n";
-	strcat(data, bufferData);
 
 	fwrite(data, sizeof(char), strlen(data), file);
 	fclose(file);
+
+	return data;
+}
+
+bool ModuleShaders::SaveShader(std::string & name, char * content, bool fragment)
+{
+	std::string path = "Assets\\";
+	path += name;
+	if (fragment)
+	{
+		path += ".edgypixel";
+	}
+	else
+		path += ".edgyvertex";
+
+	FILE* file = fopen(path.c_str(), "wb");
+	if (file != NULL)
+	{
+		fwrite(content, sizeof(char), strlen(content), file);
+	}
+	return false;
 }

@@ -3,7 +3,8 @@
 #include "ModuleShaders.h"
 #include "ImGuiTextEditor/TextEditor.h"
 
-
+#include <stdio.h>
+#include <string.h>
 
 GUIShaderEditor::GUIShaderEditor(bool active = false) : GUIElements("Shader Editor", active)
 {
@@ -17,16 +18,16 @@ GUIShaderEditor::~GUIShaderEditor()
 {
 }
 
-void GUIShaderEditor::SetShaderToEdit(bool fragment)
+void GUIShaderEditor::SetShaderToEdit(bool fragment, char* shader, const std::string& name)
 {
 	if (fragment)
 	{
-		text_editor->SetText(App->shaders->vertex_shader);
+		text_editor->SetText(shader);
 		editing_fragment = true;
 	}
 	else
 	{
-		text_editor->SetText(App->shaders->pixel_shader);
+		text_editor->SetText(shader);
 		editing_fragment = false;
 	}
 }
@@ -42,7 +43,15 @@ void GUIShaderEditor::Draw()
 		{
 			if (ImGui::MenuItem("Compile"))
 			{
-	
+				uint index = 0;
+				int size = strlen(text_editor->GetText().c_str());
+				char* buffer = new char[size];
+				strcat(buffer, text_editor->GetText().c_str());
+				if (App->shaders->CompileShader(buffer, !editing_fragment, &index))
+				{
+					App->shaders->SaveShader(shader_name, buffer, editing_fragment);
+				}
+				delete buffer;
 			}
 
 			ImGui::EndMenu();
