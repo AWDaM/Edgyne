@@ -20,9 +20,8 @@ public:
 	void LoadComponent(rapidjson::Value::ConstMemberIterator comp);
 	void Material::LoadAsMeshComponent(rapidjson::Value::ConstMemberIterator comp);
 
-
-	bool ComponentDraw();
 	void OnEditor();
+	void PrintAvalibleShaders();
 
 private:
 public:
