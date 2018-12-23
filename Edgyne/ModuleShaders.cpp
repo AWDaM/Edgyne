@@ -215,7 +215,6 @@ bool ModuleShaders::CreateShaderProgram(std::vector<uint>& shaders, uint* progra
 
 char* ModuleShaders::FindShaderObjectFromUID(uint uid, bool& isVertex)
 {
-	char* ret = "";
 	const std::experimental::filesystem::directory_iterator end{};
 
 	for (std::experimental::filesystem::directory_iterator iter{ "Assets\\Shaders\\" }; iter != end; ++iter)
@@ -231,13 +230,14 @@ char* ModuleShaders::FindShaderObjectFromUID(uint uid, bool& isVertex)
 				{
 					std::string shaderFile = (*iter).path().string();
 					shaderFile = shaderFile.substr(0, shaderFile.find_last_of("."));
-					strcpy(ret, GetShaderDataFromFile(shaderFile.c_str(), isVertex));			
+					return GetShaderDataFromFile(shaderFile.c_str(), isVertex);	
+
 				}
 				meta->closeFile();
 			}
 		}
 	}
-	return ret;
+	return "";
 }
 
 char* ModuleShaders::GetShaderDataFromFile(const char* fileName, bool& isVertex)
