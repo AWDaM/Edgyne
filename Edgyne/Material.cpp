@@ -80,6 +80,36 @@ void Material::OnEditor()
 			}
 
 			ImGui::InputFloat4("Color", material->color.ptr(), 100);
+
+			ImGui::Text("Shader Program:");
+			ImGui::SameLine();
+			if(ImGui::CollapsingHeader(material->shaderProgram.c_str()))
+			{
+				for (std::map<std::string, Resource*>::iterator it = App->resource_manager->resources.begin(); it != App->resource_manager->resources.end(); ++it)
+				{
+					if ((*it).second->type == Resource::RES_SHADER)
+					{
+						if (ImGui::Button((*it).first.c_str()))
+						{
+							material->shaderProgram = (*it).first.c_str();
+						}
+					}
+				}
+				if (ImGui::Button("Create New Program"))
+				{
+
+				}
+			}
+			if (ImGui::CollapsingHeader("Edit Program"))
+			{
+				ImGui::Button("AddExistingShader");
+				if (ImGui::Button("AddNewShader"))
+				{
+
+				}
+				ImGui::EndMenu();
+			}
+
 			ImGui::TreePop();
 		}
 	}
