@@ -387,7 +387,11 @@ char* ModuleShaders::CreateNewShaderObject(const char* shaderName, bool fragment
 
 bool ModuleShaders::SaveShader(std::string & name, char * content, bool fragment)
 {
-	std::string path = "Assets\\Shaders\\";
+	std::string path;
+	if (name.find("Assets\\Shaders\\") == std::string::npos)
+	{
+		path = "Assets\\Shaders\\";
+	}
 	path += name;
 	if (name.find(".edgypixel") == std::string::npos && name.find(".edgyvertex") == std::string::npos)
 	{
