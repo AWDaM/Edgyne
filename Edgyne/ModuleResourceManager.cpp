@@ -32,10 +32,10 @@ Resource* ModuleResourceManager::CreateResource(Resource::ResourceType type)
 	Resource* ret = nullptr;
 	switch (type)
 	{
-	case Resource::ResourceType::RES_MATERIAL:
+	case Resource::RES_MATERIAL:
 		 ret = new ResourceMaterial();
 		break;
-	case Resource::ResourceType::RESOURCE_MESH:
+	case Resource::RESOURCE_MESH:
 		ret = new ResourceMesh();
 		break;
 	case Resource::RES_SHADER:

@@ -149,37 +149,15 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		meta->closeFile();
 	}
 	fclose(pfile);
-	//pixel_shader = "#version 330 core\n"
-	//	"out vec4 FragColor;\n"
-	//	"void main()\n"
-	//	"{\n"
-	//	"   FragColor = vec4(1.0f, 0.7f, 0.7f, 1.0f);\n"
-	//	"}\n\0";
-	CreateNewProgram("Default Program");
-	//CreateDefaultProgram();
+
+
+	defaultProgram = CreateNewProgram("DefaultProgram.edgyprogram");
+
 	return ret;
 }
 
 bool ModuleShaders::CreateDefaultProgram()
 {
-	uint tmp_vertex_index = 0;
-	uint tmp_fragment_index = 0;
-	uint tmp_program_index = 0;
-	if (CompileShader(vertex_shader, true, &tmp_vertex_index))
-		default_vertex_shader = tmp_vertex_index;
-	if (CompileShader(pixel_shader, false, &tmp_fragment_index))
-		default_pixel_shader = tmp_fragment_index;
-
-	std::vector<uint> shader_list;
-	shader_list.push_back(default_vertex_shader);
-	shader_list.push_back(default_pixel_shader);
-
-	void* buffer;
-	if (CreateShaderProgram(shader_list, &tmp_program_index))
-	{
-		default_shader_program = tmp_program_index;
-	}
-
 
 	return true;
 }
@@ -380,22 +358,32 @@ bool ModuleShaders::SaveShader(std::string & name, char * content, bool fragment
 	return true;
 }
 
-void ModuleShaders::CreateNewProgram(const char * fileName)
+ResourceShaderProgram* ModuleShaders::CreateNewProgram(const char * fileName)
 {
 	std::string fn = fileName;
+	JSON_File* hmm = App->JSON_manager->openWriteFile(("Library\\ShaderPrograms\\" + fn).c_str());
+	JSON_Value* val = hmm->createValue();
+
 	ResourceShaderProgram* rsp = (ResourceShaderProgram*)App->resource_manager->CreateNewResource(Resource::RES_SHADER, fn);
 	rsp->shaderObjects.push_back(defaultVertexUID);
 	rsp->shaderObjects.push_back(defaultPixelUID);
 	std::vector<uint> indexList;
 	for (std::vector<uint>::iterator it = rsp->shaderObjects.begin(); it != rsp->shaderObjects.end(); it++)
 	{
+		val->addUint("uid", (*it));
 		bool isVertex = false;
 		char* data = FindShaderObjectFromUID(*it, isVertex);
 		uint index = 0;
 		if(CompileShader(data, isVertex, &index))
 			indexList.push_back(index);
 	}
+	hmm->addValue("", val);
+	hmm->Write();
+	hmm->closeFile();
+
 	CreateShaderProgram(indexList, &rsp->program);
+
+	return rsp;
 }
 
 
