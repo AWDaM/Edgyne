@@ -223,7 +223,7 @@ char* ModuleShaders::FindShaderObjectFromUID(uint uid, bool& isVertex)
 		if (std::experimental::filesystem::is_regular_file(*iter))
 		{
 			//std::string extension = (*iter).path().extension().string();
-			if ((*iter).path().extension().string() == "meta")
+			if ((*iter).path().extension().string() == ".meta")
 			{
 				JSON_File* meta = App->JSON_manager->openReadFile((*iter).path().string().c_str());
 				JSON_Value* muid = meta->getValue("meta");
@@ -245,9 +245,10 @@ char* ModuleShaders::GetShaderDataFromFile(const char* fileName, bool& isVertex)
 	char* ret;
 
 	FILE* file = fopen(fileName, "rb");
-	int size = ftell(file);
-
 	fseek(file, 0, SEEK_END);
+	int size = ftell(file);
+	rewind(file);
+
 	if (size > 0)
 	{
 		ret = new char[size];
