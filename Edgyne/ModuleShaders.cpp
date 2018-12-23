@@ -39,7 +39,10 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 	}
 	//------------------------------------------------------------------
 	FILE* vfile = fopen(defaultVertexFile.c_str(), "wb");
-	if (ftell(vfile) < 2)
+	fseek(vfile, 0, SEEK_END);
+	int size = ftell(vfile);
+	rewind(vfile);
+	if (size < 2)
 	{
 		fseek(vfile, 0, SEEK_END);
 		vertex_shader = "#version 330 core\n"
@@ -105,7 +108,10 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		//"	gl_Position = projection * view * model_matrix * vec4(position, 1.0f);\n"
 		//"}\n";
 	FILE* pfile = fopen(defaultPixelFile.c_str(), "wb");
-	if (ftell(pfile) < 2)
+	fseek(pfile, 0, SEEK_END);
+	size = ftell(pfile);
+	rewind(pfile);
+	if (size < 2)
 	{
 		fseek(pfile, 0, SEEK_END);
 		pixel_shader = "#version 330 core\n"
