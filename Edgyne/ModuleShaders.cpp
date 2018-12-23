@@ -109,7 +109,7 @@ bool ModuleShaders::Init(rapidjson::Value & node)
 		//"}\n";
 	FILE* pfile = fopen(defaultPixelFile.c_str(), "wb");
 	fseek(pfile, 0, SEEK_END);
-	int size = ftell(pfile);
+	size = ftell(pfile);
 	rewind(pfile);
 	if (size < 2)
 	{
