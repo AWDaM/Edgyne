@@ -105,9 +105,19 @@ void Material::OnEditor()
 				ImGui::Button("AddExistingShader");
 				if (ImGui::Button("AddNewShader"))
 				{
-
+					ImGui::OpenPopup("Shader Name");
 				}
 				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginPopupModal("Shader Name"))
+			{
+				static char name[25];
+				if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll))
+				{
+				
+				}
+				ImGui::EndPopup();
 			}
 
 			ImGui::TreePop();
