@@ -92,6 +92,7 @@
     <ClInclude Include="GUIRandomNumberTest.h" />
     <ClInclude Include="GUIScene.h" />
     <ClInclude Include="GUIShaderEditor.h" />
+    <ClInclude Include="GUIShaders.h" />
     <ClInclude Include="ImGuiTextEditor\TextEditor.h" />
     <ClInclude Include="ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="GUIRandomNumberTest.cpp" />
     <ClCompile Include="GUIScene.cpp" />
     <ClCompile Include="GUIShaderEditor.cpp" />
+    <ClCompile Include="GUIShaders.cpp" />
     <ClCompile Include="ImGuiTextEditor\TextEditor.cpp" />
     <ClCompile Include="ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />

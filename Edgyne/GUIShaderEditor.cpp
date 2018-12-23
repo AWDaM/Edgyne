@@ -42,34 +42,9 @@ void GUIShaderEditor::Draw()
 		{
 			if (ImGui::MenuItem("Compile"))
 			{
-				if (editing_fragment)
-				{		
-					std::string tmp = text_editor->GetText();
-					App->shaders->vertex_shader = new char[tmp.length()];
-					strcpy(App->shaders->vertex_shader, tmp.c_str());
-					//strcat(App->shaders->vertex_shader, "\0");
+	
+			}
 
-				}
-				else
-				{
-					std::string tmp = text_editor->GetText();
-					App->shaders->pixel_shader = new char[tmp.length()];
-					strcpy(App->shaders->pixel_shader, tmp.c_str());
-					//strcat(App->shaders->pixel_shader, "\0");
-
-				}
-				App->shaders->CreateDefaultProgram();
-			}
-			if (ImGui::MenuItem("Fragment"))
-			{
-				SetShaderToEdit(true);
-			}
-			if (ImGui::MenuItem("Pixel"))
-			{
-				SetShaderToEdit(false);
-			}
-			if (ImGui::MenuItem("Quit", "Alt-F4"))
-			{ }
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Edit"))

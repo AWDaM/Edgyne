@@ -420,6 +420,7 @@
     <ClInclude Include="ModuleShaders.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="GUIShaders.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -680,6 +681,7 @@
     <ClCompile Include="ModuleShaders.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="GUIShaders.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\emscripten\library_system.js">
